@@ -1,0 +1,121 @@
+{
+  "welcome": "Welcome",
+  "language": "Language",
+  "selectLanguage": "Select Language",
+  "english": "English",
+  "vietnamese": "Vietnamese",
+  "common": {
+    "logo_alt": "BookIt Logo",
+    "view_all": "View all",
+    "reviews": "reviews"
+  },
+  "nav": {
+    "home": "Home",
+    "locations": "Locations",
+    "about": "About",
+    "partnership": "Partnership"
+  },
+  "auth": {
+    "register": "Register",
+    "login": "Login"
+  },
+  "banner": {
+    "home": {
+      "title": "Easy Booking",
+      "description": "Book quickly, explore thousands of high-quality hotel options. Turn every trip into a memorable experience!"
+    },
+    "about": {
+      "title": "About Us",
+      "description": "Our story and mission in bringing wonderful travel experiences"
+    }
+  },
+  "footer": {
+    "company": {
+      "title": "Company",
+      "about": "About Us",
+      "contact": "Contact",
+      "booking_guide": "Booking Guide"
+    },
+    "services": {
+      "title": "Services",
+      "booking": "Booking",
+      "management": "Management",
+      "blog": "Blog"
+    },
+    "support": {
+      "title": "Support",
+      "privacy_policy": "Privacy Policy",
+      "terms": "Terms & Conditions",
+      "feedback": "Feedback & Suggestions"
+    }
+  },
+  "search": {
+    "destination": "Destination",
+    "check_in": "Check in",
+    "check_out": "Check out",
+    "guests": "Guests",
+    "adults": "Adults",
+    "children": "Children",
+    "search_button": "Search",
+    "placeholder": {
+      "destination": "Where do you want to go?",
+      "guests": "{{adults}} adults, {{children}} children"
+    },
+    "results_count_one": "{{count}} result found",
+    "results_count_other": "{{count}} results found",
+    "price": {
+      "per_night": "per night"
+    }
+  },
+  "destinations": {
+    "popular": "Popular Destinations",
+    "hotel_count_one": "{{count}} hotel",
+    "hotel_count_other": "{{count}} hotels"
+  },
+  "hotels": {
+    "best_deals": "Best Deals",
+    "favorites": "Favorite Hotels",
+    "per_night": "/ night",
+    "card": {
+      "select_room": "Select Room",
+      "original_price": "Original price",
+      "reviews_count_one": "{{count}} review",
+      "reviews_count_other": "{{count}} reviews"
+    }
+  },
+  "travel": {
+    "inspiration": {
+      "title": "Don't know where to go? Get inspired now!",
+      "expert_guide": "Read articles from travel experts",
+      "categories": {
+        "explore": "Explore",
+        "souvenir": "Souvenir",
+        "festival": "Festival",
+        "nature": "Nature",
+        "people": "People"
+      }
+    }
+  },
+  "filter": {
+    "price_range": "Price Range",
+    "star_rating": "Star Rating",
+    "amenities": "Amenities"
+  },
+  "amenities": {
+    "wifi": "WiFi",
+    "pool": "Swimming Pool",
+    "parking": "Parking",
+    "restaurant": "Restaurant",
+    "gym": "Gym",
+    "spa": "Spa",
+    "beach_access": "Beach Access",
+    "room_service": "Room Service"
+  },
+  "sort": {
+    "placeholder": "Sort by",
+    "price_asc": "Price: Low to High",
+    "price_desc": "Price: High to Low",
+    "rating_desc": "Rating: High to Low",
+    "popularity": "Popularity"
+  }
+}

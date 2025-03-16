@@ -1,0 +1,121 @@
+{
+  "welcome": "Chào mừng",
+  "language": "Ngôn ngữ",
+  "selectLanguage": "Chọn ngôn ngữ",
+  "english": "Tiếng Anh",
+  "vietnamese": "Tiếng Việt",
+  "common": {
+    "logo_alt": "Logo BookIt",
+    "view_all": "Xem tất cả",
+    "reviews": "đánh giá"
+  },
+  "nav": {
+    "home": "Trang chủ",
+    "locations": "Địa điểm",
+    "about": "Giới thiệu",
+    "partnership": "Đối tác"
+  },
+  "auth": {
+    "register": "Đăng ký",
+    "login": "Đăng nhập"
+  },
+  "banner": {
+    "home": {
+      "title": "Đặt chỗ dễ dàng",
+      "description": "Đặt phòng nhanh chóng, khám phá hàng ngàn lựa chọn khách sạn chất lượng cao. Biến mỗi chuyến đi của bạn thành trải nghiệm đáng nhớ!"
+    },
+    "about": {
+      "title": "Về Chúng Tôi",
+      "description": "Câu chuyện và sứ mệnh của chúng tôi trong việc mang đến những trải nghiệm du lịch tuyệt vời"
+    }
+  },
+  "footer": {
+    "company": {
+      "title": "Công ty",
+      "about": "Về chúng tôi",
+      "contact": "Liên hệ",
+      "booking_guide": "Hướng dẫn đặt phòng"
+    },
+    "services": {
+      "title": "Dịch vụ",
+      "booking": "Đặt phòng",
+      "management": "Quản lý",
+      "blog": "Blog"
+    },
+    "support": {
+      "title": "Hỗ trợ",
+      "privacy_policy": "Chính sách bảo mật",
+      "terms": "Điều khoản & Điều kiện",
+      "feedback": "Góp ý & Đề xuất"
+    }
+  },
+  "search": {
+    "destination": "Địa điểm",
+    "check_in": "Nhận phòng",
+    "check_out": "Trả phòng",
+    "guests": "Khách",
+    "adults": "Người lớn",
+    "children": "Trẻ em",
+    "search_button": "Tìm kiếm",
+    "placeholder": {
+      "destination": "Bạn muốn đi đâu?",
+      "guests": "{{adults}} người lớn, {{children}} trẻ em"
+    },
+    "results_count_one": "Tìm thấy {{count}} kết quả",
+    "results_count_other": "Tìm thấy {{count}} kết quả",
+    "price": {
+      "per_night": "mỗi đêm"
+    }
+  },
+  "destinations": {
+    "popular": "Địa điểm nổi tiếng",
+    "hotel_count_one": "{{count}} khách sạn",
+    "hotel_count_other": "{{count}} khách sạn"
+  },
+  "hotels": {
+    "best_deals": "Ưu đãi tốt nhất",
+    "favorites": "Khách sạn yêu thích",
+    "per_night": "/ đêm",
+    "card": {
+      "select_room": "Chọn phòng",
+      "original_price": "Giá gốc",
+      "reviews_count_one": "{{count}} đánh giá",
+      "reviews_count_other": "{{count}} đánh giá"
+    }
+  },
+  "travel": {
+    "inspiration": {
+      "title": "Chưa biết đi đâu? Tìm cảm hứng ngay!",
+      "expert_guide": "Xem bài viết từ các chuyên gia du lịch",
+      "categories": {
+        "explore": "Khám phá",
+        "souvenir": "Lưu niệm",
+        "festival": "Lễ hội",
+        "nature": "Thiên nhiên",
+        "people": "Con người"
+      }
+    }
+  },
+  "filter": {
+    "price_range": "Khoảng giá",
+    "star_rating": "Hạng sao",
+    "amenities": "Tiện nghi"
+  },
+  "amenities": {
+    "wifi": "WiFi",
+    "pool": "Hồ bơi",
+    "parking": "Bãi đậu xe",
+    "restaurant": "Nhà hàng",
+    "gym": "Phòng tập gym",
+    "spa": "Spa",
+    "beach_access": "Lối ra biển",
+    "room_service": "Dịch vụ phòng"
+  },
+  "sort": {
+    "placeholder": "Sắp xếp theo",
+    "price_asc": "Giá: Thấp đến cao",
+    "price_desc": "Giá: Cao đến thấp",
+    "rating_desc": "Đánh giá: Cao đến thấp",
+    "popularity": "Phổ biến"
+  }
+}
