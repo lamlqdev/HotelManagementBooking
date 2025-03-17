@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router";
 import { FaBed, FaUserFriends } from "react-icons/fa";
 import { IconType } from "react-icons";
 
@@ -24,11 +25,17 @@ interface HotelRoomsProps {
 }
 
 const HotelRooms = ({ rooms }: HotelRoomsProps) => {
+  const navigate = useNavigate();
+
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("vi-VN", {
       style: "currency",
       currency: "VND",
     }).format(price);
+  };
+
+  const handleBookRoom = (roomId: number) => {
+    navigate(`/booking-information?roomId=${roomId}`);
   };
 
   return (
@@ -116,9 +123,14 @@ const HotelRooms = ({ rooms }: HotelRoomsProps) => {
                   </div>
 
                   {/* Book Button */}
-                  <button className="w-full md:w-auto md:self-end bg-primary text-primary-foreground px-6 py-2 rounded-lg hover:bg-primary/90 transition-colors">
-                    Đặt ngay
-                  </button>
+                  <div className="flex items-center justify-between mt-4 pt-4 border-t">
+                    <button
+                      onClick={() => handleBookRoom(room.id)}
+                      className="px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+                    >
+                      Đặt ngay
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
