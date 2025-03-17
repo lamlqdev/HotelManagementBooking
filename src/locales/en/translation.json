@@ -46,7 +46,13 @@
       "title": "Support",
       "privacy_policy": "Privacy Policy",
       "terms": "Terms & Conditions",
-      "feedback": "Feedback & Suggestions"
+      "feedback": "Feedback & Suggestions",
+      "customer_support": "Customer Support",
+      "welcome": "Hello! How can we help you?",
+      "agent_greeting": "Hello! I'm a support agent. How may I assist you today?",
+      "input_placeholder": "Type your message...",
+      "send_button": "Send",
+      "open_chat": "Open support chat"
     }
   },
   "search": {

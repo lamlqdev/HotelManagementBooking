@@ -46,7 +46,13 @@
       "title": "Hỗ trợ",
       "privacy_policy": "Chính sách bảo mật",
       "terms": "Điều khoản & Điều kiện",
-      "feedback": "Góp ý & Đề xuất"
+      "feedback": "Góp ý & Đề xuất",
+      "customer_support": "Hỗ trợ khách hàng",
+      "welcome": "Xin chào! Chúng tôi có thể giúp gì cho bạn?",
+      "agent_greeting": "Xin chào quý khách! Tôi là nhân viên hỗ trợ. Tôi có thể giúp gì cho bạn?",
+      "input_placeholder": "Nhập tin nhắn của bạn...",
+      "send_button": "Gửi",
+      "open_chat": "Mở hộp chat hỗ trợ"
     }
   },
   "search": {

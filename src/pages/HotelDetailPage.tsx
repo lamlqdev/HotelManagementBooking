@@ -11,6 +11,7 @@ import HotelTabs from "../components/sections/hotel-detail/HotelTabs";
 import HotelOverview from "../components/sections/hotel-detail/HotelOverview";
 import HotelRooms from "../components/sections/hotel-detail/HotelRooms";
 import HotelReviews from "../components/sections/hotel-detail/HotelReviews";
+import ChatSupport from "../components/common/ChatSupport";
 
 const HotelDetailPage = () => {
   const [activeTab, setActiveTab] = useState("tổng quan");
@@ -164,6 +165,8 @@ const HotelDetailPage = () => {
 
         <HotelReviews reviewStats={reviewStats} reviews={reviews} />
       </div>
+
+      <ChatSupport />
     </div>
   );
 };
