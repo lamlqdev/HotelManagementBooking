@@ -8,6 +8,8 @@ import BlogPage from "./pages/BlogPage";
 import SearchResultPage from "./pages/SearchResultPage";
 import HotelDetailPage from "./pages/HotelDetailPage";
 import BookingInformationPage from "./pages/BookingInformationPage";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 
 function App() {
   return (
@@ -22,8 +24,11 @@ function App() {
             path="/booking-information"
             element={<BookingInformationPage />}
           />
+
           <Route path="/blog" element={<BlogPage />} />
         </Route>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
       </Routes>
     </ThemeProvider>
   );

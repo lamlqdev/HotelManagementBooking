@@ -16,8 +16,75 @@
     "partnership": "Đối tác"
   },
   "auth": {
-    "register": "Đăng ký",
-    "login": "Đăng nhập"
+    "register_button": "Đăng ký",
+    "login_button": "Đăng nhập",
+    "login": {
+      "title": "Đăng nhập",
+      "welcome": "Xin chào!",
+      "welcomeMessage": "Chúc bạn có những giây phút trải nghiệm dịch vụ của chúng tôi thoải mái nhất.",
+      "form": {
+        "email": {
+          "label": "Nhập Email",
+          "placeholder": "Nhập email của bạn"
+        },
+        "password": {
+          "label": "Mật khẩu",
+          "placeholder": "Nhập mật khẩu của bạn"
+        },
+        "rememberMe": "Ghi nhớ đăng nhập",
+        "forgotPassword": "Quên mật khẩu?",
+        "submit": "Tiếp tục với email"
+      },
+      "divider": "hoặc đăng nhập bằng tài khoản",
+      "social": {
+        "google": "Tiếp tục với Google",
+        "facebook": "Tiếp tục với Facebook"
+      },
+      "noAccount": "Chưa có tài khoản?",
+      "register": "Đăng ký"
+    },
+    "register": {
+      "title": "Đăng ký tài khoản",
+      "welcome": "Chào mừng bạn!",
+      "welcomeMessage": "Hãy tạo tài khoản để trải nghiệm những dịch vụ tuyệt vời của chúng tôi.",
+      "form": {
+        "fullName": {
+          "label": "Họ và tên",
+          "placeholder": "Nhập họ và tên của bạn"
+        },
+        "email": {
+          "label": "Email",
+          "placeholder": "Nhập email của bạn"
+        },
+        "phone": {
+          "label": "Số điện thoại",
+          "placeholder": "Nhập số điện thoại của bạn"
+        },
+        "password": {
+          "label": "Mật khẩu",
+          "placeholder": "Nhập mật khẩu của bạn"
+        },
+        "confirmPassword": {
+          "label": "Xác nhận mật khẩu",
+          "placeholder": "Nhập lại mật khẩu của bạn"
+        },
+        "terms": {
+          "prefix": "Tôi đồng ý với",
+          "termsOfService": "Điều khoản sử dụng",
+          "and": "và",
+          "privacyPolicy": "Chính sách bảo mật"
+        },
+        "agreeToTerms": "Tôi đồng ý với {{termsOfService}} và {{privacyPolicy}}",
+        "submit": "Đăng ký"
+      },
+      "divider": "hoặc đăng ký bằng tài khoản",
+      "social": {
+        "google": "Tiếp tục với Google",
+        "facebook": "Tiếp tục với Facebook"
+      },
+      "hasAccount": "Đã có tài khoản?",
+      "login": "Đăng nhập"
+    }
   },
   "banner": {
     "home": {

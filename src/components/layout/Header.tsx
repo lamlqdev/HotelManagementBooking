@@ -45,10 +45,10 @@ const Header = () => {
 
           <div className="flex items-center space-x-4">
             <Button variant="ghost" className="hover:bg-primary" asChild>
-              <Link to="/register">{t("auth.register")}</Link>
+              <Link to="/register">{t("auth.register_button")}</Link>
             </Button>
             <Button asChild>
-              <Link to="/login">{t("auth.login")}</Link>
+              <Link to="/login">{t("auth.login_button")}</Link>
             </Button>
           </div>
         </div>

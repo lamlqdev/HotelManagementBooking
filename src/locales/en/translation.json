@@ -16,8 +16,75 @@
     "partnership": "Partnership"
   },
   "auth": {
-    "register": "Register",
-    "login": "Login"
+    "register_button": "Register",
+    "login_button": "Login",
+    "login": {
+      "title": "Login",
+      "welcome": "Hello!",
+      "welcomeMessage": "We hope you have the most comfortable experience with our services.",
+      "form": {
+        "email": {
+          "label": "Enter Email",
+          "placeholder": "Enter your email"
+        },
+        "password": {
+          "label": "Password",
+          "placeholder": "Enter your password"
+        },
+        "rememberMe": "Remember me",
+        "forgotPassword": "Forgot password?",
+        "submit": "Continue with email"
+      },
+      "divider": "or login with account",
+      "social": {
+        "google": "Continue with Google",
+        "facebook": "Continue with Facebook"
+      },
+      "noAccount": "Don't have an account?",
+      "register": "Register"
+    },
+    "register": {
+      "title": "Create Account",
+      "welcome": "Welcome!",
+      "welcomeMessage": "Create an account to experience our wonderful services.",
+      "form": {
+        "fullName": {
+          "label": "Full Name",
+          "placeholder": "Enter your full name"
+        },
+        "email": {
+          "label": "Email",
+          "placeholder": "Enter your email"
+        },
+        "phone": {
+          "label": "Phone Number",
+          "placeholder": "Enter your phone number"
+        },
+        "password": {
+          "label": "Password",
+          "placeholder": "Enter your password"
+        },
+        "confirmPassword": {
+          "label": "Confirm Password",
+          "placeholder": "Re-enter your password"
+        },
+        "terms": {
+          "prefix": "I agree to the",
+          "termsOfService": "Terms of Service",
+          "and": "and",
+          "privacyPolicy": "Privacy Policy"
+        },
+        "agreeToTerms": "I agree to the {{termsOfService}} and {{privacyPolicy}}",
+        "submit": "Register"
+      },
+      "divider": "or register with account",
+      "social": {
+        "google": "Continue with Google",
+        "facebook": "Continue with Facebook"
+      },
+      "hasAccount": "Already have an account?",
+      "login": "Login"
+    }
   },
   "banner": {
     "home": {
