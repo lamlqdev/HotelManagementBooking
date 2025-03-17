@@ -123,5 +123,75 @@
     "price_desc": "Price: High to Low",
     "rating_desc": "Rating: High to Low",
     "popularity": "Popularity"
+  },
+  "booking": {
+    "pageTitle": "Booking Information",
+    "contactInfo": {
+      "title": "Contact Information",
+      "description": "Please fill in all information correctly to ensure you receive the booking confirmation via email.",
+      "bookingFor": {
+        "label": "Who are you booking for?",
+        "self": "Book for myself",
+        "other": "Book for someone else"
+      },
+      "guestName": "Guest Name *",
+      "contactName": "Contact Name *",
+      "email": "Email *",
+      "phone": "Phone Number *"
+    },
+    "specialRequests": {
+      "title": "Special Requests",
+      "description": "Upon check-in, the hotel will inform whether these requests can be accommodated. Some requests may incur additional charges, but you can always cancel them later.",
+      "checkInOut": {
+        "title": "Preferred Check-in/Check-out Time",
+        "checkIn": {
+          "label": "Request check-in time",
+          "placeholder": "Select check-in time"
+        },
+        "checkOut": {
+          "label": "Request check-out time",
+          "placeholder": "Select check-out time"
+        }
+      },
+      "other": {
+        "label": "Other Requests",
+        "placeholder": "Example: non-smoking room, high floor, etc."
+      }
+    },
+    "bookingSummary": {
+      "title": "Booking Details",
+      "checkIn": {
+        "label": "Check-in",
+        "from": "From"
+      },
+      "checkOut": {
+        "label": "Check-out",
+        "before": "Before"
+      },
+      "nights": "night(s)",
+      "amenities": {
+        "wifi": "Free WiFi",
+        "parking": "Parking",
+        "pool": "Swimming Pool",
+        "restaurant": "Restaurant"
+      },
+      "details": {
+        "roomType": "Room Type",
+        "guests": "Guests",
+        "rooms": "Rooms",
+        "nights": "Nights",
+        "guestsUnit": "person(s)",
+        "roomsUnit": "room(s)",
+        "nightsUnit": "night(s)"
+      },
+      "pricing": {
+        "pricePerNight": "Price per night",
+        "totalPrice": "Total price"
+      },
+      "coupon": {
+        "placeholder": "Enter coupon code"
+      },
+      "submitButton": "Proceed to Payment"
+    }
   }
 }

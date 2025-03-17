@@ -123,5 +123,75 @@
     "price_desc": "Giá: Cao đến thấp",
     "rating_desc": "Đánh giá: Cao đến thấp",
     "popularity": "Phổ biến"
+  },
+  "booking": {
+    "pageTitle": "Thông tin đặt phòng",
+    "contactInfo": {
+      "title": "Thông tin liên hệ",
+      "description": "Hãy điền chính xác tất cả thông tin để đảm bảo bạn nhận được Phiếu xác nhận đặt phòng qua email của mình.",
+      "bookingFor": {
+        "label": "Bạn đặt phòng cho ai?",
+        "self": "Đặt cho bản thân",
+        "other": "Đặt cho người khác"
+      },
+      "guestName": "Tên người lưu trú *",
+      "contactName": "Tên người liên hệ *",
+      "email": "Email *",
+      "phone": "Số điện thoại *"
+    },
+    "specialRequests": {
+      "title": "Yêu cầu đặc biệt",
+      "description": "Khi nhận phòng, khách sạn sẽ thông báo liệu yêu cầu này có được đáp ứng hay không. Một số yêu cầu cần trả thêm phí để sử dụng nhưng bạn hoàn toàn có thể hủy yêu cầu sau đó.",
+      "checkInOut": {
+        "title": "Thời gian check-in/check-out ưu tiên",
+        "checkIn": {
+          "label": "Yêu cầu giờ check-in",
+          "placeholder": "Chọn giờ check-in"
+        },
+        "checkOut": {
+          "label": "Yêu cầu giờ check-out",
+          "placeholder": "Chọn giờ check-out"
+        }
+      },
+      "other": {
+        "label": "Yêu cầu khác",
+        "placeholder": "Ví dụ: phòng không hút thuốc, phòng tầng cao, etc."
+      }
+    },
+    "bookingSummary": {
+      "title": "Chi tiết đặt phòng",
+      "checkIn": {
+        "label": "Nhận phòng",
+        "from": "Từ"
+      },
+      "checkOut": {
+        "label": "Trả phòng",
+        "before": "Trước"
+      },
+      "nights": "đêm",
+      "amenities": {
+        "wifi": "WiFi miễn phí",
+        "parking": "Bãi đỗ xe",
+        "pool": "Bể bơi",
+        "restaurant": "Nhà hàng"
+      },
+      "details": {
+        "roomType": "Loại phòng",
+        "guests": "Số khách",
+        "rooms": "Số phòng",
+        "nights": "Số đêm",
+        "guestsUnit": "người",
+        "roomsUnit": "phòng",
+        "nightsUnit": "đêm"
+      },
+      "pricing": {
+        "pricePerNight": "Giá mỗi đêm",
+        "totalPrice": "Tổng tiền"
+      },
+      "coupon": {
+        "placeholder": "Nhập mã giảm giá"
+      },
+      "submitButton": "Tiến hành thanh toán"
+    }
   }
 }
