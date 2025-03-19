@@ -92,8 +92,8 @@
       "description": "Đặt phòng nhanh chóng, khám phá hàng ngàn lựa chọn khách sạn chất lượng cao. Biến mỗi chuyến đi của bạn thành trải nghiệm đáng nhớ!"
     },
     "about": {
-      "title": "Về Chúng Tôi",
-      "description": "Câu chuyện và sứ mệnh của chúng tôi trong việc mang đến những trải nghiệm du lịch tuyệt vời"
+      "title": "Về chúng tôi",
+      "description": "Khám phá câu chuyện và sứ mệnh của chúng tôi trong việc cách mạng hóa trải nghiệm đặt phòng khách sạn"
     }
   },
   "footer": {
@@ -259,6 +259,65 @@
         "placeholder": "Nhập mã giảm giá"
       },
       "submitButton": "Tiến hành thanh toán"
+    }
+  },
+  "about": {
+    "features": {
+      "title": "Các chức năng cơ bản",
+      "subtitle": "Chúng tôi cung cấp đầy đủ các công cụ cần thiết để giúp bạn tìm và đặt phòng khách sạn một cách dễ dàng và an toàn",
+      "search": {
+        "title": "Tìm kiếm thông minh",
+        "description": "Công nghệ tìm kiếm thông minh giúp bạn dễ dàng tìm thấy khách sạn phù hợp với sở thích và ngân sách. Hệ thống gợi ý dựa trên đánh giá từ cộng đồng."
+      },
+      "booking": {
+        "title": "Đặt phòng dễ dàng",
+        "description": "Quy trình đặt phòng 3 bước đơn giản: chọn phòng, điền thông tin, thanh toán. Xác nhận tức thì qua email. Hỗ trợ đặt phòng trước 24h."
+      },
+      "payment": {
+        "title": "Thanh toán an toàn",
+        "description": "Tích hợp các phương thức thanh toán phổ biến: thẻ tín dụng, chuyển khoản. Mã hóa SSL bảo vệ thông tin thanh toán. Chính sách hoàn tiền rõ ràng."
+      },
+      "support": {
+        "title": "Hỗ trợ 24/7",
+        "description": "Đội ngũ hỗ trợ chuyên nghiệp luôn sẵn sàng qua email và chat trực tuyến. Cam kết phản hồi nhanh chóng và hiệu quả."
+      }
+    },
+    "introduction": {
+      "title": "Về chúng tôi",
+      "block1": {
+        "title": "Nền tảng đặt phòng khách sạn mới",
+        "description1": "Ra đời vào năm 2024, chúng tôi là nền tảng đặt phòng khách sạn mới với sứ mệnh mang đến trải nghiệm đặt phòng trực tuyến dễ dàng, nhanh chóng và an toàn. Hiện tại, chúng tôi đang tập trung phát triển tại 5 thành phố lớn với hơn 50 đối tác khách sạn chất lượng.",
+        "description2": "Trong thời gian ngắn vừa qua, chúng tôi đã phục vụ hơn 5,000 lượt đặt phòng thành công, với tỷ lệ hài lòng của khách hàng đạt 95%. Chúng tôi không ngừng cải thiện công nghệ và dịch vụ để mang đến trải nghiệm tốt nhất cho người dùng."
+      },
+      "block2": {
+        "title": "Cam kết chất lượng dịch vụ",
+        "description1": "Chúng tôi luôn nỗ lực không ngừng để cải thiện chất lượng dịch vụ, từ việc tối ưu hóa trải nghiệm người dùng đến việc đảm bảo an toàn trong thanh toán. Với đội ngũ hỗ trợ chuyên nghiệp, chúng tôi cam kết phản hồi mọi vấn đề của khách hàng trong vòng 30 phút.",
+        "description2": "Chúng tôi đang từng bước xây dựng và phát triển các tính năng mới như tìm kiếm thông minh, đánh giá từ cộng đồng, và phân tích xu hướng du lịch. Điều này giúp chúng tôi ngày càng hoàn thiện hơn trong việc đáp ứng nhu cầu của khách hàng."
+      }
+    },
+    "achievements": {
+      "title": "Thành tựu",
+      "subtitle": "Những con số ấn tượng phản ánh sự tin tưởng và hài lòng của khách hàng dành cho chúng tôi",
+      "users": {
+        "title": "10K+",
+        "description": "Người dùng đăng ký",
+        "subtext": "Tăng trưởng 50% mỗi tháng"
+      },
+      "partners": {
+        "title": "50+",
+        "description": "Đối tác khách sạn",
+        "subtext": "Tập trung tại 5 thành phố lớn"
+      },
+      "satisfaction": {
+        "title": "95%",
+        "description": "Khách hàng hài lòng",
+        "subtext": "Dựa trên 1,000+ đánh giá"
+      },
+      "security": {
+        "title": "100%",
+        "description": "Bảo mật thông tin",
+        "subtext": "Tuân thủ quy định bảo mật"
+      }
     }
   }
 }

@@ -93,7 +93,7 @@
     },
     "about": {
       "title": "About Us",
-      "description": "Our story and mission in bringing wonderful travel experiences"
+      "description": "Discover our story and mission in revolutionizing the hotel booking experience"
     }
   },
   "footer": {
@@ -259,6 +259,65 @@
         "placeholder": "Enter coupon code"
       },
       "submitButton": "Proceed to Payment"
+    }
+  },
+  "about": {
+    "features": {
+      "title": "Basic Features",
+      "subtitle": "We provide all the necessary tools to help you find and book hotel rooms easily and safely",
+      "search": {
+        "title": "Smart Search",
+        "description": "Smart search technology helps you easily find hotels that match your preferences and budget. Recommendation system based on community reviews."
+      },
+      "booking": {
+        "title": "Easy Booking",
+        "description": "Simple 3-step booking process: select room, fill information, payment. Instant confirmation via email. Support for booking 24h in advance."
+      },
+      "payment": {
+        "title": "Secure Payment",
+        "description": "Integrated popular payment methods: credit cards, bank transfers. SSL encryption protects payment information. Clear refund policy."
+      },
+      "support": {
+        "title": "24/7 Support",
+        "description": "Professional support team always available via email and online chat. Committed to quick and effective responses."
+      }
+    },
+    "introduction": {
+      "title": "About Us",
+      "block1": {
+        "title": "New Hotel Booking Platform",
+        "description1": "Launched in 2024, we are a new hotel booking platform with a mission to provide easy, fast, and secure online booking experiences. Currently, we are focusing on developing in 5 major cities with over 50 quality hotel partners.",
+        "description2": "In our short time, we have served over 5,000 successful bookings, with a customer satisfaction rate of 95%. We continuously improve our technology and services to provide the best experience for users."
+      },
+      "block2": {
+        "title": "Service Quality Commitment",
+        "description1": "We constantly strive to improve service quality, from optimizing user experience to ensuring payment security. With our professional support team, we commit to responding to all customer issues within 30 minutes.",
+        "description2": "We are gradually building and developing new features such as smart search, community reviews, and travel trend analysis. This helps us become more complete in meeting customer needs."
+      }
+    },
+    "achievements": {
+      "title": "Achievements",
+      "subtitle": "Impressive numbers reflect the trust and satisfaction of our customers",
+      "users": {
+        "title": "10K+",
+        "description": "Registered Users",
+        "subtext": "50% monthly growth"
+      },
+      "partners": {
+        "title": "50+",
+        "description": "Hotel Partners",
+        "subtext": "Focused in 5 major cities"
+      },
+      "satisfaction": {
+        "title": "95%",
+        "description": "Customer Satisfaction",
+        "subtext": "Based on 1,000+ reviews"
+      },
+      "security": {
+        "title": "100%",
+        "description": "Information Security",
+        "subtext": "Compliant with security regulations"
+      }
     }
   }
 }
