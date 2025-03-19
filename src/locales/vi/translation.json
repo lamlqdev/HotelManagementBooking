@@ -319,5 +319,49 @@
         "subtext": "Tuân thủ quy định bảo mật"
       }
     }
+  },
+  "contact": {
+    "hero": {
+      "title": "Liên Hệ Với Chúng Tôi",
+      "subtitle": "Chúng tôi luôn sẵn sàng hỗ trợ bạn 24/7"
+    },
+    "contact_info": {
+      "title": "Thông Tin Liên Hệ",
+      "description": "Hãy liên hệ với chúng tôi nếu bạn cần hỗ trợ. Đội ngũ chăm sóc khách hàng của chúng tôi sẽ phản hồi trong thời gian sớm nhất.",
+      "hotline": {
+        "label": "Hotline",
+        "value": "1900 1234"
+      },
+      "email": {
+        "label": "Email",
+        "value": "support@example.com"
+      },
+      "social": {
+        "title": "Kết nối với chúng tôi"
+      }
+    },
+    "contact_form": {
+      "title": "Gửi Tin Nhắn Cho Chúng Tôi",
+      "subtitle": "Phản hồi trong vòng 24 giờ",
+      "fields": {
+        "name": {
+          "label": "Họ và tên",
+          "placeholder": "Nhập họ và tên của bạn"
+        },
+        "email": {
+          "label": "Email",
+          "placeholder": "example@email.com"
+        },
+        "subject": {
+          "label": "Tiêu đề",
+          "placeholder": "Nhập tiêu đề"
+        },
+        "message": {
+          "label": "Nội dung",
+          "placeholder": "Nhập nội dung tin nhắn"
+        }
+      },
+      "submit": "Gửi tin nhắn"
+    }
   }
 }

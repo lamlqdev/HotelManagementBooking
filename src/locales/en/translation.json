@@ -319,5 +319,49 @@
         "subtext": "Compliant with security regulations"
       }
     }
+  },
+  "contact": {
+    "hero": {
+      "title": "Contact Us",
+      "subtitle": "We are here to help you 24/7"
+    },
+    "contact_info": {
+      "title": "Contact Information",
+      "description": "Please contact us if you need support. Our customer service team will respond as soon as possible.",
+      "hotline": {
+        "label": "Hotline",
+        "value": "1900 1234"
+      },
+      "email": {
+        "label": "Email",
+        "value": "support@example.com"
+      },
+      "social": {
+        "title": "Connect with us"
+      }
+    },
+    "contact_form": {
+      "title": "Send Us a Message",
+      "subtitle": "Response within 24 hours",
+      "fields": {
+        "name": {
+          "label": "Full Name",
+          "placeholder": "Enter your full name"
+        },
+        "email": {
+          "label": "Email",
+          "placeholder": "example@email.com"
+        },
+        "subject": {
+          "label": "Subject",
+          "placeholder": "Enter subject"
+        },
+        "message": {
+          "label": "Message",
+          "placeholder": "Enter your message"
+        }
+      },
+      "submit": "Send Message"
+    }
   }
 }
