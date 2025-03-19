@@ -363,5 +363,27 @@
       },
       "submit": "Gửi tin nhắn"
     }
+  },
+  "blog": {
+    "hero": {
+      "title": "Blog Du Lịch",
+      "subtitle": "Khám phá những trải nghiệm du lịch thú vị và những câu chuyện hấp dẫn từ khắp nơi trên thế giới"
+    },
+    "search": {
+      "placeholder": "Tìm kiếm bài viết..."
+    },
+    "categories": {
+      "all": "Tất cả",
+      "explore": "Khám phá",
+      "culture": "Văn hóa",
+      "food": "Ẩm thực",
+      "tips": "Mẹo hay"
+    },
+    "readTime": "phút đọc",
+    "noResults": "Không tìm thấy bài viết nào",
+    "pagination": {
+      "prev": "Trang trước",
+      "next": "Trang sau"
+    }
   }
 }

@@ -363,5 +363,27 @@
       },
       "submit": "Send Message"
     }
+  },
+  "blog": {
+    "hero": {
+      "title": "Travel Blog",
+      "subtitle": "Discover exciting travel experiences and fascinating stories from around the world"
+    },
+    "search": {
+      "placeholder": "Search articles..."
+    },
+    "categories": {
+      "all": "All",
+      "explore": "Explore",
+      "culture": "Culture",
+      "food": "Food",
+      "tips": "Tips"
+    },
+    "readTime": "min read",
+    "noResults": "No articles found",
+    "pagination": {
+      "prev": "Previous",
+      "next": "Next"
+    }
   }
 }
