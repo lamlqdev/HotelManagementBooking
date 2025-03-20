@@ -24,7 +24,7 @@ const Header = () => {
               {t("nav.home")}
             </Link>
             <Link
-              to="/locations"
+              to="/blog"
               className="text-foreground hover:text-primary transition-colors font-medium"
             >
               {t("nav.locations")}

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router";
 import { FiSearch, FiCalendar, FiClock, FiUser } from "react-icons/fi";
 import HeroBanner from "../components/sections/home/HeroBanner";
 import {
@@ -32,6 +33,7 @@ interface Category {
 
 const Blog: React.FC = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -155,6 +157,10 @@ const Blog: React.FC = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const handlePostClick = (slug: string) => {
+    navigate(`/blog/${slug}`);
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <HeroBanner
@@ -207,7 +213,8 @@ const Blog: React.FC = () => {
               {currentPosts.map((post) => (
                 <article
                   key={post.id}
-                  className="bg-card rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
+                  className="bg-card rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
+                  onClick={() => handlePostClick(post.slug)}
                 >
                   <div className="relative h-48">
                     <img

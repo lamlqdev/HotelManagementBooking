@@ -5,11 +5,13 @@ import Layout from "./layouts/RootLayout";
 import HomePage from "./pages/HomePage";
 import AboutPage from "./pages/AboutPage";
 import BlogPage from "./pages/BlogPage";
+import BlogDetailPage from "./pages/BlogDetailPage";
 import SearchResultPage from "./pages/SearchResultPage";
 import HotelDetailPage from "./pages/HotelDetailPage";
 import BookingInformationPage from "./pages/BookingInformationPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import ContactUs from "./pages/ContactUs";
 
 function App() {
   return (
@@ -24,8 +26,9 @@ function App() {
             path="/booking-information"
             element={<BookingInformationPage />}
           />
-
+          <Route path="/contact" element={<ContactUs />} />
           <Route path="/blog" element={<BlogPage />} />
+          <Route path="/blog/:slug" element={<BlogDetailPage />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
