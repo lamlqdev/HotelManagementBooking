@@ -53,7 +53,7 @@ const RegisterPage = () => {
       }
     },
     onError: (error: ApiError) => {
-      toast.error(error.response?.data?.message || "Có lỗi xảy ra khi đăng ký");
+      toast.error(error.message || "Có lỗi xảy ra khi đăng ký");
     },
   });
 

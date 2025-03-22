@@ -21,18 +21,28 @@ export const registerSchema = z
     path: ["confirmPassword"],
   });
 
+export const loginSchema = z.object({
+  email: z.string().email("Email không hợp lệ"),
+  password: z.string().min(1, "Vui lòng nhập mật khẩu"),
+  rememberMe: z.boolean().default(false),
+});
+
 export type RegisterFormData = z.infer<typeof registerSchema>;
+export type LoginFormData = z.infer<typeof loginSchema>;
 
 export interface AuthResponse {
   success: boolean;
-  message: string;
+  message?: string;
+  accessToken?: string;
+  refreshToken?: string;
   data?: {
-    accessToken?: string;
     user?: {
       id: string;
+      name: string;
       email: string;
-      fullName: string;
+      role: string;
       isEmailVerified: boolean;
+      provider?: string;
     };
   };
 }
@@ -41,14 +51,14 @@ export interface VerifyEmailRequest {
   token: string;
 }
 
-export interface ResendVerificationRequest {
+export interface ResetPasswordFormData {
   email: string;
+  otp: string;
+  password: string;
+  confirmPassword: string;
 }
 
 export interface ApiError {
-  response?: {
-    data?: {
-      message?: string;
-    };
-  };
+  success: boolean;
+  message: string;
 }
