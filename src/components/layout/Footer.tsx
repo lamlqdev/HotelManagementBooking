@@ -5,13 +5,17 @@ import logo from "../../assets/images/logo.png";
 const Footer = () => {
   const { t } = useTranslation();
 
+  const scrollToTop = () => {
+    window.scrollTo(0, 0);
+  };
+
   return (
     <footer className="bg-background py-12">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Logo section */}
           <div>
-            <Link to="/" className="flex items-center">
+            <Link to="/" className="flex items-center" onClick={scrollToTop}>
               <img src={logo} alt={t("common.logo_alt")} className="h-32" />
             </Link>
           </div>
@@ -26,6 +30,7 @@ const Footer = () => {
                 <Link
                   to="/about"
                   className="text-muted-foreground hover:text-foreground transition-colors"
+                  onClick={scrollToTop}
                 >
                   {t("footer.company.about")}
                 </Link>
@@ -34,6 +39,7 @@ const Footer = () => {
                 <Link
                   to="/contact"
                   className="text-muted-foreground hover:text-foreground transition-colors"
+                  onClick={scrollToTop}
                 >
                   {t("footer.company.contact")}
                 </Link>
@@ -42,6 +48,7 @@ const Footer = () => {
                 <Link
                   to="/booking-guide"
                   className="text-muted-foreground hover:text-foreground transition-colors"
+                  onClick={scrollToTop}
                 >
                   {t("footer.company.booking_guide")}
                 </Link>
@@ -59,6 +66,7 @@ const Footer = () => {
                 <Link
                   to="/booking"
                   className="text-muted-foreground hover:text-foreground transition-colors"
+                  onClick={scrollToTop}
                 >
                   {t("footer.services.booking")}
                 </Link>
@@ -67,6 +75,7 @@ const Footer = () => {
                 <Link
                   to="/management"
                   className="text-muted-foreground hover:text-foreground transition-colors"
+                  onClick={scrollToTop}
                 >
                   {t("footer.services.management")}
                 </Link>
@@ -75,6 +84,7 @@ const Footer = () => {
                 <Link
                   to="/blog"
                   className="text-muted-foreground hover:text-foreground transition-colors"
+                  onClick={scrollToTop}
                 >
                   {t("footer.services.blog")}
                 </Link>
@@ -92,6 +102,7 @@ const Footer = () => {
                 <Link
                   to="/privacy-policy"
                   className="text-muted-foreground hover:text-foreground transition-colors"
+                  onClick={scrollToTop}
                 >
                   {t("footer.support.privacy_policy")}
                 </Link>
@@ -100,6 +111,7 @@ const Footer = () => {
                 <Link
                   to="/terms"
                   className="text-muted-foreground hover:text-foreground transition-colors"
+                  onClick={scrollToTop}
                 >
                   {t("footer.support.terms")}
                 </Link>
@@ -108,6 +120,7 @@ const Footer = () => {
                 <Link
                   to="/feedback"
                   className="text-muted-foreground hover:text-foreground transition-colors"
+                  onClick={scrollToTop}
                 >
                   {t("footer.support.feedback")}
                 </Link>
