@@ -495,5 +495,35 @@
     "commentCancelledError": "Có lỗi xảy ra khi hủy bình luận. Vui lòng thử lại.",
     "commentConfirmedSuccess": "Bình luận đã được xác nhận thành công.",
     "commentConfirmedError": "Có lỗi xảy ra khi xác nhận bình luận. Vui lòng thử lại."
+  },
+  "bookingGuide": {
+    "title": "Hướng Dẫn Đặt Phòng",
+    "description": "Quy trình đặt phòng đơn giản chỉ với 6 bước",
+    "steps": {
+      "1": {
+        "title": "Tìm kiếm khách sạn",
+        "description": "Bắt đầu tìm khách sạn bằng cách điền thông tin điểm đến, địa danh hoặc tên khách sạn và số đêm nghỉ."
+      },
+      "2": {
+        "title": "Chọn khách sạn",
+        "description": "Trên trang kết quả tìm kiếm, bạn chọn khách sạn mong muốn. Nhấn \"Xem phòng\" để xem thông tin chi tiết phòng nghỉ."
+      },
+      "3": {
+        "title": "Đặt khách sạn",
+        "description": "Trên trang thông tin khách sạn, chọn hạng phòng và số lượng phòng bạn muốn đặt."
+      },
+      "4": {
+        "title": "Điền thông tin liên lạc và thông tin khách lưu trú",
+        "description": "Hãy chắc chắn rằng tất cả thông tin đều chính xác, sau đó tiến hành thanh toán."
+      },
+      "5": {
+        "title": "Thực hiện thanh toán",
+        "description": "Chọn phương thức thanh toán mong muốn. Chú ý không thanh toán vượt quá thời gian quy định."
+      },
+      "6": {
+        "title": "Nhận phiếu thanh toán",
+        "description": "Chúng tôi sẽ gửi phiếu thanh toán qua email của bạn trong vòng 60 phút sau khi nhận được số tiền thanh toán."
+      }
+    }
   }
 }

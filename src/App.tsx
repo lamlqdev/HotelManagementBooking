@@ -12,6 +12,7 @@ import BookingInformationPage from "./pages/BookingInformationPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ContactUs from "./pages/ContactUs";
+import BookingGuidePage from "./pages/BookingGuidePage";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             path="/booking-information"
             element={<BookingInformationPage />}
           />
+          <Route path="/booking-guide" element={<BookingGuidePage />} />
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/blog/:slug" element={<BlogDetailPage />} />
