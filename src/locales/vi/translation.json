@@ -104,6 +104,20 @@
       },
       "hasAccount": "Đã có tài khoản?",
       "login": "Đăng nhập"
+    },
+    "verify_email": {
+      "notification": {
+        "title": "Xác thực email",
+        "sent_to": "Chúng tôi đã gửi một email xác thực đến địa chỉ:",
+        "instruction": "Vui lòng kiểm tra hộp thư của bạn và nhấn vào đường dẫn xác thực trong email. Đường dẫn có hiệu lực trong 24 giờ.",
+        "understand_button": "Đã hiểu"
+      },
+      "page": {
+        "title": "Đang xác thực email của bạn",
+        "loading": "Vui lòng đợi trong giây lát...",
+        "success": "Xác thực email thành công",
+        "error": "Có lỗi xảy ra khi xác thực email"
+      }
     }
   },
   "banner": {

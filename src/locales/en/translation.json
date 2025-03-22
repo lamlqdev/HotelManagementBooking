@@ -104,6 +104,20 @@
       },
       "hasAccount": "Already have an account?",
       "login": "Login"
+    },
+    "verify_email": {
+      "notification": {
+        "title": "Email Verification",
+        "sent_to": "We have sent a verification email to:",
+        "instruction": "Please check your inbox and click on the verification link in the email. The link is valid for 24 hours.",
+        "understand_button": "I understand"
+      },
+      "page": {
+        "title": "Verifying your email",
+        "loading": "Please wait a moment...",
+        "success": "Email verification successful",
+        "error": "An error occurred while verifying email"
+      }
     }
   },
   "banner": {
