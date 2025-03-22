@@ -26,7 +26,8 @@ const VerifyEmailPage = () => {
       }
     },
     onError: (error: ApiError) => {
-      toast.error(error.message || t("auth.verify_email.page.error"));
+      const errorMessage = error.response?.data?.message || error.message;
+      toast.error(errorMessage || t("auth.verify_email.page.error"));
       navigate("/register");
     },
   });

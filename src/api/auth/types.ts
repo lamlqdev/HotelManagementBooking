@@ -61,4 +61,11 @@ export interface ResetPasswordFormData {
 export interface ApiError {
   success: boolean;
   message: string;
+  response?: {
+    status: number;
+    data: {
+      success: boolean;
+      message: string;
+    };
+  };
 }

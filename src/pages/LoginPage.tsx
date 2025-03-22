@@ -53,17 +53,33 @@ const LoginPage = () => {
       }
     },
     onError: (error: ApiError) => {
-      if (!error.success) {
-        if (error.message.toLowerCase().includes("email hoặc mật khẩu")) {
-          setError("email", { message: " " });
-          setError("password", {
-            message: "Email hoặc mật khẩu không chính xác",
-          });
-        } else if (error.message.toLowerCase().includes("xác thực email")) {
-          toast.error(error.message);
-        } else {
-          toast.error(error.message || "Đã có lỗi xảy ra khi đăng nhập");
-        }
+      const errorMessage = error.response?.data?.message || error.message;
+      const status = error.response?.status;
+
+      switch (status) {
+        case 400:
+          toast.error(
+            errorMessage || "Vui lòng kiểm tra lại thông tin đăng nhập"
+          );
+          break;
+
+        case 401:
+          if (errorMessage?.includes("xác thực email")) {
+            toast.error(errorMessage);
+          } else {
+            setError("email", { message: " " });
+            setError("password", {
+              message: "Email hoặc mật khẩu không chính xác",
+            });
+          }
+          break;
+
+        case 500:
+          toast.error("Đã có lỗi xảy ra, vui lòng thử lại sau");
+          break;
+
+        default:
+          toast.error(errorMessage || "Đã có lỗi xảy ra khi đăng nhập");
       }
     },
   });
