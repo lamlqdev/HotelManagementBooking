@@ -32,8 +32,43 @@ export const loginSchema = z
     password: true,
   });
 
+export const forgotPasswordEmailSchema = z.object({
+  email: z
+    .string({ required_error: "auth.forgot_password.error.email_required" })
+    .email("auth.forgot_password.error.email_invalid"),
+});
+
+export const forgotPasswordOTPSchema = z.object({
+  otp: z
+    .string({ required_error: "auth.forgot_password.error.otp_required" })
+    .min(1, "auth.forgot_password.error.otp_required"),
+});
+
+export const forgotPasswordNewPasswordSchema = z
+  .object({
+    password: z
+      .string({
+        required_error: "auth.forgot_password.error.password_required",
+      })
+      .min(6, "auth.forgot_password.error.password_min"),
+    confirmPassword: z.string({
+      required_error: "auth.forgot_password.error.password_required",
+    }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "auth.forgot_password.error.password_mismatch",
+    path: ["confirmPassword"],
+  });
+
 export type RegisterFormData = z.infer<typeof registerSchema>;
 export type LoginFormData = z.infer<typeof loginSchema>;
+export type ForgotPasswordEmailFormData = z.infer<
+  typeof forgotPasswordEmailSchema
+>;
+export type ForgotPasswordOTPFormData = z.infer<typeof forgotPasswordOTPSchema>;
+export type ForgotPasswordNewPasswordFormData = z.infer<
+  typeof forgotPasswordNewPasswordSchema
+>;
 
 export interface AuthResponse {
   success: boolean;

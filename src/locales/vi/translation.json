@@ -118,6 +118,43 @@
         "success": "Xác thực email thành công",
         "error": "Có lỗi xảy ra khi xác thực email"
       }
+    },
+    "forgot_password": {
+      "title": "Quên mật khẩu",
+      "description": "Nhập email của bạn để nhận mã OTP",
+      "email": "Email",
+      "email_placeholder": "Nhập email của bạn",
+      "send_otp": "Gửi mã OTP",
+      "sending": "Đang gửi...",
+      "verify_otp": "Xác thực OTP",
+      "verifying": "Đang xác thực...",
+      "otp_description": "Nhập mã OTP đã được gửi đến email của bạn",
+      "otp": "Mã OTP",
+      "otp_placeholder": "Nhập mã OTP",
+      "verify": "Xác thực",
+      "reset_password": "Đặt lại mật khẩu",
+      "new_password": "Mật khẩu mới",
+      "new_password_placeholder": "Nhập mật khẩu mới",
+      "confirm_password": "Xác nhận mật khẩu",
+      "confirm_password_placeholder": "Nhập lại mật khẩu mới",
+      "submit": "Hoàn tất",
+      "submitting": "Đang xử lý...",
+      "back_to_login": "Quay lại đăng nhập",
+      "success": {
+        "otp_sent": "Mã OTP đã được gửi đến email của bạn",
+        "otp_verified": "Xác thực OTP thành công",
+        "password_reset": "Đặt lại mật khẩu thành công"
+      },
+      "error": {
+        "email_required": "Vui lòng nhập email",
+        "email_invalid": "Email không hợp lệ",
+        "otp_required": "Vui lòng nhập mã OTP",
+        "otp_invalid": "Mã OTP không hợp lệ",
+        "password_required": "Vui lòng nhập mật khẩu mới",
+        "password_min": "Mật khẩu phải có ít nhất 6 ký tự",
+        "password_mismatch": "Mật khẩu không khớp",
+        "unknown": "Đã có lỗi xảy ra, vui lòng thử lại"
+      }
     }
   },
   "banner": {

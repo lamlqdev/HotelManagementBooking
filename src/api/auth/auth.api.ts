@@ -51,7 +51,7 @@ export const authApi = {
 
   // Gửi OTP để reset password
   sendOTP: async (email: string): Promise<AuthResponse> => {
-    const response = await axiosInstance.post(`${API_URL}/forgot-password`, {
+    const response = await axiosInstance.post(`${API_URL}/password/forgot`, {
       email,
     });
     return response.data;
@@ -59,10 +59,13 @@ export const authApi = {
 
   // Xác thực OTP
   verifyOTP: async (email: string, otp: string): Promise<AuthResponse> => {
-    const response = await axiosInstance.post(`${API_URL}/verify-otp`, {
-      email,
-      otp,
-    });
+    const response = await axiosInstance.post(
+      `${API_URL}/password/verify-otp`,
+      {
+        email,
+        otp,
+      }
+    );
     return response.data;
   },
 
@@ -72,7 +75,7 @@ export const authApi = {
     otp: string,
     password: string
   ): Promise<AuthResponse> => {
-    const response = await axiosInstance.post(`${API_URL}/reset-password`, {
+    const response = await axiosInstance.post(`${API_URL}/password/reset`, {
       email,
       otp,
       password,

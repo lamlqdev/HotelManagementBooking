@@ -20,6 +20,7 @@ import RegisterPage from "./pages/RegisterPage";
 import ContactUs from "./pages/ContactUs";
 import BookingGuidePage from "./pages/BookingGuidePage";
 import VerifyEmailPage from "./pages/VerifyEmailPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/verify-email/:token" element={<VerifyEmailPage />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           </Route>
 
           {/* Protected Routes - Yêu cầu đăng nhập */}
