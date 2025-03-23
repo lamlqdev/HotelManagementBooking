@@ -699,5 +699,13 @@
         "description": "We will send the booking confirmation to your email within 60 minutes after receiving payment."
       }
     }
+  },
+  "settings": {
+    "title": "Settings",
+    "appearance": "Appearance",
+    "theme": "Theme",
+    "themeDescription": "Change the theme of the application",
+    "language": "Language",
+    "languageDescription": "Select your preferred language"
   }
 }

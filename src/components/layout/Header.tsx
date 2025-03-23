@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "../ui/button";
-import { ModeToggle } from "../common/ModeToggle";
 import logo from "../../assets/images/logo.png";
 import { useAppDispatch } from "@/store/hooks";
 import { logout } from "@/features/auth/authSlice";
@@ -41,8 +40,6 @@ const Header = () => {
           <Link to="/" className="flex items-center">
             <img src={logo} alt={t("common.logo_alt")} className="h-24" />
           </Link>
-
-          <ModeToggle />
 
           <nav className="hidden md:flex items-center space-x-8">
             <Link

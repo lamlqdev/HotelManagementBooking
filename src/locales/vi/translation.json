@@ -576,5 +576,13 @@
         "description": "Chúng tôi sẽ gửi phiếu thanh toán qua email của bạn trong vòng 60 phút sau khi nhận được số tiền thanh toán."
       }
     }
+  },
+  "settings": {
+    "title": "Cài đặt",
+    "appearance": "Giao diện",
+    "theme": "Chủ đề",
+    "themeDescription": "Thay đổi chủ đề của ứng dụng",
+    "language": "Ngôn ngữ",
+    "languageDescription": "Chọn ngôn ngữ bạn muốn sử dụng"
   }
 }
