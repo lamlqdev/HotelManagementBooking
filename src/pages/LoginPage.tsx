@@ -8,7 +8,6 @@ import { useMutation } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 
 import { authApi } from "@/api/auth/auth.api";
@@ -44,11 +43,7 @@ const LoginPage = () => {
 
   const loginMutation = useMutation({
     mutationFn: async (data: LoginFormData) => {
-      const result = await authApi.login(
-        data.email,
-        data.password,
-        data.rememberMe
-      );
+      const result = await authApi.login(data.email, data.password);
       return result;
     },
     onSuccess: async (response) => {
@@ -199,20 +194,6 @@ const LoginPage = () => {
             </div>
 
             <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="remember-me"
-                  {...register("rememberMe")}
-                  disabled={loginMutation.isPending || isSubmitting}
-                  className="border border-input data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
-                />
-                <label
-                  htmlFor="remember-me"
-                  className="text-sm text-card-foreground"
-                >
-                  {t("auth.login.form.rememberMe")}
-                </label>
-              </div>
               <div className="text-sm">
                 <Link
                   to="/forgot-password"

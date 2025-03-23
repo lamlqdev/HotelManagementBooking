@@ -17,8 +17,17 @@ i18n
       },
     },
     fallbackLng: "en",
+    lng: "en",
+    debug: true,
     interpolation: {
       escapeValue: false,
+    },
+    detection: {
+      order: ["localStorage", "navigator"],
+      caches: ["localStorage"],
+    },
+    react: {
+      useSuspense: false,
     },
   });
 

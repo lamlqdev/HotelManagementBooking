@@ -24,15 +24,10 @@ export const authApi = {
   },
 
   // Đăng nhập
-  login: async (
-    email: string,
-    password: string,
-    rememberMe: boolean = false
-  ): Promise<AuthResponse> => {
+  login: async (email: string, password: string): Promise<AuthResponse> => {
     const response = await axiosInstance.post(`${API_URL}/login`, {
       email,
       password,
-      rememberMe,
     });
     return response.data;
   },

@@ -398,14 +398,14 @@
     },
     "contact_info": {
       "title": "Thông Tin Liên Hệ",
-      "description": "Hãy liên hệ với chúng tôi nếu bạn cần hỗ trợ. Đội ngũ chăm sóc khách hàng của chúng tôi sẽ phản hồi trong thời gian sớm nhất.",
+      "description": "Hãy liên hệ với chúng tôi nếu bạn cần bất kỳ sự trợ giúp nào. Đội ngũ của chúng tôi luôn sẵn sàng phục vụ bạn.",
       "hotline": {
-        "label": "Hotline",
+        "label": "Đường dây nóng",
         "value": "1900 1234"
       },
       "email": {
         "label": "Email",
-        "value": "support@example.com"
+        "value": "support@bookit.com"
       },
       "social": {
         "title": "Kết nối với chúng tôi"
@@ -413,7 +413,7 @@
     },
     "contact_form": {
       "title": "Gửi Tin Nhắn Cho Chúng Tôi",
-      "subtitle": "Phản hồi trong vòng 24 giờ",
+      "subtitle": "Chúng tôi sẽ phản hồi trong vòng 24 giờ",
       "fields": {
         "name": {
           "label": "Họ và tên",
@@ -421,15 +421,15 @@
         },
         "email": {
           "label": "Email",
-          "placeholder": "example@email.com"
+          "placeholder": "Nhập địa chỉ email của bạn"
         },
         "subject": {
           "label": "Tiêu đề",
-          "placeholder": "Nhập tiêu đề"
+          "placeholder": "Nhập tiêu đề tin nhắn"
         },
         "message": {
           "label": "Nội dung",
-          "placeholder": "Nhập nội dung tin nhắn"
+          "placeholder": "Nhập nội dung tin nhắn của bạn"
         }
       },
       "submit": "Gửi tin nhắn"
