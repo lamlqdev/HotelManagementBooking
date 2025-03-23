@@ -21,11 +21,16 @@ export const registerSchema = z
     path: ["confirmPassword"],
   });
 
-export const loginSchema = z.object({
-  email: z.string().email("Email không hợp lệ"),
-  password: z.string().min(1, "Vui lòng nhập mật khẩu"),
-  rememberMe: z.boolean().default(false),
-});
+export const loginSchema = z
+  .object({
+    email: z.string().email("Email không hợp lệ"),
+    password: z.string().min(1, "Vui lòng nhập mật khẩu"),
+    rememberMe: z.boolean().default(false),
+  })
+  .required({
+    email: true,
+    password: true,
+  });
 
 export type RegisterFormData = z.infer<typeof registerSchema>;
 export type LoginFormData = z.infer<typeof loginSchema>;

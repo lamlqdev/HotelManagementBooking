@@ -13,17 +13,19 @@ import { toast } from "sonner";
 
 import { authApi } from "@/api/auth/auth.api";
 import { loginSchema, LoginFormData, ApiError } from "@/api/auth/types";
+import { setCredentials, setUser } from "@/features/auth/authSlice";
+import { useAppDispatch } from "@/store/hooks";
 
 const LoginPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const dispatch = useAppDispatch();
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
-    setError,
+    formState: { errors, isSubmitting },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -31,61 +33,66 @@ const LoginPage = () => {
       password: "",
       rememberMe: false,
     },
+    mode: "onSubmit",
+    reValidateMode: "onSubmit",
+    shouldFocusError: true,
+    resetOptions: {
+      keepValues: true,
+      keepErrors: true,
+    },
   });
 
   const loginMutation = useMutation({
-    mutationFn: (data: LoginFormData) =>
-      authApi.login(data.email, data.password, data.rememberMe),
-    onSuccess: (response) => {
+    mutationFn: async (data: LoginFormData) => {
+      const result = await authApi.login(
+        data.email,
+        data.password,
+        data.rememberMe
+      );
+      return result;
+    },
+    onSuccess: async (response) => {
       if (response.success && response.accessToken) {
         localStorage.setItem("accessToken", response.accessToken);
         if (response.refreshToken) {
           localStorage.setItem("refreshToken", response.refreshToken);
         }
 
-        toast.success("Đăng nhập thành công");
+        dispatch(
+          setCredentials({
+            accessToken: response.accessToken,
+            refreshToken: response.refreshToken || "",
+          })
+        );
 
-        setTimeout(() => {
-          navigate("/");
-        }, 100);
+        try {
+          const userResponse = await authApi.getMe();
+          if (userResponse.success) {
+            dispatch(setUser(userResponse.data));
+            toast.success("Đăng nhập thành công");
+            navigate("/");
+          }
+        } catch (error) {
+          console.error("Lỗi khi lấy thông tin user:", error);
+          toast.error("Không thể lấy thông tin người dùng");
+        }
       } else {
-        toast.error("Đăng nhập không thành công");
+        toast.error(response.message || "Đăng nhập không thành công");
       }
     },
     onError: (error: ApiError) => {
       const errorMessage = error.response?.data?.message || error.message;
-      const status = error.response?.status;
-
-      switch (status) {
-        case 400:
-          toast.error(
-            errorMessage || "Vui lòng kiểm tra lại thông tin đăng nhập"
-          );
-          break;
-
-        case 401:
-          if (errorMessage?.includes("xác thực email")) {
-            toast.error(errorMessage);
-          } else {
-            setError("email", { message: " " });
-            setError("password", {
-              message: "Email hoặc mật khẩu không chính xác",
-            });
-          }
-          break;
-
-        case 500:
-          toast.error("Đã có lỗi xảy ra, vui lòng thử lại sau");
-          break;
-
-        default:
-          toast.error(errorMessage || "Đã có lỗi xảy ra khi đăng nhập");
-      }
+      toast.error(errorMessage || "Có lỗi xảy ra khi đăng nhập");
     },
   });
 
-  const onSubmit = (data: LoginFormData) => {
-    loginMutation.mutate(data);
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    handleSubmit((data) => {
+      if (!isSubmitting) {
+        loginMutation.mutate(data);
+      }
+    })(e);
   };
 
   return (
@@ -122,7 +129,7 @@ const LoginPage = () => {
             </h2>
           </div>
 
-          <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+          <form className="space-y-4" onSubmit={onSubmit} noValidate>
             <div className="space-y-3">
               <div>
                 <label
@@ -135,11 +142,12 @@ const LoginPage = () => {
                   id="email"
                   type="email"
                   {...register("email")}
-                  disabled={loginMutation.isPending}
+                  disabled={loginMutation.isPending || isSubmitting}
                   placeholder={t("auth.login.form.email.placeholder")}
                   className={`border border-input bg-background focus-visible:ring-1 focus-visible:ring-ring ${
                     errors.email ? "border-red-500" : ""
                   }`}
+                  autoComplete="email"
                 />
                 {errors.email && (
                   <p className="mt-1 text-sm text-red-500">
@@ -160,17 +168,18 @@ const LoginPage = () => {
                     id="password"
                     type={showPassword ? "text" : "password"}
                     {...register("password")}
-                    disabled={loginMutation.isPending}
+                    disabled={loginMutation.isPending || isSubmitting}
                     className={`pr-10 [&::-ms-reveal]:hidden [&::-ms-clear]:hidden border border-input bg-background focus-visible:ring-1 focus-visible:ring-ring ${
                       errors.password ? "border-red-500" : ""
                     }`}
                     placeholder={t("auth.login.form.password.placeholder")}
+                    autoComplete="current-password"
                   />
                   <Button
                     type="button"
                     variant="ghost"
                     size="icon"
-                    disabled={loginMutation.isPending}
+                    disabled={loginMutation.isPending || isSubmitting}
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute inset-y-0 right-0 px-3 flex items-center hover:bg-transparent"
                   >
@@ -194,7 +203,7 @@ const LoginPage = () => {
                 <Checkbox
                   id="remember-me"
                   {...register("rememberMe")}
-                  disabled={loginMutation.isPending}
+                  disabled={loginMutation.isPending || isSubmitting}
                   className="border border-input data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
                 />
                 <label
@@ -218,7 +227,7 @@ const LoginPage = () => {
               <Button
                 type="submit"
                 className="w-full"
-                disabled={loginMutation.isPending}
+                disabled={loginMutation.isPending || isSubmitting}
               >
                 {loginMutation.isPending
                   ? "Đang đăng nhập..."
