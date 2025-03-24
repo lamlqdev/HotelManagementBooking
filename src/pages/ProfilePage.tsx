@@ -1,5 +1,9 @@
 import { useTranslation } from "react-i18next";
 import { useAppSelector } from "@/store/hooks";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { useState } from "react";
+
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -19,10 +23,51 @@ import {
   User2,
   Users,
 } from "lucide-react";
+import { userApi } from "@/api/user/user.api";
 
 const Profile = () => {
   const { t } = useTranslation();
   const { user } = useAppSelector((state) => state.auth);
+  const queryClient = useQueryClient();
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  const uploadAvatarMutation = useMutation({
+    mutationFn: userApi.uploadAvatar,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+      toast.success(t("profile.avatar_upload_success"));
+    },
+    onError: () => {
+      toast.error(t("profile.avatar_upload_error"));
+    },
+  });
+
+  const handleAvatarUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      // Kiểm tra kích thước file (tối đa 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error(t("profile.file_too_large"));
+        return;
+      }
+
+      // Kiểm tra định dạng file
+      if (!file.type.startsWith("image/")) {
+        toast.error(t("profile.invalid_file_type"));
+        return;
+      }
+
+      // Tạo URL preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewUrl(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+
+      // Upload file
+      uploadAvatarMutation.mutate(file);
+    }
+  };
 
   return (
     <div className="container mx-auto py-8 mt-24">
@@ -35,20 +80,36 @@ const Profile = () => {
             <div className="relative">
               <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-primary">
                 <img
-                  src={`${import.meta.env.VITE_API_URL}/uploads/avatars/${
-                    user?.avatar
-                  }`}
+                  src={
+                    previewUrl ||
+                    (user?.avatar
+                      ? user.avatar === "default-avatar.jpg"
+                        ? "/images/default-avatar.png"
+                        : `${
+                            import.meta.env.VITE_API_URL
+                          }/public/uploads/profiles/${user.avatar}`
+                      : "/images/default-avatar.jpg")
+                  }
                   alt={user?.name}
                   className="w-full h-full object-cover"
                 />
               </div>
-              <Button
-                size="icon"
-                variant="secondary"
-                className="absolute bottom-0 right-0 rounded-full"
-              >
-                <Camera className="h-4 w-4" />
-              </Button>
+              <div className="absolute bottom-0 right-0">
+                <input
+                  id="avatar-upload"
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleAvatarUpload}
+                  disabled={uploadAvatarMutation.isPending}
+                />
+                <label
+                  htmlFor="avatar-upload"
+                  className="cursor-pointer inline-flex items-center justify-center w-8 h-8 rounded-full bg-secondary hover:bg-secondary/80 transition-colors"
+                >
+                  <Camera className="h-4 w-4" />
+                </label>
+              </div>
             </div>
             <h2 className="mt-4 text-xl font-semibold">{user?.name}</h2>
             <p className="text-muted-foreground">

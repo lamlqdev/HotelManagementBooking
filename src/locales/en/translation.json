@@ -613,6 +613,8 @@
     "preferred_airline": "Preferred Airlines",
     "preferred_hotel_type": "Preferred Hotel Type",
     "meal_preferences": "Meal Preferences",
-    "vegetarian": "Vegetarian"
+    "vegetarian": "Vegetarian",
+    "avatar_upload_success": "Avatar uploaded successfully",
+    "avatar_upload_error": "Failed to upload avatar"
   }
 }

@@ -86,9 +86,15 @@ const Header = () => {
                     >
                       <Avatar>
                         <AvatarImage
-                          src={`${
-                            import.meta.env.VITE_API_URL
-                          }/uploads/avatars/${user.avatar}`}
+                          src={
+                            user.avatar
+                              ? user.avatar === "default-avatar.jpg"
+                                ? "/images/default-avatar.png"
+                                : `${
+                                    import.meta.env.VITE_API_URL
+                                  }/public/uploads/profiles/${user.avatar}`
+                              : "/images/default-avatar.jpg"
+                          }
                           alt={user.name}
                         />
                         <AvatarFallback>

@@ -1,10 +1,10 @@
 import { ThemeProvider } from "./components/layout/ThemeProvider";
 import { Route, Routes } from "react-router";
-import Layout from "./layouts/RootLayout";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./lib/react-query";
 import { Toaster } from "sonner";
 
+import Layout from "./layouts/RootLayout";
 import PublicRoute from "./components/PublicRoute";
 import PrivateRoute from "./components/PrivateRoute";
 

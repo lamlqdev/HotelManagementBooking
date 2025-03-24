@@ -613,6 +613,8 @@
     "preferred_airline": "Hãng hàng không ưa thích",
     "preferred_hotel_type": "Loại khách sạn ưa thích",
     "meal_preferences": "Sở thích ẩm thực",
-    "vegetarian": "Ăn chay"
+    "vegetarian": "Ăn chay",
+    "avatar_upload_success": "Ảnh đại diện đã được tải lên thành công",
+    "avatar_upload_error": "Lỗi tải lên ảnh đại diện"
   }
 }
