@@ -616,5 +616,79 @@
     "vegetarian": "Vegetarian",
     "avatar_upload_success": "Avatar uploaded successfully",
     "avatar_upload_error": "Failed to upload avatar"
+  },
+  "partnership": {
+    "hero": {
+      "title": "Become our partner",
+      "subtitle": "Let's grow together and bring amazing experiences to customers"
+    },
+    "why": {
+      "title": "Why become a partner?",
+      "reach": {
+        "title": "Wide reach",
+        "description": "Connect with thousands of potential customers through our platform"
+      },
+      "growth": {
+        "title": "Sustainable growth",
+        "description": "Leverage advanced technology and effective marketing strategies to expand your business"
+      },
+      "trust": {
+        "title": "Proven credibility",
+        "description": "Supported by a reputable platform with thousands of positive customer reviews"
+      }
+    },
+    "benefits": {
+      "title": "Benefits of becoming a partner",
+      "business": {
+        "title": "Business benefits",
+        "item1": "Increase revenue by reaching new customers",
+        "item2": "Promote your brand on a trusted platform",
+        "item3": "Utilize cutting-edge technology to optimize operations"
+      },
+      "management": {
+        "title": "Efficient management",
+        "item1": "Simple and easy-to-use management tools",
+        "item2": "Detailed reports and data analysis",
+        "item3": "24/7 technical support"
+      }
+    },
+    "how": {
+      "title": "How to register as a partner",
+      "step1": {
+        "title": "Fill in basic information",
+        "description": "Provide your business details and contact information"
+      },
+      "step2": {
+        "title": "Verify documents",
+        "description": "Upload the necessary documents for business verification"
+      },
+      "step3": {
+        "title": "Complete registration",
+        "description": "Sign the partnership agreement and start growing with us"
+      }
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "q1": "What are the requirements to become a partner?",
+      "a1": "To become a partner, your business must meet the following conditions: have a valid business license, have experience in the tourism industry, have a professional team, and commit to providing high-quality services.",
+      "q2": "How long does the partner verification process take?",
+      "a2": "Typically, the verification process takes 3-5 business days after we receive all required documents. If additional information is needed, we will contact you immediately.",
+      "q3": "Is there a registration fee to become a partner?",
+      "a3": "We do not charge a registration fee for becoming a partner. However, a commission fee will be applied to each successful booking, calculated as a percentage of the total booking value.",
+      "q4": "How can I manage bookings?",
+      "a4": "We provide an online booking management system that allows you to easily track and process reservations. You can access this system 24/7 from any device.",
+      "q5": "Is technical support available for partners?",
+      "a5": "Yes, we offer 24/7 technical support for all partners through multiple channels, including email, phone, and live chat. Our support team is always ready to assist you.",
+      "more_questions": {
+        "title": "Still have questions?",
+        "description": "If you still have questions or need more information, please do not hesitate to contact us. Our support team is always ready to assist you.",
+        "button": "Contact Us"
+      }
+    },
+    "cta": {
+      "title": "Ready to get started?",
+      "description": "Register today to become a partner and grow with us",
+      "button": "Register as a partner"
+    }
   }
 }

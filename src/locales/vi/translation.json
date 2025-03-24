@@ -616,5 +616,79 @@
     "vegetarian": "Ăn chay",
     "avatar_upload_success": "Ảnh đại diện đã được tải lên thành công",
     "avatar_upload_error": "Lỗi tải lên ảnh đại diện"
+  },
+  "partnership": {
+    "hero": {
+      "title": "Trở thành đối tác của chúng tôi",
+      "subtitle": "Hãy cùng nhau phát triển và mang đến những trải nghiệm tuyệt vời cho khách hàng"
+    },
+    "why": {
+      "title": "Tại sao nên trở thành đối tác?",
+      "reach": {
+        "title": "Tiếp cận rộng rãi",
+        "description": "Kết nối với hàng nghìn khách hàng tiềm năng thông qua nền tảng của chúng tôi"
+      },
+      "growth": {
+        "title": "Tăng trưởng bền vững",
+        "description": "Tận dụng công nghệ tiên tiến và chiến lược marketing hiệu quả để phát triển doanh nghiệp"
+      },
+      "trust": {
+        "title": "Uy tín đã được khẳng định",
+        "description": "Được hỗ trợ bởi một nền tảng có uy tín với hàng nghìn đánh giá tích cực từ khách hàng"
+      }
+    },
+    "benefits": {
+      "title": "Lợi ích khi trở thành đối tác",
+      "business": {
+        "title": "Lợi ích kinh doanh",
+        "item1": "Tăng doanh thu thông qua việc tiếp cận khách hàng mới",
+        "item2": "Quảng bá thương hiệu trên nền tảng uy tín",
+        "item3": "Tận dụng công nghệ tiên tiến để tối ưu hóa hoạt động"
+      },
+      "management": {
+        "title": "Quản lý hiệu quả",
+        "item1": "Công cụ quản lý đơn giản, dễ sử dụng",
+        "item2": "Báo cáo chi tiết và phân tích dữ liệu",
+        "item3": "Hỗ trợ kỹ thuật 24/7"
+      }
+    },
+    "how": {
+      "title": "Cách đăng ký trở thành đối tác",
+      "step1": {
+        "title": "Điền thông tin cơ bản",
+        "description": "Cung cấp thông tin doanh nghiệp và liên hệ của bạn"
+      },
+      "step2": {
+        "title": "Xác minh tài liệu",
+        "description": "Tải lên các tài liệu cần thiết để xác minh doanh nghiệp"
+      },
+      "step3": {
+        "title": "Hoàn tất đăng ký",
+        "description": "Ký kết thỏa thuận hợp tác và bắt đầu hành trình phát triển"
+      }
+    },
+    "faq": {
+      "title": "Câu Hỏi Thường Gặp",
+      "q1": "Điều kiện để trở thành đối tác là gì?",
+      "a1": "Để trở thành đối tác, doanh nghiệp của bạn cần đáp ứng các điều kiện sau: có giấy phép kinh doanh hợp lệ, có kinh nghiệm trong lĩnh vực du lịch, có đội ngũ nhân viên chuyên nghiệp và cam kết cung cấp dịch vụ chất lượng cao.",
+      "q2": "Quy trình xác minh đối tác mất bao lâu?",
+      "a2": "Thông thường, quy trình xác minh sẽ mất từ 3-5 ngày làm việc sau khi chúng tôi nhận được đầy đủ hồ sơ. Trong trường hợp cần thêm thông tin, chúng tôi sẽ liên hệ với bạn ngay lập tức.",
+      "q3": "Có phí đăng ký trở thành đối tác không?",
+      "a3": "Chúng tôi không thu phí đăng ký trở thành đối tác. Tuy nhiên, sẽ có phí hoa hồng cho mỗi đơn đặt phòng thành công, được tính theo tỷ lệ phần trăm của giá trị đơn hàng.",
+      "q4": "Làm thế nào để quản lý đơn đặt phòng?",
+      "a4": "Chúng tôi cung cấp một hệ thống quản lý đơn đặt phòng trực tuyến, cho phép bạn theo dõi và xử lý các đơn đặt phòng một cách dễ dàng. Bạn có thể truy cập hệ thống này 24/7 từ bất kỳ thiết bị nào.",
+      "q5": "Có hỗ trợ kỹ thuật cho đối tác không?",
+      "a5": "Có, chúng tôi cung cấp hỗ trợ kỹ thuật 24/7 cho tất cả đối tác thông qua nhiều kênh khác nhau như email, điện thoại và chat trực tuyến. Đội ngũ hỗ trợ của chúng tôi luôn sẵn sàng giúp đỡ bạn.",
+      "more_questions": {
+        "title": "Vẫn còn câu hỏi?",
+        "description": "Nếu bạn vẫn còn thắc mắc hoặc cần thêm thông tin, đừng ngần ngại liên hệ với chúng tôi. Đội ngũ hỗ trợ của chúng tôi luôn sẵn sàng giúp đỡ bạn.",
+        "button": "Liên Hệ Với Chúng Tôi"
+      }
+    },
+    "cta": {
+      "title": "Sẵn sàng bắt đầu?",
+      "description": "Đăng ký ngay hôm nay để trở thành đối tác và cùng chúng tôi phát triển",
+      "button": "Đăng ký trở thành đối tác"
+    }
   }
 }

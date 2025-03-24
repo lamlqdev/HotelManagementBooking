@@ -23,6 +23,7 @@ import VerifyEmailPage from "./pages/VerifyEmailPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import SettingPage from "./pages/SettingPage";
 import ProfilePage from "./pages/ProfilePage";
+import Partnership from "./pages/Partnership";
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
             <Route path="/contact" element={<ContactUs />} />
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/blog/:slug" element={<BlogDetailPage />} />
+            <Route path="/partnership" element={<Partnership />} />
           </Route>
 
           {/* Auth Routes - Chỉ truy cập khi chưa đăng nhập */}
