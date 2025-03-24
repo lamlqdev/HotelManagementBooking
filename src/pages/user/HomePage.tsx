@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
 
-import SearchBox from "../components/common/SearchBox";
-import HeroBanner from "../components/sections/home/HeroBanner";
-import PopularDestinations from "../components/sections/home/PopularDestinations";
-import HotelDeals from "../components/sections/home/HotelDeals";
-import FavoriteHotels from "../components/sections/home/FavoriteHotels";
-import TravelInspiration from "../components/sections/home/TravelInspiration";
+import SearchBox from "@/components/common/SearchBox";
+import HeroBanner from "@/components/sections/home/HeroBanner";
+import PopularDestinations from "@/components/sections/home/PopularDestinations";
+import HotelDeals from "@/components/sections/home/HotelDeals";
+import FavoriteHotels from "@/components/sections/home/FavoriteHotels";
+import TravelInspiration from "@/components/sections/home/TravelInspiration";
 
 const HomePage = () => {
   const navigate = useNavigate();

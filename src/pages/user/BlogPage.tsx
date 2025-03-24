@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import { FiSearch, FiCalendar, FiClock, FiUser } from "react-icons/fi";
-import HeroBanner from "../components/sections/home/HeroBanner";
+import HeroBanner from "@/components/sections/home/HeroBanner";
 import {
   Pagination,
   PaginationContent,
@@ -11,7 +11,7 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "../components/ui/pagination";
+} from "@/components/ui/pagination";
 
 interface BlogPost {
   id: string;

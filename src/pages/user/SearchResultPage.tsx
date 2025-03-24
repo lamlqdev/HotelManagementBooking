@@ -2,10 +2,10 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import { useState } from "react";
 
-import HeroBanner from "../components/sections/home/HeroBanner";
-import SearchBox from "../components/common/SearchBox";
-import HotelList from "../components/sections/search/HotelList";
-import FilterSection from "../components/sections/search/FilterSection";
+import HeroBanner from "@/components/sections/home/HeroBanner";
+import SearchBox from "@/components/common/SearchBox";
+import HotelList from "@/components/sections/search/HotelList";
+import FilterSection from "@/components/sections/search/FilterSection";
 
 const mockHotels = [
   {
