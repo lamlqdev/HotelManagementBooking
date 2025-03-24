@@ -24,6 +24,7 @@ import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import SettingPage from "./pages/SettingPage";
 import ProfilePage from "./pages/ProfilePage";
 import Partnership from "./pages/Partnership";
+import RegisterPartner from "./pages/RegisterPartner";
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/blog/:slug" element={<BlogDetailPage />} />
             <Route path="/partnership" element={<Partnership />} />
+            <Route path="/register-partner" element={<RegisterPartner />} />
           </Route>
 
           {/* Auth Routes - Chỉ truy cập khi chưa đăng nhập */}

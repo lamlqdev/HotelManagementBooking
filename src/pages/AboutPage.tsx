@@ -75,7 +75,8 @@ const AboutPage = () => {
       </div>
 
       {/* Features Section */}
-      <section className="py-16 bg-background">
+      <section className="relative py-16">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-background via-primary/5 to-background rounded-3xl -z-10" />
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-4">
             {t("about.features.title")}
@@ -101,7 +102,8 @@ const AboutPage = () => {
       </section>
 
       {/* Introduction Section */}
-      <section className="py-16 bg-gradient-to-b from-background via-primary/5 to-background">
+      <section className="relative py-16">
+        <div className="absolute inset-0 bg-[linear-gradient(45deg,_var(--tw-gradient-stops))] from-primary/5 via-background to-primary/5 rounded-3xl -z-10" />
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12">
             {t("about.introduction.title")}
@@ -154,7 +156,8 @@ const AboutPage = () => {
       </section>
 
       {/* Achievements Section */}
-      <section className="py-16 bg-background">
+      <section className="relative py-16">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/5 via-background to-background rounded-3xl -z-10" />
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-4">
             {t("about.achievements.title")}
