@@ -27,7 +27,9 @@
     "settings": "Cài đặt",
     "theme": "Giao diện",
     "darkMode": "Chế độ tối",
-    "lightMode": "Chế độ sáng"
+    "lightMode": "Chế độ sáng",
+    "save_changes": "Lưu thay đổi",
+    "cancel": "Hủy bỏ"
   },
   "nav": {
     "home": "Trang chủ",
@@ -584,5 +586,33 @@
     "themeDescription": "Thay đổi chủ đề của ứng dụng",
     "language": "Ngôn ngữ",
     "languageDescription": "Chọn ngôn ngữ bạn muốn sử dụng"
+  },
+  "dropdown": {
+    "profile": "Hồ sơ",
+    "myBookings": "Đặt phòng của tôi",
+    "settings": "Cài đặt",
+    "logout": "Đăng xuất"
+  },
+  "profile": {
+    "title": "Hồ sơ của tôi",
+    "member_since": "Thành viên từ",
+    "personal_info": "Thông tin cá nhân",
+    "full_name": "Họ và tên",
+    "email": "Địa chỉ email",
+    "phone": "Số điện thoại",
+    "birth_date": "Ngày sinh",
+    "gender": "Giới tính",
+    "gender_options": {
+      "male": "Nam",
+      "female": "Nữ",
+      "other": "Khác"
+    },
+    "address": "Địa chỉ",
+    "enter_address": "Nhập địa chỉ của bạn",
+    "travel_preferences": "Sở thích du lịch",
+    "preferred_airline": "Hãng hàng không ưa thích",
+    "preferred_hotel_type": "Loại khách sạn ưa thích",
+    "meal_preferences": "Sở thích ẩm thực",
+    "vegetarian": "Ăn chay"
   }
 }

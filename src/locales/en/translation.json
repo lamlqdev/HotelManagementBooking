@@ -1,7 +1,7 @@
 {
   "welcome": "Welcome",
   "language": "Language",
-  "selectLanguage": "Select Language",
+  "selectLanguage": "Select language",
   "english": "English",
   "vietnamese": "Vietnamese",
   "common": {
@@ -12,10 +12,10 @@
     "search": "Search",
     "menu": "Menu",
     "close": "Close",
-    "readMore": "Read More",
-    "bookNow": "Book Now",
+    "readMore": "Read more",
+    "bookNow": "Book now",
     "contact": "Contact",
-    "about": "About Us",
+    "about": "About us",
     "blog": "Blog",
     "hotels": "Hotels",
     "destinations": "Destinations",
@@ -26,8 +26,10 @@
     "profile": "Profile",
     "settings": "Settings",
     "theme": "Theme",
-    "darkMode": "Dark Mode",
-    "lightMode": "Light Mode"
+    "darkMode": "Dark mode",
+    "lightMode": "Light mode",
+    "save_changes": "Save changes",
+    "cancel": "Cancel"
   },
   "nav": {
     "home": "Home",
@@ -55,7 +57,7 @@
         "forgotPassword": "Forgot password?",
         "submit": "Continue with email"
       },
-      "divider": "or login with account",
+      "divider": "or login with",
       "social": {
         "google": "Continue with Google",
         "facebook": "Continue with Facebook"
@@ -64,12 +66,12 @@
       "register": "Register"
     },
     "register": {
-      "title": "Create Account",
+      "title": "Register account",
       "welcome": "Welcome!",
       "welcomeMessage": "Create an account to experience our wonderful services.",
       "form": {
         "fullName": {
-          "label": "Full Name",
+          "label": "Full name",
           "placeholder": "Enter your full name"
         },
         "email": {
@@ -77,7 +79,7 @@
           "placeholder": "Enter your email"
         },
         "phone": {
-          "label": "Phone Number",
+          "label": "Phone number",
           "placeholder": "Enter your phone number"
         },
         "password": {
@@ -85,7 +87,7 @@
           "placeholder": "Enter your password"
         },
         "confirmPassword": {
-          "label": "Confirm Password",
+          "label": "Confirm password",
           "placeholder": "Re-enter your password"
         },
         "terms": {
@@ -97,7 +99,7 @@
         "agreeToTerms": "I agree to the {{termsOfService}} and {{privacyPolicy}}",
         "submit": "Register"
       },
-      "divider": "or register with account",
+      "divider": "or register with",
       "social": {
         "google": "Continue with Google",
         "facebook": "Continue with Facebook"
@@ -107,20 +109,20 @@
     },
     "verify_email": {
       "notification": {
-        "title": "Email Verification",
+        "title": "Verify email",
         "sent_to": "We have sent a verification email to:",
-        "instruction": "Please check your inbox and click on the verification link in the email. The link is valid for 24 hours.",
+        "instruction": "Please check your inbox and click the verification link in the email. The link is valid for 24 hours.",
         "understand_button": "I understand"
       },
       "page": {
         "title": "Verifying your email",
         "loading": "Please wait a moment...",
         "success": "Email verification successful",
-        "error": "An error occurred while verifying email"
+        "error": "An error occurred during email verification"
       }
     },
     "forgot_password": {
-      "title": "Forgot Password",
+      "title": "Forgot password",
       "description": "Enter your email to receive OTP code",
       "email": "Email",
       "email_placeholder": "Enter your email",
@@ -129,17 +131,17 @@
       "verify_otp": "Verify OTP",
       "verifying": "Verifying...",
       "otp_description": "Enter the OTP code sent to your email",
-      "otp": "OTP Code",
+      "otp": "OTP code",
       "otp_placeholder": "Enter OTP code",
       "verify": "Verify",
-      "reset_password": "Reset Password",
-      "new_password": "New Password",
+      "reset_password": "Reset password",
+      "new_password": "New password",
       "new_password_placeholder": "Enter new password",
-      "confirm_password": "Confirm Password",
+      "confirm_password": "Confirm password",
       "confirm_password_placeholder": "Re-enter new password",
-      "submit": "Submit",
-      "submitting": "Submitting...",
-      "back_to_login": "Back to Login",
+      "submit": "Complete",
+      "submitting": "Processing...",
+      "back_to_login": "Back to login",
       "success": {
         "otp_sent": "OTP code has been sent to your email",
         "otp_verified": "OTP verification successful",
@@ -147,7 +149,7 @@
       },
       "error": {
         "email_required": "Please enter your email",
-        "email_invalid": "Invalid email address",
+        "email_invalid": "Invalid email",
         "otp_required": "Please enter OTP code",
         "otp_invalid": "Invalid OTP code",
         "password_required": "Please enter new password",
@@ -170,9 +172,9 @@
   "footer": {
     "company": {
       "title": "Company",
-      "about": "About Us",
+      "about": "About us",
       "contact": "Contact",
-      "booking_guide": "Booking Guide"
+      "booking_guide": "Booking guide"
     },
     "services": {
       "title": "Services",
@@ -187,7 +189,7 @@
       "feedback": "Feedback & Suggestions",
       "customer_support": "Customer Support",
       "welcome": "Hello! How can we help you?",
-      "agent_greeting": "Hello! I'm a support agent. How may I assist you today?",
+      "agent_greeting": "Hello! I am a support agent. How can I assist you?",
       "input_placeholder": "Type your message...",
       "send_button": "Send",
       "open_chat": "Open support chat"
@@ -195,8 +197,8 @@
   },
   "search": {
     "destination": "Destination",
-    "check_in": "Check in",
-    "check_out": "Check out",
+    "check_in": "Check-in",
+    "check_out": "Check-out",
     "guests": "Guests",
     "adults": "Adults",
     "children": "Children",
@@ -205,23 +207,23 @@
       "destination": "Where do you want to go?",
       "guests": "{{adults}} adults, {{children}} children"
     },
-    "results_count_one": "{{count}} result found",
-    "results_count_other": "{{count}} results found",
+    "results_count_one": "Found {{count}} result",
+    "results_count_other": "Found {{count}} results",
     "price": {
       "per_night": "per night"
     }
   },
   "destinations": {
-    "popular": "Popular Destinations",
+    "popular": "Popular destinations",
     "hotel_count_one": "{{count}} hotel",
     "hotel_count_other": "{{count}} hotels"
   },
   "hotels": {
-    "best_deals": "Best Deals",
-    "favorites": "Favorite Hotels",
+    "best_deals": "Best deals",
+    "favorites": "Favorite hotels",
     "per_night": "/ night",
     "card": {
-      "select_room": "Select Room",
+      "select_room": "Select room",
       "original_price": "Original price",
       "reviews_count_one": "{{count}} review",
       "reviews_count_other": "{{count}} reviews"
@@ -229,75 +231,75 @@
   },
   "travel": {
     "inspiration": {
-      "title": "Don't know where to go? Get inspired now!",
-      "expert_guide": "Read articles from travel experts",
+      "title": "Not sure where to go? Find inspiration now!",
+      "expert_guide": "View articles from travel experts",
       "categories": {
         "explore": "Explore",
-        "souvenir": "Souvenir",
-        "festival": "Festival",
+        "souvenir": "Souvenirs",
+        "festival": "Festivals",
         "nature": "Nature",
         "people": "People"
       }
     }
   },
   "filter": {
-    "price_range": "Price Range",
-    "star_rating": "Star Rating",
+    "price_range": "Price range",
+    "star_rating": "Star rating",
     "amenities": "Amenities"
   },
   "amenities": {
     "wifi": "WiFi",
-    "pool": "Swimming Pool",
+    "pool": "Pool",
     "parking": "Parking",
     "restaurant": "Restaurant",
     "gym": "Gym",
     "spa": "Spa",
-    "beach_access": "Beach Access",
-    "room_service": "Room Service"
+    "beach_access": "Beach access",
+    "room_service": "Room service"
   },
   "sort": {
     "placeholder": "Sort by",
-    "price_asc": "Price: Low to High",
-    "price_desc": "Price: High to Low",
-    "rating_desc": "Rating: High to Low",
+    "price_asc": "Price: Low to high",
+    "price_desc": "Price: High to low",
+    "rating_desc": "Rating: High to low",
     "popularity": "Popularity"
   },
   "booking": {
-    "pageTitle": "Booking Information",
+    "pageTitle": "Booking information",
     "contactInfo": {
-      "title": "Contact Information",
-      "description": "Please fill in all information correctly to ensure you receive the booking confirmation via email.",
+      "title": "Contact information",
+      "description": "Please fill in all information accurately to ensure you receive the booking confirmation via email.",
       "bookingFor": {
         "label": "Who are you booking for?",
-        "self": "Book for myself",
-        "other": "Book for someone else"
+        "self": "Booking for myself",
+        "other": "Booking for someone else"
       },
-      "guestName": "Guest Name *",
-      "contactName": "Contact Name *",
+      "guestName": "Guest name *",
+      "contactName": "Contact name *",
       "email": "Email *",
-      "phone": "Phone Number *"
+      "phone": "Phone number *"
     },
     "specialRequests": {
-      "title": "Special Requests",
-      "description": "Upon check-in, the hotel will inform whether these requests can be accommodated. Some requests may incur additional charges, but you can always cancel them later.",
+      "title": "Special requests",
+      "description": "Upon check-in, the hotel will inform you whether these requests can be accommodated. Some requests may require additional fees, but you can always cancel the request later.",
       "checkInOut": {
-        "title": "Preferred Check-in/Check-out Time",
+        "title": "Preferred check-in/check-out time",
         "checkIn": {
-          "label": "Request check-in time",
+          "label": "Requested check-in time",
           "placeholder": "Select check-in time"
         },
         "checkOut": {
-          "label": "Request check-out time",
+          "label": "Requested check-out time",
           "placeholder": "Select check-out time"
         }
       },
       "other": {
-        "label": "Other Requests",
+        "label": "Other requests",
         "placeholder": "Example: non-smoking room, high floor, etc."
       }
     },
     "bookingSummary": {
-      "title": "Booking Details",
+      "title": "Booking details",
       "checkIn": {
         "label": "Check-in",
         "from": "From"
@@ -306,21 +308,21 @@
         "label": "Check-out",
         "before": "Before"
       },
-      "nights": "night(s)",
+      "nights": "nights",
       "amenities": {
         "wifi": "Free WiFi",
         "parking": "Parking",
-        "pool": "Swimming Pool",
+        "pool": "Swimming pool",
         "restaurant": "Restaurant"
       },
       "details": {
-        "roomType": "Room Type",
-        "guests": "Guests",
-        "rooms": "Rooms",
-        "nights": "Nights",
-        "guestsUnit": "person(s)",
-        "roomsUnit": "room(s)",
-        "nightsUnit": "night(s)"
+        "roomType": "Room type",
+        "guests": "Number of guests",
+        "rooms": "Number of rooms",
+        "nights": "Number of nights",
+        "guestsUnit": "people",
+        "roomsUnit": "rooms",
+        "nightsUnit": "nights"
       },
       "pricing": {
         "pricePerNight": "Price per night",
@@ -329,64 +331,64 @@
       "coupon": {
         "placeholder": "Enter coupon code"
       },
-      "submitButton": "Proceed to Payment"
+      "submitButton": "Proceed to payment"
     }
   },
   "about": {
     "features": {
-      "title": "Basic Features",
+      "title": "Core features",
       "subtitle": "We provide all the necessary tools to help you find and book hotel rooms easily and safely",
       "search": {
-        "title": "Smart Search",
-        "description": "Smart search technology helps you easily find hotels that match your preferences and budget. Recommendation system based on community reviews."
+        "title": "Smart search",
+        "description": "Smart search technology helps you easily find hotels that match your preferences and budget. Recommendations based on community reviews."
       },
       "booking": {
-        "title": "Easy Booking",
-        "description": "Simple 3-step booking process: select room, fill information, payment. Instant confirmation via email. Support for booking 24h in advance."
+        "title": "Easy booking",
+        "description": "Simple 3-step booking process: select room, fill information, pay. Instant confirmation via email. Support for bookings 24 hours in advance."
       },
       "payment": {
-        "title": "Secure Payment",
-        "description": "Integrated popular payment methods: credit cards, bank transfers. SSL encryption protects payment information. Clear refund policy."
+        "title": "Secure payment",
+        "description": "Integration with popular payment methods: credit cards, bank transfers. SSL encryption protects payment information. Clear refund policy."
       },
       "support": {
-        "title": "24/7 Support",
-        "description": "Professional support team always available via email and online chat. Committed to quick and effective responses."
+        "title": "24/7 support",
+        "description": "Professional support team always available via email and live chat. Committed to quick and effective responses."
       }
     },
     "introduction": {
-      "title": "About Us",
+      "title": "About us",
       "block1": {
-        "title": "New Hotel Booking Platform",
-        "description1": "Launched in 2024, we are a new hotel booking platform with a mission to provide easy, fast, and secure online booking experiences. Currently, we are focusing on developing in 5 major cities with over 50 quality hotel partners.",
-        "description2": "In our short time, we have served over 5,000 successful bookings, with a customer satisfaction rate of 95%. We continuously improve our technology and services to provide the best experience for users."
+        "title": "New hotel booking platform",
+        "description1": "Established in 2024, we are a new hotel booking platform with the mission to provide an easy, fast, and secure online booking experience. Currently, we are focusing on developing in 5 major cities with over 50 quality hotel partners.",
+        "description2": "In the short period since our inception, we have served over 5,000 successful bookings, with a customer satisfaction rate of 95%. We continuously improve our technology and services to provide the best experience for users."
       },
       "block2": {
-        "title": "Service Quality Commitment",
+        "title": "Commitment to service quality",
         "description1": "We constantly strive to improve service quality, from optimizing user experience to ensuring payment security. With our professional support team, we commit to responding to all customer issues within 30 minutes.",
-        "description2": "We are gradually building and developing new features such as smart search, community reviews, and travel trend analysis. This helps us become more complete in meeting customer needs."
+        "description2": "We are gradually building and developing new features such as smart search, community reviews, and travel trend analysis. This helps us continually improve in meeting customer needs."
       }
     },
     "achievements": {
       "title": "Achievements",
-      "subtitle": "Impressive numbers reflect the trust and satisfaction of our customers",
+      "subtitle": "Impressive numbers reflecting customer trust and satisfaction in our services",
       "users": {
         "title": "10K+",
-        "description": "Registered Users",
-        "subtext": "50% monthly growth"
+        "description": "Registered users",
+        "subtext": "50% growth per month"
       },
       "partners": {
         "title": "50+",
-        "description": "Hotel Partners",
+        "description": "Hotel partners",
         "subtext": "Focused in 5 major cities"
       },
       "satisfaction": {
         "title": "95%",
-        "description": "Customer Satisfaction",
+        "description": "Customer satisfaction",
         "subtext": "Based on 1,000+ reviews"
       },
       "security": {
         "title": "100%",
-        "description": "Information Security",
+        "description": "Information security",
         "subtext": "Compliant with security regulations"
       }
     }
@@ -394,51 +396,82 @@
   "contact": {
     "hero": {
       "title": "Contact Us",
-      "subtitle": "We are here to help you 24/7"
+      "subtitle": "We are available to support you 24/7"
     },
     "contact_info": {
       "title": "Contact Information",
-      "description": "Please contact us if you need support. Our customer service team will respond as soon as possible.",
+      "description": "Please contact us if you need any assistance. Our team is always ready to serve you.",
       "hotline": {
         "label": "Hotline",
         "value": "1900 1234"
       },
       "email": {
         "label": "Email",
-        "value": "support@example.com"
+        "value": "support@bookit.com"
       },
       "social": {
         "title": "Connect with us"
       }
     },
     "contact_form": {
-      "title": "Send Us a Message",
-      "subtitle": "Response within 24 hours",
+      "title": "Send Us A Message",
+      "subtitle": "We will respond within 24 hours",
       "fields": {
         "name": {
-          "label": "Full Name",
+          "label": "Full name",
           "placeholder": "Enter your full name"
         },
         "email": {
           "label": "Email",
-          "placeholder": "example@email.com"
+          "placeholder": "Enter your email address"
         },
         "subject": {
           "label": "Subject",
-          "placeholder": "Enter subject"
+          "placeholder": "Enter message subject"
         },
         "message": {
-          "label": "Message",
-          "placeholder": "Enter your message"
+          "label": "Content",
+          "placeholder": "Enter your message content"
         }
       },
-      "submit": "Send Message"
-    }
+      "submit": "Send message"
+    },
+    "title": "Contact",
+    "name": "Full name",
+    "email": "Email",
+    "subject": "Subject",
+    "message": "Message",
+    "send": "Send",
+    "address": "Address",
+    "phone": "Phone",
+    "workingHours": "Working hours",
+    "socialMedia": "Social media",
+    "followUs": "Follow us",
+    "success": "Your message has been sent successfully!",
+    "error": "An error occurred. Please try again.",
+    "required": "This field is required",
+    "invalidEmail": "Invalid email",
+    "messageSent": "Message sent",
+    "messageError": "Message sending error",
+    "messageSuccess": "Message sent successfully",
+    "messageFailed": "Message sending failed",
+    "messageRequired": "Please fill in all information",
+    "messageInvalid": "Please check your information",
+    "messageTooLong": "Message is too long",
+    "messageTooShort": "Message is too short",
+    "messageSpam": "Message is considered spam",
+    "messageBlocked": "Message is blocked",
+    "messageRateLimit": "Please wait a moment before sending a new message",
+    "messageCaptcha": "Please confirm captcha",
+    "messageTimeout": "Message sending timeout",
+    "messageNetwork": "Network connection error",
+    "messageServer": "Server error",
+    "messageUnknown": "Unknown error"
   },
   "blog": {
     "hero": {
       "title": "Travel Blog",
-      "subtitle": "Discover exciting travel experiences and fascinating stories from around the world"
+      "subtitle": "Discover interesting travel experiences and captivating stories from around the world"
     },
     "search": {
       "placeholder": "Search articles..."
@@ -453,26 +486,20 @@
       "explore": "Explore"
     },
     "readTime": "min read",
-    "noResults": "No articles found",
-    "pagination": {
-      "prev": "Previous",
-      "next": "Next"
-    },
-    "title": "Blog",
-    "readMore": "Read More",
+    "readMore": "Read more",
     "share": "Share",
     "comments": "Comments",
     "commentPlaceholder": "Write your comment...",
-    "postComment": "Post Comment",
-    "tableOfContents": "Table of Contents",
-    "relatedPosts": "Related Posts",
-    "sortBy": "Sort By",
+    "postComment": "Post comment",
+    "tableOfContents": "Table of contents",
+    "relatedPosts": "Related posts",
+    "sortBy": "Sort by",
     "latest": "Latest",
     "popular": "Popular",
     "trending": "Trending",
     "author": "Author",
     "publishedOn": "Published on",
-    "followAuthor": "Follow Author",
+    "followAuthor": "Follow author",
     "articles": "Articles",
     "followers": "Followers",
     "replies": "Replies",
@@ -485,218 +512,70 @@
     "cancel": "Cancel",
     "confirm": "Confirm",
     "deleteConfirm": "Are you sure you want to delete this comment?",
-    "reportReason": "Report Reason",
-    "reportSubmit": "Submit Report",
+    "reportReason": "Reason for reporting",
+    "reportSubmit": "Submit report",
     "reportSuccess": "Thank you for reporting. We will review this content.",
     "commentSuccess": "Your comment has been posted.",
     "commentError": "An error occurred while posting your comment. Please try again.",
     "loginToComment": "Please login to comment.",
     "noComments": "No comments yet. Be the first!",
-    "loadMore": "Load More",
+    "loadMore": "Load more",
     "noMoreComments": "No more comments to load.",
     "commentDeleted": "Comment has been deleted.",
     "commentEdited": "Comment has been edited.",
     "commentReported": "Comment has been reported.",
-    "commentLiked": "You have liked this comment.",
-    "commentUnliked": "You have unliked this comment.",
-    "commentReplied": "You have replied to this comment.",
+    "commentLiked": "You liked this comment.",
+    "commentUnliked": "You unliked this comment.",
+    "commentReplied": "You replied to this comment.",
     "commentSaved": "Comment has been saved.",
     "commentCancelled": "Comment has been cancelled.",
     "commentConfirmed": "Comment has been confirmed.",
-    "commentReportedSuccess": "Comment has been reported successfully.",
+    "commentReportedSuccess": "Comment reported successfully.",
     "commentReportedError": "An error occurred while reporting the comment. Please try again.",
-    "commentDeletedSuccess": "Comment has been deleted successfully.",
+    "commentDeletedSuccess": "Comment deleted successfully.",
     "commentDeletedError": "An error occurred while deleting the comment. Please try again.",
-    "commentEditedSuccess": "Comment has been edited successfully.",
+    "commentEditedSuccess": "Comment edited successfully.",
     "commentEditedError": "An error occurred while editing the comment. Please try again.",
-    "commentLikedSuccess": "You have liked the comment successfully.",
+    "commentLikedSuccess": "You liked the comment successfully.",
     "commentLikedError": "An error occurred while liking the comment. Please try again.",
-    "commentUnlikedSuccess": "You have unliked the comment successfully.",
+    "commentUnlikedSuccess": "You unliked the comment successfully.",
     "commentUnlikedError": "An error occurred while unliking the comment. Please try again.",
-    "commentRepliedSuccess": "You have replied to the comment successfully.",
+    "commentRepliedSuccess": "You replied to the comment successfully.",
     "commentRepliedError": "An error occurred while replying to the comment. Please try again.",
-    "commentSavedSuccess": "Comment has been saved successfully.",
+    "commentSavedSuccess": "Comment saved successfully.",
     "commentSavedError": "An error occurred while saving the comment. Please try again.",
-    "commentCancelledSuccess": "Comment has been cancelled successfully.",
+    "commentCancelledSuccess": "Comment cancelled successfully.",
     "commentCancelledError": "An error occurred while cancelling the comment. Please try again.",
-    "commentConfirmedSuccess": "Comment has been confirmed successfully.",
-    "commentConfirmedError": "An error occurred while confirming the comment. Please try again.",
-    "title": "Blog",
-    "categories": {
-      "all": "All",
-      "travel": "Travel",
-      "food": "Food",
-      "culture": "Culture",
-      "tips": "Tips",
-      "news": "News",
-      "explore": "Explore"
-    }
-  },
-  "hotel": {
-    "search": {
-      "title": "Search Hotels",
-      "location": "Location",
-      "checkIn": "Check-in",
-      "checkOut": "Check-out",
-      "guests": "Guests",
-      "searchButton": "Search"
-    },
-    "filters": {
-      "title": "Filters",
-      "priceRange": "Price Range",
-      "starRating": "Star Rating",
-      "amenities": "Amenities",
-      "apply": "Apply",
-      "reset": "Reset"
-    },
-    "sort": {
-      "title": "Sort By",
-      "priceLowToHigh": "Price: Low to High",
-      "priceHighToLow": "Price: High to Low",
-      "rating": "Rating",
-      "popularity": "Popularity"
-    },
-    "amenities": {
-      "wifi": "WiFi",
-      "parking": "Parking",
-      "pool": "Pool",
-      "restaurant": "Restaurant",
-      "spa": "Spa",
-      "gym": "Gym",
-      "conference": "Conference Room",
-      "elevator": "Elevator",
-      "airConditioning": "Air Conditioning",
-      "security": "24/7 Security"
-    }
-  },
-  "hotelDetail": {
-    "overview": "Overview",
-    "rooms": "Rooms",
-    "amenities": "Amenities",
-    "reviews": "Reviews",
-    "location": "Location",
-    "policies": "Policies",
-    "gallery": "Gallery",
-    "description": "Description",
-    "features": "Features",
-    "price": "Price",
-    "perNight": "per night",
-    "total": "Total",
-    "checkIn": "Check-in",
-    "checkOut": "Check-out",
-    "guests": "Guests",
-    "bookNow": "Book Now",
-    "contact": "Contact",
-    "share": "Share",
-    "save": "Save",
-    "reviews": {
-      "title": "Guest Reviews",
-      "rating": "Rating",
-      "basedOn": "based on",
-      "reviews": "reviews",
-      "writeReview": "Write a Review",
-      "sortBy": "Sort By",
-      "filter": "Filter",
-      "helpful": "Helpful",
-      "report": "Report",
-      "reply": "Reply"
-    },
-    "location": {
-      "title": "Location",
-      "address": "Address",
-      "directions": "Directions",
-      "nearby": "Nearby Places",
-      "distance": "Distance",
-      "map": "Map"
-    },
-    "policies": {
-      "title": "Policies",
-      "cancellation": "Cancellation",
-      "checkIn": "Check-in",
-      "checkOut": "Check-out",
-      "payment": "Payment",
-      "pets": "Pets",
-      "children": "Children",
-      "smoking": "Smoking",
-      "parties": "Parties",
-      "quietHours": "Quiet Hours"
-    }
-  },
-  "booking": {
-    "title": "Booking",
-    "summary": "Booking Summary",
-    "guestInfo": "Guest Information",
-    "payment": "Payment",
-    "confirmation": "Confirmation",
-    "steps": {
-      "room": "Select Room",
-      "guest": "Guest Info",
-      "payment": "Payment",
-      "confirm": "Confirm"
-    },
-    "guest": {
-      "title": "Guest Information",
-      "firstName": "First Name",
-      "lastName": "Last Name",
-      "email": "Email",
-      "phone": "Phone",
-      "address": "Address",
-      "city": "City",
-      "country": "Country",
-      "zipCode": "ZIP Code",
-      "specialRequests": "Special Requests"
-    },
-    "payment": {
-      "title": "Payment",
-      "cardNumber": "Card Number",
-      "cardName": "Cardholder Name",
-      "expiry": "Expiry Date",
-      "cvv": "CVV",
-      "payNow": "Pay Now",
-      "secure": "Secure Payment"
-    },
-    "summary": {
-      "title": "Booking Summary",
-      "room": "Room",
-      "nights": "Nights",
-      "guests": "Guests",
-      "checkIn": "Check-in",
-      "checkOut": "Check-out",
-      "subtotal": "Subtotal",
-      "taxes": "Taxes",
-      "fees": "Fees",
-      "total": "Total",
-      "cancellation": "Cancellation Policy",
-      "terms": "Terms and Conditions"
-    }
+    "commentConfirmedSuccess": "Comment confirmed successfully.",
+    "commentConfirmedError": "An error occurred while confirming the comment. Please try again."
   },
   "bookingGuide": {
     "title": "Booking Guide",
-    "description": "Simple 6-step booking process",
+    "description": "Simple booking process in just 6 steps",
     "steps": {
       "1": {
-        "title": "Search for Hotels",
-        "description": "Start by entering your destination, location, or hotel name and number of nights."
+        "title": "Search for hotels",
+        "description": "Start searching for hotels by entering destination information, landmarks, or hotel names and the number of nights."
       },
       "2": {
-        "title": "Choose a Hotel",
-        "description": "From the search results, select your desired hotel. Click \"View Rooms\" to see detailed room information."
+        "title": "Select hotel",
+        "description": "On the search results page, select your desired hotel. Click \"View rooms\" to see detailed information about the accommodations."
       },
       "3": {
-        "title": "Book a Hotel",
+        "title": "Book hotel",
         "description": "On the hotel information page, select the room type and number of rooms you want to book."
       },
       "4": {
-        "title": "Fill in Contact and Guest Information",
-        "description": "Make sure all information is accurate before proceeding to payment."
+        "title": "Fill in contact information and guest details",
+        "description": "Make sure all information is accurate, then proceed to payment."
       },
       "5": {
-        "title": "Make Payment",
-        "description": "Choose your preferred payment method. Note that payment must be made within the specified time limit."
+        "title": "Make payment",
+        "description": "Select your preferred payment method. Be careful not to exceed the specified payment time."
       },
       "6": {
-        "title": "Receive Booking Confirmation",
-        "description": "We will send the booking confirmation to your email within 60 minutes after receiving payment."
+        "title": "Receive payment voucher",
+        "description": "We will send a payment voucher to your email within 60 minutes after receiving your payment."
       }
     }
   },
@@ -704,8 +583,36 @@
     "title": "Settings",
     "appearance": "Appearance",
     "theme": "Theme",
-    "themeDescription": "Change the theme of the application",
+    "themeDescription": "Change the application theme",
     "language": "Language",
-    "languageDescription": "Select your preferred language"
+    "languageDescription": "Select the language you want to use"
+  },
+  "dropdown": {
+    "profile": "Profile",
+    "myBookings": "My bookings",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
+  "profile": {
+    "title": "My Profile",
+    "member_since": "Member since",
+    "personal_info": "Personal Information",
+    "full_name": "Full Name",
+    "email": "Email Address",
+    "phone": "Phone Number",
+    "birth_date": "Date of Birth",
+    "gender": "Gender",
+    "gender_options": {
+      "male": "Male",
+      "female": "Female",
+      "other": "Other"
+    },
+    "address": "Address",
+    "enter_address": "Enter your address",
+    "travel_preferences": "Travel Preferences",
+    "preferred_airline": "Preferred Airlines",
+    "preferred_hotel_type": "Preferred Hotel Type",
+    "meal_preferences": "Meal Preferences",
+    "vegetarian": "Vegetarian"
   }
 }
