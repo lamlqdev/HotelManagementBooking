@@ -110,17 +110,17 @@ const Header = () => {
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>
-                      <Link to="/profile">Hồ sơ</Link>
+                      <Link to="/profile">{t("dropdown.profile")}</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link to="/bookings">Đặt phòng của tôi</Link>
+                      <Link to="/bookings">{t("dropdown.myBookings")}</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link to="/settings">Cài đặt</Link>
+                      <Link to="/settings">{t("dropdown.settings")}</Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={handleLogout}>
-                      Đăng xuất
+                      {t("dropdown.logout")}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>

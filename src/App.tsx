@@ -22,6 +22,7 @@ import BookingGuidePage from "./pages/BookingGuidePage";
 import VerifyEmailPage from "./pages/VerifyEmailPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import SettingPage from "./pages/SettingPage";
+import ProfilePage from "./pages/ProfilePage";
 
 function App() {
   return (
@@ -56,7 +57,7 @@ function App() {
                 element={<BookingInformationPage />}
               />
               <Route path="/settings" element={<SettingPage />} />
-              {/* Thêm các route cần bảo vệ khác ở đây */}
+              <Route path="/profile" element={<ProfilePage />} />
             </Route>
           </Route>
         </Routes>
