@@ -18,11 +18,22 @@ import BookingInformationPage from "./pages/user/BookingInformationPage";
 import BookingGuidePage from "./pages/user/BookingGuidePage";
 import ContactUs from "./pages/user/ContactUs";
 import SettingPage from "./pages/user/SettingPage";
-import ProfilePage from "./pages/user/ProfilePage";
+import UserProfilePage from "./pages/user/ProfilePage";
 import Partnership from "./pages/user/Partnership";
 import RegisterPartner from "./pages/user/RegisterPartner";
 
-import PartnerDashboardPage from "./pages/partner/PartnerDashboardPage";
+import RevenuePage from "./pages/partner/RevenuePage";
+import HotelInfoPage from "./pages/partner/HotelInfoPage";
+import RoomManagementPage from "./pages/partner/RoomManagementPage";
+import RoomStatusPage from "./pages/partner/RoomStatusPage";
+import BookingListPage from "./pages/partner/BookingListPage";
+import BookingOrdersPage from "./pages/partner/BookingOrdersPage";
+import BookingRequestsPage from "./pages/partner/BookingRequestsPage";
+import MessagesPage from "./pages/partner/MessagesPage";
+import AccountPage from "./pages/partner/AccountPage";
+import PartnerProfilePage from "./pages/partner/ProfilePage";
+import SettingsPage from "./pages/partner/SettingsPage";
+import NotificationsPage from "./pages/partner/NotificationsPage";
 
 import BlogPage from "./pages/user/BlogPage";
 import BlogDetailPage from "./pages/user/BlogDetailPage";
@@ -67,15 +78,23 @@ function App() {
                 element={<BookingInformationPage />}
               />
               <Route path="/settings" element={<SettingPage />} />
-              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/profile" element={<UserProfilePage />} />
             </Route>
           </Route>
 
           <Route path="/partner" element={<PartnerLayout />}>
-            <Route
-              path="/partner/dashboard"
-              element={<PartnerDashboardPage />}
-            />
+            <Route path="revenue" element={<RevenuePage />} />
+            <Route path="hotels/info" element={<HotelInfoPage />} />
+            <Route path="hotels/rooms" element={<RoomManagementPage />} />
+            <Route path="hotels/status" element={<RoomStatusPage />} />
+            <Route path="bookings/list" element={<BookingListPage />} />
+            <Route path="bookings/orders" element={<BookingOrdersPage />} />
+            <Route path="bookings/requests" element={<BookingRequestsPage />} />
+            <Route path="messages" element={<MessagesPage />} />
+            <Route path="account" element={<AccountPage />} />
+            <Route path="profile" element={<PartnerProfilePage />} />
+            <Route path="settings" element={<SettingsPage />} />
+            <Route path="notifications" element={<NotificationsPage />} />
           </Route>
         </Routes>
 
