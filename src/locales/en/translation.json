@@ -29,7 +29,10 @@
     "darkMode": "Dark mode",
     "lightMode": "Light mode",
     "save_changes": "Save changes",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "account": "Account",
+    "notifications": "Notifications",
+    "personalInfo": "Personal Information"
   },
   "nav": {
     "home": "Home",
@@ -801,6 +804,26 @@
       "min_description": "Please provide more details (minimum {{min}} characters)",
       "required_image": "Please upload at least 1 image",
       "max_file_size": "Each file must not exceed 5MB"
+    }
+  },
+  "partner": {
+    "dashboard": {
+      "title": "Partner Dashboard",
+      "revenue": "Revenue Management",
+      "hotels": "Hotel Management",
+      "bookings": "Booking Management",
+      "messages": "Messages",
+      "account": "Account Management"
+    },
+    "hotels": {
+      "info": "Hotel Information",
+      "rooms": "Room Management",
+      "status": "Room Status"
+    },
+    "bookings": {
+      "list": "Booking List",
+      "orders": "Order Management",
+      "requests": "Cancellation/Change Requests"
     }
   }
 }

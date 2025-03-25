@@ -1,5 +1,5 @@
 {
-  "welcome": "Chào mừng",
+  "welcome": "Xin chào",
   "language": "Ngôn ngữ",
   "selectLanguage": "Chọn ngôn ngữ",
   "english": "Tiếng Anh",
@@ -29,7 +29,10 @@
     "darkMode": "Chế độ tối",
     "lightMode": "Chế độ sáng",
     "save_changes": "Lưu thay đổi",
-    "cancel": "Hủy bỏ"
+    "cancel": "Hủy bỏ",
+    "account": "Tài khoản",
+    "notifications": "Thông báo",
+    "personalInfo": "Thông tin cá nhân"
   },
   "nav": {
     "home": "Trang chủ",
@@ -801,6 +804,26 @@
       "min_description": "Vui lòng mô tả chi tiết hơn (tối thiểu {{min}} ký tự)",
       "required_image": "Vui lòng tải lên ít nhất 1 hình ảnh",
       "max_file_size": "Mỗi file không được vượt quá 5MB"
+    }
+  },
+  "partner": {
+    "dashboard": {
+      "title": "Bảng điều khiển đối tác",
+      "revenue": "Quản lý doanh thu",
+      "hotels": "Quản lý khách sạn",
+      "bookings": "Quản lý đặt phòng",
+      "messages": "Nhắn tin",
+      "account": "Quản lý tài khoản"
+    },
+    "hotels": {
+      "info": "Thông tin khách sạn",
+      "rooms": "Quản lý phòng",
+      "status": "Tình trạng phòng"
+    },
+    "bookings": {
+      "list": "Danh sách đặt phòng",
+      "orders": "Quản lý đơn đặt phòng",
+      "requests": "Yêu cầu huỷ/đổi"
     }
   }
 }

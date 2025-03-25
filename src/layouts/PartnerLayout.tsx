@@ -1,5 +1,6 @@
 import { useLocation, Outlet, Link } from "react-router";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import {
   Building2,
@@ -46,6 +47,7 @@ import {
 
 export default function PartnerLayout() {
   const location = useLocation();
+  const { t } = useTranslation();
   const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({
     hotels: location.pathname.startsWith("/partner/hotels"),
     bookings: location.pathname.startsWith("/partner/bookings"),
@@ -66,13 +68,13 @@ export default function PartnerLayout() {
             <SidebarHeader className="px-4 py-3">
               <div className="flex items-center gap-3">
                 <img
-                  src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=150&h=150&fit=crop&auto=format&q=80"
+                  src="https://images.unsplash.com/photo-1543610892-0b1f7e6d8ac1?q=80&w=1856&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                   alt="Hotel Logo"
                   className="h-10 w-10 rounded-full object-cover ring-2 ring-sidebar-ring/10 group-data-[collapsed=true]:h-8 group-data-[collapsed=true]:w-8"
                 />
                 <div className="flex flex-col group-data-[collapsed=true]:hidden">
                   <span className="text-xs text-muted-foreground">
-                    Xin chào,
+                    {t("welcome")},
                   </span>
                   <span className="text-sm font-medium text-sidebar-foreground">
                     Grand Hotel
@@ -87,35 +89,33 @@ export default function PartnerLayout() {
 
             <SidebarContent className="px-4 py-1">
               <SidebarMenu className="space-y-1">
-                {/* Quản lý doanh thu */}
+                {/* Revenue Management */}
                 <SidebarMenuItem>
-                  <Link to="/partner/revenue">
+                  <Link to="/partner/">
                     <SidebarMenuButton
-                      isActive={location.pathname.startsWith(
-                        "/partner/revenue"
-                      )}
-                      tooltip="Quản lý doanh thu"
+                      isActive={location.pathname.startsWith("/partner")}
+                      tooltip={t("partner.dashboard.revenue")}
                       className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg group-data-[collapsed=true]:justify-center"
                     >
                       <DollarSign className="h-4 w-4" />
                       <span className="group-data-[collapsed=true]:hidden">
-                        Quản lý doanh thu
+                        {t("partner.dashboard.revenue")}
                       </span>
                     </SidebarMenuButton>
                   </Link>
                 </SidebarMenuItem>
 
-                {/* Quản lý khách sạn */}
+                {/* Hotel Management */}
                 <SidebarMenuItem>
                   <SidebarMenuButton
                     isActive={location.pathname.startsWith("/partner/hotels")}
-                    tooltip="Quản lý khách sạn"
+                    tooltip={t("partner.dashboard.hotels")}
                     className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg group-data-[collapsed=true]:justify-center"
                     onClick={() => toggleMenu("hotels")}
                   >
                     <Hotel className="h-4 w-4" />
                     <span className="group-data-[collapsed=true]:hidden">
-                      Quản lý khách sạn
+                      {t("partner.dashboard.hotels")}
                     </span>
                     <ChevronDown
                       className={`h-4 w-4 ml-auto transition-transform duration-200 group-data-[collapsed=true]:hidden ${
@@ -134,7 +134,7 @@ export default function PartnerLayout() {
                             className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg"
                           >
                             <Building2 className="h-4 w-4" />
-                            <span>Thông tin khách sạn</span>
+                            <span>{t("partner.hotels.info")}</span>
                           </SidebarMenuSubButton>
                         </Link>
                       </SidebarMenuSubItem>
@@ -147,7 +147,7 @@ export default function PartnerLayout() {
                             className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg"
                           >
                             <DoorOpen className="h-4 w-4" />
-                            <span>Quản lý phòng</span>
+                            <span>{t("partner.hotels.rooms")}</span>
                           </SidebarMenuSubButton>
                         </Link>
                       </SidebarMenuSubItem>
@@ -160,7 +160,7 @@ export default function PartnerLayout() {
                             className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg"
                           >
                             <ClipboardList className="h-4 w-4" />
-                            <span>Tình trạng phòng</span>
+                            <span>{t("partner.hotels.status")}</span>
                           </SidebarMenuSubButton>
                         </Link>
                       </SidebarMenuSubItem>
@@ -168,17 +168,17 @@ export default function PartnerLayout() {
                   )}
                 </SidebarMenuItem>
 
-                {/* Quản lý đặt phòng */}
+                {/* Booking Management */}
                 <SidebarMenuItem>
                   <SidebarMenuButton
                     isActive={location.pathname.startsWith("/partner/bookings")}
-                    tooltip="Quản lý đặt phòng"
+                    tooltip={t("partner.dashboard.bookings")}
                     className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg group-data-[collapsed=true]:justify-center"
                     onClick={() => toggleMenu("bookings")}
                   >
                     <CalendarCheck className="h-4 w-4" />
                     <span className="group-data-[collapsed=true]:hidden">
-                      Quản lý đặt phòng
+                      {t("partner.dashboard.bookings")}
                     </span>
                     <ChevronDown
                       className={`h-4 w-4 ml-auto transition-transform duration-200 group-data-[collapsed=true]:hidden ${
@@ -197,7 +197,7 @@ export default function PartnerLayout() {
                             className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg"
                           >
                             <ListChecks className="h-4 w-4" />
-                            <span>Danh sách đặt phòng</span>
+                            <span>{t("partner.bookings.list")}</span>
                           </SidebarMenuSubButton>
                         </Link>
                       </SidebarMenuSubItem>
@@ -210,7 +210,7 @@ export default function PartnerLayout() {
                             className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg"
                           >
                             <FileEdit className="h-4 w-4" />
-                            <span>Quản lý đơn đặt phòng</span>
+                            <span>{t("partner.bookings.orders")}</span>
                           </SidebarMenuSubButton>
                         </Link>
                       </SidebarMenuSubItem>
@@ -223,7 +223,7 @@ export default function PartnerLayout() {
                             className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg"
                           >
                             <Ban className="h-4 w-4" />
-                            <span>Yêu cầu huỷ/đổi</span>
+                            <span>{t("partner.bookings.requests")}</span>
                           </SidebarMenuSubButton>
                         </Link>
                       </SidebarMenuSubItem>
@@ -231,37 +231,37 @@ export default function PartnerLayout() {
                   )}
                 </SidebarMenuItem>
 
-                {/* Nhắn tin */}
+                {/* Messages */}
                 <SidebarMenuItem>
                   <Link to="/partner/messages">
                     <SidebarMenuButton
                       isActive={location.pathname.startsWith(
                         "/partner/messages"
                       )}
-                      tooltip="Nhắn tin"
+                      tooltip={t("partner.dashboard.messages")}
                       className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg group-data-[collapsed=true]:justify-center"
                     >
                       <MessageSquare className="h-4 w-4" />
                       <span className="group-data-[collapsed=true]:hidden">
-                        Nhắn tin
+                        {t("partner.dashboard.messages")}
                       </span>
                     </SidebarMenuButton>
                   </Link>
                 </SidebarMenuItem>
 
-                {/* Quản lý tài khoản */}
+                {/* Account Management */}
                 <SidebarMenuItem>
                   <Link to="/partner/account">
                     <SidebarMenuButton
                       isActive={location.pathname.startsWith(
                         "/partner/account"
                       )}
-                      tooltip="Quản lý tài khoản"
+                      tooltip={t("partner.dashboard.account")}
                       className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg group-data-[collapsed=true]:justify-center"
                     >
                       <UserCog className="h-4 w-4" />
                       <span className="group-data-[collapsed=true]:hidden">
-                        Quản lý tài khoản
+                        {t("partner.dashboard.account")}
                       </span>
                     </SidebarMenuButton>
                   </Link>
@@ -283,7 +283,7 @@ export default function PartnerLayout() {
                     </Avatar>
                     <div className="flex flex-col group-data-[collapsed=true]:hidden">
                       <span className="text-sm font-medium text-sidebar-foreground">
-                        Tên Đối Tác
+                        Partner Name
                       </span>
                       <span className="text-xs text-muted-foreground">
                         partner@example.com
@@ -296,31 +296,31 @@ export default function PartnerLayout() {
                   className="w-56 bg-sidebar border-sidebar-border"
                 >
                   <DropdownMenuLabel className="text-sidebar-foreground">
-                    Tài khoản
+                    {t("common.account")}
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator className="bg-border" />
                   <Link to="/partner/profile">
                     <DropdownMenuItem className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground cursor-pointer">
                       <UserCog className="mr-2 h-4 w-4 hover:text-sidebar-accent-foreground" />
-                      Thông tin cá nhân
+                      {t("common.personalInfo")}
                     </DropdownMenuItem>
                   </Link>
                   <Link to="/partner/settings">
                     <DropdownMenuItem className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground cursor-pointer">
                       <Settings className="mr-2 h-4 w-4 hover:text-sidebar-accent-foreground" />
-                      Cài đặt
+                      {t("common.settings")}
                     </DropdownMenuItem>
                   </Link>
                   <Link to="/partner/notifications">
                     <DropdownMenuItem className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground cursor-pointer">
                       <Bell className="mr-2 h-4 w-4 hover:text-sidebar-accent-foreground" />
-                      Thông báo
+                      {t("common.notifications")}
                     </DropdownMenuItem>
                   </Link>
                   <DropdownMenuSeparator className="bg-border" />
                   <DropdownMenuItem className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground cursor-pointer">
                     <LogOut className="mr-2 h-4 w-4 hover:text-sidebar-accent-foreground" />
-                    Đăng xuất
+                    {t("common.logout")}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
