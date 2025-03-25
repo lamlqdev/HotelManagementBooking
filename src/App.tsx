@@ -5,6 +5,7 @@ import { Toaster } from "sonner";
 import { queryClient } from "./lib/react-query";
 
 import Layout from "./layouts/UserLayout";
+import PartnerLayout from "./layouts/PartnerLayout";
 import PublicRoute from "./components/PublicRoute";
 import PrivateRoute from "./components/PrivateRoute";
 import { ThemeProvider } from "./components/layout/ThemeProvider";
@@ -20,6 +21,8 @@ import SettingPage from "./pages/user/SettingPage";
 import ProfilePage from "./pages/user/ProfilePage";
 import Partnership from "./pages/user/Partnership";
 import RegisterPartner from "./pages/user/RegisterPartner";
+
+import PartnerDashboardPage from "./pages/partner/PartnerDashboardPage";
 
 import BlogPage from "./pages/user/BlogPage";
 import BlogDetailPage from "./pages/user/BlogDetailPage";
@@ -67,7 +70,15 @@ function App() {
               <Route path="/profile" element={<ProfilePage />} />
             </Route>
           </Route>
+
+          <Route path="/partner" element={<PartnerLayout />}>
+            <Route
+              path="/partner/dashboard"
+              element={<PartnerDashboardPage />}
+            />
+          </Route>
         </Routes>
+
         <Toaster position="top-right" richColors />
       </ThemeProvider>
     </QueryClientProvider>
