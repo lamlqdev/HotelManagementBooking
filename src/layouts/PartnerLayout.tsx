@@ -62,7 +62,7 @@ export default function PartnerLayout() {
 
   return (
     <SidebarProvider>
-      <div className="flex h-screen bg-background">
+      <div className="flex h-screen bg-background w-full">
         <div className="relative">
           <Sidebar
             className="w-64 border-r border-sidebar-border bg-sidebar group"
@@ -333,11 +333,9 @@ export default function PartnerLayout() {
           </Sidebar>
         </div>
 
-        <main className="flex-1 overflow-auto">
-          <div className="container mx-auto p-4">
-            <SidebarTrigger className="mb-2" />
-            <Outlet />
-          </div>
+        <main className="flex-1 flex flex-col p-4">
+          <SidebarTrigger className="mb-4" />
+          <Outlet />
         </main>
       </div>
     </SidebarProvider>
