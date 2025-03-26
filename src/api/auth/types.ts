@@ -2,30 +2,35 @@ import { z } from "zod";
 
 export const registerSchema = z
   .object({
-    fullName: z.string().min(2, "Họ tên phải có ít nhất 2 ký tự"),
-    email: z.string().email("Email không hợp lệ"),
+    fullName: z
+      .string()
+      .min(2, "auth.register.form.error.name")
+      .max(50, "auth.register.form.error.name"),
+    email: z
+      .string()
+      .email("auth.register.form.error.email")
+      .max(100, "auth.register.form.error.email"),
     password: z
       .string()
-      .min(8, "Mật khẩu phải có ít nhất 8 ký tự")
+      .min(6, "auth.register.form.error.min")
       .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-        "Mật khẩu phải chứa ít nhất 1 chữ hoa, 1 chữ thường và 1 số"
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/,
+        "auth.register.form.error.format"
       ),
     confirmPassword: z.string(),
     agreeToTerms: z.boolean().refine((val) => val === true, {
-      message: "Bạn phải đồng ý với điều khoản sử dụng",
+      message: "auth.register.form.error.required",
     }),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Mật khẩu xác nhận không khớp",
+    message: "auth.register.form.error.mismatch",
     path: ["confirmPassword"],
   });
 
 export const loginSchema = z
   .object({
-    email: z.string().email("Email không hợp lệ"),
-    password: z.string().min(1, "Vui lòng nhập mật khẩu"),
-    rememberMe: z.boolean().default(false),
+    email: z.string().email("auth.login.form.error.email"),
+    password: z.string().min(1, "auth.login.form.error.password"),
   })
   .required({
     email: true,

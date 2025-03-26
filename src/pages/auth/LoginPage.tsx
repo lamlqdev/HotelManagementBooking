@@ -9,6 +9,14 @@ import { useMutation } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 
 import { authApi } from "@/api/auth/auth.api";
 import { loginSchema, LoginFormData, ApiError } from "@/api/auth/types";
@@ -21,16 +29,11 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useAppDispatch();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<LoginFormData>({
+  const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
       password: "",
-      rememberMe: false,
     },
     mode: "onSubmit",
     reValidateMode: "onSubmit",
@@ -81,13 +84,8 @@ const LoginPage = () => {
     },
   });
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    handleSubmit((data) => {
-      if (!isSubmitting) {
-        loginMutation.mutate(data);
-      }
-    })(e);
+  const onSubmit = (data: LoginFormData) => {
+    loginMutation.mutate(data);
   };
 
   return (
@@ -124,134 +122,130 @@ const LoginPage = () => {
             </h2>
           </div>
 
-          <form className="space-y-4" onSubmit={onSubmit} noValidate>
-            <div className="space-y-3">
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-card-foreground"
-                >
-                  {t("auth.login.form.email.label")}
-                </label>
-                <Input
-                  id="email"
-                  type="email"
-                  {...register("email")}
-                  disabled={loginMutation.isPending || isSubmitting}
-                  placeholder={t("auth.login.form.email.placeholder")}
-                  className={`border border-input bg-background focus-visible:ring-1 focus-visible:ring-ring ${
-                    errors.email ? "border-red-500" : ""
-                  }`}
-                  autoComplete="email"
+          <Form {...form}>
+            <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
+              <div className="space-y-3">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("auth.login.form.email.label")}</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          type="email"
+                          placeholder={t("auth.login.form.email.placeholder")}
+                          disabled={loginMutation.isPending}
+                          autoComplete="email"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-                {errors.email && (
-                  <p className="mt-1 text-sm text-red-500">
-                    {errors.email.message}
-                  </p>
-                )}
+
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        {t("auth.login.form.password.label")}
+                      </FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Input
+                            {...field}
+                            type={showPassword ? "text" : "password"}
+                            className="pr-10 [&::-ms-reveal]:hidden [&::-ms-clear]:hidden"
+                            placeholder={t(
+                              "auth.login.form.password.placeholder"
+                            )}
+                            disabled={loginMutation.isPending}
+                            autoComplete="current-password"
+                          />
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute inset-y-0 right-0 px-3 flex items-center hover:bg-transparent"
+                          >
+                            {showPassword ? (
+                              <FaEyeSlash className="h-5 w-5 text-muted-foreground" />
+                            ) : (
+                              <FaEye className="h-5 w-5 text-muted-foreground" />
+                            )}
+                          </Button>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div className="text-sm">
+                  <Link
+                    to="/forgot-password"
+                    className="font-medium text-primary hover:text-accent"
+                  >
+                    {t("auth.login.form.forgotPassword")}
+                  </Link>
+                </div>
               </div>
 
               <div>
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-card-foreground"
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={loginMutation.isPending}
                 >
-                  {t("auth.login.form.password.label")}
-                </label>
+                  {loginMutation.isPending
+                    ? "Đang đăng nhập..."
+                    : t("auth.login.form.submit")}
+                </Button>
+              </div>
+
+              <div className="mt-4">
                 <div className="relative">
-                  <Input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    {...register("password")}
-                    disabled={loginMutation.isPending || isSubmitting}
-                    className={`pr-10 [&::-ms-reveal]:hidden [&::-ms-clear]:hidden border border-input bg-background focus-visible:ring-1 focus-visible:ring-ring ${
-                      errors.password ? "border-red-500" : ""
-                    }`}
-                    placeholder={t("auth.login.form.password.placeholder")}
-                    autoComplete="current-password"
-                  />
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-input"></div>
+                  </div>
+                  <div className="relative flex justify-center text-sm">
+                    <span className="px-2 bg-card text-muted-foreground">
+                      {t("auth.login.divider")}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="mt-4 grid grid-cols-1 gap-2">
+                  <Button variant="outline" type="button" className="w-full">
+                    <img
+                      src="/src/assets/images/google.svg"
+                      alt="Google logo"
+                      className="h-5 w-5 mr-2"
+                    />
+                    {t("auth.login.social.google")}
+                  </Button>
+
                   <Button
                     type="button"
-                    variant="ghost"
-                    size="icon"
-                    disabled={loginMutation.isPending || isSubmitting}
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-0 px-3 flex items-center hover:bg-transparent"
+                    className="w-full bg-[#4267B2] hover:bg-[#365899]"
                   >
-                    {showPassword ? (
-                      <FaEyeSlash className="h-5 w-5 text-muted-foreground" />
-                    ) : (
-                      <FaEye className="h-5 w-5 text-muted-foreground" />
-                    )}
+                    <img
+                      src="/src/assets/images/facebook.svg"
+                      alt="Facebook logo"
+                      className="h-5 w-5 mr-2"
+                    />
+                    {t("auth.login.social.facebook")}
                   </Button>
                 </div>
-                {errors.password && (
-                  <p className="mt-1 text-sm text-red-500">
-                    {errors.password.message}
-                  </p>
-                )}
               </div>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div className="text-sm">
-                <Link
-                  to="/forgot-password"
-                  className="font-medium text-primary hover:text-accent"
-                >
-                  {t("auth.login.form.forgotPassword")}
-                </Link>
-              </div>
-            </div>
-
-            <div>
-              <Button
-                type="submit"
-                className="w-full"
-                disabled={loginMutation.isPending || isSubmitting}
-              >
-                {loginMutation.isPending
-                  ? "Đang đăng nhập..."
-                  : t("auth.login.form.submit")}
-              </Button>
-            </div>
-
-            <div className="mt-4">
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-input"></div>
-                </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-card text-muted-foreground">
-                    {t("auth.login.divider")}
-                  </span>
-                </div>
-              </div>
-
-              <div className="mt-4 grid grid-cols-1 gap-2">
-                <Button variant="outline" type="button" className="w-full">
-                  <img
-                    src="/src/assets/images/google.svg"
-                    alt="Google logo"
-                    className="h-5 w-5 mr-2"
-                  />
-                  {t("auth.login.social.google")}
-                </Button>
-
-                <Button
-                  type="button"
-                  className="w-full bg-[#4267B2] hover:bg-[#365899]"
-                >
-                  <img
-                    src="/src/assets/images/facebook.svg"
-                    alt="Facebook logo"
-                    className="h-5 w-5 mr-2"
-                  />
-                  {t("auth.login.social.facebook")}
-                </Button>
-              </div>
-            </div>
-          </form>
+            </form>
+          </Form>
 
           <p className="mt-6 text-center text-sm text-muted-foreground">
             {t("auth.login.noAccount")}{" "}

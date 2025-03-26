@@ -56,7 +56,10 @@
           "label": "Mật khẩu",
           "placeholder": "Nhập mật khẩu của bạn"
         },
-        "rememberMe": "Ghi nhớ đăng nhập",
+        "error": {
+          "email": "Vui lòng nhập email",
+          "password": "Vui lòng nhập mật khẩu"
+        },
         "forgotPassword": "Quên mật khẩu?",
         "submit": "Tiếp tục với email"
       },
@@ -99,9 +102,18 @@
           "and": "và",
           "privacyPolicy": "Chính sách bảo mật"
         },
+        "error": {
+          "required": "Bạn phải đồng ý với {{termsOfService}} và {{privacyPolicy}}",
+          "mismatch": "Mật khẩu không khớp",
+          "min": "Mật khẩu phải có ít nhất 6 ký tự",
+          "format": "Mật khẩu phải chứa ít nhất 1 chữ hoa, 1 chữ thường và 1 số",
+          "email": "Email không hợp lệ",
+          "name": "Họ tên phải có ít nhất 2 ký tự"
+        },
         "agreeToTerms": "Tôi đồng ý với {{termsOfService}} và {{privacyPolicy}}",
         "submit": "Đăng ký"
       },
+
       "divider": "hoặc đăng ký bằng tài khoản",
       "social": {
         "google": "Tiếp tục với Google",

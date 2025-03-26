@@ -56,6 +56,10 @@
           "label": "Password",
           "placeholder": "Enter your password"
         },
+        "error": {
+          "email": "Please enter your email",
+          "password": "Please enter your password"
+        },
         "rememberMe": "Remember me",
         "forgotPassword": "Forgot password?",
         "submit": "Continue with email"
@@ -98,6 +102,14 @@
           "termsOfService": "Terms of Service",
           "and": "and",
           "privacyPolicy": "Privacy Policy"
+        },
+        "error": {
+          "required": "You must agree to the terms of service and privacy policy",
+          "mismatch": "Passwords do not match",
+          "min": "Password must be at least 6 characters",
+          "format": "Password must contain at least 1 uppercase letter, 1 lowercase letter, and 1 number",
+          "email": "Invalid email",
+          "name": "Name must be at least 2 characters"
         },
         "agreeToTerms": "I agree to the {{termsOfService}} and {{privacyPolicy}}",
         "submit": "Register"

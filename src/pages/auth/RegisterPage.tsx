@@ -11,6 +11,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { VerifyEmailNotification } from "@/components/auth/VerifyEmailNotification";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 
 import { authApi } from "@/api/auth/auth.api";
 import { registerSchema, RegisterFormData, ApiError } from "@/api/auth/types";
@@ -22,12 +30,7 @@ const RegisterPage = () => {
   const [isVerifyModalOpen, setIsVerifyModalOpen] = React.useState(false);
   const [registeredEmail, setRegisteredEmail] = React.useState("");
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm<RegisterFormData>({
+  const form = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
       fullName: "",
@@ -105,225 +108,227 @@ const RegisterPage = () => {
               </h2>
             </div>
 
-            <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
-              <div className="space-y-3">
-                <div>
-                  <label
-                    htmlFor="fullName"
-                    className="block text-sm font-medium text-card-foreground"
-                  >
-                    {t("auth.register.form.fullName.label")}
-                  </label>
-                  <Input
-                    id="fullName"
-                    {...register("fullName")}
-                    type="text"
-                    className={`border border-input bg-background focus-visible:ring-1 focus-visible:ring-ring ${
-                      errors.fullName ? "border-red-500" : ""
-                    }`}
-                    placeholder={t("auth.register.form.fullName.placeholder")}
+            <Form {...form}>
+              <form
+                className="space-y-4"
+                onSubmit={form.handleSubmit(onSubmit)}
+              >
+                <div className="space-y-3">
+                  <FormField
+                    control={form.control}
+                    name="fullName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          {t("auth.register.form.fullName.label")}
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            type="text"
+                            placeholder={t(
+                              "auth.register.form.fullName.placeholder"
+                            )}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                  {errors.fullName && (
-                    <p className="mt-1 text-sm text-red-500">
-                      {errors.fullName.message}
-                    </p>
-                  )}
-                </div>
 
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium text-card-foreground"
-                  >
-                    {t("auth.register.form.email.label")}
-                  </label>
-                  <Input
-                    id="email"
-                    {...register("email")}
-                    type="email"
-                    className={`border border-input bg-background focus-visible:ring-1 focus-visible:ring-ring ${
-                      errors.email ? "border-red-500" : ""
-                    }`}
-                    placeholder={t("auth.register.form.email.placeholder")}
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          {t("auth.register.form.email.label")}
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            type="email"
+                            placeholder={t(
+                              "auth.register.form.email.placeholder"
+                            )}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                  {errors.email && (
-                    <p className="mt-1 text-sm text-red-500">
-                      {errors.email.message}
-                    </p>
-                  )}
+
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          {t("auth.register.form.password.label")}
+                        </FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Input
+                              {...field}
+                              type={showPassword ? "text" : "password"}
+                              className="pr-10 [&::-ms-reveal]:hidden [&::-ms-clear]:hidden"
+                              placeholder={t(
+                                "auth.register.form.password.placeholder"
+                              )}
+                            />
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => setShowPassword(!showPassword)}
+                              className="absolute inset-y-0 right-0 px-3 flex items-center hover:bg-transparent"
+                            >
+                              {showPassword ? (
+                                <FaEyeSlash className="h-5 w-5 text-muted-foreground" />
+                              ) : (
+                                <FaEye className="h-5 w-5 text-muted-foreground" />
+                              )}
+                            </Button>
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="confirmPassword"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          {t("auth.register.form.confirmPassword.label")}
+                        </FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Input
+                              {...field}
+                              type={showConfirmPassword ? "text" : "password"}
+                              className="pr-10 [&::-ms-reveal]:hidden [&::-ms-clear]:hidden"
+                              placeholder={t(
+                                "auth.register.form.confirmPassword.placeholder"
+                              )}
+                            />
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              onClick={() =>
+                                setShowConfirmPassword(!showConfirmPassword)
+                              }
+                              className="absolute inset-y-0 right-0 px-3 flex items-center hover:bg-transparent"
+                            >
+                              {showConfirmPassword ? (
+                                <FaEyeSlash className="h-5 w-5 text-muted-foreground" />
+                              ) : (
+                                <FaEye className="h-5 w-5 text-muted-foreground" />
+                              )}
+                            </Button>
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
 
-                <div>
-                  <label
-                    htmlFor="password"
-                    className="block text-sm font-medium text-card-foreground"
-                  >
-                    {t("auth.register.form.password.label")}
-                  </label>
-                  <div className="relative">
-                    <Input
-                      id="password"
-                      {...register("password")}
-                      type={showPassword ? "text" : "password"}
-                      className={`pr-10 [&::-ms-reveal]:hidden [&::-ms-clear]:hidden border border-input bg-background focus-visible:ring-1 focus-visible:ring-ring ${
-                        errors.password ? "border-red-500" : ""
-                      }`}
-                      placeholder={t("auth.register.form.password.placeholder")}
-                    />
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute inset-y-0 right-0 px-3 flex items-center hover:bg-transparent"
-                    >
-                      {showPassword ? (
-                        <FaEyeSlash className="h-5 w-5 text-muted-foreground" />
-                      ) : (
-                        <FaEye className="h-5 w-5 text-muted-foreground" />
-                      )}
-                    </Button>
-                  </div>
-                  {errors.password && (
-                    <p className="mt-1 text-sm text-red-500">
-                      {errors.password.message}
-                    </p>
+                <FormField
+                  control={form.control}
+                  name="agreeToTerms"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex items-center space-x-2">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                        <label
+                          htmlFor="agreeToTerms"
+                          className="text-sm text-card-foreground"
+                        >
+                          {t("auth.register.form.terms.prefix")}{" "}
+                          <Link
+                            to="/terms"
+                            className="text-primary hover:text-accent underline"
+                          >
+                            {t("auth.register.form.terms.termsOfService")}
+                          </Link>{" "}
+                          {t("auth.register.form.terms.and")}{" "}
+                          <Link
+                            to="/privacy"
+                            className="text-primary hover:text-accent underline"
+                          >
+                            {t("auth.register.form.terms.privacyPolicy")}
+                          </Link>
+                        </label>
+                      </div>
+                      <FormMessage />
+                    </FormItem>
                   )}
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="confirmPassword"
-                    className="block text-sm font-medium text-card-foreground"
-                  >
-                    {t("auth.register.form.confirmPassword.label")}
-                  </label>
-                  <div className="relative">
-                    <Input
-                      id="confirmPassword"
-                      {...register("confirmPassword")}
-                      type={showConfirmPassword ? "text" : "password"}
-                      className={`pr-10 [&::-ms-reveal]:hidden [&::-ms-clear]:hidden border border-input bg-background focus-visible:ring-1 focus-visible:ring-ring ${
-                        errors.confirmPassword ? "border-red-500" : ""
-                      }`}
-                      placeholder={t(
-                        "auth.register.form.confirmPassword.placeholder"
-                      )}
-                    />
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
-                      onClick={() =>
-                        setShowConfirmPassword(!showConfirmPassword)
-                      }
-                      className="absolute inset-y-0 right-0 px-3 flex items-center hover:bg-transparent"
-                    >
-                      {showConfirmPassword ? (
-                        <FaEyeSlash className="h-5 w-5 text-muted-foreground" />
-                      ) : (
-                        <FaEye className="h-5 w-5 text-muted-foreground" />
-                      )}
-                    </Button>
-                  </div>
-                  {errors.confirmPassword && (
-                    <p className="mt-1 text-sm text-red-500">
-                      {errors.confirmPassword.message}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="agreeToTerms"
-                  onCheckedChange={(checked) => {
-                    setValue("agreeToTerms", checked === true);
-                  }}
-                  className={`border border-input data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground ${
-                    errors.agreeToTerms ? "border-red-500" : ""
-                  }`}
                 />
-                <label
-                  htmlFor="agreeToTerms"
-                  className="text-sm text-card-foreground"
-                >
-                  {t("auth.register.form.terms.prefix")}{" "}
-                  <Link
-                    to="/terms"
-                    className="text-primary hover:text-accent underline"
-                  >
-                    {t("auth.register.form.terms.termsOfService")}
-                  </Link>{" "}
-                  {t("auth.register.form.terms.and")}{" "}
-                  <Link
-                    to="/privacy"
-                    className="text-primary hover:text-accent underline"
-                  >
-                    {t("auth.register.form.terms.privacyPolicy")}
-                  </Link>
-                </label>
-              </div>
-              {errors.agreeToTerms && (
-                <p className="mt-1 text-sm text-red-500">
-                  {errors.agreeToTerms.message}
-                </p>
-              )}
 
-              <div>
-                <Button
-                  type="submit"
-                  className="w-full"
-                  disabled={mutation.isPending}
-                >
-                  {mutation.isPending
-                    ? "Đang xử lý..."
-                    : t("auth.register.form.submit")}
-                </Button>
-              </div>
-
-              <div className="mt-4">
-                <div className="relative">
-                  <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-input"></div>
-                  </div>
-                  <div className="relative flex justify-center text-sm">
-                    <span className="px-2 bg-card text-muted-foreground">
-                      {t("auth.register.divider")}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="mt-4 grid grid-cols-1 gap-2">
+                <div>
                   <Button
-                    variant="outline"
-                    type="button"
+                    type="submit"
                     className="w-full"
-                    onClick={handleGoogleAuth}
+                    disabled={mutation.isPending}
                   >
-                    <img
-                      src="/src/assets/images/google.svg"
-                      alt="Google logo"
-                      className="h-5 w-5 mr-2"
-                    />
-                    {t("auth.register.social.google")}
-                  </Button>
-
-                  <Button
-                    type="button"
-                    className="w-full bg-[#4267B2] hover:bg-[#365899]"
-                    onClick={handleFacebookAuth}
-                  >
-                    <img
-                      src="/src/assets/images/facebook.svg"
-                      alt="Facebook logo"
-                      className="h-5 w-5 mr-2"
-                    />
-                    {t("auth.register.social.facebook")}
+                    {mutation.isPending
+                      ? "Đang xử lý..."
+                      : t("auth.register.form.submit")}
                   </Button>
                 </div>
-              </div>
-            </form>
+
+                <div className="mt-4">
+                  <div className="relative">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-input"></div>
+                    </div>
+                    <div className="relative flex justify-center text-sm">
+                      <span className="px-2 bg-card text-muted-foreground">
+                        {t("auth.register.divider")}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 grid grid-cols-1 gap-2">
+                    <Button
+                      variant="outline"
+                      type="button"
+                      className="w-full"
+                      onClick={handleGoogleAuth}
+                    >
+                      <img
+                        src="/src/assets/images/google.svg"
+                        alt="Google logo"
+                        className="h-5 w-5 mr-2"
+                      />
+                      {t("auth.register.social.google")}
+                    </Button>
+
+                    <Button
+                      type="button"
+                      className="w-full bg-[#4267B2] hover:bg-[#365899]"
+                      onClick={handleFacebookAuth}
+                    >
+                      <img
+                        src="/src/assets/images/facebook.svg"
+                        alt="Facebook logo"
+                        className="h-5 w-5 mr-2"
+                      />
+                      {t("auth.register.social.facebook")}
+                    </Button>
+                  </div>
+                </div>
+              </form>
+            </Form>
 
             <p className="mt-6 text-center text-sm text-muted-foreground">
               {t("auth.register.hasAccount")}{" "}
