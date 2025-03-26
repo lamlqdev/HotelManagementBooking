@@ -83,7 +83,7 @@ function App() {
           </Route>
 
           <Route path="/partner" element={<PartnerLayout />}>
-            <Route index element={<RevenuePage />} />
+            <Route path="revenue" element={<RevenuePage />} />
             <Route path="hotels/info" element={<HotelInfoPage />} />
             <Route path="hotels/rooms" element={<RoomManagementPage />} />
             <Route path="hotels/status" element={<RoomStatusPage />} />
