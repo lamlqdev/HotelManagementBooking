@@ -87,4 +87,10 @@ export const authApi = {
   facebookAuth: () => {
     window.location.href = `${import.meta.env.VITE_API_URL}${API_URL}/facebook`;
   },
+
+  // Refresh token
+  refreshToken: async (): Promise<AuthResponse> => {
+    const response = await axiosInstance.post(`${API_URL}/refresh-token`);
+    return response.data;
+  },
 };

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { authApi } from "@/api/auth/auth.api";
 
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000/api",
@@ -34,19 +35,14 @@ axiosInstance.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const refreshToken = localStorage.getItem("refreshToken");
-        const response = await axios.post(
-          "http://localhost:3000/api/auth/refresh-token",
-          {
-            refreshToken,
-          }
-        );
+        // Gọi API refresh token thông qua authApi
+        const response = await authApi.refreshToken();
 
-        if (response.data.accessToken) {
-          localStorage.setItem("accessToken", response.data.accessToken);
+        if (response.accessToken) {
+          localStorage.setItem("accessToken", response.accessToken);
           axiosInstance.defaults.headers.common[
             "Authorization"
-          ] = `Bearer ${response.data.accessToken}`;
+          ] = `Bearer ${response.accessToken}`;
           return axiosInstance(originalRequest);
         }
       } catch (refreshError) {
