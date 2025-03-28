@@ -8,8 +8,8 @@ export default function SettingPage() {
   const { t } = useTranslation();
 
   return (
-    <div className="container mx-auto mt-32 mb-12">
-      <h1 className="text-3xl font-bold mb-6">{t("settings.title")}</h1>
+    <div className="container mx-auto mb-12">
+      <h1 className="text-2xl font-bold mb-4">{t("settings.title")}</h1>
 
       <div className="space-y-6">
         <Card>

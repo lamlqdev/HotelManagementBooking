@@ -17,7 +17,7 @@ import HotelDetailPage from "./pages/user/HotelDetailPage";
 import BookingInformationPage from "./pages/user/BookingInformationPage";
 import BookingGuidePage from "./pages/user/BookingGuidePage";
 import ContactUs from "./pages/user/ContactUs";
-import SettingPage from "./pages/user/SettingPage";
+import SettingPage from "./pages/shared/SettingPage";
 import UserProfilePage from "./pages/user/ProfilePage";
 import Partnership from "./pages/user/Partnership";
 import RegisterPartner from "./pages/user/RegisterPartner";
@@ -32,7 +32,6 @@ import BookingRequestsPage from "./pages/partner/BookingRequestsPage";
 import MessagesPage from "./pages/partner/MessagesPage";
 import AccountPage from "./pages/partner/AccountPage";
 import PartnerProfilePage from "./pages/partner/ProfilePage";
-import SettingsPage from "./pages/partner/SettingsPage";
 import NotificationsPage from "./pages/partner/NotificationsPage";
 
 import BlogPage from "./pages/user/BlogPage";
@@ -93,7 +92,7 @@ function App() {
             <Route path="messages" element={<MessagesPage />} />
             <Route path="account" element={<AccountPage />} />
             <Route path="profile" element={<PartnerProfilePage />} />
-            <Route path="settings" element={<SettingsPage />} />
+            <Route path="settings" element={<SettingPage />} />
             <Route path="notifications" element={<NotificationsPage />} />
           </Route>
         </Routes>

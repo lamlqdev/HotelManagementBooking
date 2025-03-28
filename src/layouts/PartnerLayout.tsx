@@ -131,12 +131,12 @@ export default function PartnerLayout() {
                   {openMenus.hotels && (
                     <SidebarMenuSub className="mt-2 space-y-1 group-data-[collapsible=icon]:hidden">
                       <SidebarMenuSubItem>
-                        <Link to="/partner/hotels/info">
+                        <Link to="/partner/hotels/info" className="block">
                           <SidebarMenuSubButton
                             isActive={
                               location.pathname === "/partner/hotels/info"
                             }
-                            className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg"
+                            className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg w-full"
                           >
                             <Building2 className="h-4 w-4" />
                             <span>{t("partner.hotels.info")}</span>
@@ -144,12 +144,12 @@ export default function PartnerLayout() {
                         </Link>
                       </SidebarMenuSubItem>
                       <SidebarMenuSubItem>
-                        <Link to="/partner/hotels/rooms">
+                        <Link to="/partner/hotels/rooms" className="block">
                           <SidebarMenuSubButton
                             isActive={
                               location.pathname === "/partner/hotels/rooms"
                             }
-                            className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg"
+                            className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg w-full"
                           >
                             <DoorOpen className="h-4 w-4" />
                             <span>{t("partner.hotels.rooms")}</span>
