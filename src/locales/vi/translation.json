@@ -837,5 +837,75 @@
       "orders": "Quản lý đơn đặt phòng",
       "requests": "Yêu cầu huỷ/đổi"
     }
+  },
+  "hotelInfo": {
+    "title": "Thông tin khách sạn",
+    "buttons": {
+      "edit": "Chỉnh sửa",
+      "cancel": "Hủy",
+      "save": "Lưu"
+    },
+    "tabs": {
+      "general": "Thông tin chung",
+      "contact": "Liên hệ",
+      "policies": "Chính sách"
+    },
+    "general": {
+      "basicInfo": "Thông tin cơ bản",
+      "name": "Tên khách sạn",
+      "address": "Địa chỉ",
+      "description": "Mô tả",
+      "images": "Ảnh khách sạn",
+      "mainImage": "Ảnh đại diện",
+      "mainImageAlt": "Ảnh đại diện khách sạn",
+      "mainImageDesc": "Ảnh đại diện sẽ được hiển thị ở vị trí nổi bật nhất của khách sạn",
+      "galleryImages": "Ảnh mô tả",
+      "galleryImageAlt": "Ảnh mô tả {{index}}",
+      "changeImage": "Thay đổi ảnh",
+      "addImage": "Thêm ảnh",
+      "galleryImagesDesc": "Thêm các ảnh mô tả chi tiết về khách sạn của bạn",
+      "amenities": "Tiện nghi",
+      "selectedAmenities": "Tiện nghi đã chọn",
+      "availableAmenities": "Tiện nghi có sẵn"
+    },
+    "contact": {
+      "title": "Thông tin liên hệ",
+      "phone": "Số điện thoại",
+      "email": "Email",
+      "website": "Website",
+      "representativeName": "Người đại diện"
+    },
+    "policies": {
+      "title": "Chính sách",
+      "checkInOut": "Thời gian check-in/check-out",
+      "checkInTime": "Thời gian check-in",
+      "checkOutTime": "Thời gian check-out",
+      "cancellation": "Chính sách hủy phòng",
+      "children": "Chính sách trẻ em",
+      "pet": "Chính sách thú cưng",
+      "smoking": "Chính sách hút thuốc",
+      "content": "Nội dung"
+    },
+    "amenities": {
+      "wifi": "WiFi miễn phí",
+      "parking": "Bãi đỗ xe",
+      "elevator": "Thang máy",
+      "air-conditioning": "Điều hòa nhiệt độ",
+      "minibar": "Minibar",
+      "safe": "Két sắt",
+      "balcony": "Ban công",
+      "ocean-view": "Hướng biển",
+      "pool": "Bể bơi",
+      "gym": "Phòng tập",
+      "spa": "Spa",
+      "tennis": "Sân tennis",
+      "restaurant": "Nhà hàng",
+      "bar": "Quầy bar",
+      "cafe": "Quán cà phê",
+      "room-service": "Dịch vụ phòng",
+      "meeting-room": "Phòng họp",
+      "business-center": "Trung tâm kinh doanh",
+      "conference-hall": "Hội trường"
+    }
   }
 }

@@ -837,5 +837,75 @@
       "orders": "Order Management",
       "requests": "Cancellation/Change Requests"
     }
+  },
+  "hotelInfo": {
+    "title": "Hotel Information",
+    "buttons": {
+      "edit": "Edit",
+      "cancel": "Cancel",
+      "save": "Save"
+    },
+    "tabs": {
+      "general": "General",
+      "contact": "Contact",
+      "policies": "Policies"
+    },
+    "general": {
+      "basicInfo": "Basic Information",
+      "name": "Hotel Name",
+      "address": "Address",
+      "description": "Description",
+      "images": "Hotel Images",
+      "mainImage": "Main Image",
+      "mainImageAlt": "Hotel Main Image",
+      "mainImageDesc": "The main image will be displayed in the most prominent position of the hotel",
+      "galleryImages": "Gallery Images",
+      "galleryImageAlt": "Gallery Image {{index}}",
+      "changeImage": "Change Image",
+      "addImage": "Add Image",
+      "galleryImagesDesc": "Add detailed images to describe your hotel",
+      "amenities": "Amenities",
+      "selectedAmenities": "Selected Amenities",
+      "availableAmenities": "Available Amenities"
+    },
+    "contact": {
+      "title": "Contact Information",
+      "phone": "Phone",
+      "email": "Email",
+      "website": "Website",
+      "representativeName": "Representative"
+    },
+    "policies": {
+      "title": "Policies",
+      "checkInOut": "Check-in/Check-out Time",
+      "checkInTime": "Check-in Time",
+      "checkOutTime": "Check-out Time",
+      "cancellation": "Cancellation Policy",
+      "children": "Children Policy",
+      "pet": "Pet Policy",
+      "smoking": "Smoking Policy",
+      "content": "Content"
+    },
+    "amenities": {
+      "wifi": "Free WiFi",
+      "parking": "Parking",
+      "elevator": "Elevator",
+      "air-conditioning": "Air Conditioning",
+      "minibar": "Minibar",
+      "safe": "Safe",
+      "balcony": "Balcony",
+      "ocean-view": "Ocean View",
+      "pool": "Swimming Pool",
+      "gym": "Gym",
+      "spa": "Spa",
+      "tennis": "Tennis Court",
+      "restaurant": "Restaurant",
+      "bar": "Bar",
+      "cafe": "Café",
+      "room-service": "Room Service",
+      "meeting-room": "Meeting Room",
+      "business-center": "Business Center",
+      "conference-hall": "Conference Hall"
+    }
   }
 }
