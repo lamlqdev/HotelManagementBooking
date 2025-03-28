@@ -1,10 +1,10 @@
 import { MdLocalOffer } from "react-icons/md";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { HotelInfo } from "@/components/common/HotelInfo";
-import { BookingDates } from "@/components/common/BookingDates";
-import { AmenitiesList } from "@/components/common/AmenitiesList";
-import { PricingSummary } from "@/components/common/PricingSummary";
+import { HotelInfo } from "@/components/user/booking/HotelInfo";
+import { BookingDates } from "@/components/user/booking/BookingDates";
+import { AmenitiesList } from "@/components/user/booking/AmenitiesList";
+import { PricingSummary } from "@/components/user/booking/PricingSummary";
 import { IconType } from "react-icons";
 import { useTranslation } from "react-i18next";
 

@@ -6,9 +6,9 @@ import { queryClient } from "./lib/react-query";
 
 import Layout from "./layouts/UserLayout";
 import PartnerLayout from "./layouts/PartnerLayout";
-import PublicRoute from "./components/PublicRoute";
-import PrivateRoute from "./components/PrivateRoute";
-import { ThemeProvider } from "./components/layout/ThemeProvider";
+import PublicRoute from "./components/routes/PublicRoute";
+import PrivateRoute from "./components/routes/PrivateRoute";
+import { ThemeProvider } from "./components/setting/ThemeProvider";
 
 import HomePage from "./pages/user/HomePage";
 import AboutPage from "./pages/user/AboutPage";

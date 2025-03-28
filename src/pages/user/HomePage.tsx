@@ -2,11 +2,11 @@ import { useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
 
 import SearchBox from "@/components/common/SearchBox";
-import HeroBanner from "@/components/sections/home/HeroBanner";
-import PopularDestinations from "@/components/sections/home/PopularDestinations";
-import HotelDeals from "@/components/sections/home/HotelDeals";
-import FavoriteHotels from "@/components/sections/home/FavoriteHotels";
-import TravelInspiration from "@/components/sections/home/TravelInspiration";
+import HeroBanner from "@/components/common/HeroBanner";
+import PopularDestinations from "@/components/user/home/PopularDestinations";
+import HotelDeals from "@/components/user/home/HotelDeals";
+import FavoriteHotels from "@/components/user/home/FavoriteHotels";
+import TravelInspiration from "@/components/user/home/TravelInspiration";
 
 const HomePage = () => {
   const navigate = useNavigate();

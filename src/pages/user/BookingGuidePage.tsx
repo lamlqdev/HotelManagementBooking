@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import HeroBanner from "@/components/sections/home/HeroBanner";
+import HeroBanner from "@/components/common/HeroBanner";
 import step1 from "@/assets/images/booking_steps/step1.png";
 import step2 from "@/assets/images/booking_steps/step2.png";
 import step3 from "@/assets/images/booking_steps/step3.png";

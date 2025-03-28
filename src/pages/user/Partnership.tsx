@@ -9,7 +9,7 @@ import {
   HelpCircle,
 } from "lucide-react";
 import { Link } from "react-router";
-import HeroBanner from "@/components/sections/home/HeroBanner";
+import HeroBanner from "@/components/common/HeroBanner";
 import step1 from "@/assets/images/partner_register_steps/step1.svg";
 import step2 from "@/assets/images/partner_register_steps/step2.svg";
 import step3 from "@/assets/images/partner_register_steps/step3.svg";

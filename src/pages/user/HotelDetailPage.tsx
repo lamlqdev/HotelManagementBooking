@@ -5,12 +5,12 @@ import { AiFillLike } from "react-icons/ai";
 import { FaWifi, FaCoffee, FaSmokingBan } from "react-icons/fa";
 import { BsWindow } from "react-icons/bs";
 
-import HotelHeader from "@/components/sections/hotel-detail/HotelHeader";
-import HotelGallery from "@/components/sections/hotel-detail/HotelGallery";
-import HotelTabs from "@/components/sections/hotel-detail/HotelTabs";
-import HotelOverview from "@/components/sections/hotel-detail/HotelOverview";
-import HotelRooms from "@/components/sections/hotel-detail/HotelRooms";
-import HotelReviews from "@/components/sections/hotel-detail/HotelReviews";
+import HotelHeader from "@/components/user/hotel-detail/HotelHeader";
+import HotelGallery from "@/components/user/hotel-detail/HotelGallery";
+import HotelTabs from "@/components/user/hotel-detail/HotelTabs";
+import HotelOverview from "@/components/user/hotel-detail/HotelOverview";
+import HotelRooms from "@/components/user/hotel-detail/HotelRooms";
+import HotelReviews from "@/components/user/hotel-detail/HotelReviews";
 import ChatSupport from "@/components/common/ChatSupport";
 
 const HotelDetailPage = () => {

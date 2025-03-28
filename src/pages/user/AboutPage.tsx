@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import HeroBanner from "@/components/sections/home/HeroBanner";
+import HeroBanner from "@/components/common/HeroBanner";
 import {
   Search,
   Calendar,

@@ -1,8 +1,8 @@
 import { FaWifi, FaParking, FaSwimmingPool, FaUtensils } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
-import { BookingContactForm } from "@/components/sections/booking/BookingContactForm";
-import { BookingSpecialRequests } from "@/components/sections/booking/BookingSpecialRequests";
-import { BookingSummary } from "@/components/sections/booking/BookingSummary";
+import { BookingContactForm } from "@/components/user/booking/BookingContactForm";
+import { BookingSpecialRequests } from "@/components/user/booking/BookingSpecialRequests";
+import { BookingSummary } from "@/components/user/booking/BookingSummary";
 
 const BookingInformationPage = () => {
   const { t } = useTranslation();

@@ -7,7 +7,8 @@ import "./index.css";
 import "./lib/i18n";
 import { store } from "./store/store";
 import App from "./App.tsx";
-import AuthProvider from "./components/AuthProvider.tsx";
+import AuthProvider from "./components/routes/AuthProvider.tsx";
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Provider store={store}>

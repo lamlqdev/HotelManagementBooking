@@ -8,11 +8,11 @@ import { Form } from "@/components/ui/form";
 
 import { partnerFormSchema, type PartnerFormData } from "@/api/partner/types";
 
-import HotelInfoSection from "@/components/sections/partner-registration/HotelInfoSection";
-import AddressSection from "@/components/sections/partner-registration/AddressSection";
-import ContactSection from "@/components/sections/partner-registration/ContactSection";
-import BusinessSection from "@/components/sections/partner-registration/BusinessSection";
-import LicenseSection from "@/components/sections/partner-registration/LicenseSection";
+import HotelInfoSection from "@/components/partner/partner-registration/HotelInfoSection";
+import AddressSection from "@/components/partner/partner-registration/AddressSection";
+import ContactSection from "@/components/partner/partner-registration/ContactSection";
+import BusinessSection from "@/components/partner/partner-registration/BusinessSection";
+import LicenseSection from "@/components/partner/partner-registration/LicenseSection";
 
 const RegisterPartner = () => {
   const { t } = useTranslation();
