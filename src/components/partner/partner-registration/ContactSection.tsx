@@ -20,11 +20,7 @@ const ContactSection = ({ form }: ContactSectionProps) => {
   const { t } = useTranslation();
 
   return (
-    <div className="bg-card p-6 rounded-lg space-y-6 dark:border dark:border-gray-800">
-      <h2 className="text-xl font-semibold">
-        {t("register_partner.contact_info.title")}
-      </h2>
-
+    <div className="space-y-6">
       <FormField
         control={form.control}
         name="contactName"
@@ -35,26 +31,6 @@ const ContactSection = ({ form }: ContactSectionProps) => {
               <Input
                 placeholder={t(
                   "register_partner.contact_info.name_placeholder"
-                )}
-                className="dark:border-gray-700 focus:dark:border-primary"
-                {...field}
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-
-      <FormField
-        control={form.control}
-        name="position"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>{t("register_partner.contact_info.position")}</FormLabel>
-            <FormControl>
-              <Input
-                placeholder={t(
-                  "register_partner.contact_info.position_placeholder"
                 )}
                 className="dark:border-gray-700 focus:dark:border-primary"
                 {...field}
@@ -106,6 +82,26 @@ const ContactSection = ({ form }: ContactSectionProps) => {
           )}
         />
       </div>
+
+      <FormField
+        control={form.control}
+        name="website"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>{t("register_partner.contact_info.website")}</FormLabel>
+            <FormControl>
+              <Input
+                placeholder={t(
+                  "register_partner.contact_info.website_placeholder"
+                )}
+                className="dark:border-gray-700 focus:dark:border-primary"
+                {...field}
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
     </div>
   );
 };

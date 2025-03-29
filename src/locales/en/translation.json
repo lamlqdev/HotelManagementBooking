@@ -711,6 +711,17 @@
     }
   },
   "register_partner": {
+    "sections": {
+      "general": {
+        "title": "General Information"
+      },
+      "contact": {
+        "title": "Contact Information"
+      },
+      "policies": {
+        "title": "Policies"
+      }
+    },
     "title": "Hotel Partner Registration",
     "hotel_info": {
       "title": "Hotel Information",
@@ -726,33 +737,23 @@
         "5": "5 Stars",
         "unrated": "Not Rated"
       },
-      "room_count": "Number of Rooms",
-      "room_count_placeholder": "Enter number of rooms",
-      "amenities": "Main Amenities",
-      "amenities_placeholder": "List main amenities (swimming pool, restaurant, spa, gym...)",
-      "hotel_images": "Hotel Images",
-      "hotel_images_desc": "Upload high-quality images of your hotel",
-      "business_type": "Business Type",
-      "business_type_placeholder": "Select business type",
-      "business_types": {
-        "corporation": "Corporation",
-        "limited": "Limited Company",
-        "private": "Private Enterprise",
-        "other": "Other"
-      },
-      "tax_id": "Tax ID",
-      "tax_id_placeholder": "Enter tax ID",
-      "website": "Website",
-      "website_placeholder": "https://..."
+
+      "main_image": "Main Image",
+      "main_image_desc": "Upload the main image of your hotel",
+      "gallery_images": "Gallery Images",
+      "gallery_images_desc": "Upload high-quality gallery images",
+      "description": "Hotel Description",
+      "description_desc": "Describe your hotel in detail, including history, highlights, and main services",
+      "description_placeholder": "Describe your hotel in detail...",
+      "amenities": "Amenities",
+      "amenities_desc": "Select the main amenities of your hotel"
     },
     "address": {
       "title": "Hotel Address",
       "address": "Address",
       "address_placeholder": "Enter full address",
-      "district": "District",
-      "district_placeholder": "Enter district",
-      "city": "City",
-      "city_placeholder": "Enter city",
+      "tourist_spot": "Tourist Spot",
+      "tourist_spot_placeholder": "Enter tourist spot",
       "location_desc": "Location Description",
       "location_desc_placeholder": "Describe geographical location and nearby attractions..."
     },
@@ -760,47 +761,25 @@
       "title": "Contact Information",
       "name": "Full Name",
       "name_placeholder": "Enter full name",
-      "position": "Position",
-      "position_placeholder": "Enter position",
       "email": "Email",
       "email_placeholder": "example@company.com",
       "phone": "Phone Number",
-      "phone_placeholder": "Enter phone number"
+      "phone_placeholder": "Enter phone number",
+      "website": "Website",
+      "website_placeholder": "Enter website URL"
     },
-    "business_info": {
-      "title": "Business Information",
-      "price_range": "Price Range",
-      "price_range_placeholder": "Select price range",
-      "price_ranges": {
-        "budget": "Under 500,000 VND",
-        "economic": "500,000 - 1,000,000 VND",
-        "mid_range": "1,000,000 - 2,000,000 VND",
-        "luxury": "2,000,000 - 5,000,000 VND",
-        "ultra_luxury": "Above 5,000,000 VND"
-      },
-      "target_guests": "Target Guests",
-      "target_guests_placeholder": "Select target guests",
-      "guest_types": {
-        "business": "Business Travelers",
-        "family": "Families",
-        "couples": "Couples",
-        "backpackers": "Backpackers",
-        "groups": "Groups",
-        "all": "All Types"
-      },
-      "description": "Hotel Description",
-      "description_desc": "Describe your hotel in detail, including history, highlights, and main services",
-      "description_placeholder": "Describe your hotel in detail..."
-    },
-    "license": {
-      "title": "Licenses & Certifications",
-      "business_license": "Business License Number",
-      "business_license_placeholder": "Enter business license number",
-      "certifications": "Other Certifications",
-      "certifications_desc": "List other certifications such as: ISO, Food Safety Certificate, etc.",
-      "certifications_placeholder": "List other certifications...",
-      "certificate_images": "License & Certificate Images",
-      "certificate_images_desc": "Upload images of business license and other certificates"
+    "policies": {
+      "title": "Policies",
+      "check_in_time": "Check-in Time",
+      "check_out_time": "Check-out Time",
+      "cancellation": "Cancellation Policy",
+      "cancellation_placeholder": "Enter cancellation policy",
+      "children": "Children Policy",
+      "children_placeholder": "Enter children policy",
+      "pets": "Pet Policy",
+      "pets_placeholder": "Enter pet policy",
+      "smoking": "Smoking Policy",
+      "smoking_placeholder": "Enter smoking policy"
     },
     "file_upload": {
       "drag_drop": "Drag and drop images here or click to select files",

@@ -711,6 +711,17 @@
     }
   },
   "register_partner": {
+    "sections": {
+      "general": {
+        "title": "Thông tin chung"
+      },
+      "contact": {
+        "title": "Thông tin liên hệ"
+      },
+      "policies": {
+        "title": "Chính sách"
+      }
+    },
     "title": "Đăng ký khách sạn đối tác",
     "hotel_info": {
       "title": "Thông tin khách sạn",
@@ -726,33 +737,22 @@
         "5": "5 sao",
         "unrated": "Chưa xếp hạng"
       },
-      "room_count": "Số lượng phòng",
-      "room_count_placeholder": "Nhập số lượng phòng",
-      "amenities": "Tiện nghi chính",
-      "amenities_placeholder": "Liệt kê các tiện nghi chính của khách sạn (hồ bơi, nhà hàng, spa, phòng gym...)",
-      "hotel_images": "Hình ảnh khách sạn",
-      "hotel_images_desc": "Tải lên các hình ảnh chất lượng cao của khách sạn",
-      "business_type": "Loại hình kinh doanh",
-      "business_type_placeholder": "Chọn loại hình kinh doanh",
-      "business_types": {
-        "corporation": "Công ty cổ phần",
-        "limited": "Công ty TNHH",
-        "private": "Doanh nghiệp tư nhân",
-        "other": "Khác"
-      },
-      "tax_id": "Mã số thuế",
-      "tax_id_placeholder": "Nhập mã số thuế",
-      "website": "Website",
-      "website_placeholder": "https://..."
+      "main_image": "Hình ảnh đại diện",
+      "main_image_desc": "Tải lên hình ảnh đại diện của khách sạn",
+      "gallery_images": "Hình ảnh khách sạn",
+      "gallery_images_desc": "Tải lên các hình ảnh chất lượng cao của khách sạn",
+      "description": "Mô tả khách sạn",
+      "description_desc": "Mô tả chi tiết về khách sạn, bao gồm lịch sử, đặc điểm nổi bật, và các dịch vụ chính",
+      "description_placeholder": "Mô tả chi tiết về khách sạn của bạn...",
+      "amenities": "Tiện nghi",
+      "amenities_desc": "Chọn các tiện nghi chính của khách sạn"
     },
     "address": {
       "title": "Địa chỉ khách sạn",
       "address": "Địa chỉ",
       "address_placeholder": "Nhập địa chỉ đầy đủ",
-      "district": "Quận/Huyện",
-      "district_placeholder": "Nhập quận/huyện",
-      "city": "Thành phố",
-      "city_placeholder": "Nhập thành phố",
+      "tourist_spot": "Điểm du lịch",
+      "tourist_spot_placeholder": "Nhập điểm du lịch",
       "location_desc": "Mô tả vị trí",
       "location_desc_placeholder": "Mô tả vị trí địa lý và các địa điểm lân cận..."
     },
@@ -760,47 +760,25 @@
       "title": "Thông tin người đại diện",
       "name": "Họ và tên",
       "name_placeholder": "Nhập họ và tên",
-      "position": "Chức vụ",
-      "position_placeholder": "Nhập chức vụ",
       "email": "Email",
       "email_placeholder": "example@company.com",
       "phone": "Số điện thoại",
-      "phone_placeholder": "Nhập số điện thoại"
+      "phone_placeholder": "Nhập số điện thoại",
+      "website": "Website",
+      "website_placeholder": "Nhập URL website"
     },
-    "business_info": {
-      "title": "Thông tin kinh doanh",
-      "price_range": "Khoảng giá phòng",
-      "price_range_placeholder": "Chọn khoảng giá phòng",
-      "price_ranges": {
-        "budget": "Dưới 500.000đ",
-        "economic": "500.000đ - 1.000.000đ",
-        "mid_range": "1.000.000đ - 2.000.000đ",
-        "luxury": "2.000.000đ - 5.000.000đ",
-        "ultra_luxury": "Trên 5.000.000đ"
-      },
-      "target_guests": "Đối tượng khách hàng chính",
-      "target_guests_placeholder": "Chọn đối tượng khách hàng",
-      "guest_types": {
-        "business": "Khách doanh nhân",
-        "family": "Gia đình",
-        "couples": "Cặp đôi",
-        "backpackers": "Khách du lịch bụi",
-        "groups": "Đoàn khách",
-        "all": "Tất cả đối tượng"
-      },
-      "description": "Mô tả về khách sạn",
-      "description_desc": "Mô tả chi tiết về khách sạn, bao gồm lịch sử, đặc điểm nổi bật, và các dịch vụ chính",
-      "description_placeholder": "Mô tả chi tiết về khách sạn của bạn..."
-    },
-    "license": {
-      "title": "Giấy phép & Chứng nhận",
-      "business_license": "Số giấy phép kinh doanh",
-      "business_license_placeholder": "Nhập số giấy phép kinh doanh",
-      "certifications": "Chứng nhận khác",
-      "certifications_desc": "Liệt kê các chứng nhận khác như: ISO, chứng nhận vệ sinh an toàn thực phẩm, etc.",
-      "certifications_placeholder": "Liệt kê các chứng nhận khác...",
-      "certificate_images": "Hình ảnh giấy phép & chứng nhận",
-      "certificate_images_desc": "Tải lên hình ảnh giấy phép kinh doanh và các chứng nhận khác"
+    "policies": {
+      "title": "Chính sách",
+      "check_in_time": "Thời gian check-in",
+      "check_out_time": "Thời gian check-out",
+      "cancellation": "Chính sách hủy phòng",
+      "cancellation_placeholder": "Nhập chính sách hủy phòng",
+      "children": "Chính sách trẻ em",
+      "children_placeholder": "Nhập chính sách trẻ em",
+      "pets": "Chính sách thú cưng",
+      "pets_placeholder": "Nhập chính sách thú cưng",
+      "smoking": "Chính sách hút thuốc",
+      "smoking_placeholder": "Nhập chính sách hút thuốc"
     },
     "file_upload": {
       "drag_drop": "Kéo thả hình ảnh vào đây hoặc click để chọn file",

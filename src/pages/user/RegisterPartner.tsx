@@ -2,17 +2,16 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Building2, Phone, FileText } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 
 import { partnerFormSchema, type PartnerFormData } from "@/api/partner/types";
 
-import HotelInfoSection from "@/components/partner/partner-registration/HotelInfoSection";
-import AddressSection from "@/components/partner/partner-registration/AddressSection";
+import HotelInfoSection from "@/components/partner/partner-registration/GeneralSection";
 import ContactSection from "@/components/partner/partner-registration/ContactSection";
-import BusinessSection from "@/components/partner/partner-registration/BusinessSection";
-import LicenseSection from "@/components/partner/partner-registration/LicenseSection";
+import PoliciesSection from "@/components/partner/partner-registration/PoliciesSection";
 
 const RegisterPartner = () => {
   const { t } = useTranslation();
@@ -25,29 +24,27 @@ const RegisterPartner = () => {
     resolver: zodResolver(partnerFormSchema),
     defaultValues: {
       hotelName: "",
-      businessType: "",
-      taxId: "",
-      website: "",
-      starRating: "",
-      roomCount: "",
-      hotelAmenities: "",
-      hotelImages: undefined,
+      description: "",
+      mainImage: undefined,
+      galleryImages: undefined,
+      amenities: [],
       address: "",
-      district: "",
-      city: "",
+      touristSpot: "",
       country: "",
       locationDescription: "",
       contactName: "",
-      position: "",
       email: "",
       phone: "",
-      priceRange: "",
-      targetGuests: "",
-      businessDescription: "",
-      marketingPlans: "",
-      businessLicense: "",
-      certifications: "",
-      certificateImages: undefined,
+      website: "",
+
+      checkInTime: "",
+      checkOutTime: "",
+      cancellationPolicy: "",
+      paymentPolicy: "",
+      houseRules: "",
+      childrenPolicy: "",
+      petPolicy: "",
+      smokingPolicy: "",
     },
   });
 
@@ -64,11 +61,40 @@ const RegisterPartner = () => {
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <HotelInfoSection form={form} />
-            <AddressSection form={form} />
-            <ContactSection form={form} />
-            <BusinessSection form={form} />
-            <LicenseSection form={form} />
+            <div className="space-y-6">
+              {/* Phần thông tin cơ bản */}
+              <div className="bg-card p-6 rounded-lg space-y-6 dark:border dark:border-gray-800">
+                <div className="flex items-center gap-2">
+                  <Building2 className="w-5 h-5 text-primary" />
+                  <h2 className="text-xl font-semibold">
+                    {t("register_partner.sections.general.title")}
+                  </h2>
+                </div>
+                <HotelInfoSection form={form} />
+              </div>
+
+              {/* Phần thông tin liên hệ */}
+              <div className="bg-card p-6 rounded-lg space-y-6 dark:border dark:border-gray-800">
+                <div className="flex items-center gap-2">
+                  <Phone className="w-5 h-5 text-primary" />
+                  <h2 className="text-xl font-semibold">
+                    {t("register_partner.sections.contact.title")}
+                  </h2>
+                </div>
+                <ContactSection form={form} />
+              </div>
+
+              {/* Phần chính sách và quy định */}
+              <div className="bg-card p-6 rounded-lg space-y-6 dark:border dark:border-gray-800">
+                <div className="flex items-center gap-2">
+                  <FileText className="w-5 h-5 text-primary" />
+                  <h2 className="text-xl font-semibold">
+                    {t("register_partner.sections.policies.title")}
+                  </h2>
+                </div>
+                <PoliciesSection form={form} />
+              </div>
+            </div>
 
             <div className="flex justify-center">
               <Button type="submit" size="lg">

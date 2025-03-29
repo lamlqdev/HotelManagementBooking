@@ -21,11 +21,7 @@ const AddressSection = ({ form }: AddressSectionProps) => {
   const { t } = useTranslation();
 
   return (
-    <div className="bg-card p-6 rounded-lg space-y-6 dark:border dark:border-gray-800">
-      <h2 className="text-xl font-semibold">
-        {t("register_partner.address.title")}
-      </h2>
-
+    <div className="space-y-6">
       <FormField
         control={form.control}
         name="address"
@@ -44,36 +40,20 @@ const AddressSection = ({ form }: AddressSectionProps) => {
         )}
       />
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4">
         <FormField
           control={form.control}
-          name="district"
+          name="touristSpot"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("register_partner.address.district")}</FormLabel>
+              <FormLabel>
+                {t("register_partner.address.tourist_spot")}
+              </FormLabel>
               <FormControl>
                 <Input
                   placeholder={t(
-                    "register_partner.address.district_placeholder"
+                    "register_partner.address.tourist_spot_placeholder"
                   )}
-                  className="dark:border-gray-700 focus:dark:border-primary"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="city"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t("register_partner.address.city")}</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder={t("register_partner.address.city_placeholder")}
                   className="dark:border-gray-700 focus:dark:border-primary"
                   {...field}
                 />
