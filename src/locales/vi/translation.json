@@ -264,13 +264,22 @@
   },
   "amenities": {
     "wifi": "WiFi",
+    "parking": "Bãi đỗ xe",
     "pool": "Hồ bơi",
-    "parking": "Bãi đậu xe",
-    "restaurant": "Nhà hàng",
     "gym": "Phòng tập gym",
     "spa": "Spa",
-    "beach_access": "Lối ra biển",
-    "room_service": "Dịch vụ phòng"
+    "restaurant": "Nhà hàng",
+    "bar": "Quầy bar",
+    "room-service": "Dịch vụ phòng",
+    "air-conditioning": "Điều hòa nhiệt độ",
+    "minibar": "Minibar",
+    "safe": "Két sắt",
+    "balcony": "Ban công",
+    "ocean-view": "Hướng biển",
+    "tennis": "Sân tennis",
+    "meeting-room": "Phòng họp",
+    "business-center": "Trung tâm kinh doanh",
+    "conference-hall": "Hội trường"
   },
   "sort": {
     "placeholder": "Sắp xếp theo",
@@ -884,6 +893,94 @@
       "meeting-room": "Phòng họp",
       "business-center": "Trung tâm kinh doanh",
       "conference-hall": "Hội trường"
+    }
+  },
+  "room": {
+    "detail": {
+      "title": "Chi tiết phòng",
+      "edit": "Chỉnh sửa",
+      "delete": "Xóa phòng",
+      "price": "Giá phòng",
+      "per_night": "/ đêm",
+      "update_price": "Cập nhật giá",
+      "promotions": "Khuyến mãi",
+      "add_promotion": "Thêm khuyến mãi",
+      "basic_info": "Thông tin cơ bản",
+      "amenities": "Tiện nghi",
+      "settings": "Cài đặt phòng",
+      "check_in_out": "Thời gian check-in/out",
+      "cancel_policy": "Chính sách hủy",
+      "booking_status": "Tình trạng đặt phòng",
+      "available": "Đang có sẵn"
+    },
+    "dialog": {
+      "add": {
+        "title": "Thêm phòng mới",
+        "add": "Thêm phòng"
+      },
+      "edit": {
+        "title": "Chỉnh sửa thông tin phòng",
+        "images": "Hình ảnh phòng",
+        "basic_info": "Thông tin cơ bản",
+        "amenities": "Tiện nghi",
+        "name": "Tên phòng",
+        "type": "Loại phòng",
+        "description": "Mô tả",
+        "floor": "Tầng",
+        "bed_type": "Loại giường",
+        "capacity": "Sức chứa",
+        "size": "Diện tích",
+        "save": "Lưu thay đổi",
+        "cancel": "Hủy"
+      },
+      "delete": {
+        "title": "Xác nhận xóa phòng",
+        "warning": "Bạn có chắc chắn muốn xóa phòng này?",
+        "description": "Hành động này không thể hoàn tác. Tất cả thông tin về phòng, bao gồm lịch sử đặt phòng và đánh giá sẽ bị xóa vĩnh viễn.",
+        "confirm_text": "Vui lòng nhập tên phòng để xác nhận",
+        "confirm_placeholder": "Nhập tên phòng",
+        "delete": "Xóa phòng",
+        "cancel": "Hủy"
+      },
+      "update_price": {
+        "title": "Cập nhật giá phòng",
+        "new_price": "Giá mới",
+        "apply_from": "Áp dụng từ ngày hiện tại",
+        "update": "Cập nhật",
+        "cancel": "Hủy"
+      },
+      "add_promotion": {
+        "title": "Thêm khuyến mãi mới",
+        "name": "Tên khuyến mãi",
+        "name_placeholder": "Nhập tên khuyến mãi",
+        "code": "Mã khuyến mãi",
+        "code_placeholder": "Nhập mã khuyến mãi",
+        "discount": "Giảm giá (%)",
+        "discount_placeholder": "Nhập phần trăm giảm giá",
+        "valid_until": "Hạn sử dụng",
+        "add": "Thêm khuyến mãi"
+      }
+    },
+    "management": {
+      "title": "Quản lý phòng",
+      "status": "Tình trạng phòng",
+      "search_placeholder": "Tìm kiếm phòng...",
+      "room_type": "Loại phòng",
+      "all": "Tất cả",
+      "deluxe": "Deluxe",
+      "suite": "Suite",
+      "standard": "Standard",
+      "floor": "Tầng",
+      "floor_1": "Tầng 1",
+      "floor_2": "Tầng 2",
+      "floor_3": "Tầng 3",
+      "filter": "Bộ lọc",
+      "advanced_filter": "Bộ lọc nâng cao",
+      "price_range": "Khoảng giá",
+      "sort_by": "Sắp xếp theo",
+      "name": "Tên phòng",
+      "price": "Giá",
+      "view_details": "Xem chi tiết"
     }
   }
 }
