@@ -37,11 +37,11 @@ import { PartnerFormData, availableAmenities } from "@/api/partner/types";
 import FileUpload from "./FileUpload";
 import AddressSection from "./AddressSection";
 
-interface HotelInfoSectionProps {
+interface GeneralSectionProps {
   form: UseFormReturn<PartnerFormData>;
 }
 
-const HotelInfoSection = ({ form }: HotelInfoSectionProps) => {
+const GeneralSection = ({ form }: GeneralSectionProps) => {
   const { t } = useTranslation();
 
   const getAmenityIcon = (icon: string) => {
@@ -233,4 +233,4 @@ const HotelInfoSection = ({ form }: HotelInfoSectionProps) => {
   );
 };
 
-export default HotelInfoSection;
+export default GeneralSection;

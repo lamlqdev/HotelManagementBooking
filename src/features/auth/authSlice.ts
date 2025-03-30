@@ -1,13 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { User } from "@/types/auth";
 import { AxiosError } from "axios";
-
-interface AuthState {
-  user: User | null;
-  accessToken: string | null;
-  refreshToken: string | null;
-  isAuthenticated: boolean;
-}
+import { AuthState } from "./types";
 
 const initialState: AuthState = {
   user: null,

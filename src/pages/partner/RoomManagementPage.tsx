@@ -31,7 +31,7 @@ import { Link } from "react-router";
 import { AddRoomDialog } from "@/components/partner/room-management/dialog/AddRoomDialog";
 import { useTranslation } from "react-i18next";
 
-interface Room {
+interface Room {       
   name: string;
   type: string;
   description: string;

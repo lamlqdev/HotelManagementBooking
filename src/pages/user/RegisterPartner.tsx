@@ -9,7 +9,7 @@ import { Form } from "@/components/ui/form";
 
 import { partnerFormSchema, type PartnerFormData } from "@/api/partner/types";
 
-import HotelInfoSection from "@/components/partner/partner-registration/GeneralSection";
+import GeneralSection from "@/components/partner/partner-registration/GeneralSection";
 import ContactSection from "@/components/partner/partner-registration/ContactSection";
 import PoliciesSection from "@/components/partner/partner-registration/PoliciesSection";
 
@@ -40,8 +40,6 @@ const RegisterPartner = () => {
       checkInTime: "",
       checkOutTime: "",
       cancellationPolicy: "",
-      paymentPolicy: "",
-      houseRules: "",
       childrenPolicy: "",
       petPolicy: "",
       smokingPolicy: "",
@@ -70,7 +68,7 @@ const RegisterPartner = () => {
                     {t("register_partner.sections.general.title")}
                   </h2>
                 </div>
-                <HotelInfoSection form={form} />
+                <GeneralSection form={form} />
               </div>
 
               {/* Phần thông tin liên hệ */}
