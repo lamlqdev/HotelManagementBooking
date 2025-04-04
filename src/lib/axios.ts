@@ -6,6 +6,10 @@ const axiosInstance = axios.create({
   withCredentials: true,
 });
 
+// Biến để theo dõi số lần gọi refreshToken
+let isRefreshing = false;
+let refreshSubscribers: ((token: string) => void)[] = [];
+
 // Add request interceptor
 axiosInstance.interceptors.request.use(
   (config) => {
@@ -28,11 +32,22 @@ axiosInstance.interceptors.response.use(
 
     // Chỉ thực hiện refresh token khi có accessToken trong localStorage
     if (
-      error.response.status === 401 &&
+      error.response?.status === 401 &&
       !originalRequest._retry &&
       localStorage.getItem("accessToken")
     ) {
+      if (isRefreshing) {
+        // Nếu đang refresh, thêm request vào hàng đợi
+        return new Promise((resolve) => {
+          refreshSubscribers.push((token: string) => {
+            originalRequest.headers.Authorization = `Bearer ${token}`;
+            resolve(axiosInstance(originalRequest));
+          });
+        });
+      }
+
       originalRequest._retry = true;
+      isRefreshing = true;
 
       try {
         // Gọi API refresh token thông qua authApi
@@ -43,6 +58,15 @@ axiosInstance.interceptors.response.use(
           axiosInstance.defaults.headers.common[
             "Authorization"
           ] = `Bearer ${response.accessToken}`;
+
+          // Thực hiện lại các request đang đợi
+          refreshSubscribers.forEach((callback) => {
+            if (response.accessToken) {
+              callback(response.accessToken);
+            }
+          });
+          refreshSubscribers = [];
+
           return axiosInstance(originalRequest);
         }
       } catch (refreshError) {
@@ -51,6 +75,8 @@ axiosInstance.interceptors.response.use(
         localStorage.removeItem("refreshToken");
         window.location.href = "/login";
         return Promise.reject(refreshError);
+      } finally {
+        isRefreshing = false;
       }
     }
 
