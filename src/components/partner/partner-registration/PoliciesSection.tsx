@@ -41,8 +41,6 @@ const PolicyRadioGroup = ({
   options,
   form,
 }: PolicyRadioGroupProps) => {
-  const error = form.formState.errors[name];
-
   return (
     <FormField
       control={form.control}
@@ -69,9 +67,7 @@ const PolicyRadioGroup = ({
               ))}
             </RadioGroup>
           </FormControl>
-          <FormMessage>
-            {error?.message || "Vui lòng chọn một tùy chọn"}
-          </FormMessage>
+          <FormMessage />
         </FormItem>
       )}
     />
@@ -91,87 +87,10 @@ const PoliciesSection = ({ form }: PoliciesSectionProps) => {
           <FormField
             control={form.control}
             name="checkInTime"
-            render={({ field }) => {
-              const error = form.formState.errors.checkInTime;
-              return (
-                <FormItem>
-                  <FormLabel>
-                    {t("register_partner.policies.check_in_time")}
-                  </FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    value={field.value || ""}
-                  >
-                    <FormControl>
-                      <SelectTrigger className="dark:border-gray-700 focus:dark:border-primary">
-                        <SelectValue
-                          placeholder={getTimeSelectPlaceholder("check-in")}
-                        />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {timeOptions.map((time) => (
-                        <SelectItem key={time} value={time}>
-                          {formatTimeDisplay(time)}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage>
-                    {error?.message || "Vui lòng chọn giờ nhận phòng"}
-                  </FormMessage>
-                </FormItem>
-              );
-            }}
-          />
-
-          <FormField
-            control={form.control}
-            name="checkOutTime"
-            render={({ field }) => {
-              const error = form.formState.errors.checkOutTime;
-              return (
-                <FormItem>
-                  <FormLabel>
-                    {t("register_partner.policies.check_out_time")}
-                  </FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    value={field.value || ""}
-                  >
-                    <FormControl>
-                      <SelectTrigger className="dark:border-gray-700 focus:dark:border-primary">
-                        <SelectValue
-                          placeholder={getTimeSelectPlaceholder("check-out")}
-                        />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {timeOptions.map((time) => (
-                        <SelectItem key={time} value={time}>
-                          {formatTimeDisplay(time)}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage>
-                    {error?.message || "Vui lòng chọn giờ trả phòng"}
-                  </FormMessage>
-                </FormItem>
-              );
-            }}
-          />
-        </div>
-
-        <FormField
-          control={form.control}
-          name="cancellationPolicy"
-          render={({ field }) => {
-            const error = form.formState.errors.cancellationPolicy;
-            return (
+            render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  {t("register_partner.policies.cancellation")}
+                  {t("register_partner.policies.check_in_time")}
                 </FormLabel>
                 <Select
                   onValueChange={field.onChange}
@@ -179,27 +98,86 @@ const PoliciesSection = ({ form }: PoliciesSectionProps) => {
                 >
                   <FormControl>
                     <SelectTrigger className="dark:border-gray-700 focus:dark:border-primary">
-                      <SelectValue placeholder="Chọn chính sách hủy phòng" />
+                      <SelectValue
+                        placeholder={getTimeSelectPlaceholder("check-in")}
+                      />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="24h-full-refund">
-                      Hoàn tiền 100% nếu hủy trước 24h
-                    </SelectItem>
-                    <SelectItem value="24h-half-refund">
-                      Hoàn tiền 50% nếu hủy trước 24h
-                    </SelectItem>
-                    <SelectItem value="no-refund">
-                      Không hoàn tiền khi hủy
-                    </SelectItem>
+                    {timeOptions.map((time) => (
+                      <SelectItem key={time} value={time}>
+                        {formatTimeDisplay(time)}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
-                <FormMessage>
-                  {error?.message || "Vui lòng chọn chính sách hủy phòng"}
-                </FormMessage>
+                <FormMessage />
               </FormItem>
-            );
-          }}
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="checkOutTime"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  {t("register_partner.policies.check_out_time")}
+                </FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  value={field.value || ""}
+                >
+                  <FormControl>
+                    <SelectTrigger className="dark:border-gray-700 focus:dark:border-primary">
+                      <SelectValue
+                        placeholder={getTimeSelectPlaceholder("check-out")}
+                      />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {timeOptions.map((time) => (
+                      <SelectItem key={time} value={time}>
+                        {formatTimeDisplay(time)}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <FormField
+          control={form.control}
+          name="cancellationPolicy"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>
+                {t("register_partner.policies.cancellation")}
+              </FormLabel>
+              <Select onValueChange={field.onChange} value={field.value || ""}>
+                <FormControl>
+                  <SelectTrigger className="dark:border-gray-700 focus:dark:border-primary">
+                    <SelectValue placeholder="Chọn chính sách hủy phòng" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value="24h-full-refund">
+                    Hoàn tiền 100% nếu hủy trước 24h
+                  </SelectItem>
+                  <SelectItem value="24h-half-refund">
+                    Hoàn tiền 50% nếu hủy trước 24h
+                  </SelectItem>
+                  <SelectItem value="no-refund">
+                    Không hoàn tiền khi hủy
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
         />
 
         <PolicyRadioGroup
@@ -216,35 +194,29 @@ const PoliciesSection = ({ form }: PoliciesSectionProps) => {
           <FormField
             control={form.control}
             name="childrenAgeDefinition"
-            render={({ field }) => {
-              const error = form.formState.errors.childrenAgeDefinition;
-              return (
-                <FormItem>
-                  <FormLabel>Độ tuổi được coi là trẻ em</FormLabel>
-                  <Select
-                    onValueChange={(value) => field.onChange(Number(value))}
-                    value={field.value?.toString() || "12"}
-                  >
-                    <FormControl>
-                      <SelectTrigger className="dark:border-gray-700 focus:dark:border-primary">
-                        <SelectValue placeholder="Chọn độ tuổi" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {Array.from({ length: 19 }, (_, i) => (
-                        <SelectItem key={i} value={i.toString()}>
-                          {i} tuổi
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage>
-                    {error?.message ||
-                      "Vui lòng chọn độ tuổi được coi là trẻ em"}
-                  </FormMessage>
-                </FormItem>
-              );
-            }}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Độ tuổi được coi là trẻ em</FormLabel>
+                <Select
+                  onValueChange={(value) => field.onChange(Number(value))}
+                  value={field.value?.toString() || "12"}
+                >
+                  <FormControl>
+                    <SelectTrigger className="dark:border-gray-700 focus:dark:border-primary">
+                      <SelectValue placeholder="Chọn độ tuổi" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {Array.from({ length: 19 }, (_, i) => (
+                      <SelectItem key={i} value={i.toString()}>
+                        {i} tuổi
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
           />
         )}
 

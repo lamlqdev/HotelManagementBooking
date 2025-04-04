@@ -24,7 +24,7 @@ const AddressSection = ({ form }: AddressSectionProps) => {
     <div className="space-y-6">
       <FormField
         control={form.control}
-        name="address"
+        name="hotelAddress"
         render={({ field }) => (
           <FormItem>
             <FormLabel>{t("register_partner.address.address")}</FormLabel>
@@ -43,7 +43,7 @@ const AddressSection = ({ form }: AddressSectionProps) => {
       <div className="grid grid-cols-1 gap-4">
         <FormField
           control={form.control}
-          name="touristSpot"
+          name="hotelLocationName"
           render={({ field }) => (
             <FormItem>
               <FormLabel>
@@ -66,7 +66,7 @@ const AddressSection = ({ form }: AddressSectionProps) => {
 
       <FormField
         control={form.control}
-        name="locationDescription"
+        name="hotelLocationDescription"
         render={({ field }) => (
           <FormItem>
             <FormLabel>{t("register_partner.address.location_desc")}</FormLabel>

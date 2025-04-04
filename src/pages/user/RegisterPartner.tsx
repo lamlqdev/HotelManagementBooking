@@ -23,26 +23,32 @@ const RegisterPartner = () => {
   const form = useForm<PartnerFormData>({
     resolver: zodResolver(partnerFormSchema),
     defaultValues: {
-      hotelName: "",
-      description: "",
-      mainImage: undefined,
-      galleryImages: undefined,
-      amenities: [],
-      address: "",
-      touristSpot: "",
-      country: "",
-      locationDescription: "",
-      contactName: "",
+      // Thông tin người dùng
+      name: "",
       email: "",
       phone: "",
-      website: "",
 
+      // Thông tin khách sạn
+      hotelName: "",
+      hotelAddress: "",
+      hotelDescription: "",
+      hotelLocationName: "",
+      hotelLocationDescription: "",
+      hotelAmenities: [],
+      hotelWebsite: "",
+
+      // Chính sách khách sạn
       checkInTime: "",
       checkOutTime: "",
       cancellationPolicy: "",
       childrenPolicy: "",
+      childrenAgeDefinition: 12,
       petPolicy: "",
       smokingPolicy: "",
+
+      // Hình ảnh
+      featuredImage: undefined,
+      galleryImages: [],
     },
   });
 

@@ -23,7 +23,7 @@ const ContactSection = ({ form }: ContactSectionProps) => {
     <div className="space-y-6">
       <FormField
         control={form.control}
-        name="contactName"
+        name="name"
         render={({ field }) => (
           <FormItem>
             <FormLabel>{t("register_partner.contact_info.name")}</FormLabel>
@@ -85,7 +85,7 @@ const ContactSection = ({ form }: ContactSectionProps) => {
 
       <FormField
         control={form.control}
-        name="website"
+        name="hotelWebsite"
         render={({ field }) => (
           <FormItem>
             <FormLabel>{t("register_partner.contact_info.website")}</FormLabel>

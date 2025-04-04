@@ -60,6 +60,10 @@ function App() {
             <Route path="/blog/:slug" element={<BlogDetailPage />} />
             <Route path="/partnership" element={<Partnership />} />
             <Route path="/register-partner" element={<RegisterPartner />} />
+            <Route
+              path="/booking-information"
+              element={<BookingInformationPage />}
+            />
           </Route>
 
           {/* Auth Routes - Chỉ truy cập khi chưa đăng nhập */}
@@ -73,10 +77,6 @@ function App() {
           {/* Protected Routes User - Yêu cầu đăng nhập */}
           <Route element={<PrivateRoute role="user" />}>
             <Route element={<Layout />}>
-              <Route
-                path="/booking-information"
-                element={<BookingInformationPage />}
-              />
               <Route path="/settings" element={<SettingPage />} />
               <Route path="/profile" element={<UserProfilePage />} />
             </Route>

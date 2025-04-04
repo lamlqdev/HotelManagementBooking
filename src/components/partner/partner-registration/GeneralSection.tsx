@@ -49,7 +49,7 @@ const GeneralSection = ({ form }: GeneralSectionProps) => {
 
       <FormField
         control={form.control}
-        name="description"
+        name="hotelDescription"
         render={({ field }) => (
           <FormItem>
             <FormLabel>
@@ -73,7 +73,7 @@ const GeneralSection = ({ form }: GeneralSectionProps) => {
 
       <FormField
         control={form.control}
-        name="mainImage"
+        name="featuredImage"
         render={({ field: { onChange, ...field } }) => (
           <FormItem>
             <FormLabel>{t("register_partner.hotel_info.main_image")}</FormLabel>
@@ -119,7 +119,7 @@ const GeneralSection = ({ form }: GeneralSectionProps) => {
 
       <FormField
         control={form.control}
-        name="amenities"
+        name="hotelAmenities"
         render={({ field }) => (
           <FormItem>
             <FormLabel>{t("register_partner.hotel_info.amenities")}</FormLabel>
