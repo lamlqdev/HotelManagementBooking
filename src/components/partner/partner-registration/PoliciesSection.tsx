@@ -8,137 +8,268 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 import { PartnerFormData } from "@/api/partner/types";
+import {
+  generateTimeOptions,
+  formatTimeDisplay,
+  getTimeSelectPlaceholder,
+} from "@/utils/timeUtils";
 
 interface PoliciesSectionProps {
   form: UseFormReturn<PartnerFormData>;
 }
 
-const PoliciesSection = ({ form }: PoliciesSectionProps) => {
-  const { t } = useTranslation();
+interface PolicyRadioGroupProps {
+  label: string;
+  name: keyof PartnerFormData;
+  options: { value: string; label: string }[];
+  form: UseFormReturn<PartnerFormData>;
+}
+
+const PolicyRadioGroup = ({
+  label,
+  name,
+  options,
+  form,
+}: PolicyRadioGroupProps) => {
+  const error = form.formState.errors[name];
 
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-2 gap-4">
-        <FormField
-          control={form.control}
-          name="checkInTime"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>
-                {t("register_partner.policies.check_in_time")}
-              </FormLabel>
-              <FormControl>
-                <Input
-                  type="time"
-                  className="dark:border-gray-700 focus:dark:border-primary"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+    <FormField
+      control={form.control}
+      name={name}
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>{label}</FormLabel>
+          <FormControl>
+            <RadioGroup
+              onValueChange={field.onChange}
+              value={field.value?.toString() || ""}
+              className="flex flex-col space-y-2 mt-2"
+            >
+              {options.map((option) => (
+                <FormItem
+                  key={option.value}
+                  className="flex items-center space-x-3 space-y-0"
+                >
+                  <FormControl>
+                    <RadioGroupItem value={option.value} />
+                  </FormControl>
+                  <FormLabel className="font-normal">{option.label}</FormLabel>
+                </FormItem>
+              ))}
+            </RadioGroup>
+          </FormControl>
+          <FormMessage>
+            {error?.message || "Vui lòng chọn một tùy chọn"}
+          </FormMessage>
+        </FormItem>
+      )}
+    />
+  );
+};
+
+const PoliciesSection = ({ form }: PoliciesSectionProps) => {
+  const { t } = useTranslation();
+  const timeOptions = generateTimeOptions();
+
+  return (
+    <div className="space-y-8">
+      <div className="space-y-6">
+        <h3 className="text-lg font-medium">Chính sách khách sạn</h3>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <FormField
+            control={form.control}
+            name="checkInTime"
+            render={({ field }) => {
+              const error = form.formState.errors.checkInTime;
+              return (
+                <FormItem>
+                  <FormLabel>
+                    {t("register_partner.policies.check_in_time")}
+                  </FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value || ""}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="dark:border-gray-700 focus:dark:border-primary">
+                        <SelectValue
+                          placeholder={getTimeSelectPlaceholder("check-in")}
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {timeOptions.map((time) => (
+                        <SelectItem key={time} value={time}>
+                          {formatTimeDisplay(time)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage>
+                    {error?.message || "Vui lòng chọn giờ nhận phòng"}
+                  </FormMessage>
+                </FormItem>
+              );
+            }}
+          />
+
+          <FormField
+            control={form.control}
+            name="checkOutTime"
+            render={({ field }) => {
+              const error = form.formState.errors.checkOutTime;
+              return (
+                <FormItem>
+                  <FormLabel>
+                    {t("register_partner.policies.check_out_time")}
+                  </FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value || ""}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="dark:border-gray-700 focus:dark:border-primary">
+                        <SelectValue
+                          placeholder={getTimeSelectPlaceholder("check-out")}
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {timeOptions.map((time) => (
+                        <SelectItem key={time} value={time}>
+                          {formatTimeDisplay(time)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage>
+                    {error?.message || "Vui lòng chọn giờ trả phòng"}
+                  </FormMessage>
+                </FormItem>
+              );
+            }}
+          />
+        </div>
 
         <FormField
           control={form.control}
-          name="checkOutTime"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>
-                {t("register_partner.policies.check_out_time")}
-              </FormLabel>
-              <FormControl>
-                <Input
-                  type="time"
-                  className="dark:border-gray-700 focus:dark:border-primary"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+          name="cancellationPolicy"
+          render={({ field }) => {
+            const error = form.formState.errors.cancellationPolicy;
+            return (
+              <FormItem>
+                <FormLabel>
+                  {t("register_partner.policies.cancellation")}
+                </FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  value={field.value || ""}
+                >
+                  <FormControl>
+                    <SelectTrigger className="dark:border-gray-700 focus:dark:border-primary">
+                      <SelectValue placeholder="Chọn chính sách hủy phòng" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="24h-full-refund">
+                      Hoàn tiền 100% nếu hủy trước 24h
+                    </SelectItem>
+                    <SelectItem value="24h-half-refund">
+                      Hoàn tiền 50% nếu hủy trước 24h
+                    </SelectItem>
+                    <SelectItem value="no-refund">
+                      Không hoàn tiền khi hủy
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage>
+                  {error?.message || "Vui lòng chọn chính sách hủy phòng"}
+                </FormMessage>
+              </FormItem>
+            );
+          }}
         />
+
+        <PolicyRadioGroup
+          label={t("register_partner.policies.children")}
+          name="childrenPolicy"
+          options={[
+            { value: "allowed", label: "Cho phép trẻ em" },
+            { value: "not-allowed", label: "Không cho phép trẻ em" },
+          ]}
+          form={form}
+        />
+
+        {form.watch("childrenPolicy") === "allowed" && (
+          <FormField
+            control={form.control}
+            name="childrenAgeDefinition"
+            render={({ field }) => {
+              const error = form.formState.errors.childrenAgeDefinition;
+              return (
+                <FormItem>
+                  <FormLabel>Độ tuổi được coi là trẻ em</FormLabel>
+                  <Select
+                    onValueChange={(value) => field.onChange(Number(value))}
+                    value={field.value?.toString() || "12"}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="dark:border-gray-700 focus:dark:border-primary">
+                        <SelectValue placeholder="Chọn độ tuổi" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {Array.from({ length: 19 }, (_, i) => (
+                        <SelectItem key={i} value={i.toString()}>
+                          {i} tuổi
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage>
+                    {error?.message ||
+                      "Vui lòng chọn độ tuổi được coi là trẻ em"}
+                  </FormMessage>
+                </FormItem>
+              );
+            }}
+          />
+        )}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <PolicyRadioGroup
+            label={t("register_partner.policies.pets")}
+            name="petPolicy"
+            options={[
+              { value: "yes", label: "Cho phép mang thú cưng" },
+              { value: "no", label: "Không cho phép mang thú cưng" },
+            ]}
+            form={form}
+          />
+
+          <PolicyRadioGroup
+            label={t("register_partner.policies.smoking")}
+            name="smokingPolicy"
+            options={[
+              { value: "yes", label: "Cho phép hút thuốc" },
+              { value: "no", label: "Không cho phép hút thuốc" },
+            ]}
+            form={form}
+          />
+        </div>
       </div>
-
-      <FormField
-        control={form.control}
-        name="cancellationPolicy"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>{t("register_partner.policies.cancellation")}</FormLabel>
-            <FormControl>
-              <Textarea
-                placeholder={t(
-                  "register_partner.policies.cancellation_placeholder"
-                )}
-                className="min-h-[100px] dark:border-gray-700 focus:dark:border-primary"
-                {...field}
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-
-      <FormField
-        control={form.control}
-        name="childrenPolicy"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>{t("register_partner.policies.children")}</FormLabel>
-            <FormControl>
-              <Textarea
-                placeholder={t(
-                  "register_partner.policies.children_placeholder"
-                )}
-                className="min-h-[100px] dark:border-gray-700 focus:dark:border-primary"
-                {...field}
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-
-      <FormField
-        control={form.control}
-        name="petPolicy"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>{t("register_partner.policies.pets")}</FormLabel>
-            <FormControl>
-              <Textarea
-                placeholder={t("register_partner.policies.pets_placeholder")}
-                className="min-h-[100px] dark:border-gray-700 focus:dark:border-primary"
-                {...field}
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-
-      <FormField
-        control={form.control}
-        name="smokingPolicy"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>{t("register_partner.policies.smoking")}</FormLabel>
-            <FormControl>
-              <Textarea
-                placeholder={t("register_partner.policies.smoking_placeholder")}
-                className="min-h-[100px] dark:border-gray-700 focus:dark:border-primary"
-                {...field}
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
     </div>
   );
 };

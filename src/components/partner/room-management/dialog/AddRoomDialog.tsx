@@ -6,32 +6,18 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogFooter,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Plus,
-  Wifi,
-  Car,
-  Waves,
-  Dumbbell,
-  Heart,
-  Utensils,
-  Beer,
-  Bell,
-  Snowflake,
-  Wine,
-  Lock,
-  DoorOpen,
-  Users,
-  Briefcase,
-  Presentation,
-  Activity,
-} from "lucide-react";
+import { Plus } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
+import { useAmenities } from "@/hooks/useAmenities";
+import { getAmenityIcon } from "@/utils/amenityIcons";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface AddRoomDialogProps {
   onAdd: (room: {
@@ -44,37 +30,14 @@ interface AddRoomDialogProps {
     size: string;
     price: number;
     images: string[];
-    amenities: Array<{
-      name: string;
-      icon: React.ElementType;
-      selected: boolean;
-    }>;
+    amenities: string[];
   }) => void;
 }
 
-const defaultAmenities = [
-  { name: "wifi", icon: Wifi, selected: false },
-  { name: "parking", icon: Car, selected: false },
-  { name: "pool", icon: Waves, selected: false },
-  { name: "gym", icon: Dumbbell, selected: false },
-  { name: "spa", icon: Heart, selected: false },
-  { name: "restaurant", icon: Utensils, selected: false },
-  { name: "bar", icon: Beer, selected: false },
-  { name: "room-service", icon: Bell, selected: false },
-  { name: "air-conditioning", icon: Snowflake, selected: false },
-  { name: "minibar", icon: Wine, selected: false },
-  { name: "safe", icon: Lock, selected: false },
-  { name: "balcony", icon: DoorOpen, selected: false },
-  { name: "ocean-view", icon: Waves, selected: false },
-  { name: "tennis", icon: Activity, selected: false },
-  { name: "meeting-room", icon: Users, selected: false },
-  { name: "business-center", icon: Briefcase, selected: false },
-  { name: "conference-hall", icon: Presentation, selected: false },
-];
-
 export function AddRoomDialog({ onAdd }: AddRoomDialogProps) {
   const { t } = useTranslation();
-  const [amenities, setAmenities] = useState(defaultAmenities);
+  const { data: amenities, isLoading } = useAmenities();
+  const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -89,15 +52,21 @@ export function AddRoomDialog({ onAdd }: AddRoomDialogProps) {
       size: formData.get("size") as string,
       price: Number(formData.get("price")),
       images: [],
-      amenities: amenities,
+      amenities: selectedAmenities,
     });
   };
 
-  const toggleAmenity = (index: number) => {
-    const newAmenities = [...amenities];
-    newAmenities[index].selected = !newAmenities[index].selected;
-    setAmenities(newAmenities);
+  const handleAmenityChange = (amenityId: string, checked: boolean) => {
+    if (checked) {
+      setSelectedAmenities([...selectedAmenities, amenityId]);
+    } else {
+      setSelectedAmenities(selectedAmenities.filter((id) => id !== amenityId));
+    }
   };
+
+  // Lọc chỉ lấy tiện ích phòng
+  const roomAmenities =
+    amenities?.filter((amenity) => amenity.type === "room") || [];
 
   return (
     <Dialog>
@@ -107,9 +76,12 @@ export function AddRoomDialog({ onAdd }: AddRoomDialogProps) {
           {t("room.dialog.add.title")}
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-7xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{t("room.dialog.add.title")}</DialogTitle>
+          <DialogDescription>
+            {t("room.dialog.add.description")}
+          </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-6 py-4">
           {/* Basic Info */}
@@ -179,40 +151,40 @@ export function AddRoomDialog({ onAdd }: AddRoomDialogProps) {
           {/* Amenities */}
           <div className="space-y-4">
             <h3 className="font-medium">{t("room.dialog.edit.amenities")}</h3>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {amenities.map((amenity, index) => {
-                const Icon = amenity.icon;
-                return (
+            {isLoading ? (
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                {[1, 2, 3, 4, 5, 6].map((i) => (
+                  <Skeleton key={i} className="h-10" />
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                {roomAmenities.map((amenity) => (
                   <div
-                    key={amenity.name}
-                    className={`flex items-center space-x-2 p-3 rounded-lg border cursor-pointer transition-colors ${
-                      amenity.selected
-                        ? "bg-primary text-primary-foreground border-primary"
-                        : "hover:bg-accent"
-                    }`}
-                    onClick={() => toggleAmenity(index)}
+                    key={amenity._id}
+                    className="flex items-center space-x-2 p-3 bg-secondary/5 border border-border rounded-lg hover:bg-secondary/10 transition-colors"
                   >
                     <Checkbox
-                      id={amenity.name}
-                      checked={amenity.selected}
-                      onCheckedChange={() => toggleAmenity(index)}
-                      className={`${
-                        amenity.selected ? "text-primary-foreground" : ""
-                      }`}
+                      id={amenity._id}
+                      checked={selectedAmenities.includes(amenity._id)}
+                      onCheckedChange={(checked) =>
+                        handleAmenityChange(amenity._id, checked as boolean)
+                      }
+                      className="border-primary"
                     />
-                    <Icon className="w-4 h-4" />
-                    <Label
-                      htmlFor={amenity.name}
-                      className={`cursor-pointer flex-1 ${
-                        amenity.selected ? "text-primary-foreground" : ""
-                      }`}
-                    >
-                      {t(`amenities.${amenity.name}`)}
-                    </Label>
+                    <div className="flex items-center gap-2">
+                      {amenity.icon && getAmenityIcon(amenity.icon)}
+                      <Label
+                        htmlFor={amenity._id}
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
+                        {amenity.name}
+                      </Label>
+                    </div>
                   </div>
-                );
-              })}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <DialogFooter className="sticky bottom-0 bg-background border-t pt-4">

@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { BookingContactForm } from "@/components/user/booking/BookingContactForm";
 import { BookingSpecialRequests } from "@/components/user/booking/BookingSpecialRequests";
 import { BookingSummary } from "@/components/user/booking/BookingSummary";
+import { formatTimeDisplay } from "@/utils/timeUtils";
 
 const BookingInformationPage = () => {
   const { t } = useTranslation();
@@ -11,19 +12,19 @@ const BookingInformationPage = () => {
     name: "Lakeside Motel Warefront",
     rating: 4.5,
     reviews: 128,
-    checkIn: "14:00",
-    checkOut: "12:00",
+    checkIn: formatTimeDisplay("14:00"),
+    checkOut: formatTimeDisplay("12:00"),
     address: "Lorem ipsum road, Tantruim-2322, Melbourne, Australia",
     image:
       "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1000&auto=format&fit=crop",
     bookingDates: {
       checkIn: {
         date: "Thứ 3, 18 thg 3 2025",
-        time: "14:00",
+        time: formatTimeDisplay("14:00"),
       },
       checkOut: {
         date: "Thứ 4, 19 thg 3 2025",
-        time: "12:00",
+        time: formatTimeDisplay("12:00"),
       },
       nights: 1,
     },
