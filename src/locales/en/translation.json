@@ -1037,5 +1037,35 @@
       "price": "Price",
       "view_details": "View Details"
     }
+  },
+  "admin": {
+    "title": "Admin Dashboard",
+    "partners_description": "Manage all partners",
+    "partners_list": "Partners List",
+    "dashboard": {
+      "partners": "Partners"
+    },
+    "partners": {
+      "approval": {
+        "title": "Partner Registration Approval",
+        "pendingRequests": "Pending Registration Requests",
+        "pendingRequestsDescription": "View and approve new partner registration requests",
+        "table": {
+          "hotelName": "Hotel Name",
+          "ownerName": "Owner",
+          "contact": "Contact",
+          "address": "Address",
+          "submittedAt": "Submitted At",
+          "actions": "Actions"
+        },
+        "details": {
+          "title": "Registration Details",
+          "approve": "Approve",
+          "reject": "Reject",
+          "submittedAt": "Submitted At",
+          "status": "Status"
+        }
+      }
+    }
   }
 }

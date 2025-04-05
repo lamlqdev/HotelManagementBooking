@@ -6,6 +6,7 @@ import { queryClient } from "./lib/react-query";
 
 import Layout from "./layouts/UserLayout";
 import PartnerLayout from "./layouts/PartnerLayout";
+import AdminLayout from "./layouts/AdminLayout";
 import PublicRoute from "./components/routes/PublicRoute";
 import PrivateRoute from "./components/routes/PrivateRoute";
 import { ThemeProvider } from "./components/setting/ThemeProvider";
@@ -41,6 +42,9 @@ import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
 import VerifyEmailPage from "./pages/auth/VerifyEmailPage";
 import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
+
+import PartnerApproval from "./pages/admin/PartnerApproval";
+import PartnerRegistrationDetails from "@/pages/admin/PartnerRegistrationDetails";
 
 function App() {
   return (
@@ -94,6 +98,15 @@ function App() {
             <Route path="profile" element={<PartnerProfilePage />} />
             <Route path="settings" element={<SettingPage />} />
             <Route path="notifications" element={<NotificationsPage />} />
+          </Route>
+
+          {/* Admin Routes */}
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route path="partners" element={<PartnerApproval />} />
+            <Route
+              path="partners/:id"
+              element={<PartnerRegistrationDetails />}
+            />
           </Route>
         </Routes>
 
