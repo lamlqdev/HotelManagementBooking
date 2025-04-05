@@ -194,19 +194,6 @@ export default function PartnerLayout() {
                   {openMenus.bookings && (
                     <SidebarMenuSub className="mt-2 space-y-1 group-data-[collapsible=icon]:hidden">
                       <SidebarMenuSubItem>
-                        <Link to="/partner/bookings/list">
-                          <SidebarMenuSubButton
-                            isActive={
-                              location.pathname === "/partner/bookings/list"
-                            }
-                            className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg"
-                          >
-                            <ListChecks className="h-4 w-4" />
-                            <span>{t("partner.bookings.list")}</span>
-                          </SidebarMenuSubButton>
-                        </Link>
-                      </SidebarMenuSubItem>
-                      <SidebarMenuSubItem>
                         <Link to="/partner/bookings/orders">
                           <SidebarMenuSubButton
                             isActive={

@@ -4,6 +4,7 @@ export interface User {
   email: string;
   role: string;
   isEmailVerified: boolean;
+  avatar: string;
 }
 
 export interface AuthState {

@@ -820,9 +820,63 @@
       "status": "Tình trạng phòng"
     },
     "bookings": {
-      "list": "Danh sách đặt phòng",
+      "title": "Quản lý đặt phòng",
+      "listTitle": "Danh sách đơn đặt phòng",
+      "listDescription": "Quản lý tất cả các đơn đặt phòng từ khách hàng",
       "orders": "Quản lý đơn đặt phòng",
-      "requests": "Yêu cầu huỷ/đổi"
+      "requests": "Quản lí yêu cầu huỷ/đổi",
+      "id": "Mã đơn",
+      "customer": "Khách hàng",
+      "roomType": "Loại phòng",
+      "dates": "Ngày",
+      "guests": "Số khách",
+      "totalPrice": "Tổng tiền",
+      "status": "Trạng thái",
+      "payment": "Thanh toán",
+      "actions": "Thao tác",
+      "viewDetails": "Xem chi tiết",
+      "detailsTitle": "Chi tiết đơn đặt phòng - {{id}}",
+      "detailsDescription": "Xem và quản lý chi tiết đơn đặt phòng",
+      "tabs": {
+        "general": "Thông tin chung",
+        "customer": "Thông tin khách hàng",
+        "actions": "Thao tác"
+      },
+      "hotel": "Khách sạn",
+      "checkIn": "Nhận phòng",
+      "checkOut": "Trả phòng",
+      "rooms": "Số phòng",
+      "createdAt": "Ngày tạo",
+      "specialRequests": "Yêu cầu đặc biệt",
+      "noSpecialRequests": "Không có yêu cầu đặc biệt",
+      "customerName": "Tên khách hàng",
+      "customerEmail": "Email",
+      "customerPhone": "Số điện thoại",
+      "approveBooking": "Duyệt đơn đặt phòng",
+      "approve": "Duyệt",
+      "rejectBooking": "Từ chối đơn đặt phòng",
+      "reject": "Từ chối",
+      "rejectReasonPlaceholder": "Nhập lý do từ chối...",
+      "approveDescription": "Duyệt đơn đặt phòng và gửi thông báo cho khách hàng",
+      "approveNotePlaceholder": "Nhập ghi chú duyệt...",
+      "rejectDescription": "Từ chối đơn đặt phòng và gửi thông báo cho khách hàng",
+      "sendNotification": "Gửi thông báo cho khách hàng",
+      "notificationPlaceholder": "Nhập tin nhắn cho khách hàng...",
+      "send": "Gửi",
+      "statusTypes": {
+        "pending": "Chờ duyệt",
+        "approved": "Đã duyệt",
+        "rejected": "Đã từ chối",
+        "completed": "Hoàn thành",
+        "cancelled": "Đã hủy",
+        "unknown": "Không xác định"
+      },
+      "paymentTypes": {
+        "paid": "Đã thanh toán",
+        "pending": "Chờ thanh toán",
+        "failed": "Thanh toán thất bại",
+        "unknown": "Không xác định"
+      }
     }
   },
   "hotelInfo": {

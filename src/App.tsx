@@ -27,7 +27,6 @@ import HotelInfoPage from "./pages/partner/HotelInfoPage";
 import RoomManagementPage from "./pages/partner/RoomManagementPage";
 import RoomStatusPage from "./pages/partner/RoomStatusPage";
 import RoomDetailPage from "./pages/partner/RoomDetailPage";
-import BookingListPage from "./pages/partner/BookingListPage";
 import BookingOrdersPage from "./pages/partner/BookingOrdersPage";
 import BookingRequestsPage from "./pages/partner/BookingRequestsPage";
 import MessagesPage from "./pages/partner/MessagesPage";
@@ -88,7 +87,6 @@ function App() {
             <Route path="hotels/rooms" element={<RoomManagementPage />} />
             <Route path="hotels/rooms/:id" element={<RoomDetailPage />} />
             <Route path="hotels/status" element={<RoomStatusPage />} />
-            <Route path="bookings/list" element={<BookingListPage />} />
             <Route path="bookings/orders" element={<BookingOrdersPage />} />
             <Route path="bookings/requests" element={<BookingRequestsPage />} />
             <Route path="messages" element={<MessagesPage />} />

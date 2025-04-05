@@ -821,9 +821,63 @@
       "status": "Room Status"
     },
     "bookings": {
-      "list": "Booking List",
-      "orders": "Order Management",
-      "requests": "Cancellation/Change Requests"
+      "title": "Booking Management",
+      "listTitle": "Booking Orders List",
+      "listDescription": "Manage all booking orders from customers",
+      "orders": "Booking Orders Management",
+      "requests": "Booking Request Management",
+      "id": "Order ID",
+      "customer": "Customer",
+      "roomType": "Room Type",
+      "dates": "Dates",
+      "guests": "Guests",
+      "totalPrice": "Total Price",
+      "status": "Status",
+      "payment": "Payment",
+      "actions": "Actions",
+      "viewDetails": "View Details",
+      "detailsTitle": "Booking Details - {{id}}",
+      "detailsDescription": "View and manage booking details",
+      "tabs": {
+        "general": "General Information",
+        "customer": "Customer Information",
+        "actions": "Actions"
+      },
+      "hotel": "Hotel",
+      "checkIn": "Check-in",
+      "checkOut": "Check-out",
+      "rooms": "Rooms",
+      "createdAt": "Created At",
+      "specialRequests": "Special Requests",
+      "noSpecialRequests": "No special requests",
+      "customerName": "Customer Name",
+      "customerEmail": "Email",
+      "customerPhone": "Phone",
+      "approveBooking": "Approve Booking",
+      "approve": "Approve",
+      "rejectBooking": "Reject Booking",
+      "reject": "Reject",
+      "rejectReasonPlaceholder": "Enter rejection reason...",
+      "approveDescription": "Approve the booking and send a notification to the customer",
+      "approveNotePlaceholder": "Enter approval note...",
+      "rejectDescription": "Reject the booking and send a notification to the customer",
+      "sendNotification": "Send Notification to Customer",
+      "notificationPlaceholder": "Enter message for customer...",
+      "send": "Send",
+      "statusTypes": {
+        "pending": "Pending",
+        "approved": "Approved",
+        "rejected": "Rejected",
+        "completed": "Completed",
+        "cancelled": "Cancelled",
+        "unknown": "Unknown"
+      },
+      "paymentTypes": {
+        "paid": "Paid",
+        "pending": "Pending",
+        "failed": "Failed",
+        "unknown": "Unknown"
+      }
     }
   },
   "hotelInfo": {
