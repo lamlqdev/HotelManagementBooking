@@ -792,9 +792,13 @@
     },
     "file_upload": {
       "drag_drop": "Drag and drop images here or click to select files",
-      "supported_formats": "Supported: JPG, PNG (Max: 5MB/image)"
+      "supported_formats": "Supported: JPG, PNG (Max: 5MB/image)",
+      "add_more": "Add more"
     },
     "submit": "Submit Registration",
+    "submitting": "Submitting registration...",
+    "error": "An error occurred while submitting registration",
+    "success": "Registration submitted successfully",
     "validation": {
       "required_field": "This field is required",
       "min_length": "Must be at least {{min}} characters",

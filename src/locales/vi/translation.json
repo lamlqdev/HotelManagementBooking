@@ -791,9 +791,13 @@
     },
     "file_upload": {
       "drag_drop": "Kéo thả hình ảnh vào đây hoặc click để chọn file",
-      "supported_formats": "Hỗ trợ: JPG, PNG (Tối đa: 5MB/ảnh)"
+      "supported_formats": "Hỗ trợ: JPG, PNG (Tối đa: 5MB/ảnh)",
+      "add_more": "Thêm ảnh"
     },
     "submit": "Gửi đăng ký",
+    "submitting": "Đang gửi đăng ký...",
+    "error": "Có lỗi xảy ra khi đăng ký",
+    "success": "Đăng ký thành công",
     "validation": {
       "required_field": "Vui lòng điền thông tin này",
       "min_length": "Phải có ít nhất {{min}} ký tự",

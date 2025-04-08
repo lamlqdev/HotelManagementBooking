@@ -2,19 +2,31 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { Building2, Phone, FileText } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 
 import { partnerFormSchema, type PartnerFormData } from "@/api/partner/types";
-
+import { partnerApi } from "@/api/partner/partner.api";
 import GeneralSection from "@/components/partner/partner-registration/GeneralSection";
 import ContactSection from "@/components/partner/partner-registration/ContactSection";
 import PoliciesSection from "@/components/partner/partner-registration/PoliciesSection";
+import { ApiError } from "@/api/auth/types";
 
 const RegisterPartner = () => {
   const { t } = useTranslation();
+  const { mutate: registerPartner, isPending } = useMutation({
+    mutationFn: partnerApi.registerPartner,
+    onSuccess: () => {
+      toast.success(t("register_partner.success"));
+    },
+    onError: (error: ApiError) => {
+      toast.error(error.message || t("register_partner.error"));
+    },
+  });
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -53,7 +65,7 @@ const RegisterPartner = () => {
   });
 
   const onSubmit = async (values: PartnerFormData) => {
-    console.log(values);
+    registerPartner(values);
   };
 
   return (
@@ -101,8 +113,10 @@ const RegisterPartner = () => {
             </div>
 
             <div className="flex justify-center">
-              <Button type="submit" size="lg">
-                {t("register_partner.submit")}
+              <Button type="submit" size="lg" disabled={isPending}>
+                {isPending
+                  ? t("register_partner.submitting")
+                  : t("register_partner.submit")}
               </Button>
             </div>
           </form>

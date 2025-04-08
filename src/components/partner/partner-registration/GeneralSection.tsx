@@ -74,7 +74,7 @@ const GeneralSection = ({ form }: GeneralSectionProps) => {
       <FormField
         control={form.control}
         name="featuredImage"
-        render={({ field: { onChange, ...field } }) => (
+        render={({ field: { onChange, value, ...field } }) => (
           <FormItem>
             <FormLabel>{t("register_partner.hotel_info.main_image")}</FormLabel>
             <FormDescription>
@@ -82,9 +82,10 @@ const GeneralSection = ({ form }: GeneralSectionProps) => {
             </FormDescription>
             <FormControl>
               <FileUpload
-                onChange={onChange}
+                onChange={(files) => onChange(files as File)}
                 accept="image/*"
                 multiple={false}
+                value={value}
                 {...field}
               />
             </FormControl>
@@ -96,7 +97,7 @@ const GeneralSection = ({ form }: GeneralSectionProps) => {
       <FormField
         control={form.control}
         name="galleryImages"
-        render={({ field: { onChange, ...field } }) => (
+        render={({ field: { onChange, value, ...field } }) => (
           <FormItem>
             <FormLabel>
               {t("register_partner.hotel_info.gallery_images")}
@@ -106,9 +107,10 @@ const GeneralSection = ({ form }: GeneralSectionProps) => {
             </FormDescription>
             <FormControl>
               <FileUpload
-                onChange={onChange}
+                onChange={(files) => onChange(files as File[])}
                 accept="image/*"
                 multiple
+                value={value}
                 {...field}
               />
             </FormControl>
