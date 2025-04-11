@@ -87,13 +87,10 @@ const Header = () => {
                       <Avatar>
                         <AvatarImage
                           src={
-                            user.avatar
-                              ? user.avatar === "default-avatar.jpg"
-                                ? "/images/default-avatar.png"
-                                : `${
-                                    import.meta.env.VITE_API_URL
-                                  }/public/uploads/profiles/${user.avatar}`
-                              : "/images/default-avatar.jpg"
+                            user.avatar && user.avatar.length > 0
+                              ? user.avatar[0].url
+                              : user.defaultAvatar ||
+                                "/images/default-avatar.png"
                           }
                           alt={user.name}
                         />

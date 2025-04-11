@@ -1,11 +1,4 @@
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: string;
-  isEmailVerified: boolean;
-  avatar: string;
-}
+import { User } from "@/types/auth";
 
 export interface AuthState {
   user: User | null;

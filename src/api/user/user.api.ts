@@ -1,13 +1,20 @@
-import { UploadAvatarResponse } from "./types";
-import axiosInstance from "@/lib/axios";
-
-const API_URL = "/users/me";
+import axios from "@/lib/axios";
+import { UploadAvatarResponse } from "@/types/auth";
 
 export const userApi = {
   uploadAvatar: async (file: File): Promise<UploadAvatarResponse> => {
-    const response = await axiosInstance.put(`${API_URL}/avatar`, {
-      avatar: file,
-    });
+    const formData = new FormData();
+    formData.append("avatar", file);
+
+    const response = await axios.patch<UploadAvatarResponse>(
+      "/users/me/avatar",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
     return response.data;
   },
 };

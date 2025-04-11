@@ -7,6 +7,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Select,
   SelectContent,
@@ -24,6 +25,7 @@ import {
   Users,
 } from "lucide-react";
 import { userApi } from "@/api/user/user.api";
+import { AxiosError } from "axios";
 
 const Profile = () => {
   const { t } = useTranslation();
@@ -37,8 +39,11 @@ const Profile = () => {
       queryClient.invalidateQueries({ queryKey: ["user"] });
       toast.success(t("profile.avatar_upload_success"));
     },
-    onError: () => {
-      toast.error(t("profile.avatar_upload_error"));
+    onError: (error: AxiosError) => {
+      toast.error(
+        (error.response?.data as { message: string }).message ||
+          t("profile.avatar_upload_error")
+      );
     },
   });
 
@@ -78,22 +83,22 @@ const Profile = () => {
         <Card className="p-6">
           <div className="flex flex-col items-center">
             <div className="relative">
-              <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-primary">
-                <img
-                  src={
-                    previewUrl ||
-                    (user?.avatar
-                      ? user.avatar === "default-avatar.jpg"
-                        ? "/images/default-avatar.png"
-                        : `${
-                            import.meta.env.VITE_API_URL
-                          }/public/uploads/profiles/${user.avatar}`
-                      : "/images/default-avatar.jpg")
-                  }
-                  alt={user?.name}
-                  className="w-full h-full object-cover"
-                />
-              </div>
+              {uploadAvatarMutation.isPending ? (
+                <Skeleton className="w-32 h-32 rounded-full" />
+              ) : (
+                <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-primary">
+                  <img
+                    src={
+                      previewUrl ||
+                      (user?.avatar && user.avatar.length > 0
+                        ? user.avatar[0].url
+                        : user?.defaultAvatar || "/images/default-avatar.png")
+                    }
+                    alt={user?.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
               <div className="absolute bottom-0 right-0">
                 <input
                   id="avatar-upload"
@@ -105,7 +110,11 @@ const Profile = () => {
                 />
                 <label
                   htmlFor="avatar-upload"
-                  className="cursor-pointer inline-flex items-center justify-center w-8 h-8 rounded-full bg-secondary hover:bg-secondary/80 transition-colors"
+                  className={`cursor-pointer inline-flex items-center justify-center w-8 h-8 rounded-full bg-secondary hover:bg-secondary/80 transition-colors ${
+                    uploadAvatarMutation.isPending
+                      ? "opacity-50 cursor-not-allowed"
+                      : ""
+                  }`}
                 >
                   <Camera className="h-4 w-4" />
                 </label>
