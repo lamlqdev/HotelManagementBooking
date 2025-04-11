@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { Eye } from "lucide-react";
 import { Link } from "react-router";
+import { useQuery } from "@tanstack/react-query";
 
 import {
   Table,
@@ -12,42 +13,31 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 
-// Mock data - sẽ được thay thế bằng dữ liệu thực từ API
-const mockPartners = [
-  {
-    id: "1",
-    name: "Nguyễn Văn A",
-    email: "nguyenvana@example.com",
-    phone: "0123456789",
-    hotelName: "Grand Hotel",
-    hotelAddress: "123 Đường ABC, Quận 1, TP.HCM",
-    status: "pending",
-    submittedAt: "2024-03-20T10:00:00Z",
-  },
-  {
-    id: "2",
-    name: "Trần Thị B",
-    email: "tranthib@example.com",
-    phone: "0987654321",
-    hotelName: "Luxury Resort",
-    hotelAddress: "456 Đường XYZ, Quận 2, TP.HCM",
-    status: "pending",
-    submittedAt: "2024-03-19T15:30:00Z",
-  },
-];
+import { partnerApi } from "@/api/partner/partner.api";
+import { PartnerResponse, Partner } from "@/api/partner/types";
 
 const PartnerApproval = () => {
   const { t } = useTranslation();
 
+  const { data: response, isLoading } = useQuery<PartnerResponse>({
+    queryKey: ["pendingPartners"],
+    queryFn: async () => {
+      const response = await partnerApi.getPendingPartners();
+      return response;
+    },
+  });
+
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("vi-VN", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    const date = new Date(dateString);
+    const hours = date.getHours().toString().padStart(2, "0");
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const year = date.getFullYear();
+
+    return `${hours}:${minutes} ${day}/${month}/${year}`;
   };
 
   return (
@@ -87,27 +77,63 @@ const PartnerApproval = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {mockPartners.map((partner) => (
-                <TableRow key={partner.id}>
-                  <TableCell>{partner.hotelName}</TableCell>
-                  <TableCell>{partner.name}</TableCell>
-                  <TableCell>
-                    <div>{partner.email}</div>
-                    <div className="text-sm text-muted-foreground">
-                      {partner.phone}
-                    </div>
-                  </TableCell>
-                  <TableCell>{partner.hotelAddress}</TableCell>
-                  <TableCell>{formatDate(partner.submittedAt)}</TableCell>
-                  <TableCell className="text-right">
-                    <Button variant="ghost" size="icon" asChild>
-                      <Link to={`/admin/partners/${partner.id}`}>
-                        <Eye className="h-4 w-4" />
-                      </Link>
-                    </Button>
+              {isLoading ? (
+                // Hiển thị skeleton loading
+                Array.from({ length: 5 }).map((_, index) => (
+                  <TableRow key={index}>
+                    <TableCell>
+                      <Skeleton className="h-6 w-32" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-6 w-24" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-6 w-40 mb-1" />
+                      <Skeleton className="h-4 w-28" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-6 w-48" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-6 w-36" />
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Skeleton className="h-8 w-8 ml-auto" />
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : response?.data && response.data.length > 0 ? (
+                response.data.map((partner: Partner) => (
+                  <TableRow key={partner.user._id}>
+                    <TableCell>{partner.hotel.name}</TableCell>
+                    <TableCell>{partner.user.name}</TableCell>
+                    <TableCell>
+                      <div>{partner.user.email}</div>
+                      <div className="text-sm text-muted-foreground">
+                        {partner.user.phone}
+                      </div>
+                    </TableCell>
+                    <TableCell>{partner.hotel.address}</TableCell>
+                    <TableCell>{formatDate(partner.hotel.createdAt)}</TableCell>
+                    <TableCell className="text-right">
+                      <Button variant="ghost" size="icon" asChild>
+                        <Link to={`/admin/partners/${partner.user._id}`}>
+                          <Eye className="h-4 w-4" />
+                        </Link>
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={6}
+                    className="text-center py-8 text-muted-foreground"
+                  >
+                    {t("admin.partners.approval.noPendingRequests")}
                   </TableCell>
                 </TableRow>
-              ))}
+              )}
             </TableBody>
           </Table>
         </Card>

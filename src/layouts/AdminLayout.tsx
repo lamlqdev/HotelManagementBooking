@@ -1,7 +1,8 @@
 import { useLocation, Outlet, Link } from "react-router";
 import { useTranslation } from "react-i18next";
-
+import { useAppSelector } from "@/store/hooks";
 import { UserCog, LogOut, Bell, Settings } from "lucide-react";
+import { Logo } from "@/components/ui/logo";
 
 import {
   Sidebar,
@@ -28,6 +29,28 @@ import {
 export default function AdminLayout() {
   const location = useLocation();
   const { t } = useTranslation();
+  const { user } = useAppSelector((state) => state.auth);
+
+  // Hàm lấy chữ cái đầu tiên của tên người dùng
+  const getInitials = (name: string) => {
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase();
+  };
+
+  // Hàm lấy câu chào theo buổi
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) {
+      return t("greetings.morning");
+    } else if (hour < 18) {
+      return t("greetings.afternoon");
+    } else {
+      return t("greetings.evening");
+    }
+  };
 
   return (
     <SidebarProvider>
@@ -37,19 +60,17 @@ export default function AdminLayout() {
             className="w-64 border-r border-sidebar-border bg-sidebar group"
             collapsible="icon"
           >
-            <SidebarHeader className="px-4 py-3">
-              <div className="flex items-center gap-3">
-                <img
-                  src="https://images.unsplash.com/photo-1543610892-0b1f7e6d8ac1?q=80&w=1856&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                  alt="Admin Logo"
-                  className="h-10 w-10 rounded-full object-cover ring-2 ring-sidebar-ring/10 group-data-[collapsible=icon]:h-8 group-data-[collapsible=icon]:w-8"
-                />
-                <div className="flex flex-col group-data-[collapsible=icon]:hidden">
-                  <span className="text-xs text-muted-foreground">
-                    {t("welcome")},
+            <SidebarHeader className="px-6 py-4">
+              <div className="flex flex-col items-center gap-3">
+                <Link to="/">
+                  <Logo className="group-data-[collapsible=icon]:scale-75 transition-transform" />
+                </Link>
+                <div className="flex items-center gap-1.5 group-data-[collapsible=icon]:hidden">
+                  <span className="text-sm font-medium text-muted-foreground">
+                    {getGreeting()}
                   </span>
-                  <span className="text-sm font-medium text-sidebar-foreground">
-                    Admin Panel
+                  <span className="text-sm font-medium text-foreground">
+                    {user?.name?.split(" ")[0] || ""}
                   </span>
                 </div>
               </div>
@@ -88,15 +109,24 @@ export default function AdminLayout() {
                 <DropdownMenuTrigger asChild>
                   <div className="flex items-center gap-3 p-2 cursor-pointer hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg transition-colors group-data-[collapsible=icon]:justify-center">
                     <Avatar className="h-10 w-10 ring-2 ring-sidebar-ring/10 group-data-[collapsible=icon]:h-8 group-data-[collapsible=icon]:w-8">
-                      <AvatarImage src="/avatar.png" alt="Admin avatar" />
-                      <AvatarFallback>A</AvatarFallback>
+                      <AvatarImage
+                        src={
+                          user?.avatar && user.avatar.length > 0
+                            ? user.avatar[0].url
+                            : user?.defaultAvatar || "/avatar.png"
+                        }
+                        alt={user?.name || "Admin avatar"}
+                      />
+                      <AvatarFallback>
+                        {user?.name ? getInitials(user.name) : "A"}
+                      </AvatarFallback>
                     </Avatar>
                     <div className="flex flex-col group-data-[collapsible=icon]:hidden">
                       <span className="text-sm font-medium text-sidebar-foreground">
-                        Admin Name
+                        {user?.name || "Admin Name"}
                       </span>
                       <span className="text-xs text-muted-foreground">
-                        admin@example.com
+                        {user?.email || "admin@example.com"}
                       </span>
                     </div>
                   </div>

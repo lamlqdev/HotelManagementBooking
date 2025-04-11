@@ -141,4 +141,59 @@ export const partnerFormSchema = z
     }
   );
 
+// Định nghĩa kiểu dữ liệu cho response API
+export interface PartnerResponse {
+  success: boolean;
+  count: number;
+  data: Partner[];
+}
+
+export interface Partner {
+  user: {
+    _id: string;
+    name: string;
+    email: string;
+    phone: string;
+    role: string;
+    status: string;
+    isEmailVerified: boolean;
+    avatar: Array<{
+      url: string;
+      publicId: string;
+      filename: string;
+    }>;
+    createdAt: string;
+    updatedAt: string;
+  };
+  hotel: {
+    _id: string;
+    name: string;
+    address: string;
+    locationName: string;
+    locationDescription: string;
+    description: string;
+    featuredImage: {
+      url: string;
+      publicId: string;
+      filename: string;
+    };
+    images: Array<{
+      url: string;
+      publicId: string;
+      filename: string;
+    }>;
+    policies: {
+      checkInTime: string;
+      checkOutTime: string;
+      cancellationPolicy: string;
+      childrenPolicy: string;
+      petPolicy: string;
+      smokingPolicy: string;
+    };
+    status: string;
+    createdAt: string;
+    updatedAt: string;
+  };
+}
+
 export type PartnerFormData = z.infer<typeof partnerFormSchema>;

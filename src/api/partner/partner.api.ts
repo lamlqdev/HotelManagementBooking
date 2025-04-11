@@ -2,6 +2,7 @@ import axiosInstance from "@/lib/axios";
 import { PartnerFormData } from "./types";
 
 export const partnerApi = {
+  // API đăng ký đối tác
   registerPartner: async (data: PartnerFormData) => {
     const formData = new FormData();
 
@@ -53,6 +54,31 @@ export const partnerApi = {
         headers: {
           "Content-Type": "multipart/form-data",
         },
+      }
+    );
+    return response.data;
+  },
+
+  // API lấy danh sách đối tác chờ duyệt (chỉ admin)
+  getPendingPartners: async () => {
+    const response = await axiosInstance.get(`/auth/pending-partners`);
+    return response.data;
+  },
+
+  // API phê duyệt đối tác (chỉ admin)
+  approvePartner: async (partnerId: string) => {
+    const response = await axiosInstance.put(
+      `/auth/approve-partner/${partnerId}`
+    );
+    return response.data;
+  },
+
+  // API từ chối đối tác (chỉ admin)
+  rejectPartner: async (partnerId: string, reason: string) => {
+    const response = await axiosInstance.put(
+      `/auth/reject-partner/${partnerId}`,
+      {
+        reason,
       }
     );
     return response.data;

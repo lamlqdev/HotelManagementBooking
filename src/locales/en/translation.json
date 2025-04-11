@@ -619,7 +619,8 @@
     "profile": "Profile",
     "myBookings": "My bookings",
     "settings": "Settings",
-    "logout": "Logout"
+    "logout": "Logout",
+    "manage": "Manage"
   },
   "profile": {
     "title": "My Profile",
@@ -1071,5 +1072,10 @@
         }
       }
     }
+  },
+  "greetings": {
+    "morning": "Good morning",
+    "afternoon": "Good afternoon",
+    "evening": "Good evening"
   }
 }

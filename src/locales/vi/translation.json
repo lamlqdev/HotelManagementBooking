@@ -619,7 +619,8 @@
     "profile": "Hồ sơ",
     "myBookings": "Đặt phòng của tôi",
     "settings": "Cài đặt",
-    "logout": "Đăng xuất"
+    "logout": "Đăng xuất",
+    "manage": "Quản lý"
   },
   "profile": {
     "title": "Hồ sơ của tôi",
@@ -1102,5 +1103,10 @@
         }
       }
     }
+  },
+  "greetings": {
+    "morning": "Chào buổi sáng",
+    "afternoon": "Chào buổi chiều",
+    "evening": "Chào buổi tối"
   }
 }

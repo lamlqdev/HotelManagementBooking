@@ -68,7 +68,22 @@ const LoginPage = () => {
           if (userResponse.success) {
             dispatch(setUser(userResponse.data));
             toast.success("Đăng nhập thành công");
-            navigate("/");
+
+            // Chuyển hướng dựa trên role
+            const role = userResponse.data.role;
+            switch (role) {
+              case "admin":
+                navigate("/admin/partners");
+                break;
+              case "partner":
+                navigate("/partner/hotels/info");
+                break;
+              case "user":
+                navigate("/");
+                break;
+              default:
+                navigate("/");
+            }
           }
         } catch (error) {
           console.error("Lỗi khi lấy thông tin user:", error);

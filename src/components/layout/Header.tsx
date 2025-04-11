@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
 import { Bell } from "lucide-react";
 import { useAppSelector } from "@/store/hooks";
+import { Logo } from "@/components/ui/logo";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,7 +13,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "../ui/button";
-import logo from "../../assets/images/logo.png";
 import { useAppDispatch } from "@/store/hooks";
 import { logout } from "@/features/auth/authSlice";
 
@@ -38,7 +38,7 @@ const Header = () => {
       <div className="container mx-auto bg-card rounded-lg p-2">
         <div className="flex items-center justify-between h-16 px-6">
           <Link to="/" className="flex items-center">
-            <img src={logo} alt={t("common.logo_alt")} className="h-24" />
+            <Logo className="h-8" showDot={false} />
           </Link>
 
           <nav className="hidden md:flex items-center space-x-8">
@@ -112,12 +112,48 @@ const Header = () => {
                       </div>
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem asChild>
-                      <Link to="/profile">{t("dropdown.profile")}</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/bookings">{t("dropdown.myBookings")}</Link>
-                    </DropdownMenuItem>
+
+                    {user.role === "admin" && (
+                      <>
+                        <DropdownMenuItem asChild>
+                          <Link to="/admin/partners">
+                            {t("dropdown.manage")}
+                          </Link>
+                        </DropdownMenuItem>
+                      </>
+                    )}
+
+                    {user.role === "partner" && (
+                      <>
+                        <DropdownMenuItem asChild>
+                          <Link to="/partner/hotels/info">
+                            {t("dropdown.hotelInfo")}
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link to="/partner/bookings/orders">
+                            {t("dropdown.bookingOrders")}
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link to="/partner/revenue">
+                            {t("dropdown.revenue")}
+                          </Link>
+                        </DropdownMenuItem>
+                      </>
+                    )}
+
+                    {user.role === "user" && (
+                      <>
+                        <DropdownMenuItem asChild>
+                          <Link to="/profile">{t("dropdown.profile")}</Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link to="/bookings">{t("dropdown.myBookings")}</Link>
+                        </DropdownMenuItem>
+                      </>
+                    )}
+
                     <DropdownMenuItem asChild>
                       <Link to="/settings">{t("dropdown.settings")}</Link>
                     </DropdownMenuItem>

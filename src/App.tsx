@@ -11,6 +11,7 @@ import PublicRoute from "./components/routes/PublicRoute";
 import PrivateRoute from "./components/routes/PrivateRoute";
 import { ThemeProvider } from "./components/setting/ThemeProvider";
 
+// Public Pages
 import HomePage from "./pages/user/HomePage";
 import AboutPage from "./pages/user/AboutPage";
 import SearchResultPage from "./pages/user/SearchResultPage";
@@ -18,11 +19,22 @@ import HotelDetailPage from "./pages/user/HotelDetailPage";
 import BookingInformationPage from "./pages/user/BookingInformationPage";
 import BookingGuidePage from "./pages/user/BookingGuidePage";
 import ContactUs from "./pages/user/ContactUs";
-import SettingPage from "./pages/shared/SettingPage";
-import UserProfilePage from "./pages/user/ProfilePage";
+import BlogPage from "./pages/user/BlogPage";
+import BlogDetailPage from "./pages/user/BlogDetailPage";
 import Partnership from "./pages/user/Partnership";
 import RegisterPartner from "./pages/user/RegisterPartner";
 
+// Auth Pages
+import LoginPage from "./pages/auth/LoginPage";
+import RegisterPage from "./pages/auth/RegisterPage";
+import VerifyEmailPage from "./pages/auth/VerifyEmailPage";
+import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
+
+// User Pages
+import SettingPage from "./pages/shared/SettingPage";
+import UserProfilePage from "./pages/user/ProfilePage";
+
+// Partner Pages
 import RevenuePage from "./pages/partner/RevenuePage";
 import HotelInfoPage from "./pages/partner/HotelInfoPage";
 import RoomManagementPage from "./pages/partner/RoomManagementPage";
@@ -35,14 +47,7 @@ import AccountPage from "./pages/partner/AccountPage";
 import PartnerProfilePage from "./pages/partner/ProfilePage";
 import NotificationsPage from "./pages/partner/NotificationsPage";
 
-import BlogPage from "./pages/user/BlogPage";
-import BlogDetailPage from "./pages/user/BlogDetailPage";
-
-import LoginPage from "./pages/auth/LoginPage";
-import RegisterPage from "./pages/auth/RegisterPage";
-import VerifyEmailPage from "./pages/auth/VerifyEmailPage";
-import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
-
+// Admin Pages
 import PartnerApproval from "./pages/admin/PartnerApproval";
 import PartnerRegistrationDetails from "@/pages/admin/PartnerRegistrationDetails";
 
@@ -77,7 +82,7 @@ function App() {
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           </Route>
 
-          {/* Protected Routes User - Yêu cầu đăng nhập */}
+          {/* Protected Routes User - Yêu cầu đăng nhập với role user */}
           <Route element={<PrivateRoute role="user" />}>
             <Route element={<Layout />}>
               <Route path="/settings" element={<SettingPage />} />
@@ -85,28 +90,36 @@ function App() {
             </Route>
           </Route>
 
-          <Route path="/partner" element={<PartnerLayout />}>
-            <Route path="revenue" element={<RevenuePage />} />
-            <Route path="hotels/info" element={<HotelInfoPage />} />
-            <Route path="hotels/rooms" element={<RoomManagementPage />} />
-            <Route path="hotels/rooms/:id" element={<RoomDetailPage />} />
-            <Route path="hotels/status" element={<RoomStatusPage />} />
-            <Route path="bookings/orders" element={<BookingOrdersPage />} />
-            <Route path="bookings/requests" element={<BookingRequestsPage />} />
-            <Route path="messages" element={<MessagesPage />} />
-            <Route path="account" element={<AccountPage />} />
-            <Route path="profile" element={<PartnerProfilePage />} />
-            <Route path="settings" element={<SettingPage />} />
-            <Route path="notifications" element={<NotificationsPage />} />
+          {/* Protected Routes Partner - Yêu cầu đăng nhập với role partner */}
+          <Route element={<PrivateRoute role="partner" />}>
+            <Route path="/partner" element={<PartnerLayout />}>
+              <Route path="revenue" element={<RevenuePage />} />
+              <Route path="hotels/info" element={<HotelInfoPage />} />
+              <Route path="hotels/rooms" element={<RoomManagementPage />} />
+              <Route path="hotels/rooms/:id" element={<RoomDetailPage />} />
+              <Route path="hotels/status" element={<RoomStatusPage />} />
+              <Route path="bookings/orders" element={<BookingOrdersPage />} />
+              <Route
+                path="bookings/requests"
+                element={<BookingRequestsPage />}
+              />
+              <Route path="messages" element={<MessagesPage />} />
+              <Route path="account" element={<AccountPage />} />
+              <Route path="profile" element={<PartnerProfilePage />} />
+              <Route path="settings" element={<SettingPage />} />
+              <Route path="notifications" element={<NotificationsPage />} />
+            </Route>
           </Route>
 
-          {/* Admin Routes */}
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route path="partners" element={<PartnerApproval />} />
-            <Route
-              path="partners/:id"
-              element={<PartnerRegistrationDetails />}
-            />
+          {/* Protected Routes Admin - Yêu cầu đăng nhập với role admin */}
+          <Route element={<PrivateRoute role="admin" />}>
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route path="partners" element={<PartnerApproval />} />
+              <Route
+                path="partners/:id"
+                element={<PartnerRegistrationDetails />}
+              />
+            </Route>
           </Route>
         </Routes>
 
