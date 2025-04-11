@@ -184,13 +184,13 @@ const PoliciesSection = ({ form }: PoliciesSectionProps) => {
           label={t("register_partner.policies.children")}
           name="childrenPolicy"
           options={[
-            { value: "allowed", label: "Cho phép trẻ em" },
-            { value: "not-allowed", label: "Không cho phép trẻ em" },
+            { value: "yes", label: "Cho phép trẻ em" },
+            { value: "no", label: "Không cho phép trẻ em" },
           ]}
           form={form}
         />
 
-        {form.watch("childrenPolicy") === "allowed" && (
+        {form.watch("childrenPolicy") === "yes" && (
           <FormField
             control={form.control}
             name="childrenAgeDefinition"

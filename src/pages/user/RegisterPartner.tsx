@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Building2, Phone, FileText } from "lucide-react";
+import { useNavigate } from "react-router";
 
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
@@ -18,13 +19,37 @@ import { ApiError } from "@/api/auth/types";
 
 const RegisterPartner = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+
   const { mutate: registerPartner, isPending } = useMutation({
     mutationFn: partnerApi.registerPartner,
     onSuccess: () => {
       toast.success(t("register_partner.success"));
+      // Chuyển hướng đến trang xác nhận sau 2 giây
+      setTimeout(() => {
+        navigate("/partner/registration-success");
+      }, 2000);
     },
     onError: (error: ApiError) => {
-      toast.error(error.message || t("register_partner.error"));
+      // Xử lý lỗi chi tiết
+      if (error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else if (error.message) {
+        toast.error(error.message);
+      } else {
+        toast.error(t("register_partner.error"));
+      }
+
+      // Hiển thị lỗi validation nếu có
+      const errorData = error.response?.data as {
+        errors?: Record<string, string[]>;
+      };
+      if (errorData?.errors) {
+        const errors = errorData.errors;
+        Object.keys(errors).forEach((key) => {
+          toast.error(`${key}: ${errors[key].join(", ")}`);
+        });
+      }
     },
   });
 
@@ -60,7 +85,7 @@ const RegisterPartner = () => {
 
       // Hình ảnh
       featuredImage: undefined,
-      galleryImages: [],
+      hotelImages: [],
     },
   });
 

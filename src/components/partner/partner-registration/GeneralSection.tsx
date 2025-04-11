@@ -96,7 +96,7 @@ const GeneralSection = ({ form }: GeneralSectionProps) => {
 
       <FormField
         control={form.control}
-        name="galleryImages"
+        name="hotelImages"
         render={({ field: { onChange, value, ...field } }) => (
           <FormItem>
             <FormLabel>
@@ -109,7 +109,7 @@ const GeneralSection = ({ form }: GeneralSectionProps) => {
               <FileUpload
                 onChange={(files) => onChange(files as File[])}
                 accept="image/*"
-                multiple
+                multiple={true}
                 value={value}
                 {...field}
               />

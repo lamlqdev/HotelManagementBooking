@@ -70,7 +70,7 @@ export const partnerFormSchema = z
       .string()
       .min(1, "Vui lòng chọn chính sách trẻ em")
       .refine(
-        (value) => ["allowed", "not-allowed"].includes(value),
+        (value) => ["yes", "no"].includes(value),
         "Vui lòng chọn chính sách trẻ em hợp lệ"
       ),
     childrenAgeDefinition: z
@@ -101,25 +101,21 @@ export const partnerFormSchema = z
         "Kích thước ảnh không được vượt quá 5MB"
       )
       .refine(
-        (file) => ["image/jpeg", "image/png", "image/webp"].includes(file.type),
-        "Chỉ chấp nhận file ảnh định dạng JPG, PNG hoặc WebP"
+        (file) => file.type.startsWith("image/"),
+        "File phải là hình ảnh"
       ),
-    galleryImages: z
-      .array(
-        z
-          .instanceof(File, { message: "Vui lòng tải lên ảnh gallery" })
-          .refine(
-            (file) => file.size <= 5 * 1024 * 1024,
-            "Kích thước ảnh không được vượt quá 5MB"
-          )
-          .refine(
-            (file) =>
-              ["image/jpeg", "image/png", "image/webp"].includes(file.type),
-            "Chỉ chấp nhận file ảnh định dạng JPG, PNG hoặc WebP"
-          )
+    hotelImages: z
+      .array(z.instanceof(File))
+      .refine(
+        (files) => files.every((file) => file.size <= 5 * 1024 * 1024),
+        "Kích thước mỗi ảnh không được vượt quá 5MB"
       )
-      .min(1, "Vui lòng tải lên ít nhất một ảnh gallery")
-      .max(10, "Không được tải lên quá 10 ảnh gallery"),
+      .refine(
+        (files) => files.every((file) => file.type.startsWith("image/")),
+        "Tất cả các file phải là hình ảnh"
+      )
+      .optional()
+      .default([]),
   })
   .refine(
     (data) => {
@@ -137,10 +133,10 @@ export const partnerFormSchema = z
     (data) => {
       const [checkInHours] = data.checkInTime.split(":").map(Number);
       const [checkOutHours] = data.checkOutTime.split(":").map(Number);
-      return checkOutHours > checkInHours;
+      return checkInHours > checkOutHours;
     },
     {
-      message: "Giờ trả phòng phải sau giờ nhận phòng",
+      message: "Giờ nhận phòng phải lớn hơn giờ trả phòng",
       path: ["checkOutTime"],
     }
   );
