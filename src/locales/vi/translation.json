@@ -729,7 +729,14 @@
         "title": "Thông tin liên hệ"
       },
       "policies": {
-        "title": "Chính sách"
+        "title": "Chính sách",
+        "yes": "Được phép",
+        "no": "Không được phép"
+      },
+      "images": {
+        "title": "Hình ảnh",
+        "featured": "Hình ảnh đại diện",
+        "gallery": "Hình ảnh khách sạn"
       }
     },
     "title": "Đăng ký khách sạn đối tác",
@@ -1054,6 +1061,7 @@
         "title": "Duyệt đăng ký đối tác",
         "pendingRequests": "Danh sách đơn đăng ký đang chờ",
         "pendingRequestsDescription": "Xem và duyệt các đơn đăng ký đối tác mới",
+        "noPendingRequests": "Không có đơn đăng ký đang chờ",
         "table": {
           "hotelName": "Tên khách sạn",
           "ownerName": "Chủ sở hữu",

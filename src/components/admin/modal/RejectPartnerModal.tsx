@@ -1,13 +1,14 @@
 import { useTranslation } from "react-i18next";
-import { Button } from "@/components/ui/button";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -27,6 +28,7 @@ interface RejectPartnerModalProps {
   onRejectReasonsChange: (reasons: RejectReasons) => void;
   rejectDetails: string;
   onRejectDetailsChange: (details: string) => void;
+  isLoading?: boolean;
 }
 
 const RejectPartnerModal = ({
@@ -37,29 +39,29 @@ const RejectPartnerModal = ({
   onRejectReasonsChange,
   rejectDetails,
   onRejectDetailsChange,
+  isLoading = false,
 }: RejectPartnerModalProps) => {
   const { t } = useTranslation();
 
-  const handleReject = () => {
+  const handleSubmit = () => {
     onReject(rejectReasons, rejectDetails);
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>
-            {t("admin.partners.approval.details.modal.reject.title")}
-          </DialogTitle>
-          <DialogDescription>
-            {t("admin.partners.approval.details.modal.reject.description")}
-          </DialogDescription>
-        </DialogHeader>
-        <div className="space-y-4 py-4">
-          <div className="space-y-2">
-            <Label>
-              {t("admin.partners.approval.details.modal.reject.reasons.title")}
-            </Label>
+    <AlertDialog open={open} onOpenChange={onOpenChange}>
+      <AlertDialogContent className="max-w-xl">
+        <AlertDialogHeader>
+          <AlertDialogTitle>
+            {t("admin.partners.approval.modal.reject.title")}
+          </AlertDialogTitle>
+          <AlertDialogDescription>
+            {t("admin.partners.approval.modal.reject.description")}
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+
+        <div className="space-y-6 py-4">
+          <div className="space-y-4">
+            <Label>{t("admin.partners.approval.modal.reject.reasons")}</Label>
             <div className="space-y-2">
               <div className="flex items-center space-x-2">
                 <Checkbox
@@ -68,15 +70,17 @@ const RejectPartnerModal = ({
                   onCheckedChange={(checked) =>
                     onRejectReasonsChange({
                       ...rejectReasons,
-                      incomplete: checked as boolean,
+                      incomplete: checked === true,
                     })
                   }
+                  disabled={isLoading}
                 />
-                <Label htmlFor="incomplete">
-                  {t(
-                    "admin.partners.approval.details.modal.reject.reasons.incomplete"
-                  )}
-                </Label>
+                <label
+                  htmlFor="incomplete"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  {t("admin.partners.approval.modal.reject.reasons.incomplete")}
+                </label>
               </div>
               <div className="flex items-center space-x-2">
                 <Checkbox
@@ -85,15 +89,17 @@ const RejectPartnerModal = ({
                   onCheckedChange={(checked) =>
                     onRejectReasonsChange({
                       ...rejectReasons,
-                      invalid: checked as boolean,
+                      invalid: checked === true,
                     })
                   }
+                  disabled={isLoading}
                 />
-                <Label htmlFor="invalid">
-                  {t(
-                    "admin.partners.approval.details.modal.reject.reasons.invalid"
-                  )}
-                </Label>
+                <label
+                  htmlFor="invalid"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  {t("admin.partners.approval.modal.reject.reasons.invalid")}
+                </label>
               </div>
               <div className="flex items-center space-x-2">
                 <Checkbox
@@ -102,15 +108,17 @@ const RejectPartnerModal = ({
                   onCheckedChange={(checked) =>
                     onRejectReasonsChange({
                       ...rejectReasons,
-                      duplicate: checked as boolean,
+                      duplicate: checked === true,
                     })
                   }
+                  disabled={isLoading}
                 />
-                <Label htmlFor="duplicate">
-                  {t(
-                    "admin.partners.approval.details.modal.reject.reasons.duplicate"
-                  )}
-                </Label>
+                <label
+                  htmlFor="duplicate"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  {t("admin.partners.approval.modal.reject.reasons.duplicate")}
+                </label>
               </div>
               <div className="flex items-center space-x-2">
                 <Checkbox
@@ -119,47 +127,52 @@ const RejectPartnerModal = ({
                   onCheckedChange={(checked) =>
                     onRejectReasonsChange({
                       ...rejectReasons,
-                      other: checked as boolean,
+                      other: checked === true,
                     })
                   }
+                  disabled={isLoading}
                 />
-                <Label htmlFor="other">
-                  {t(
-                    "admin.partners.approval.details.modal.reject.reasons.other"
-                  )}
-                </Label>
+                <label
+                  htmlFor="other"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  {t("admin.partners.approval.modal.reject.reasons.other")}
+                </label>
               </div>
             </div>
           </div>
+
           <div className="space-y-2">
-            <Label>
-              {t("admin.partners.approval.details.modal.reject.details.title")}
-            </Label>
+            <Label>{t("admin.partners.approval.modal.reject.details")}</Label>
             <Textarea
               placeholder={t(
-                "admin.partners.approval.details.modal.reject.details.placeholder"
+                "admin.partners.approval.modal.reject.detailsPlaceholder"
               )}
               value={rejectDetails}
               onChange={(e) => onRejectDetailsChange(e.target.value)}
               className="min-h-[100px]"
+              disabled={isLoading}
             />
           </div>
         </div>
-        <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
-            {t("admin.partners.approval.details.modal.reject.cancel")}
-          </Button>
-          <Button
-            onClick={handleReject}
-            disabled={
-              !Object.values(rejectReasons).some(Boolean) || !rejectDetails
-            }
-          >
-            {t("admin.partners.approval.details.modal.reject.confirm")}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+
+        <AlertDialogFooter>
+          <AlertDialogCancel disabled={isLoading}>
+            {t("common.cancel")}
+          </AlertDialogCancel>
+          <AlertDialogAction onClick={handleSubmit} disabled={isLoading}>
+            {isLoading ? (
+              <div className="flex items-center gap-2">
+                <div className="h-4 w-4 border-2 border-current border-t-transparent animate-spin rounded-full" />
+                {t("common.rejecting")}
+              </div>
+            ) : (
+              t("common.reject")
+            )}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 };
 

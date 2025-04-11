@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Eye } from "lucide-react";
-import { Link } from "react-router";
+import { useNavigate } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 
 import {
@@ -17,9 +17,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 import { partnerApi } from "@/api/partner/partner.api";
 import { PartnerResponse, Partner } from "@/api/partner/types";
+import { formatDate } from "@/utils/timeUtils";
 
 const PartnerApproval = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const { data: response, isLoading } = useQuery<PartnerResponse>({
     queryKey: ["pendingPartners"],
@@ -29,15 +31,8 @@ const PartnerApproval = () => {
     },
   });
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const hours = date.getHours().toString().padStart(2, "0");
-    const minutes = date.getMinutes().toString().padStart(2, "0");
-    const day = date.getDate().toString().padStart(2, "0");
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
-    const year = date.getFullYear();
-
-    return `${hours}:${minutes} ${day}/${month}/${year}`;
+  const handleViewDetails = (partner: Partner) => {
+    navigate(`/admin/partners/${partner.user._id}`, { state: { partner } });
   };
 
   return (
@@ -55,7 +50,7 @@ const PartnerApproval = () => {
 
           <Table>
             <TableHeader>
-              <TableRow>
+              <TableRow className="hover:bg-transparent">
                 <TableHead>
                   {t("admin.partners.approval.table.hotelName")}
                 </TableHead>
@@ -80,7 +75,7 @@ const PartnerApproval = () => {
               {isLoading ? (
                 // Hiển thị skeleton loading
                 Array.from({ length: 5 }).map((_, index) => (
-                  <TableRow key={index}>
+                  <TableRow key={index} className="hover:bg-transparent">
                     <TableCell>
                       <Skeleton className="h-6 w-32" />
                     </TableCell>
@@ -104,7 +99,10 @@ const PartnerApproval = () => {
                 ))
               ) : response?.data && response.data.length > 0 ? (
                 response.data.map((partner: Partner) => (
-                  <TableRow key={partner.user._id}>
+                  <TableRow
+                    key={partner.user._id}
+                    className="hover:bg-transparent"
+                  >
                     <TableCell>{partner.hotel.name}</TableCell>
                     <TableCell>{partner.user.name}</TableCell>
                     <TableCell>
@@ -116,16 +114,18 @@ const PartnerApproval = () => {
                     <TableCell>{partner.hotel.address}</TableCell>
                     <TableCell>{formatDate(partner.hotel.createdAt)}</TableCell>
                     <TableCell className="text-right">
-                      <Button variant="ghost" size="icon" asChild>
-                        <Link to={`/admin/partners/${partner.user._id}`}>
-                          <Eye className="h-4 w-4" />
-                        </Link>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleViewDetails(partner)}
+                      >
+                        <Eye className="h-4 w-4" />
                       </Button>
                     </TableCell>
                   </TableRow>
                 ))
               ) : (
-                <TableRow>
+                <TableRow className="hover:bg-transparent">
                   <TableCell
                     colSpan={6}
                     className="text-center py-8 text-muted-foreground"

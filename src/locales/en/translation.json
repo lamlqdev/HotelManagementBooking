@@ -729,7 +729,14 @@
         "title": "Contact Information"
       },
       "policies": {
-        "title": "Policies"
+        "title": "Policies",
+        "yes": "Allowed",
+        "no": "Not allowed"
+      },
+      "images": {
+        "title": "Images",
+        "featured": "Featured Image",
+        "gallery": "Gallery Images"
       }
     },
     "title": "Hotel Partner Registration",
@@ -1055,6 +1062,7 @@
         "title": "Partner Registration Approval",
         "pendingRequests": "Pending Registration Requests",
         "pendingRequestsDescription": "View and approve new partner registration requests",
+        "noPendingRequests": "No pending registration requests",
         "table": {
           "hotelName": "Hotel Name",
           "ownerName": "Owner",

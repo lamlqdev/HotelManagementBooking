@@ -1,45 +1,36 @@
 import { useTranslation } from "react-i18next";
-import { Building2, Phone, FileText } from "lucide-react";
+import { Building2, Phone, FileText, Image, ChevronLeft } from "lucide-react";
 import { useState } from "react";
+import { useLocation, useNavigate } from "react-router";
+import { toast } from "sonner";
 
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 import ApprovePartnerModal from "@/components/admin/modal/ApprovePartnerModal";
 import RejectPartnerModal from "@/components/admin/modal/RejectPartnerModal";
 
-// Mock data - sẽ được thay thế bằng dữ liệu thực từ API
-const mockPartnerData = {
-  id: "1",
-  name: "Nguyễn Văn A",
-  email: "nguyenvana@example.com",
-  phone: "0123456789",
-  hotelName: "Grand Hotel",
-  hotelAddress: "123 Đường ABC, Quận 1, TP.HCM",
-  hotelDescription: "Khách sạn 5 sao với view đẹp...",
-  hotelLocationName: "Quận 1",
-  hotelLocationDescription: "Gần các điểm du lịch nổi tiếng...",
-  hotelAmenities: ["wifi", "parking", "pool", "restaurant"],
-  hotelWebsite: "https://grandhotel.com",
-  checkInTime: "14:00",
-  checkOutTime: "12:00",
-  cancellationPolicy: "Hủy phòng trước 24h được hoàn tiền 100%",
-  childrenPolicy: "Trẻ em dưới 6 tuổi được miễn phí",
-  childrenAgeDefinition: 6,
-  petPolicy: "Không cho phép mang thú cưng",
-  smokingPolicy: "Không hút thuốc trong phòng",
-  featuredImage: "https://example.com/image1.jpg",
-  galleryImages: [
-    "https://example.com/image2.jpg",
-    "https://example.com/image3.jpg",
-  ],
-  status: "pending",
-  submittedAt: "2024-03-20T10:00:00Z",
-};
+import { partnerApi } from "@/api/partner/partner.api";
+import { Partner } from "@/api/partner/types";
+import { formatDate } from "@/utils/timeUtils";
 
 const PartnerRegistrationDetails = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const partner = location.state?.partner as Partner;
+
   const [showApproveModal, setShowApproveModal] = useState(false);
   const [showRejectModal, setShowRejectModal] = useState(false);
+  const [isApproving, setIsApproving] = useState(false);
+  const [isRejecting, setIsRejecting] = useState(false);
   const [rejectReasons, setRejectReasons] = useState({
     incomplete: false,
     invalid: false,
@@ -48,177 +39,304 @@ const PartnerRegistrationDetails = () => {
   });
   const [rejectDetails, setRejectDetails] = useState("");
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("vi-VN", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+  if (!partner) {
+    navigate("/admin/partners");
+    return null;
+  }
+
+  const handleBack = () => {
+    navigate("/admin/partners");
   };
 
-  const handleApprove = () => {
-    // TODO: Implement approve logic
-    console.log("Approving partner registration:", mockPartnerData.id);
-    setShowApproveModal(false);
+  const handleApprove = async () => {
+    try {
+      setIsApproving(true);
+      const loadingToast = toast.loading(
+        t("admin.partners.approval.approving")
+      );
+
+      await partnerApi.approvePartner(partner.user._id);
+
+      toast.dismiss(loadingToast);
+      toast.success(t("admin.partners.approval.approveSuccess"));
+      setShowApproveModal(false);
+      navigate("/admin/partners");
+    } catch (error) {
+      toast.error(t("admin.partners.approval.approveError"));
+      console.error("Error approving partner:", error);
+    } finally {
+      setIsApproving(false);
+    }
   };
 
-  const handleReject = (reasons: typeof rejectReasons, details: string) => {
-    // TODO: Implement reject logic
-    console.log("Rejecting partner registration:", {
-      id: mockPartnerData.id,
-      reasons,
-      details,
-    });
-    setShowRejectModal(false);
+  const handleReject = async () => {
+    try {
+      setIsRejecting(true);
+      const loadingToast = toast.loading(
+        t("admin.partners.approval.rejecting")
+      );
+
+      await partnerApi.rejectPartner(partner.user._id, rejectDetails);
+
+      toast.dismiss(loadingToast);
+      toast.success(t("admin.partners.approval.rejectSuccess"));
+      setShowRejectModal(false);
+      navigate("/admin/partners");
+    } catch (error) {
+      toast.error(t("admin.partners.approval.rejectError"));
+      console.error("Error rejecting partner:", error);
+    } finally {
+      setIsRejecting(false);
+    }
   };
 
   return (
     <div className="container mx-auto px-4 pb-12">
-      <div className="max-w-3xl mx-auto">
-        <h1 className="text-3xl text-center font-bold mb-8">
-          {t("admin.partners.approval.details.title")}
-        </h1>
+      <div className="max-w-4xl mx-auto">
+        <div className="flex items-center gap-4 mb-8">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={handleBack}
+            className="hover:bg-muted"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </Button>
+          <div className="flex-1 flex items-center justify-between">
+            <h1 className="text-3xl font-bold">
+              {t("admin.partners.approval.details.title")}
+            </h1>
+            <div className="flex gap-4">
+              <Button
+                variant="outline"
+                onClick={() => setShowRejectModal(true)}
+                disabled={isRejecting || isApproving}
+              >
+                {isRejecting ? (
+                  <div className="flex items-center gap-2">
+                    <div className="h-4 w-4 border-2 border-current border-t-transparent animate-spin rounded-full" />
+                    {t("common.rejecting")}
+                  </div>
+                ) : (
+                  t("admin.partners.approval.details.actions.reject")
+                )}
+              </Button>
+              <Button
+                onClick={() => setShowApproveModal(true)}
+                disabled={isRejecting || isApproving}
+              >
+                {isApproving ? (
+                  <div className="flex items-center gap-2">
+                    <div className="h-4 w-4 border-2 border-current border-t-transparent animate-spin rounded-full" />
+                    {t("common.approving")}
+                  </div>
+                ) : (
+                  t("admin.partners.approval.details.actions.approve")
+                )}
+              </Button>
+            </div>
+          </div>
+        </div>
 
-        <div className="space-y-6">
+        <div className="grid gap-6">
+          {/* Hình ảnh khách sạn */}
+          <Card className="p-6">
+            <div className="flex items-center gap-2 mb-6">
+              <Image className="w-5 h-5 text-primary" />
+              <h2 className="text-xl font-semibold">
+                {t("register_partner.sections.images.title")}
+              </h2>
+            </div>
+            <div className="space-y-8">
+              {/* Ảnh đại diện */}
+              <div>
+                <h3 className="text-sm font-medium text-muted-foreground mb-3">
+                  {t("register_partner.sections.images.featured")}
+                </h3>
+                <div className="aspect-video rounded-lg overflow-hidden">
+                  <img
+                    src={partner.hotel.featuredImage.url}
+                    alt={partner.hotel.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </div>
+
+              {/* Thư viện ảnh */}
+              {partner.hotel.images.length > 0 && (
+                <div>
+                  <h3 className="text-sm font-medium text-muted-foreground mb-3">
+                    {t("register_partner.sections.images.gallery")}
+                  </h3>
+                  <Carousel className="w-full">
+                    <CarouselContent>
+                      {partner.hotel.images.map((image) => (
+                        <CarouselItem
+                          key={image.publicId}
+                          className="basis-1/3"
+                        >
+                          <div className="aspect-square rounded-lg overflow-hidden">
+                            <img
+                              src={image.url}
+                              alt={image.filename}
+                              className="w-full h-full object-cover hover:scale-110 transition-transform"
+                            />
+                          </div>
+                        </CarouselItem>
+                      ))}
+                    </CarouselContent>
+                    <CarouselPrevious />
+                    <CarouselNext />
+                  </Carousel>
+                </div>
+              )}
+            </div>
+          </Card>
+
           {/* Thông tin cơ bản */}
           <Card className="p-6">
-            <div className="flex items-center gap-2 mb-4">
+            <div className="flex items-center gap-2 mb-6">
               <Building2 className="w-5 h-5 text-primary" />
               <h2 className="text-xl font-semibold">
                 {t("register_partner.sections.general.title")}
               </h2>
             </div>
-            <div className="space-y-4">
+            <div className="grid gap-6 md:grid-cols-2">
               <div>
-                <h3 className="font-medium mb-1">
+                <h3 className="text-sm font-medium text-muted-foreground mb-1">
                   {t("register_partner.hotel_info.hotel_name")}
                 </h3>
-                <p>{mockPartnerData.hotelName}</p>
+                <p className="text-base">{partner.hotel.name}</p>
               </div>
               <div>
-                <h3 className="font-medium mb-1">
-                  {t("register_partner.hotel_info.description")}
-                </h3>
-                <p>{mockPartnerData.hotelDescription}</p>
-              </div>
-              <div>
-                <h3 className="font-medium mb-1">
+                <h3 className="text-sm font-medium text-muted-foreground mb-1">
                   {t("register_partner.address.address")}
                 </h3>
-                <p>{mockPartnerData.hotelAddress}</p>
+                <p className="text-base">{partner.hotel.address}</p>
+              </div>
+              <div className="md:col-span-2">
+                <h3 className="text-sm font-medium text-muted-foreground mb-1">
+                  {t("register_partner.hotel_info.description")}
+                </h3>
+                <p className="text-base">{partner.hotel.description}</p>
               </div>
               <div>
-                <h3 className="font-medium mb-1">
+                <h3 className="text-sm font-medium text-muted-foreground mb-1">
                   {t("register_partner.address.tourist_spot")}
                 </h3>
-                <p>{mockPartnerData.hotelLocationName}</p>
+                <p className="text-base">{partner.hotel.locationName}</p>
               </div>
               <div>
-                <h3 className="font-medium mb-1">
+                <h3 className="text-sm font-medium text-muted-foreground mb-1">
                   {t("register_partner.address.location_desc")}
                 </h3>
-                <p>{mockPartnerData.hotelLocationDescription}</p>
-              </div>
-              <div>
-                <h3 className="font-medium mb-1">
-                  {t("register_partner.hotel_info.amenities")}
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {mockPartnerData.hotelAmenities.map((amenity) => (
-                    <span
-                      key={amenity}
-                      className="px-3 py-1 bg-primary/10 rounded-full text-sm"
-                    >
-                      {t(`amenities.${amenity}`)}
-                    </span>
-                  ))}
-                </div>
+                <p className="text-base">{partner.hotel.locationDescription}</p>
               </div>
             </div>
           </Card>
 
           {/* Thông tin liên hệ */}
           <Card className="p-6">
-            <div className="flex items-center gap-2 mb-4">
+            <div className="flex items-center gap-2 mb-6">
               <Phone className="w-5 h-5 text-primary" />
               <h2 className="text-xl font-semibold">
                 {t("register_partner.sections.contact.title")}
               </h2>
             </div>
-            <div className="space-y-4">
+            <div className="grid gap-6 md:grid-cols-2">
               <div>
-                <h3 className="font-medium mb-1">
+                <h3 className="text-sm font-medium text-muted-foreground mb-1">
                   {t("register_partner.contact_info.name")}
                 </h3>
-                <p>{mockPartnerData.name}</p>
+                <p className="text-base">{partner.user.name}</p>
               </div>
               <div>
-                <h3 className="font-medium mb-1">
-                  {t("register_partner.contact_info.email")}
-                </h3>
-                <p>{mockPartnerData.email}</p>
-              </div>
-              <div>
-                <h3 className="font-medium mb-1">
+                <h3 className="text-sm font-medium text-muted-foreground mb-1">
                   {t("register_partner.contact_info.phone")}
                 </h3>
-                <p>{mockPartnerData.phone}</p>
+                <p className="text-base">{partner.user.phone}</p>
               </div>
-              <div>
-                <h3 className="font-medium mb-1">
-                  {t("register_partner.contact_info.website")}
+              <div className="md:col-span-2">
+                <h3 className="text-sm font-medium text-muted-foreground mb-1">
+                  {t("register_partner.contact_info.email")}
                 </h3>
-                <p>{mockPartnerData.hotelWebsite}</p>
+                <p className="text-base">{partner.user.email}</p>
               </div>
             </div>
           </Card>
 
           {/* Chính sách */}
           <Card className="p-6">
-            <div className="flex items-center gap-2 mb-4">
+            <div className="flex items-center gap-2 mb-6">
               <FileText className="w-5 h-5 text-primary" />
               <h2 className="text-xl font-semibold">
                 {t("register_partner.sections.policies.title")}
               </h2>
             </div>
-            <div className="space-y-4">
-              <div>
-                <h3 className="font-medium mb-1">
-                  {t("register_partner.policies.check_in_time")}
-                </h3>
-                <p>{mockPartnerData.checkInTime}</p>
+            <div className="space-y-8">
+              <div className="grid gap-6 md:grid-cols-2">
+                <div>
+                  <h3 className="text-sm font-medium text-muted-foreground mb-1">
+                    {t("register_partner.policies.check_in_time")}
+                  </h3>
+                  <p className="text-base">
+                    {partner.hotel.policies.checkInTime}
+                  </p>
+                </div>
+                <div>
+                  <h3 className="text-sm font-medium text-muted-foreground mb-1">
+                    {t("register_partner.policies.check_out_time")}
+                  </h3>
+                  <p className="text-base">
+                    {partner.hotel.policies.checkOutTime}
+                  </p>
+                </div>
               </div>
+
+              <Separator />
+
               <div>
-                <h3 className="font-medium mb-1">
-                  {t("register_partner.policies.check_out_time")}
-                </h3>
-                <p>{mockPartnerData.checkOutTime}</p>
-              </div>
-              <div>
-                <h3 className="font-medium mb-1">
+                <h3 className="text-sm font-medium text-muted-foreground mb-1">
                   {t("register_partner.policies.cancellation")}
                 </h3>
-                <p>{mockPartnerData.cancellationPolicy}</p>
+                <p className="text-base">
+                  {partner.hotel.policies.cancellationPolicy}
+                </p>
               </div>
-              <div>
-                <h3 className="font-medium mb-1">
-                  {t("register_partner.policies.children")}
-                </h3>
-                <p>{mockPartnerData.childrenPolicy}</p>
-              </div>
-              <div>
-                <h3 className="font-medium mb-1">
-                  {t("register_partner.policies.pets")}
-                </h3>
-                <p>{mockPartnerData.petPolicy}</p>
-              </div>
-              <div>
-                <h3 className="font-medium mb-1">
-                  {t("register_partner.policies.smoking")}
-                </h3>
-                <p>{mockPartnerData.smokingPolicy}</p>
+
+              <Separator />
+
+              <div className="grid gap-6 md:grid-cols-3">
+                <div>
+                  <h3 className="text-sm font-medium text-muted-foreground mb-1">
+                    {t("register_partner.policies.children")}
+                  </h3>
+                  <p className="text-base">
+                    {partner.hotel.policies.childrenPolicy === "yes"
+                      ? t("register_partner.sections.policies.yes")
+                      : t("register_partner.sections.policies.no")}
+                  </p>
+                </div>
+                <div>
+                  <h3 className="text-sm font-medium text-muted-foreground mb-1">
+                    {t("register_partner.policies.pets")}
+                  </h3>
+                  <p className="text-base">
+                    {partner.hotel.policies.petPolicy === "yes"
+                      ? t("register_partner.sections.policies.yes")
+                      : t("register_partner.sections.policies.no")}
+                  </p>
+                </div>
+                <div>
+                  <h3 className="text-sm font-medium text-muted-foreground mb-1">
+                    {t("register_partner.policies.smoking")}
+                  </h3>
+                  <p className="text-base">
+                    {partner.hotel.policies.smokingPolicy === "yes"
+                      ? t("register_partner.sections.policies.yes")
+                      : t("register_partner.sections.policies.no")}
+                  </p>
+                </div>
               </div>
             </div>
           </Card>
@@ -227,40 +345,25 @@ const PartnerRegistrationDetails = () => {
           <Card className="p-6">
             <div className="space-y-4">
               <div>
-                <h3 className="font-medium mb-1">
+                <h3 className="text-sm font-medium text-muted-foreground mb-1">
                   {t("admin.partners.approval.details.submittedAt")}
                 </h3>
-                <p>{formatDate(mockPartnerData.submittedAt)}</p>
-              </div>
-              <div>
-                <h3 className="font-medium mb-1">
-                  {t("admin.partners.approval.details.status")}
-                </h3>
-                <p className="capitalize">{mockPartnerData.status}</p>
+                <p className="text-base">
+                  {formatDate(partner.hotel.createdAt)}
+                </p>
               </div>
             </div>
           </Card>
-
-          {/* Nút thao tác */}
-          <div className="flex justify-end gap-4 mt-8">
-            <Button variant="outline" onClick={() => setShowRejectModal(true)}>
-              {t("admin.partners.approval.details.actions.reject")}
-            </Button>
-            <Button onClick={() => setShowApproveModal(true)}>
-              {t("admin.partners.approval.details.actions.approve")}
-            </Button>
-          </div>
         </div>
       </div>
 
-      {/* Modal xác nhận duyệt */}
+      {/* Modals */}
       <ApprovePartnerModal
         open={showApproveModal}
         onOpenChange={setShowApproveModal}
         onApprove={handleApprove}
+        isLoading={isApproving}
       />
-
-      {/* Modal xác nhận từ chối */}
       <RejectPartnerModal
         open={showRejectModal}
         onOpenChange={setShowRejectModal}
@@ -269,6 +372,7 @@ const PartnerRegistrationDetails = () => {
         onRejectReasonsChange={setRejectReasons}
         rejectDetails={rejectDetails}
         onRejectDetailsChange={setRejectDetails}
+        isLoading={isRejecting}
       />
     </div>
   );
