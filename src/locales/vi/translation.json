@@ -32,7 +32,19 @@
     "cancel": "Hủy bỏ",
     "account": "Tài khoản",
     "notifications": "Thông báo",
-    "personalInfo": "Thông tin cá nhân"
+    "personalInfo": "Thông tin cá nhân",
+    "error": "Lỗi",
+    "errorMessage": "Đã có lỗi xảy ra. Vui lòng thử lại sau.",
+    "filter": "Lọc",
+    "actions": "Thao tác",
+    "edit": "Sửa",
+    "view": "Xem",
+    "delete": "Xóa",
+    "save": "Lưu",
+    "confirm": "Xác nhận",
+    "loading": "Đang tải...",
+    "noData": "Không có dữ liệu",
+    "searchPlaceholder": "Tìm kiếm..."
   },
   "nav": {
     "home": "Trang chủ",
@@ -620,7 +632,10 @@
     "myBookings": "Đặt phòng của tôi",
     "settings": "Cài đặt",
     "logout": "Đăng xuất",
-    "manage": "Quản lý"
+    "manage": "Quản lý",
+    "hotelInfo": "Thông tin khách sạn",
+    "bookingOrders": "Đơn đặt phòng",
+    "revenue": "Doanh thu"
   },
   "profile": {
     "title": "Hồ sơ của tôi",
@@ -1109,6 +1124,30 @@
             }
           }
         }
+      }
+    },
+    "hotels": {
+      "title": "Quản lý khách sạn",
+      "description": "Quản lý danh sách khách sạn trong hệ thống",
+      "addNew": "Thêm khách sạn",
+      "searchPlaceholder": "Tìm kiếm khách sạn...",
+      "noHotels": "Không có khách sạn nào",
+      "table": {
+        "name": "Tên khách sạn",
+        "location": "Địa điểm",
+        "policies": "Chính sách",
+        "rating": "Đánh giá",
+        "status": "Trạng thái"
+      },
+      "policies": {
+        "childrenAllowed": "Cho phép trẻ em",
+        "petsAllowed": "Cho phép thú cưng",
+        "smokingAllowed": "Cho phép hút thuốc"
+      },
+      "status": {
+        "active": "Đang hoạt động",
+        "inactive": "Ngừng hoạt động",
+        "pending": "Đang chờ duyệt"
       }
     }
   },

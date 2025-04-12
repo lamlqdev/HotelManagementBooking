@@ -4,6 +4,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "react-router";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -21,6 +23,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+
 import {
   ForgotPasswordEmailFormData,
   ForgotPasswordOTPFormData,
@@ -36,6 +39,7 @@ type Step = "email" | "otp" | "password";
 
 const ForgotPasswordForm = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [step, setStep] = useState<Step>("email");
   const [email, setEmail] = useState("");
 
@@ -72,7 +76,7 @@ const ForgotPasswordForm = () => {
     }) => authApi.resetPassword(email, otp, password),
     onSuccess: () => {
       toast.success(t("auth.forgot_password.success.password_reset"));
-      window.location.href = "/login";
+      navigate("/login");
     },
     onError: (error: ApiError) => {
       toast.error(error.message || t("auth.forgot_password.error.unknown"));

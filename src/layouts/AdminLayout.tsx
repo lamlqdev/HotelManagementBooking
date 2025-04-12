@@ -1,7 +1,7 @@
 import { useLocation, Outlet, Link } from "react-router";
 import { useTranslation } from "react-i18next";
 import { useAppSelector } from "@/store/hooks";
-import { UserCog, LogOut, Bell, Settings } from "lucide-react";
+import { UserCog, LogOut, Bell, Settings, Building2 } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
 
 import {
@@ -93,6 +93,22 @@ export default function AdminLayout() {
                       <UserCog className="h-4 w-4" />
                       <span className="group-data-[collapsible=icon]:hidden">
                         {t("admin.partners.approval.title")}
+                      </span>
+                    </SidebarMenuButton>
+                  </Link>
+                </SidebarMenuItem>
+
+                {/* Hotel Management */}
+                <SidebarMenuItem>
+                  <Link to="/admin/hotels">
+                    <SidebarMenuButton
+                      isActive={location.pathname.startsWith("/admin/hotels")}
+                      tooltip={t("admin.hotels.title")}
+                      className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg group-data-[collapsible=icon]:justify-center"
+                    >
+                      <Building2 className="h-4 w-4" />
+                      <span className="group-data-[collapsible=icon]:hidden">
+                        {t("admin.hotels.title")}
                       </span>
                     </SidebarMenuButton>
                   </Link>

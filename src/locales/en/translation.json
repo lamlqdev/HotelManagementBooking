@@ -32,7 +32,19 @@
     "cancel": "Cancel",
     "account": "Account",
     "notifications": "Notifications",
-    "personalInfo": "Personal Information"
+    "personalInfo": "Personal Information",
+    "error": "Error",
+    "errorMessage": "An error occurred. Please try again later.",
+    "filter": "Filter",
+    "actions": "Actions",
+    "edit": "Edit",
+    "view": "View",
+    "delete": "Delete",
+    "save": "Save",
+    "confirm": "Confirm",
+    "loading": "Loading...",
+    "noData": "No data",
+    "searchPlaceholder": "Search..."
   },
   "nav": {
     "home": "Home",
@@ -620,7 +632,10 @@
     "myBookings": "My bookings",
     "settings": "Settings",
     "logout": "Logout",
-    "manage": "Manage"
+    "manage": "Manage",
+    "hotelInfo": "Hotel Information",
+    "bookingOrders": "Booking Orders",
+    "revenue": "Revenue"
   },
   "profile": {
     "title": "My Profile",
@@ -1057,26 +1072,42 @@
     "dashboard": {
       "partners": "Partners"
     },
+    "hotels": {
+      "title": "Hotels Management",
+      "description": "Manage hotels in the system",
+      "addNew": "Add Hotel",
+      "searchPlaceholder": "Search hotels...",
+      "noHotels": "No hotels found",
+      "table": {
+        "name": "Hotel Name",
+        "location": "Location",
+        "policies": "Policies",
+        "rating": "Rating",
+        "status": "Status"
+      },
+      "policies": {
+        "childrenAllowed": "Children Allowed",
+        "petsAllowed": "Pets Allowed",
+        "smokingAllowed": "Smoking Allowed"
+      },
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive",
+        "pending": "Pending"
+      }
+    },
     "partners": {
       "approval": {
-        "title": "Partner Registration Approval",
-        "pendingRequests": "Pending Registration Requests",
-        "pendingRequestsDescription": "View and approve new partner registration requests",
-        "noPendingRequests": "No pending registration requests",
+        "title": "Partner Approval",
+        "pendingRequestsDescription": "List of pending partner registration requests",
+        "noPendingRequests": "No pending requests",
         "table": {
           "hotelName": "Hotel Name",
-          "ownerName": "Owner",
+          "ownerName": "Owner Name",
           "contact": "Contact",
           "address": "Address",
           "submittedAt": "Submitted At",
           "actions": "Actions"
-        },
-        "details": {
-          "title": "Registration Details",
-          "approve": "Approve",
-          "reject": "Reject",
-          "submittedAt": "Submitted At",
-          "status": "Status"
         }
       }
     }
