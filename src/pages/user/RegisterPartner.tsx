@@ -69,7 +69,7 @@ const RegisterPartner = () => {
       hotelName: "",
       hotelAddress: "",
       hotelDescription: "",
-      hotelLocationName: "",
+      locationId: "",
       hotelLocationDescription: "",
       hotelAmenities: [],
       hotelWebsite: "",
