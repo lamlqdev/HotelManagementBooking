@@ -759,16 +759,6 @@
       "title": "Thông tin khách sạn",
       "hotel_name": "Tên khách sạn",
       "hotel_name_placeholder": "Nhập tên khách sạn",
-      "star_rating": "Hạng sao",
-      "star_rating_placeholder": "Chọn hạng sao",
-      "star_options": {
-        "1": "1 sao",
-        "2": "2 sao",
-        "3": "3 sao",
-        "4": "4 sao",
-        "5": "5 sao",
-        "unrated": "Chưa xếp hạng"
-      },
       "main_image": "Hình ảnh đại diện",
       "main_image_desc": "Tải lên hình ảnh đại diện của khách sạn",
       "gallery_images": "Hình ảnh khách sạn",
@@ -783,10 +773,10 @@
       "title": "Địa chỉ khách sạn",
       "address": "Địa chỉ",
       "address_placeholder": "Nhập địa chỉ đầy đủ",
-      "tourist_spot": "Điểm du lịch",
-      "tourist_spot_placeholder": "Nhập điểm du lịch",
       "location_desc": "Mô tả vị trí",
-      "location_desc_placeholder": "Mô tả vị trí địa lý và các địa điểm lân cận..."
+      "location_desc_placeholder": "Mô tả vị trí địa lý và các địa điểm lân cận...",
+      "location": "Địa điểm",
+      "location_placeholder": "Khách sạn của bạn nằm ở đâu?"
     },
     "contact_info": {
       "title": "Thông tin người đại diện",
@@ -1155,5 +1145,16 @@
     "morning": "Chào buổi sáng",
     "afternoon": "Chào buổi chiều",
     "evening": "Chào buổi tối"
+  },
+  "register_success": {
+    "title": "Đăng Ký Thành Công!",
+    "subtitle": "Cảm ơn bạn đã đăng ký với BookIt. Tài khoản của bạn đang được xử lý.",
+    "email_verification": "Xác Thực Email",
+    "email_verification_desc": "Chúng tôi đã gửi email xác thực vào hộp thư của bạn. Vui lòng kiểm tra và nhấp vào liên kết xác thực để kích hoạt tài khoản của bạn.",
+    "admin_approval": "Phê Duyệt Quản Trị Viên",
+    "admin_approval_desc": "Tài khoản của bạn sẽ được quản trị viên xem xét. Quá trình này thường mất 1-2 ngày làm việc.",
+    "result": "Các Bước Tiếp Theo",
+    "result_desc": "Sau khi được phê duyệt, bạn sẽ nhận được email với hướng dẫn đăng nhập. Sau đó, bạn có thể truy cập tất cả các tính năng của tài khoản.",
+    "back_to_home": "Quay Lại Trang Chủ"
   }
 }

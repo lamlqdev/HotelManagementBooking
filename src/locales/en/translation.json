@@ -759,16 +759,6 @@
       "title": "Hotel Information",
       "hotel_name": "Hotel Name",
       "hotel_name_placeholder": "Enter hotel name",
-      "star_rating": "Star Rating",
-      "star_rating_placeholder": "Select star rating",
-      "star_options": {
-        "1": "1 Star",
-        "2": "2 Stars",
-        "3": "3 Stars",
-        "4": "4 Stars",
-        "5": "5 Stars",
-        "unrated": "Not Rated"
-      },
 
       "main_image": "Main Image",
       "main_image_desc": "Upload the main image of your hotel",
@@ -784,10 +774,10 @@
       "title": "Hotel Address",
       "address": "Address",
       "address_placeholder": "Enter full address",
-      "tourist_spot": "Tourist Spot",
-      "tourist_spot_placeholder": "Enter tourist spot",
       "location_desc": "Location Description",
-      "location_desc_placeholder": "Describe geographical location and nearby attractions..."
+      "location_desc_placeholder": "Describe geographical location and nearby attractions...",
+      "location": "Location",
+      "location_placeholder": "Where is your hotel located?"
     },
     "contact_info": {
       "title": "Contact Information",
@@ -1116,5 +1106,16 @@
     "morning": "Good morning",
     "afternoon": "Good afternoon",
     "evening": "Good evening"
+  },
+  "register_success": {
+    "title": "Registration Successful!",
+    "subtitle": "Thank you for registering with BookIt. Your account is being processed.",
+    "email_verification": "Email Verification",
+    "email_verification_desc": "We've sent a verification email to your inbox. Please check and click the verification link to activate your account.",
+    "admin_approval": "Admin Approval",
+    "admin_approval_desc": "Your account will be reviewed by our administrators. This process usually takes 1-2 business days.",
+    "result": "Next Steps",
+    "result_desc": "Once approved, you'll receive an email with login instructions. You can then access all features of your account.",
+    "back_to_home": "Back to Home"
   }
 }
