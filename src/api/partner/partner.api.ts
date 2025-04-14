@@ -15,7 +15,7 @@ export const partnerApi = {
     formData.append("hotelName", data.hotelName);
     formData.append("hotelAddress", data.hotelAddress);
     formData.append("hotelDescription", data.hotelDescription);
-    formData.append("hotelLocationName", data.hotelLocationName);
+    formData.append("locationId", data.locationId);
     formData.append("hotelLocationDescription", data.hotelLocationDescription);
     formData.append("hotelWebsite", data.hotelWebsite || "");
 

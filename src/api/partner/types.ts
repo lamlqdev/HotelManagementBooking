@@ -26,10 +26,7 @@ export const partnerFormSchema = z
       .string()
       .min(1, "Vui lòng nhập mô tả khách sạn")
       .max(1000, "Mô tả không được vượt quá 1000 ký tự"),
-    hotelLocationName: z
-      .string()
-      .min(1, "Vui lòng nhập tên địa điểm du lịch")
-      .max(100, "Tên địa điểm không được vượt quá 100 ký tự"),
+    locationId: z.string().min(1, "Vui lòng chọn địa điểm du lịch"),
     hotelLocationDescription: z
       .string()
       .min(1, "Vui lòng nhập mô tả địa điểm")
@@ -169,7 +166,7 @@ export interface Partner {
     _id: string;
     name: string;
     address: string;
-    locationName: string;
+    locationId: string;
     locationDescription: string;
     description: string;
     featuredImage: {
