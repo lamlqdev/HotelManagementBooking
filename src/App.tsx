@@ -23,6 +23,7 @@ import BlogPage from "./pages/user/BlogPage";
 import BlogDetailPage from "./pages/user/BlogDetailPage";
 import Partnership from "./pages/user/Partnership";
 import RegisterPartner from "./pages/user/RegisterPartner";
+import RegisterSuccessfullyPage from "./pages/user/RegisterSuccessfullyPage";
 
 // Auth Pages
 import LoginPage from "./pages/auth/LoginPage";
@@ -72,6 +73,10 @@ function App() {
             <Route
               path="/booking-information"
               element={<BookingInformationPage />}
+            />
+            <Route
+              path="/partner/registration-success"
+              element={<RegisterSuccessfullyPage />}
             />
           </Route>
 
