@@ -31,7 +31,7 @@ import { Link } from "react-router";
 import { AddRoomDialog } from "@/components/partner/room-management/dialog/AddRoomDialog";
 import { useTranslation } from "react-i18next";
 
-interface Room {       
+interface Room {
   name: string;
   type: string;
   description: string;
@@ -41,11 +41,7 @@ interface Room {
   size: string;
   price: number;
   images: string[];
-  amenities: Array<{
-    name: string;
-    icon: string;
-    selected: boolean;
-  }>;
+  amenities: string[];
 }
 
 // Mock data - sau này sẽ được thay thế bằng API call

@@ -1,11 +1,4 @@
-export interface Amenity {
-  _id: string;
-  name: string;
-  type: "hotel" | "room";
-  icon?: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import { Amenity } from "@/types/amenity";
 
 export interface AmenityResponse {
   success: boolean;

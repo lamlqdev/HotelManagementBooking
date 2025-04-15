@@ -1,25 +1,5 @@
 import { useTranslation } from "react-i18next";
-import {
-  Camera,
-  Building2,
-  MapPin,
-  FileText,
-  Wifi,
-  ParkingCircle,
-  Snowflake,
-  Wine,
-  Lock,
-  Sun,
-  Waves,
-  Dumbbell,
-  Heart,
-  Utensils,
-  Coffee,
-  Bell,
-  Users,
-  Briefcase,
-  Presentation,
-} from "lucide-react";
+import { Camera, Building2, MapPin, FileText } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -29,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 
 import { GeneralTabProps } from "../../../types/hotel";
-
+import { getAmenityIcon } from "@/utils/amenityIcons";
 export function GeneralTab({
   hotel,
   isEditing,
@@ -38,51 +18,6 @@ export function GeneralTab({
   availableAmenities,
 }: GeneralTabProps) {
   const { t } = useTranslation();
-
-  const getAmenityIcon = (icon: string) => {
-    switch (icon) {
-      case "wifi":
-        return <Wifi className="w-5 h-5" />;
-      case "parking":
-        return <ParkingCircle className="w-5 h-5" />;
-      case "elevator":
-        return <Building2 className="w-5 h-5" />;
-      case "air-conditioning":
-        return <Snowflake className="w-5 h-5" />;
-      case "minibar":
-        return <Wine className="w-5 h-5" />;
-      case "safe":
-        return <Lock className="w-5 h-5" />;
-      case "balcony":
-        return <Sun className="w-5 h-5" />;
-      case "ocean-view":
-        return <Waves className="w-5 h-5" />;
-      case "pool":
-        return <Waves className="w-5 h-5" />;
-      case "gym":
-        return <Dumbbell className="w-5 h-5" />;
-      case "spa":
-        return <Heart className="w-5 h-5" />;
-      case "tennis":
-        return <Dumbbell className="w-5 h-5" />;
-      case "restaurant":
-        return <Utensils className="w-5 h-5" />;
-      case "bar":
-        return <Wine className="w-5 h-5" />;
-      case "cafe":
-        return <Coffee className="w-5 h-5" />;
-      case "room-service":
-        return <Bell className="w-5 h-5" />;
-      case "meeting-room":
-        return <Users className="w-5 h-5" />;
-      case "business-center":
-        return <Briefcase className="w-5 h-5" />;
-      case "conference-hall":
-        return <Presentation className="w-5 h-5" />;
-      default:
-        return null;
-    }
-  };
 
   return (
     <div className="space-y-6">
@@ -157,7 +92,7 @@ export function GeneralTab({
             </div>
             <div className="relative group">
               <img
-                src={hotel.mainImage}
+                src={hotel.featuredImage?.url}
                 alt={t("hotelInfo.general.mainImageAlt")}
                 className="w-full h-[400px] object-cover rounded-lg border-2 border-border hover:border-primary/50 transition-all duration-300"
               />
@@ -187,10 +122,10 @@ export function GeneralTab({
               </Label>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {hotel.galleryImages.map((image: string, index: number) => (
+              {hotel.images?.map((image, index) => (
                 <div key={index} className="relative group aspect-square">
                   <img
-                    src={image}
+                    src={image.url}
                     alt={t("hotelInfo.general.galleryImageAlt", {
                       index: index + 1,
                     })}
@@ -240,26 +175,26 @@ export function GeneralTab({
               </Label>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                 {availableAmenities
-                  .filter((amenity) => hotel.amenities.includes(amenity.id))
+                  .filter((amenity) => hotel.amenities.includes(amenity._id))
                   .map((amenity) => (
                     <div
-                      key={amenity.id}
+                      key={amenity._id}
                       className="flex items-center space-x-2 p-3 bg-primary/5 border border-primary/20 rounded-lg hover:bg-primary/10 transition-colors"
                     >
                       <Checkbox
-                        id={amenity.id}
+                        id={amenity._id}
                         checked={true}
-                        onCheckedChange={() => onAmenityToggle(amenity.id)}
+                        onCheckedChange={() => onAmenityToggle(amenity._id)}
                         disabled={!isEditing}
                         className="border-primary"
                       />
                       <div className="flex items-center gap-2">
-                        {getAmenityIcon(amenity.icon)}
+                        {getAmenityIcon(amenity.icon || "default-icon")}
                         <Label
-                          htmlFor={amenity.id}
+                          htmlFor={amenity._id}
                           className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                         >
-                          {t(`hotelInfo.amenities.${amenity.id}`)}
+                          {amenity.name}
                         </Label>
                       </div>
                     </div>
@@ -274,25 +209,25 @@ export function GeneralTab({
               </Label>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                 {availableAmenities
-                  .filter((amenity) => !hotel.amenities.includes(amenity.id))
+                  .filter((amenity) => !hotel.amenities.includes(amenity._id))
                   .map((amenity) => (
                     <div
-                      key={amenity.id}
+                      key={amenity._id}
                       className="flex items-center space-x-2 p-3 bg-secondary/5 border border-border rounded-lg hover:bg-secondary/10 transition-colors"
                     >
                       <Checkbox
-                        id={amenity.id}
+                        id={amenity._id}
                         checked={false}
-                        onCheckedChange={() => onAmenityToggle(amenity.id)}
+                        onCheckedChange={() => onAmenityToggle(amenity._id)}
                         disabled={!isEditing}
                       />
                       <div className="flex items-center gap-2">
-                        {getAmenityIcon(amenity.icon)}
+                        {getAmenityIcon(amenity.icon || "default-icon")}
                         <Label
-                          htmlFor={amenity.id}
+                          htmlFor={amenity._id}
                           className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                         >
-                          {t(`hotelInfo.amenities.${amenity.id}`)}
+                          {amenity.name}
                         </Label>
                       </div>
                     </div>

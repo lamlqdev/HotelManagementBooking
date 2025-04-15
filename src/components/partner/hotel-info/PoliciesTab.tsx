@@ -46,7 +46,7 @@ export const PoliciesTab = ({
                 <Input
                   id="checkInTime"
                   name="checkInTime"
-                  value={hotel.checkInTime}
+                  value={hotel.policies.checkInTime}
                   onChange={onInputChange}
                   disabled={!isEditing}
                   placeholder="14:00"
@@ -68,7 +68,7 @@ export const PoliciesTab = ({
                 <Input
                   id="checkOutTime"
                   name="checkOutTime"
-                  value={hotel.checkOutTime}
+                  value={hotel.policies.checkOutTime}
                   onChange={onInputChange}
                   disabled={!isEditing}
                   placeholder="12:00"
@@ -102,7 +102,7 @@ export const PoliciesTab = ({
             <Textarea
               id="cancellationPolicy"
               name="cancellationPolicy"
-              value={hotel.cancellationPolicy}
+              value={hotel.policies.cancellationPolicy}
               onChange={onInputChange}
               disabled={!isEditing}
               placeholder={t("hotelInfo.policies.cancellation")}
@@ -131,7 +131,7 @@ export const PoliciesTab = ({
             <Textarea
               id="childrenPolicy"
               name="childrenPolicy"
-              value={hotel.childrenPolicy}
+              value={hotel.policies.childrenPolicy}
               onChange={onInputChange}
               disabled={!isEditing}
               placeholder={t("hotelInfo.policies.children")}
@@ -160,7 +160,7 @@ export const PoliciesTab = ({
             <Textarea
               id="petPolicy"
               name="petPolicy"
-              value={hotel.petPolicy}
+              value={hotel.policies.petPolicy}
               onChange={onInputChange}
               disabled={!isEditing}
               placeholder={t("hotelInfo.policies.pet")}
@@ -189,7 +189,7 @@ export const PoliciesTab = ({
             <Textarea
               id="smokingPolicy"
               name="smokingPolicy"
-              value={hotel.smokingPolicy}
+              value={hotel.policies.smokingPolicy}
               onChange={onInputChange}
               disabled={!isEditing}
               placeholder={t("hotelInfo.policies.smoking")}

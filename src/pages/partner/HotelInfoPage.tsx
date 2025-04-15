@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useQuery } from "@tanstack/react-query";
 import { Building2, Phone, FileText } from "lucide-react";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -8,89 +9,90 @@ import {
   GeneralTab,
   ContactTab,
   PoliciesTab,
-  Hotel,
 } from "@/components/partner/hotel-info";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
+
+import { hotelApi } from "@/api/hotel/hotel.api";
+import { amenitiesApi } from "@/api/amenities/amenities.api";
+import { useAppSelector } from "@/store/hooks";
+import { Amenity } from "@/types/amenity";
 
 const HotelInfoPage = () => {
   const [isEditing, setIsEditing] = useState(false);
-  const [hotel, setHotel] = useState<Hotel>({
-    name: "Vinpearl Resort & Spa",
-    address: "Nha Trang, Khánh Hòa",
-    description: "Khách sạn 5 sao với view biển tuyệt đẹp",
-    mainImage: "https://images.unsplash.com/photo-1566073771259-6a8506099945",
-    galleryImages: [
-      "https://images.unsplash.com/photo-1582719508461-905c673771fd",
-      "https://images.unsplash.com/photo-1571896349842-33c89424de2d",
-      "https://images.unsplash.com/photo-1584132967334-10e028bd69f7",
-      "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af",
-      "https://images.unsplash.com/photo-1445019980597-93fa8acb246c",
-    ],
-    amenities: ["wifi", "parking", "pool", "restaurant"],
-    phone: "0123456789",
-    email: "contact@vinpearl.com",
-    website: "https://vinpearl.com",
-    representativeName: "Nguyễn Văn A",
-    checkInTime: "14:00",
-    checkOutTime: "12:00",
-    cancellationPolicy: "Hủy phòng miễn phí trước 24h",
-    paymentPolicy: "Thanh toán tại khách sạn",
-    houseRules: "Không hút thuốc trong phòng",
-    childrenPolicy: "Trẻ em dưới 6 tuổi được miễn phí",
-    petPolicy: "Không chấp nhận thú cưng",
-    smokingPolicy: "Không hút thuốc trong phòng",
+  const { t } = useTranslation();
+  const { user } = useAppSelector((state) => state.auth);
+
+  const {
+    data: hotels,
+    isLoading: isLoadingHotels,
+    error: hotelError,
+  } = useQuery({
+    queryKey: ["hotel"],
+    queryFn: () => hotelApi.getMyHotels({ ownerId: user?.id }),
   });
 
-  const { t } = useTranslation();
+  const { data: amenitiesData, isLoading: isLoadingAmenities } = useQuery({
+    queryKey: ["amenities"],
+    queryFn: () => amenitiesApi.getAmenities(),
+  });
 
-  const availableAmenities = [
-    { id: "wifi", name: "WiFi miễn phí", icon: "wifi" },
-    { id: "parking", name: "Bãi đỗ xe", icon: "parking" },
-    { id: "elevator", name: "Thang máy", icon: "elevator" },
-    { id: "air-conditioning", name: "Điều hòa", icon: "air-conditioning" },
-    { id: "minibar", name: "Minibar", icon: "minibar" },
-    { id: "safe", name: "Két sắt", icon: "safe" },
-    { id: "balcony", name: "Ban công", icon: "balcony" },
-    { id: "ocean-view", name: "View biển", icon: "ocean-view" },
-    { id: "pool", name: "Bể bơi", icon: "pool" },
-    { id: "gym", name: "Phòng tập", icon: "gym" },
-    { id: "spa", name: "Spa", icon: "spa" },
-    { id: "tennis", name: "Sân tennis", icon: "tennis" },
-    { id: "restaurant", name: "Nhà hàng", icon: "restaurant" },
-    { id: "bar", name: "Bar", icon: "bar" },
-    { id: "cafe", name: "Café", icon: "cafe" },
-    { id: "room-service", name: "Dịch vụ phòng", icon: "room-service" },
-    { id: "meeting-room", name: "Phòng họp", icon: "meeting-room" },
-    {
-      id: "business-center",
-      name: "Trung tâm kinh doanh",
-      icon: "business-center",
-    },
-    { id: "conference-hall", name: "Hội trường", icon: "conference-hall" },
-  ];
-
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setHotel((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleAmenityToggle = (amenityId: string) => {
-    setHotel((prev) => ({
-      ...prev,
-      amenities: prev.amenities.includes(amenityId)
-        ? prev.amenities.filter((id) => id !== amenityId)
-        : [...prev.amenities, amenityId],
-    }));
-  };
+  const hotel = hotels?.data[0];
+  const availableAmenities = (amenitiesData?.data || []).filter(
+    (amenity: Amenity) => amenity.type === "hotel"
+  );
 
   const handleSave = () => {
     // TODO: Implement save functionality
     setIsEditing(false);
   };
+
+  const handleInputChange = (
+    _e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    // TODO: Implement input change
+  };
+
+  const handleAmenityToggle = (_amenityId: string) => {
+    // TODO: Implement amenity toggle
+  };
+
+  if (isLoadingHotels || isLoadingAmenities) {
+    return (
+      <div className="container mx-auto px-4 space-y-6">
+        <div className="flex justify-between items-center">
+          <Skeleton className="h-8 w-[200px]" />
+          <Skeleton className="h-10 w-[100px]" />
+        </div>
+        <Skeleton className="h-[500px] w-full" />
+      </div>
+    );
+  }
+
+  if (hotelError) {
+    return (
+      <div className="container mx-auto px-4">
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>{t("error.title")}</AlertTitle>
+          <AlertDescription>{t("error.loadHotelFailed")}</AlertDescription>
+        </Alert>
+      </div>
+    );
+  }
+
+  if (!hotel) {
+    return (
+      <div className="container mx-auto px-4">
+        <Alert>
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>{t("info.title")}</AlertTitle>
+          <AlertDescription>{t("info.noHotelFound")}</AlertDescription>
+        </Alert>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4">

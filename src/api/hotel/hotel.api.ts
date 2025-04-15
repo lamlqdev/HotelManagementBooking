@@ -18,6 +18,17 @@ export const hotelApi = {
     return response.data;
   },
 
+  // Lấy danh sách khách sạn của đối tác đang đăng nhập
+  getMyHotels: async (params?: HotelQueryParams): Promise<HotelsResponse> => {
+    const response = await axiosInstance.get<HotelsResponse>(
+      `${baseUrl}/my-hotels`,
+      {
+        params,
+      }
+    );
+    return response.data;
+  },
+
   // Lấy thông tin một khách sạn
   getHotel: async (id: string): Promise<HotelResponse> => {
     const response = await axiosInstance.get<HotelResponse>(`${baseUrl}/${id}`);

@@ -6,9 +6,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 import { TabProps } from "../../../types/hotel";
+import { useAppSelector } from "@/store/hooks";
 
 export function ContactTab({ hotel, isEditing, onInputChange }: TabProps) {
   const { t } = useTranslation();
+  const { user } = useAppSelector((state) => state.auth);
 
   return (
     <Card>
@@ -26,7 +28,7 @@ export function ContactTab({ hotel, isEditing, onInputChange }: TabProps) {
           <Input
             id="representativeName"
             name="representativeName"
-            value={hotel.representativeName}
+            value={user?.name || ""}
             onChange={onInputChange}
             disabled={!isEditing}
             className="flex-1"
@@ -41,7 +43,7 @@ export function ContactTab({ hotel, isEditing, onInputChange }: TabProps) {
           <Input
             id="phone"
             name="phone"
-            value={hotel.phone}
+            value={user?.phone || ""}
             onChange={onInputChange}
             disabled={!isEditing}
             className="flex-1"
@@ -58,7 +60,7 @@ export function ContactTab({ hotel, isEditing, onInputChange }: TabProps) {
             id="email"
             name="email"
             type="email"
-            value={hotel.email}
+            value={user?.email || ""}
             onChange={onInputChange}
             disabled={!isEditing}
             className="flex-1"

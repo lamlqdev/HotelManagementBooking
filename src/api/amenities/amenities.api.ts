@@ -1,5 +1,6 @@
 import axiosInstance from "@/lib/axios";
-import { Amenity, AmenityResponse, AmenitiesResponse } from "./types";
+import { AmenityResponse, AmenitiesResponse } from "./types";
+import { Amenity } from "@/types/amenity";
 
 const API_URL = "/amenities";
 

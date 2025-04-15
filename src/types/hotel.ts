@@ -1,28 +1,41 @@
+import { Amenity } from "./amenity";
+
 export interface Hotel {
+  _id: string;
   name: string;
   address: string;
+  locationId: string;
+  locationDescription?: string;
+  rating: number;
   description: string;
-  mainImage: string;
-  galleryImages: string[];
-  amenities: string[];
-  phone: string;
-  email: string;
-  website: string;
-  representativeName: string;
-  checkInTime: string;
-  checkOutTime: string;
-  cancellationPolicy: string;
-  paymentPolicy: string;
-  houseRules: string;
-  childrenPolicy: string;
-  petPolicy: string;
-  smokingPolicy: string;
-}
-
-export interface Amenity {
-  id: string;
-  name: string;
-  icon: string;
+  ownerId: string;
+  website?: string;
+  featuredImage?: {
+    url: string;
+    publicId: string;
+    filename: string;
+  };
+  images?: Array<{
+    url: string;
+    publicId: string;
+    filename: string;
+  }>;
+  amenities: string[]; // Array of Amenity IDs
+  policies: {
+    checkInTime: string;
+    checkOutTime: string;
+    cancellationPolicy: "24h-full-refund" | "24h-half-refund" | "no-refund";
+    childrenPolicy: "yes" | "no";
+    petPolicy: "yes" | "no";
+    smokingPolicy: "yes" | "no";
+  };
+  favoriteCount: number;
+  lowestPrice: number;
+  lowestDiscountedPrice: number;
+  highestDiscountPercent: number;
+  status: "active" | "inactive" | "pending";
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface TabProps {
