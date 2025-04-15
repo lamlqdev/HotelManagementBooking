@@ -7,8 +7,6 @@ import {
   Star,
   MapPin,
   Clock,
-  Globe,
-  Eye,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,16 +24,30 @@ import { hotelApi } from "@/api/hotel/hotel.api";
 import { Hotel } from "@/api/hotel/type";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import { useState } from "react";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+  PaginationEllipsis,
+} from "@/components/ui/pagination";
 
 export default function HotelsManagementPage() {
   const { t } = useTranslation();
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Sử dụng React Query để lấy danh sách khách sạn
   const { data, isLoading, error } = useQuery({
-    queryKey: ["hotels"],
+    queryKey: ["hotels", currentPage],
     queryFn: async () => {
-      const response = await hotelApi.getHotels();
-      return response.data;
+      const response = await hotelApi.getHotels({
+        page: currentPage,
+        limit: 10,
+      });
+      return response;
     },
   });
 
@@ -52,6 +64,76 @@ export default function HotelsManagementPage() {
       </div>
     );
   }
+
+  const totalPages = data?.pagination?.totalPages || 1;
+  const hotels = data?.data || [];
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const renderPaginationItems = () => {
+    const items = [];
+    const maxVisiblePages = 5;
+    const halfVisible = Math.floor(maxVisiblePages / 2);
+
+    let startPage = Math.max(1, currentPage - halfVisible);
+    const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+
+    // Thêm trang đầu nếu cần
+    if (startPage > 1) {
+      items.push(
+        <PaginationItem key="1">
+          <PaginationLink onClick={() => handlePageChange(1)}>1</PaginationLink>
+        </PaginationItem>
+      );
+      if (startPage > 2) {
+        items.push(
+          <PaginationItem key="start-ellipsis">
+            <PaginationEllipsis />
+          </PaginationItem>
+        );
+      }
+    }
+
+    // Thêm các trang giữa
+    for (let i = startPage; i <= endPage; i++) {
+      items.push(
+        <PaginationItem key={i}>
+          <PaginationLink
+            isActive={currentPage === i}
+            onClick={() => handlePageChange(i)}
+          >
+            {i}
+          </PaginationLink>
+        </PaginationItem>
+      );
+    }
+
+    // Thêm trang cuối nếu cần
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) {
+        items.push(
+          <PaginationItem key="end-ellipsis">
+            <PaginationEllipsis />
+          </PaginationItem>
+        );
+      }
+      items.push(
+        <PaginationItem key={totalPages}>
+          <PaginationLink onClick={() => handlePageChange(totalPages)}>
+            {totalPages}
+          </PaginationLink>
+        </PaginationItem>
+      );
+    }
+
+    return items;
+  };
 
   return (
     <div className="container mx-auto px-4">
@@ -92,13 +174,23 @@ export default function HotelsManagementPage() {
           <Table>
             <TableHeader>
               <TableRow className="hover:bg-transparent">
-                <TableHead>{t("admin.hotels.table.name")}</TableHead>
-                <TableHead>{t("admin.hotels.table.location")}</TableHead>
-                <TableHead>{t("admin.hotels.table.policies")}</TableHead>
-                <TableHead>{t("admin.hotels.table.rating")}</TableHead>
-                <TableHead>{t("admin.hotels.table.status")}</TableHead>
-                <TableHead className="text-right">
-                  {t("common.actions")}
+                <TableHead className="w-[25%]">
+                  {t("admin.hotels.table.name")}
+                </TableHead>
+                <TableHead className="w-[20%]">
+                  {t("admin.hotels.table.location")}
+                </TableHead>
+                <TableHead className="w-[15%]">
+                  {t("admin.hotels.table.checkInOut")}
+                </TableHead>
+                <TableHead className="w-[20%]">
+                  {t("admin.hotels.table.policies")}
+                </TableHead>
+                <TableHead className="w-[10%]">
+                  {t("admin.hotels.table.rating")}
+                </TableHead>
+                <TableHead className="w-[10%]">
+                  {t("admin.hotels.table.status")}
                 </TableHead>
               </TableRow>
             </TableHeader>
@@ -114,111 +206,80 @@ export default function HotelsManagementPage() {
                       <Skeleton className="h-6 w-24" />
                     </TableCell>
                     <TableCell>
-                      <Skeleton className="h-6 w-40 mb-1" />
-                      <Skeleton className="h-4 w-28" />
+                      <Skeleton className="h-6 w-20" />
                     </TableCell>
                     <TableCell>
-                      <Skeleton className="h-6 w-48" />
+                      <Skeleton className="h-6 w-32" />
                     </TableCell>
                     <TableCell>
-                      <Skeleton className="h-6 w-36" />
+                      <Skeleton className="h-6 w-16" />
                     </TableCell>
-                    <TableCell className="text-right">
-                      <Skeleton className="h-8 w-8 ml-auto" />
+                    <TableCell>
+                      <Skeleton className="h-6 w-20" />
                     </TableCell>
                   </TableRow>
                 ))
-              ) : data && data.length > 0 ? (
-                // Hiển thị dữ liệu khi đã load xong
-                data.map((hotel: Hotel) => (
-                  <TableRow
-                    key={hotel._id || hotel.id}
-                    className="hover:bg-transparent"
-                  >
-                    <TableCell>
-                      <div className="flex flex-col gap-1">
-                        <span className="font-medium">{hotel.name}</span>
-                        <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                          <MapPin className="h-3 w-3" />
-                          <span>{hotel.address}</span>
-                        </div>
-                        {hotel.website && (
-                          <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                            <Globe className="h-3 w-3" />
-                            <a
-                              href={hotel.website}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="hover:underline"
-                            >
-                              {hotel.website}
-                            </a>
-                          </div>
+              ) : hotels.length > 0 ? (
+                hotels.map((hotel: Hotel) => (
+                  <TableRow key={hotel._id} className="hover:bg-transparent">
+                    <TableCell className="max-w-[25%]">
+                      <span className="font-medium truncate block">
+                        {hotel.name}
+                      </span>
+                    </TableCell>
+                    <TableCell className="max-w-[20%]">
+                      <div className="flex items-center gap-1">
+                        <MapPin className="h-3 w-3 flex-shrink-0 text-muted-foreground" />
+                        <span className="truncate">{hotel.address}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell className="max-w-[15%]">
+                      <div className="flex items-center gap-1 text-sm">
+                        <Clock className="h-3 w-3 flex-shrink-0 text-muted-foreground" />
+                        <span className="whitespace-nowrap">
+                          {hotel.policies.checkInTime} -{" "}
+                          {hotel.policies.checkOutTime}
+                        </span>
+                      </div>
+                    </TableCell>
+                    <TableCell className="max-w-[20%]">
+                      <div className="flex flex-wrap gap-1">
+                        {hotel.policies.childrenPolicy === "yes" && (
+                          <Badge variant="outline" className="text-xs">
+                            {t("admin.hotels.policies.childrenAllowed")}
+                          </Badge>
+                        )}
+                        {hotel.policies.petPolicy === "yes" && (
+                          <Badge variant="outline" className="text-xs">
+                            {t("admin.hotels.policies.petsAllowed")}
+                          </Badge>
+                        )}
+                        {hotel.policies.smokingPolicy === "yes" && (
+                          <Badge variant="outline" className="text-xs">
+                            {t("admin.hotels.policies.smokingAllowed")}
+                          </Badge>
                         )}
                       </div>
                     </TableCell>
-                    <TableCell>
-                      <div className="flex flex-col gap-1">
-                        <span className="font-medium">
-                          {hotel.locationName}
-                        </span>
-                        <span className="text-sm text-muted-foreground">
-                          {hotel.locationDescription}
-                        </span>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex flex-col gap-1">
-                        <div className="flex items-center gap-1 text-sm">
-                          <Clock className="h-3 w-3" />
-                          <span>
-                            {hotel.policies.checkInTime} -{" "}
-                            {hotel.policies.checkOutTime}
-                          </span>
-                        </div>
-                        <div className="flex flex-wrap gap-1">
-                          {hotel.policies.childrenPolicy === "yes" && (
-                            <Badge variant="outline" className="text-xs">
-                              {t("admin.hotels.policies.childrenAllowed")}
-                            </Badge>
-                          )}
-                          {hotel.policies.petPolicy === "yes" && (
-                            <Badge variant="outline" className="text-xs">
-                              {t("admin.hotels.policies.petsAllowed")}
-                            </Badge>
-                          )}
-                          {hotel.policies.smokingPolicy === "yes" && (
-                            <Badge variant="outline" className="text-xs">
-                              {t("admin.hotels.policies.smokingAllowed")}
-                            </Badge>
-                          )}
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
+                    <TableCell className="max-w-[10%]">
                       <div className="flex items-center gap-1">
-                        <Star className="h-4 w-4 text-yellow-400 fill-yellow-400" />
-                        <span>{hotel.rating || 0}</span>
+                        <Star className="h-4 w-4 text-yellow-400 fill-yellow-400 flex-shrink-0" />
+                        <span className="font-medium">{hotel.rating || 0}</span>
                       </div>
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="max-w-[10%]">
                       <Badge
                         variant={
                           hotel.status === "active" ? "default" : "secondary"
                         }
+                        className="whitespace-nowrap"
                       >
                         {t(`admin.hotels.status.${hotel.status}`)}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-right">
-                      <Button variant="ghost" size="icon">
-                        <Eye className="h-4 w-4" />
-                      </Button>
-                    </TableCell>
                   </TableRow>
                 ))
               ) : (
-                // Hiển thị thông báo khi không có dữ liệu
                 <TableRow className="hover:bg-transparent">
                   <TableCell
                     colSpan={6}
@@ -230,6 +291,44 @@ export default function HotelsManagementPage() {
               )}
             </TableBody>
           </Table>
+
+          {/* Pagination */}
+          {hotels.length > 0 && (
+            <div className="mt-4">
+              <div className="text-sm text-muted-foreground text-center mb-4">
+                {t("common.showing")} {(currentPage - 1) * 10 + 1}-
+                {Math.min(currentPage * 10, data?.count || 0)} {t("common.of")}{" "}
+                {data?.total || 0} {t("common.results")}
+              </div>
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      className={
+                        currentPage === 1
+                          ? "pointer-events-none opacity-50"
+                          : "cursor-pointer"
+                      }
+                    />
+                  </PaginationItem>
+
+                  {renderPaginationItems()}
+
+                  <PaginationItem>
+                    <PaginationNext
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      className={
+                        currentPage === totalPages
+                          ? "pointer-events-none opacity-50"
+                          : "cursor-pointer"
+                      }
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </div>
+          )}
         </Card>
       </div>
     </div>

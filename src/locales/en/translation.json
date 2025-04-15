@@ -44,7 +44,10 @@
     "confirm": "Confirm",
     "loading": "Loading...",
     "noData": "No data",
-    "searchPlaceholder": "Search..."
+    "searchPlaceholder": "Search...",
+    "showing": "Showing",
+    "of": "of",
+    "results": "results"
   },
   "nav": {
     "home": "Home",
@@ -1073,6 +1076,7 @@
         "location": "Location",
         "policies": "Policies",
         "rating": "Rating",
+        "checkInOut": "Check-in/Check-out",
         "status": "Status"
       },
       "policies": {

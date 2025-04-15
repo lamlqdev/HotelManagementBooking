@@ -1,74 +1,95 @@
-export interface HotelImage {
-  url: string;
-  publicId: string;
-  filename: string;
-  _id?: string;
-}
-
-export interface HotelPolicies {
-  checkInTime: string;
-  checkOutTime: string;
-  cancellationPolicy: string;
-  childrenPolicy: string;
-  petPolicy: string;
-  smokingPolicy: string;
-}
-
 export interface Hotel {
-  id: string;
-  _id?: string;
+  _id: string;
   name: string;
-  description: string;
   address: string;
-  city: string;
-  country: string;
-  phone: string;
-  email: string;
-  website: string;
-  locationName: string;
-  locationDescription: string;
+  locationId: string;
+  locationDescription?: string;
+  rating: number;
+  description: string;
+  ownerId: string;
+  website?: string;
+  featuredImage?: {
+    url: string;
+    publicId: string;
+    filename: string;
+  };
+  images?: Array<{
+    url: string;
+    publicId: string;
+    filename: string;
+  }>;
+  amenities: string[]; // Array of Amenity IDs
   policies: {
     checkInTime: string;
     checkOutTime: string;
-    childrenPolicy: "yes" | "no";
-    petPolicy: "yes" | "no";
-    smokingPolicy: "yes" | "no";
+    cancellationPolicy: '24h-full-refund' | '24h-half-refund' | 'no-refund';
+    childrenPolicy: 'yes' | 'no';
+    petPolicy: 'yes' | 'no';
+    smokingPolicy: 'yes' | 'no';
   };
-  rating: number;
-  status: "active" | "inactive" | "pending";
+  favoriteCount: number;
+  lowestPrice: number;
+  lowestDiscountedPrice: number;
+  highestDiscountPercent: number;
+  status: 'active' | 'inactive' | 'pending';
   createdAt: string;
   updatedAt: string;
-  __v: number;
-  featuredImage: HotelImage;
-  images: HotelImage[];
-  amenities: string[];
-  ownerId: string;
 }
 
 export interface CreateHotelDto {
   name: string;
-  description: string;
   address: string;
-  locationName: string;
-  locationDescription: string;
+  locationId: string;
+  locationDescription?: string;
+  description: string;
   website?: string;
-  amenities: string[];
   featuredImage?: File;
   images?: File[];
-  policies: HotelPolicies;
+  amenities: string[]; // Array of Amenity IDs
+  policies?: {
+    checkInTime?: string;
+    checkOutTime?: string;
+    cancellationPolicy?: '24h-full-refund' | '24h-half-refund' | 'no-refund';
+    childrenPolicy?: 'yes' | 'no';
+    petPolicy?: 'yes' | 'no';
+    smokingPolicy?: 'yes' | 'no';
+  };
 }
 
 export interface UpdateHotelDto extends Partial<CreateHotelDto> {
-  replaceAllImages?: boolean;
+  status?: 'active' | 'inactive' | 'pending';
+  rating?: number;
+  favoriteCount?: number;
+  lowestPrice?: number;
+  lowestDiscountedPrice?: number;
+  highestDiscountPercent?: number;
 }
 
 export interface HotelResponse {
   success: boolean;
+  data: Hotel;
+}
+
+export interface HotelsResponse {
+  success: boolean;
   count: number;
+  total: number;
+  pagination: {
+    currentPage: number;
+    totalPages: number;
+  };
   data: Hotel[];
 }
 
-export interface SingleHotelResponse {
-  success: boolean;
-  data: Hotel;
+export interface HotelQueryParams {
+  name?: string;
+  locationId?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  minDiscountPercent?: number;
+  sort?: string;
+  page?: number;
+  limit?: number;
+  status?: 'active' | 'inactive' | 'pending';
+  rating?: number;
 }

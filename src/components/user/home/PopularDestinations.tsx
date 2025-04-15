@@ -1,67 +1,72 @@
 import { useTranslation } from "react-i18next";
+import { useQuery } from "@tanstack/react-query";
+import { AlertCircle } from "lucide-react";
+
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "../../ui/carousel";
-
-import halongImg from "@/assets/images/destinations/halong.jpg";
-import hoianImg from "@/assets/images/destinations/hoian.jpg";
-import dalatImg from "@/assets/images/destinations/dalat.jpg";
-import phuquocImg from "@/assets/images/destinations/phuquoc.jpg";
-import nhatrangImg from "@/assets/images/destinations/nhatrang.jpg";
-import sapaImg from "@/assets/images/destinations/sapa.jpg";
-
-interface Destination {
-  id: number;
-  name: string;
-  hotelCount: number;
-  image: string;
-}
-
-const popularDestinations: Destination[] = [
-  {
-    id: 1,
-    name: "Hạ Long",
-    hotelCount: 245,
-    image: halongImg,
-  },
-  {
-    id: 2,
-    name: "Hội An",
-    hotelCount: 186,
-    image: hoianImg,
-  },
-  {
-    id: 3,
-    name: "Đà Lạt",
-    hotelCount: 312,
-    image: dalatImg,
-  },
-  {
-    id: 4,
-    name: "Phú Quốc",
-    hotelCount: 278,
-    image: phuquocImg,
-  },
-  {
-    id: 5,
-    name: "Nha Trang",
-    hotelCount: 421,
-    image: nhatrangImg,
-  },
-  {
-    id: 6,
-    name: "Sapa",
-    hotelCount: 165,
-    image: sapaImg,
-  },
-];
+} from "@/components/ui/carousel";
+import { Skeleton } from "@/components/ui/skeleton";
+import { locationApi } from "@/api/location/location.api";
+import { PopularLocation } from "@/api/location/type";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export default function PopularDestinations() {
   const { t } = useTranslation();
+
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["popularLocations"],
+    queryFn: () => locationApi.getPopularLocations(),
+  });
+
+  if (isLoading) {
+    return (
+      <section className="py-12">
+        <div className="container">
+          <h2 className="text-3xl font-bold mb-8">
+            {t("destinations.popular")}
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {[...Array(6)].map((_, index) => (
+              <div key={index} className="relative overflow-hidden rounded-lg">
+                <Skeleton className="aspect-[4/3] w-full" />
+                <div className="absolute bottom-0 left-0 p-4 w-full">
+                  <Skeleton className="h-6 w-32 mb-1" />
+                  <Skeleton className="h-4 w-24" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (isError) {
+    return (
+      <section className="py-12">
+        <div className="container">
+          <h2 className="text-3xl font-bold mb-8">
+            {t("destinations.popular")}
+          </h2>
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Lỗi</AlertTitle>
+            <AlertDescription>
+              {error instanceof Error
+                ? error.message
+                : "Không thể tải danh sách địa điểm phổ biến"}
+            </AlertDescription>
+          </Alert>
+        </div>
+      </section>
+    );
+  }
+
+  const popularDestinations = data?.data || [];
 
   return (
     <section className="py-12">
@@ -76,15 +81,15 @@ export default function PopularDestinations() {
             className="w-full"
           >
             <CarouselContent className="-ml-4">
-              {popularDestinations.map((destination) => (
+              {popularDestinations.map((destination: PopularLocation) => (
                 <CarouselItem
-                  key={destination.id}
+                  key={destination._id}
                   className="pl-4 basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4"
                 >
                   <div className="relative group overflow-hidden rounded-lg cursor-pointer">
                     <div className="relative aspect-[4/3]">
                       <img
-                        src={destination.image}
+                        src={destination.image?.url || "/placeholder-image.jpg"}
                         alt={destination.name}
                         className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                         loading="lazy"

@@ -31,7 +31,7 @@ export const partnerApi = {
     if (data.hotelAmenities && data.hotelAmenities.length > 0) {
       // Gửi từng amenity ID riêng lẻ thay vì gửi cả mảng dưới dạng JSON
       data.hotelAmenities.forEach((amenityId) => {
-        formData.append("amenities", amenityId);
+        formData.append("hotelAmenities", amenityId);
       });
     }
 
