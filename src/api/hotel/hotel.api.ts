@@ -1,11 +1,5 @@
 import axiosInstance from "@/lib/axios";
-import {
-  CreateHotelDto,
-  UpdateHotelDto,
-  HotelResponse,
-  HotelsResponse,
-  HotelQueryParams,
-} from "./type";
+import { HotelResponse, HotelsResponse, HotelQueryParams } from "./type";
 
 const baseUrl = "/hotels";
 
@@ -36,19 +30,51 @@ export const hotelApi = {
   },
 
   // Tạo khách sạn mới
-  createHotel: async (data: CreateHotelDto): Promise<HotelResponse> => {
+  createHotel: async (data: {
+    name: string;
+    description: string;
+    address: string;
+    locationId: string;
+    locationDescription?: string;
+    website?: string;
+    checkInTime: string;
+    checkOutTime: string;
+    cancellationPolicy: string;
+    childrenPolicy: string;
+    petPolicy: string;
+    smokingPolicy: string;
+    amenities?: string[];
+    featuredImage?: File;
+    images?: File[];
+  }): Promise<HotelResponse> => {
     const formData = new FormData();
 
-    // Thêm các trường dữ liệu cơ bản
-    Object.entries(data).forEach(([key, value]) => {
-      if (key !== "featuredImage" && key !== "images") {
-        if (Array.isArray(value)) {
-          value.forEach((item) => formData.append(key, item));
-        } else {
-          formData.append(key, value);
-        }
-      }
-    });
+    // Thêm các trường thông tin cơ bản
+    formData.append("name", data.name);
+    formData.append("description", data.description);
+    formData.append("address", data.address);
+    formData.append("locationId", data.locationId);
+    if (data.locationDescription) {
+      formData.append("locationDescription", data.locationDescription);
+    }
+    if (data.website) {
+      formData.append("website", data.website);
+    }
+
+    // Thêm các chính sách
+    formData.append("checkInTime", data.checkInTime);
+    formData.append("checkOutTime", data.checkOutTime);
+    formData.append("cancellationPolicy", data.cancellationPolicy);
+    formData.append("childrenPolicy", data.childrenPolicy);
+    formData.append("petPolicy", data.petPolicy);
+    formData.append("smokingPolicy", data.smokingPolicy);
+
+    // Thêm amenities nếu có
+    if (data.amenities && data.amenities.length > 0) {
+      data.amenities.forEach((amenityId) => {
+        formData.append("amenities", amenityId);
+      });
+    }
 
     // Thêm ảnh đại diện nếu có
     if (data.featuredImage) {
@@ -77,20 +103,51 @@ export const hotelApi = {
   // Cập nhật thông tin khách sạn
   updateHotel: async (
     id: string,
-    data: UpdateHotelDto
+    data: {
+      name?: string;
+      description?: string;
+      address?: string;
+      locationId?: string;
+      locationDescription?: string;
+      website?: string;
+      policies?: {
+        checkInTime?: string;
+        checkOutTime?: string;
+        cancellationPolicy?:
+          | "24h-full-refund"
+          | "24h-half-refund"
+          | "no-refund";
+        childrenPolicy?: "yes" | "no";
+        petPolicy?: "yes" | "no";
+        smokingPolicy?: "yes" | "no";
+      };
+      amenities?: string[];
+      featuredImage?: File;
+      images?: File[];
+    }
   ): Promise<HotelResponse> => {
     const formData = new FormData();
 
-    // Thêm các trường dữ liệu cơ bản
-    Object.entries(data).forEach(([key, value]) => {
-      if (key !== "featuredImage" && key !== "images") {
-        if (Array.isArray(value)) {
-          value.forEach((item) => formData.append(key, item));
-        } else {
-          formData.append(key, value);
-        }
-      }
-    });
+    // Thêm các trường thông tin cơ bản nếu có
+    if (data.name) formData.append("name", data.name);
+    if (data.description) formData.append("description", data.description);
+    if (data.address) formData.append("address", data.address);
+    if (data.locationId) formData.append("locationId", data.locationId);
+    if (data.locationDescription)
+      formData.append("locationDescription", data.locationDescription);
+    if (data.website) formData.append("website", data.website);
+
+    // Thêm policies nếu có
+    if (data.policies) {
+      formData.append("policies", JSON.stringify(data.policies));
+    }
+
+    // Thêm amenities nếu có
+    if (data.amenities && data.amenities.length > 0) {
+      data.amenities.forEach((amenityId) => {
+        formData.append("amenities", amenityId);
+      });
+    }
 
     // Thêm ảnh đại diện nếu có
     if (data.featuredImage) {

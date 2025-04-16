@@ -770,7 +770,22 @@
       "description_desc": "Mô tả chi tiết về khách sạn, bao gồm lịch sử, đặc điểm nổi bật, và các dịch vụ chính",
       "description_placeholder": "Mô tả chi tiết về khách sạn của bạn...",
       "amenities": "Tiện nghi",
-      "amenities_desc": "Chọn các tiện nghi chính của khách sạn"
+      "amenities_desc": "Chọn các tiện nghi chính của khách sạn",
+      "policies": {
+        "title": "Chính sách",
+        "check_in_time": "Thời gian check-in",
+        "check_out_time": "Thời gian check-out",
+        "cancellation": "Chính sách hủy phòng",
+        "children": "Chính sách trẻ em",
+        "childrenAllowed": "Cho phép trẻ em",
+        "childrenNotAllowed": "Không cho phép trẻ em",
+        "pets": "Chính sách thú cưng",
+        "petsAllowed": "Cho phép thú cưng",
+        "petsNotAllowed": "Không cho phép thú cưng",
+        "smoking": "Chính sách hút thuốc",
+        "smokingAllowed": "Cho phép hút thuốc",
+        "smokingNotAllowed": "Không cho phép hút thuốc"
+      }
     },
     "address": {
       "title": "Địa chỉ khách sạn",
@@ -927,7 +942,8 @@
       "galleryImagesDesc": "Thêm các ảnh mô tả chi tiết về khách sạn của bạn",
       "amenities": "Tiện nghi",
       "selectedAmenities": "Tiện nghi đã chọn",
-      "availableAmenities": "Tiện nghi có sẵn"
+      "availableAmenities": "Tiện nghi có sẵn",
+      "website": "Website"
     },
     "contact": {
       "title": "Thông tin liên hệ",
@@ -945,7 +961,14 @@
       "children": "Chính sách trẻ em",
       "pet": "Chính sách thú cưng",
       "smoking": "Chính sách hút thuốc",
-      "content": "Nội dung"
+      "content": "Nội dung",
+      "childrenAllowed": "Cho phép trẻ em",
+      "childrenNotAllowed": "Không cho phép trẻ em",
+      "petsAllowed": "Cho phép thú cưng",
+      "petsNotAllowed": "Không cho phép thú cưng",
+      "smokingAllowed": "Cho phép hút thuốc",
+      "smokingNotAllowed": "Không cho phép hút thuốc",
+      "otherPolicies": "Chính sách khác"
     },
     "amenities": {
       "wifi": "WiFi miễn phí",

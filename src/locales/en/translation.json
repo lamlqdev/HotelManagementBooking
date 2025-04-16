@@ -928,7 +928,8 @@
       "galleryImagesDesc": "Add detailed images to describe your hotel",
       "amenities": "Amenities",
       "selectedAmenities": "Selected Amenities",
-      "availableAmenities": "Available Amenities"
+      "availableAmenities": "Available Amenities",
+      "website": "Website"
     },
     "contact": {
       "title": "Contact Information",
@@ -946,7 +947,14 @@
       "children": "Children Policy",
       "pet": "Pet Policy",
       "smoking": "Smoking Policy",
-      "content": "Content"
+      "content": "Content",
+      "childrenAllowed": "Children Allowed",
+      "childrenNotAllowed": "Children Not Allowed",
+      "petsAllowed": "Pets Allowed",
+      "petsNotAllowed": "Pets Not Allowed",
+      "smokingAllowed": "Smoking Allowed",
+      "smokingNotAllowed": "Smoking Not Allowed",
+      "otherPolicies": "Other Policies"
     },
     "amenities": {
       "wifi": "Free WiFi",
