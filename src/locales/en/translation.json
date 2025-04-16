@@ -905,7 +905,8 @@
     "buttons": {
       "edit": "Edit",
       "cancel": "Cancel",
-      "save": "Save"
+      "save": "Save",
+      "saving": "Saving..."
     },
     "tabs": {
       "general": "General",
@@ -976,6 +977,12 @@
       "meeting-room": "Meeting Room",
       "business-center": "Business Center",
       "conference-hall": "Conference Hall"
+    },
+    "messages": {
+      "updateSuccess": "Hotel information updated successfully",
+      "updateFailed": "Failed to update hotel information",
+      "deleteSuccess": "Hotel deleted successfully",
+      "deleteFailed": "Failed to delete hotel"
     }
   },
   "room": {

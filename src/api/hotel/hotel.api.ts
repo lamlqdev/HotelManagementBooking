@@ -139,7 +139,11 @@ export const hotelApi = {
 
     // Thêm policies nếu có
     if (data.policies) {
-      formData.append("policies", JSON.stringify(data.policies));
+      Object.entries(data.policies).forEach(([key, value]) => {
+        if (value !== undefined) {
+          formData.append(`policies[${key}]`, value);
+        }
+      });
     }
 
     // Thêm amenities nếu có

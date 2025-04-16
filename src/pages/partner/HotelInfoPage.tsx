@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -104,23 +105,21 @@ const HotelInfoPage = () => {
     } = editedData;
 
     // Tạo object policies riêng
-    const policies = {
-      checkInTime: checkInTime || hotel.policies.checkInTime,
-      checkOutTime: checkOutTime || hotel.policies.checkOutTime,
-      cancellationPolicy:
-        cancellationPolicy || hotel.policies.cancellationPolicy,
-      childrenPolicy: childrenPolicy || hotel.policies.childrenPolicy,
-      petPolicy: petPolicy || hotel.policies.petPolicy,
-      smokingPolicy: smokingPolicy || hotel.policies.smokingPolicy,
-    };
+    const policies: Record<string, string> = {};
+    policies.checkInTime = checkInTime || hotel.policies.checkInTime;
+    policies.checkOutTime = checkOutTime || hotel.policies.checkOutTime;
+    policies.cancellationPolicy =
+      cancellationPolicy || hotel.policies.cancellationPolicy;
+    policies.childrenPolicy = childrenPolicy || hotel.policies.childrenPolicy;
+    policies.petPolicy = petPolicy || hotel.policies.petPolicy;
+    policies.smokingPolicy = smokingPolicy || hotel.policies.smokingPolicy;
 
     // Tạo dữ liệu cập nhật với policies được đóng gói
     const dataToUpdate = {
       ...otherData,
-      policies: policies,
+      policies,
     };
 
-    console.log("Data to update:", dataToUpdate);
     updateHotelMutation.mutate(dataToUpdate);
   };
 
@@ -172,17 +171,23 @@ const HotelInfoPage = () => {
   };
 
   const handleRemoveImage = (type: "main" | "gallery", index?: number) => {
-    if (type === "main") {
-      setEditedData((prev) => ({
-        ...prev,
-        featuredImage: undefined,
-      }));
-    } else if (typeof index === "number") {
-      setEditedData((prev) => ({
-        ...prev,
-        images: (prev.images || []).filter((_, i) => i !== index),
-      }));
-    }
+    setEditedData((prev) => {
+      if (type === "main") {
+        return {
+          ...prev,
+          featuredImage: undefined,
+        };
+      } else if (typeof index === "number") {
+        // Xóa ảnh tại vị trí index
+        const currentImages = [...(prev.images || [])];
+        currentImages.splice(index, 1);
+        return {
+          ...prev,
+          images: currentImages,
+        };
+      }
+      return prev;
+    });
   };
 
   if (isLoadingHotels || isLoadingAmenities) {
@@ -231,8 +236,19 @@ const HotelInfoPage = () => {
               <Button variant="outline" onClick={() => setIsEditing(false)}>
                 {t("hotelInfo.buttons.cancel")}
               </Button>
-              <Button onClick={handleSave}>
-                {t("hotelInfo.buttons.save")}
+              <Button
+                onClick={handleSave}
+                disabled={updateHotelMutation.isPending}
+                className="flex items-center gap-2"
+              >
+                {updateHotelMutation.isPending ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    {t("hotelInfo.buttons.saving")}
+                  </>
+                ) : (
+                  t("hotelInfo.buttons.save")
+                )}
               </Button>
             </>
           ) : (

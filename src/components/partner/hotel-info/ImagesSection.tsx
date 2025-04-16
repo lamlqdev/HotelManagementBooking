@@ -42,7 +42,19 @@ export const ImagesSection = ({
       });
       setGalleryImagePreviews(newPreviews);
     }
-  }, [hotel.images, removedImages]);
+    setMainImagePreview(null);
+  }, [hotel, removedImages]);
+
+  useEffect(() => {
+    return () => {
+      if (mainImagePreview) {
+        URL.revokeObjectURL(mainImagePreview);
+      }
+      Object.values(galleryImagePreviews).forEach((url) => {
+        URL.revokeObjectURL(url);
+      });
+    };
+  }, [mainImagePreview, galleryImagePreviews]);
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -63,15 +75,22 @@ export const ImagesSection = ({
     if (file) {
       const previewUrl = URL.createObjectURL(file);
       if (type === "main") {
+        if (mainImagePreview) {
+          URL.revokeObjectURL(mainImagePreview);
+        }
         setMainImagePreview(previewUrl);
+        onImageChange(type, file);
       } else if (index !== undefined) {
+        if (galleryImagePreviews[index]) {
+          URL.revokeObjectURL(galleryImagePreviews[index]);
+        }
         setGalleryImagePreviews((prev) => ({
           ...prev,
           [index]: previewUrl,
         }));
         setRemovedImages((prev) => prev.filter((i) => i !== index));
+        onImageChange(type, file, index);
       }
-      onImageChange(type, file, index);
     }
   };
 
@@ -88,23 +107,36 @@ export const ImagesSection = ({
     if (file) {
       const previewUrl = URL.createObjectURL(file);
       if (type === "main") {
+        if (mainImagePreview) {
+          URL.revokeObjectURL(mainImagePreview);
+        }
         setMainImagePreview(previewUrl);
+        onImageChange(type, file);
       } else if (index !== undefined) {
+        if (galleryImagePreviews[index]) {
+          URL.revokeObjectURL(galleryImagePreviews[index]);
+        }
         setGalleryImagePreviews((prev) => ({
           ...prev,
           [index]: previewUrl,
         }));
         setRemovedImages((prev) => prev.filter((i) => i !== index));
+        onImageChange(type, file, index);
       }
-      onImageChange(type, file, index);
     }
   };
 
   const handleRemoveImage = (type: "main" | "gallery", index?: number) => {
     if (type === "main") {
+      if (mainImagePreview) {
+        URL.revokeObjectURL(mainImagePreview);
+      }
       setMainImagePreview(null);
       onRemoveImage(type);
     } else if (index !== undefined) {
+      if (galleryImagePreviews[index]) {
+        URL.revokeObjectURL(galleryImagePreviews[index]);
+      }
       setRemovedImages((prev) => [...prev, index]);
       setGalleryImagePreviews((prev) => {
         const newPreviews = { ...prev };
@@ -260,6 +292,38 @@ export const ImagesSection = ({
                 </div>
               );
             })}
+
+            {Object.entries(galleryImagePreviews)
+              .filter(([index]) => !hotel.images?.[Number(index)])
+              .map(([index, url]) => (
+                <div
+                  key={`new-${index}`}
+                  className="relative group aspect-square"
+                >
+                  <img
+                    src={url}
+                    alt={t("hotelInfo.general.galleryImageAlt", {
+                      index: Number(index) + 1,
+                    })}
+                    className="w-full h-full object-cover rounded-lg border border-border hover:border-primary/50 transition-all duration-300"
+                  />
+                  {isEditing && (
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg flex items-center justify-center">
+                      <Button
+                        variant="destructive"
+                        size="icon"
+                        className="rounded-full"
+                        onClick={() =>
+                          handleRemoveImage("gallery", Number(index))
+                        }
+                      >
+                        <X className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              ))}
+
             {isEditing && (
               <>
                 <input
@@ -283,7 +347,9 @@ export const ImagesSection = ({
                     setDragActive(false);
                     const file = e.dataTransfer.files?.[0];
                     if (file) {
-                      const newIndex = hotel.images?.length || 0;
+                      const newIndex =
+                        (hotel.images?.length || 0) +
+                        Object.keys(galleryImagePreviews).length;
                       const previewUrl = URL.createObjectURL(file);
                       setGalleryImagePreviews((prev) => ({
                         ...prev,

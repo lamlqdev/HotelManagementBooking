@@ -919,7 +919,8 @@
     "buttons": {
       "edit": "Chỉnh sửa",
       "cancel": "Hủy",
-      "save": "Lưu"
+      "save": "Lưu",
+      "saving": "Đang lưu..."
     },
     "tabs": {
       "general": "Thông tin chung",
@@ -990,6 +991,12 @@
       "meeting-room": "Phòng họp",
       "business-center": "Trung tâm kinh doanh",
       "conference-hall": "Hội trường"
+    },
+    "messages": {
+      "updateSuccess": "Thông tin khách sạn đã được cập nhật thành công",
+      "updateFailed": "Cập nhật thông tin khách sạn thất bại",
+      "deleteSuccess": "Khách sạn đã được xóa thành công",
+      "deleteFailed": "Xóa khách sạn thất bại"
     }
   },
   "room": {
