@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -11,7 +11,8 @@ import { AlertCircle } from "lucide-react";
 
 import { hotelApi } from "@/api/hotel/hotel.api";
 import { amenitiesApi } from "@/api/amenities/amenities.api";
-import { useAppSelector } from "@/store/hooks";
+import { useAppSelector, useAppDispatch } from "@/store/hooks";
+import { setCurrentHotel } from "@/features/hotel/hotelSlice";
 import { Amenity } from "@/types/amenity";
 import { BasicInfoSection } from "@/components/partner/hotel-info/BasicInfoSection";
 import { ImagesSection } from "@/components/partner/hotel-info/ImagesSection";
@@ -41,6 +42,8 @@ const HotelInfoPage = () => {
   const [editedData, setEditedData] = useState<EditedHotelData>({});
   const { t } = useTranslation();
   const { user } = useAppSelector((state) => state.auth);
+  const { currentHotel } = useAppSelector((state) => state.hotel);
+  const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
 
   const {
@@ -56,6 +59,13 @@ const HotelInfoPage = () => {
     queryKey: ["amenities"],
     queryFn: () => amenitiesApi.getAmenities(),
   });
+
+  // Lưu thông tin hotel vào Redux khi lấy được dữ liệu
+  useEffect(() => {
+    if (hotels?.data[0] && !currentHotel) {
+      dispatch(setCurrentHotel(hotels.data[0]));
+    }
+  }, [hotels, dispatch, currentHotel]);
 
   const updateHotelMutation = useMutation({
     mutationFn: (data: EditedHotelData) => {

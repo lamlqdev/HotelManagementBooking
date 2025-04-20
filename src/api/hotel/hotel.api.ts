@@ -1,5 +1,5 @@
 import axiosInstance from "@/lib/axios";
-import { HotelResponse, HotelsResponse, HotelQueryParams } from "./type";
+import { HotelResponse, HotelsResponse, HotelQueryParams } from "./types";
 
 const baseUrl = "/hotels";
 
@@ -165,6 +165,8 @@ export const hotelApi = {
       });
     }
 
+    console.log(formData);
+
     const response = await axiosInstance.put<HotelResponse>(
       `${baseUrl}/${id}`,
       formData,
@@ -189,59 +191,6 @@ export const hotelApi = {
   getHotelsByLocation: async (locationId: string): Promise<HotelsResponse> => {
     const response = await axiosInstance.get<HotelsResponse>(
       `${baseUrl}/location/${locationId}`
-    );
-    return response.data;
-  },
-
-  // Upload hình ảnh cho khách sạn
-  uploadHotelImages: async (
-    id: string,
-    images: File[]
-  ): Promise<HotelResponse> => {
-    const formData = new FormData();
-    images.forEach((image) => {
-      formData.append("images", image);
-    });
-
-    const response = await axiosInstance.post<HotelResponse>(
-      `${baseUrl}/${id}/images`,
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
-    return response.data;
-  },
-
-  // Xóa một ảnh từ mảng images của khách sạn
-  deleteHotelImage: async (
-    id: string,
-    imageIndex: number
-  ): Promise<HotelResponse> => {
-    const response = await axiosInstance.delete<HotelResponse>(
-      `${baseUrl}/${id}/images/${imageIndex}`
-    );
-    return response.data;
-  },
-
-  // Cập nhật ảnh đại diện
-  updateFeaturedImage: async (
-    id: string,
-    image: File
-  ): Promise<HotelResponse> => {
-    const formData = new FormData();
-    formData.append("featuredImage", image);
-
-    const response = await axiosInstance.put<HotelResponse>(
-      `${baseUrl}/${id}/featured-image`,
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
     );
     return response.data;
   },

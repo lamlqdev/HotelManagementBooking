@@ -1,5 +1,3 @@
-import { Amenity } from "./amenity";
-
 export interface Hotel {
   _id: string;
   name: string;
@@ -36,17 +34,4 @@ export interface Hotel {
   status: "active" | "inactive" | "pending";
   createdAt: string;
   updatedAt: string;
-}
-
-export interface TabProps {
-  hotel: Hotel;
-  isEditing: boolean;
-  onInputChange: (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => void;
-}
-
-export interface GeneralTabProps extends TabProps {
-  onAmenityToggle: (amenityId: string) => void;
-  availableAmenities: Amenity[];
 }

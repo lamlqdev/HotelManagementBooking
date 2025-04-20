@@ -5,7 +5,7 @@ import {
   LocationResponse,
   SingleLocationResponse,
   PopularLocationResponse,
-} from "./type";
+} from "./types";
 
 export const locationApi = {
   // API lấy danh sách địa điểm

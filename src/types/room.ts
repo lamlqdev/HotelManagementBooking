@@ -1,31 +1,28 @@
-import { LucideIcon } from "lucide-react";
+import { Amenity } from "./amenity";
 
-export type Amenity = {
-  name: string;
-  icon: LucideIcon;
-  selected: boolean;
+export type RoomImage = {
+  url: string;
+  publicId: string;
+  filename: string;
 };
 
 export type Room = {
-  id: number;
-  name: string;
-  type: string;
-  price: number;
+  _id: string;
+  hotelId: string;
+  roomName: string;
   floor: number;
-  images: string[];
-  description: string;
-  amenities: Amenity[];
+  roomType: "Standard" | "Superior" | "Deluxe" | "Suite" | "Family";
+  bedType: "Single" | "Twin" | "Double" | "Queen" | "King";
+  price: number;
   capacity: number;
-  bedType: string;
-  size: string;
-  checkIn: string;
-  checkOut: string;
-  cancelPolicy: string;
-  promotions: {
-    id: number;
-    name: string;
-    discount: number;
-    validUntil: string;
-    code: string;
-  }[];
+  squareMeters: number;
+  amenities: Amenity[];
+  images: RoomImage[];
+  cancellationPolicy: "flexible" | "moderate" | "strict";
+  discountPercent: number;
+  discountStartDate: string | null;
+  discountEndDate: string | null;
+  status: "available" | "booked" | "maintenance";
+  createdAt: string;
+  updatedAt: string;
 };

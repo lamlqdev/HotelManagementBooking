@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/carousel";
 import { Skeleton } from "@/components/ui/skeleton";
 import { locationApi } from "@/api/location/location.api";
-import { PopularLocation } from "@/api/location/type";
+import { PopularLocation } from "@/api/location/types";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export default function PopularDestinations() {

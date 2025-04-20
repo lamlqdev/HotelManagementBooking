@@ -47,7 +47,8 @@
     "searchPlaceholder": "Tìm kiếm...",
     "showing": "Hiển thị",
     "of": "của",
-    "results": "kết quả"
+    "results": "kết quả",
+    "clearFilters": "Xóa bỏ bộ lọc"
   },
   "nav": {
     "home": "Trang chủ",
@@ -1020,7 +1021,10 @@
     "dialog": {
       "add": {
         "title": "Thêm phòng mới",
-        "add": "Thêm phòng"
+        "description": "Điền thông tin để thêm phòng mới vào khách sạn của bạn",
+        "add": "Thêm phòng",
+        "success": "Thêm phòng thành công",
+        "error": "Không thể thêm phòng. Vui lòng thử lại sau."
       },
       "edit": {
         "title": "Chỉnh sửa thông tin phòng",
@@ -1029,13 +1033,21 @@
         "amenities": "Tiện nghi",
         "name": "Tên phòng",
         "type": "Loại phòng",
+        "select_type": "Chọn loại phòng",
         "description": "Mô tả",
         "floor": "Tầng",
         "bed_type": "Loại giường",
+        "select_bed_type": "Chọn loại giường",
         "capacity": "Sức chứa",
         "size": "Diện tích",
         "save": "Lưu thay đổi",
-        "cancel": "Hủy"
+        "cancel": "Hủy",
+        "upload_images": "Tải lên hình ảnh",
+        "image_requirements": "Tối đa 10 ảnh, mỗi ảnh tối đa 5MB",
+        "max_images_error": "Bạn chỉ có thể tải lên tối đa 10 ảnh",
+        "invalid_image_format": "Định dạng ảnh không hợp lệ",
+        "image_too_large": "Kích thước ảnh quá lớn (tối đa 5MB)",
+        "upload_hint": "Click hoặc kéo thả hình ảnh vào đây"
       },
       "delete": {
         "title": "Xác nhận xóa phòng",
@@ -1067,25 +1079,35 @@
     },
     "management": {
       "title": "Quản lý phòng",
-      "status": "Tình trạng phòng",
+      "status": "Trạng thái phòng",
       "search_placeholder": "Tìm kiếm phòng...",
       "room_type": "Loại phòng",
-      "all": "Tất cả",
-      "deluxe": "Deluxe",
-      "suite": "Suite",
-      "standard": "Standard",
       "floor": "Tầng",
-      "floor_1": "Tầng 1",
-      "floor_2": "Tầng 2",
-      "floor_3": "Tầng 3",
       "filter": "Bộ lọc",
       "advanced_filter": "Bộ lọc nâng cao",
       "price_range": "Khoảng giá",
       "sort_by": "Sắp xếp theo",
-      "name": "Tên phòng",
+      "name": "Tên",
       "price": "Giá",
-      "view_details": "Xem chi tiết"
+      "view_details": "Xem chi tiết",
+      "all": "Tất cả",
+      "standard": "Tiêu chuẩn",
+      "superior": "Cao cấp",
+      "deluxe": "Deluxe",
+      "suite": "Suite",
+      "family": "Gia đình",
+      "floor_number": "Tầng {{number}}"
     }
+  },
+  "info": {
+    "title": "Thông tin",
+    "noHotelSelected": "Vui lòng chọn một khách sạn để quản lý phòng",
+    "noRoomsFound": "Chưa có phòng nào được thêm vào",
+    "noRoomsMatchFilter": "Không tìm thấy phòng nào phù hợp với bộ lọc"
+  },
+  "error": {
+    "title": "Lỗi",
+    "loadRoomsFailed": "Không thể tải danh sách phòng. Vui lòng thử lại sau."
   },
   "admin": {
     "title": "Bảng điều khiển quản trị viên",

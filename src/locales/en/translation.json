@@ -47,7 +47,8 @@
     "searchPlaceholder": "Search...",
     "showing": "Showing",
     "of": "of",
-    "results": "results"
+    "results": "results",
+    "clearFilters": "Clear filters"
   },
   "nav": {
     "home": "Home",
@@ -1006,7 +1007,10 @@
     "dialog": {
       "add": {
         "title": "Add New Room",
-        "add": "Add Room"
+        "description": "Fill in the information to add a new room to your hotel",
+        "add": "Add Room",
+        "success": "Room added successfully",
+        "error": "Failed to add room. Please try again later."
       },
       "edit": {
         "title": "Edit Room Information",
@@ -1015,13 +1019,21 @@
         "amenities": "Amenities",
         "name": "Room Name",
         "type": "Room Type",
+        "select_type": "Select room type",
         "description": "Description",
         "floor": "Floor",
         "bed_type": "Bed Type",
+        "select_bed_type": "Select bed type",
         "capacity": "Capacity",
         "size": "Size",
         "save": "Save Changes",
-        "cancel": "Cancel"
+        "cancel": "Cancel",
+        "upload_images": "Upload Images",
+        "image_requirements": "Maximum 10 images, each up to 5MB",
+        "max_images_error": "You can only upload a maximum of 10 images",
+        "invalid_image_format": "Invalid image format",
+        "image_too_large": "Image size too large (maximum 5MB)",
+        "upload_hint": "Click or drag and drop images here"
       },
       "delete": {
         "title": "Confirm Delete Room",
@@ -1056,21 +1068,21 @@
       "status": "Room Status",
       "search_placeholder": "Search rooms...",
       "room_type": "Room Type",
-      "all": "All",
-      "deluxe": "Deluxe",
-      "suite": "Suite",
-      "standard": "Standard",
       "floor": "Floor",
-      "floor_1": "Floor 1",
-      "floor_2": "Floor 2",
-      "floor_3": "Floor 3",
       "filter": "Filter",
       "advanced_filter": "Advanced Filter",
       "price_range": "Price Range",
       "sort_by": "Sort by",
-      "name": "Room Name",
+      "name": "Name",
       "price": "Price",
-      "view_details": "View Details"
+      "view_details": "View Details",
+      "all": "All",
+      "standard": "Standard",
+      "superior": "Superior",
+      "deluxe": "Deluxe",
+      "suite": "Suite",
+      "family": "Family",
+      "floor_number": "Floor {{number}}"
     }
   },
   "admin": {
@@ -1136,5 +1148,15 @@
     "result": "Next Steps",
     "result_desc": "Once approved, you'll receive an email with login instructions. You can then access all features of your account.",
     "back_to_home": "Back to Home"
+  },
+  "info": {
+    "title": "Information",
+    "noHotelSelected": "Please select a hotel to manage rooms",
+    "noRoomsFound": "No rooms have been added yet",
+    "noRoomsMatchFilter": "No rooms match the filter criteria"
+  },
+  "error": {
+    "title": "Error",
+    "loadRoomsFailed": "Failed to load rooms. Please try again later."
   }
 }
