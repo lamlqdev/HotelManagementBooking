@@ -7,7 +7,6 @@ import {
   Hotel,
   DoorOpen,
   CalendarCheck,
-  ListChecks,
   FileEdit,
   Settings,
   LogOut,
@@ -19,7 +18,6 @@ import {
   Bell,
   MessageSquare,
 } from "lucide-react";
-
 import {
   Sidebar,
   SidebarContent,
@@ -45,6 +43,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+import { useAppSelector, useAppDispatch } from "@/store/hooks";
+import { logout } from "@/features/auth/authSlice";
+
 export default function PartnerLayout() {
   const location = useLocation();
   const { t } = useTranslation();
@@ -52,6 +53,10 @@ export default function PartnerLayout() {
     hotels: location.pathname.startsWith("/partner/hotels"),
     bookings: location.pathname.startsWith("/partner/bookings"),
   });
+
+  const { currentHotel } = useAppSelector((state) => state.hotel);
+  const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state) => state.auth);
 
   const toggleMenu = (menuKey: string) => {
     setOpenMenus((prev) => ({
@@ -71,8 +76,8 @@ export default function PartnerLayout() {
             <SidebarHeader className="px-4 py-3">
               <div className="flex items-center gap-3">
                 <img
-                  src="https://images.unsplash.com/photo-1543610892-0b1f7e6d8ac1?q=80&w=1856&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                  alt="Hotel Logo"
+                  src={currentHotel?.featuredImage?.url}
+                  alt="Hotel Featured Image"
                   className="h-10 w-10 rounded-full object-cover ring-2 ring-sidebar-ring/10 group-data-[collapsible=icon]:h-8 group-data-[collapsible=icon]:w-8"
                 />
                 <div className="flex flex-col group-data-[collapsible=icon]:hidden">
@@ -80,7 +85,7 @@ export default function PartnerLayout() {
                     {t("welcome")},
                   </span>
                   <span className="text-sm font-medium text-sidebar-foreground">
-                    Grand Hotel
+                    {currentHotel?.name}
                   </span>
                 </div>
               </div>
@@ -270,15 +275,18 @@ export default function PartnerLayout() {
                 <DropdownMenuTrigger asChild>
                   <div className="flex items-center gap-3 p-2 cursor-pointer hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg transition-colors group-data-[collapsible=icon]:justify-center">
                     <Avatar className="h-10 w-10 ring-2 ring-sidebar-ring/10 group-data-[collapsible=icon]:h-8 group-data-[collapsible=icon]:w-8">
-                      <AvatarImage src="/avatar.png" alt="Partner avatar" />
+                      <AvatarImage
+                        src={user?.avatar?.[0]?.url}
+                        alt="Partner avatar"
+                      />
                       <AvatarFallback>P</AvatarFallback>
                     </Avatar>
                     <div className="flex flex-col group-data-[collapsible=icon]:hidden">
                       <span className="text-sm font-medium text-sidebar-foreground">
-                        Partner Name
+                        {user?.name}
                       </span>
                       <span className="text-xs text-muted-foreground">
-                        partner@example.com
+                        {user?.email}
                       </span>
                     </div>
                   </div>
@@ -310,7 +318,10 @@ export default function PartnerLayout() {
                     </DropdownMenuItem>
                   </Link>
                   <DropdownMenuSeparator className="bg-border" />
-                  <DropdownMenuItem className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground cursor-pointer">
+                  <DropdownMenuItem
+                    className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground cursor-pointer"
+                    onClick={() => dispatch(logout())}
+                  >
                     <LogOut className="mr-2 h-4 w-4 hover:text-sidebar-accent-foreground" />
                     {t("common.logout")}
                   </DropdownMenuItem>

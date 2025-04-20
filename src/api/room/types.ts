@@ -82,8 +82,10 @@ export const createRoomSchema = z.object({
     .number()
     .min(1, "Vui lòng nhập diện tích phòng")
     .max(1000, "Diện tích phòng không hợp lệ"),
-  amenities: z.array(z.string()).min(1, "Vui lòng chọn ít nhất một tiện ích"),
-  images: z.array(z.instanceof(File)).optional(),
+  amenities: z.array(z.string()).min(2, "Vui lòng chọn ít nhất hai tiện ích"),
+  images: z
+    .array(z.instanceof(File))
+    .min(1, "Vui lòng chọn ít nhất một hình ảnh"),
   cancellationPolicy: z.enum(["flexible", "moderate", "strict"], {
     required_error: "Vui lòng chọn chính sách hủy phòng",
   }),

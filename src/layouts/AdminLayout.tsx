@@ -1,8 +1,6 @@
 import { useLocation, Outlet, Link } from "react-router";
 import { useTranslation } from "react-i18next";
-import { useAppSelector } from "@/store/hooks";
 import { UserCog, LogOut, Bell, Settings, Building2 } from "lucide-react";
-import { Logo } from "@/components/ui/logo";
 
 import {
   Sidebar,
@@ -26,10 +24,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { Logo } from "@/components/ui/logo";
+import { logout } from "@/features/auth/authSlice";
+
 export default function AdminLayout() {
   const location = useLocation();
   const { t } = useTranslation();
   const { user } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
 
   // Hàm lấy chữ cái đầu tiên của tên người dùng
   const getInitials = (name: string) => {
@@ -174,7 +177,10 @@ export default function AdminLayout() {
                     </DropdownMenuItem>
                   </Link>
                   <DropdownMenuSeparator className="bg-border" />
-                  <DropdownMenuItem className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground cursor-pointer">
+                  <DropdownMenuItem
+                    className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground cursor-pointer"
+                    onClick={() => dispatch(logout())}
+                  >
                     <LogOut className="mr-2 h-4 w-4 hover:text-sidebar-accent-foreground" />
                     {t("common.logout")}
                   </DropdownMenuItem>

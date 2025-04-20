@@ -1,14 +1,20 @@
+import { useLocation } from "react-router";
 import { useTranslation } from "react-i18next";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ModeToggle } from "@/components/setting/ModeToggle";
+
 import { LanguageToggle } from "@/components/setting/LanguageToggle";
+import { ModeToggle } from "@/components/setting/ModeToggle";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
 export default function SettingPage() {
   const { t } = useTranslation();
+  const location = useLocation();
+  const isPartnerRoute = location.pathname.startsWith("/partner");
 
   return (
-    <div className="container mx-auto mb-12">
+    <div
+      className={`container mx-auto mb-12 ${!isPartnerRoute ? "mt-32" : ""}`}
+    >
       <h1 className="text-2xl font-bold mb-4">{t("settings.title")}</h1>
 
       <div className="space-y-6">

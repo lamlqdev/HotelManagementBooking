@@ -1,36 +1,28 @@
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { Upload, Plus, Trash2, Loader2 } from "lucide-react";
+
+import { amenitiesApi } from "@/api/amenities/amenities.api";
+import { createRoomSchema, type CreateRoomFormData } from "@/api/room/types";
+import { getAmenityIcon } from "@/utils/amenityIcons";
+import { useAppSelector } from "@/store/hooks";
+
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogFooter,
-  DialogDescription,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
-import { Badge } from "@/components/ui/badge";
-import { Upload, Plus, Trash2, Loader2 } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Skeleton } from "@/components/ui/skeleton";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { useQuery } from "@tanstack/react-query";
-import { amenitiesApi } from "@/api/amenities/amenities.api";
-import { getAmenityIcon } from "@/utils/amenityIcons";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { createRoomSchema, type CreateRoomFormData } from "@/api/room/types";
 import {
   Form,
   FormControl,
@@ -39,7 +31,17 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useAppSelector } from "@/store/hooks";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface AddRoomDialogProps {
   onAdd: (room: CreateRoomFormData) => void;
@@ -70,8 +72,8 @@ export function AddRoomDialog({
       floor: 1,
       roomType: "Standard",
       bedType: "Single",
-      price: 0,
-      capacity: 1,
+      price: 250000,
+      capacity: 2,
       squareMeters: 20,
       amenities: [],
       images: [],
@@ -358,7 +360,11 @@ export function AddRoomDialog({
                   {selectedImages.length}/10 {t("room.dialog.edit.images")}
                 </Badge>
               </div>
-
+              {form.formState.errors.images && (
+                <p className="text-sm text-destructive">
+                  {form.formState.errors.images.message}
+                </p>
+              )}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div className="col-span-full">
                   <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
@@ -414,6 +420,11 @@ export function AddRoomDialog({
               <h3 className="text-lg font-medium">
                 {t("room.dialog.edit.amenities")}
               </h3>
+              {form.formState.errors.amenities && (
+                <p className="text-sm text-destructive">
+                  {form.formState.errors.amenities.message}
+                </p>
+              )}
               {amenitiesLoading ? (
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                   {[1, 2, 3, 4, 5, 6].map((i) => (
