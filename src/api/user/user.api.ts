@@ -3,6 +3,13 @@ import {
   UploadAvatarResponse,
   UpdateMeRequest,
   UpdateMeResponse,
+  GetUsersParams,
+  GetUsersResponse,
+  GetUserResponse,
+  UpdateUserRequest,
+  UpdateUserResponse,
+  DeleteUserResponse,
+  GetUserStatsResponse,
 } from "./types";
 
 export const userApi = {
@@ -27,8 +34,31 @@ export const userApi = {
     return response.data;
   },
 
-  getMe: async (): Promise<UpdateMeResponse> => {
-    const response = await axios.get<UpdateMeResponse>("/users/me");
+  getUsers: async (params: GetUsersParams): Promise<GetUsersResponse> => {
+    const response = await axios.get<GetUsersResponse>("/users", { params });
+    return response.data;
+  },
+
+  getUser: async (id: string): Promise<GetUserResponse> => {
+    const response = await axios.get<GetUserResponse>(`/users/${id}`);
+    return response.data;
+  },
+
+  updateUser: async (
+    id: string,
+    data: UpdateUserRequest
+  ): Promise<UpdateUserResponse> => {
+    const response = await axios.put<UpdateUserResponse>(`/users/${id}`, data);
+    return response.data;
+  },
+
+  deleteUser: async (id: string): Promise<DeleteUserResponse> => {
+    const response = await axios.delete<DeleteUserResponse>(`/users/${id}`);
+    return response.data;
+  },
+
+  getUserStats: async (): Promise<GetUserStatsResponse> => {
+    const response = await axios.get<GetUserStatsResponse>("/users/stats");
     return response.data;
   },
 };

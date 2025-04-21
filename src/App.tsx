@@ -52,6 +52,8 @@ import NotificationsPage from "./pages/partner/NotificationsPage";
 import PartnerApproval from "./pages/admin/PartnerApproval";
 import PartnerRegistrationDetails from "@/pages/admin/PartnerRegistrationDetails";
 import HotelsPage from "./pages/admin/HotelsManagementPage";
+import UsersManagementPage from "./pages/admin/UsersManagementPage";
+import UserDetailPage from "./pages/admin/UserDetailPage";
 
 function App() {
   return (
@@ -126,6 +128,8 @@ function App() {
                 element={<PartnerRegistrationDetails />}
               />
               <Route path="hotels" element={<HotelsPage />} />
+              <Route path="users" element={<UsersManagementPage />} />
+              <Route path="users/:id" element={<UserDetailPage />} />
             </Route>
           </Route>
         </Routes>

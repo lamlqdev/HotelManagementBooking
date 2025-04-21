@@ -48,7 +48,10 @@
     "showing": "Hiển thị",
     "of": "của",
     "results": "kết quả",
-    "clearFilters": "Xóa bỏ bộ lọc"
+    "clearFilters": "Xóa bỏ bộ lọc",
+    "yes": "Có",
+    "no": "Không",
+    "all": "Tất cả"
   },
   "nav": {
     "home": "Trang chủ",
@@ -1224,6 +1227,62 @@
         "active": "Đang hoạt động",
         "inactive": "Ngừng hoạt động",
         "pending": "Đang chờ duyệt"
+      }
+    },
+    "users": {
+      "title": "Quản lý người dùng",
+      "description": "Quản lý và theo dõi tất cả người dùng trong hệ thống",
+      "addNew": "Thêm người dùng",
+      "searchPlaceholder": "Tìm kiếm theo tên hoặc email...",
+      "table": {
+        "name": "Tên",
+        "email": "Email",
+        "phone": "Số điện thoại",
+        "role": "Vai trò",
+        "status": "Trạng thái",
+        "emailVerified": "Xác thực email",
+        "createdAt": "Ngày tạo"
+      },
+      "status": {
+        "active": "Hoạt động",
+        "inactive": "Không hoạt động"
+      },
+      "roles": {
+        "admin": "Quản trị viên",
+        "user": "Người dùng",
+        "hotel_owner": "Chủ khách sạn",
+        "partner": "Đối tác"
+      },
+      "filters": {
+        "title": "Bộ lọc",
+        "role": "Vai trò",
+        "status": "Trạng thái",
+        "emailVerified": "Xác thực email",
+        "apply": "Áp dụng",
+        "reset": "Đặt lại"
+      },
+      "noUsers": "Không tìm thấy người dùng nào",
+      "actions": {
+        "edit": "Chỉnh sửa",
+        "delete": "Xóa",
+        "view": "Xem chi tiết"
+      },
+      "details": {
+        "title": "Chi tiết người dùng",
+        "basicInfo": "Thông tin cơ bản",
+        "additionalInfo": "Thông tin bổ sung",
+        "name": "Họ và tên",
+        "email": "Email",
+        "phone": "Số điện thoại",
+        "role": "Vai trò",
+        "status": "Trạng thái",
+        "emailVerified": "Xác thực email",
+        "createdAt": "Ngày tạo",
+        "updatedAt": "Ngày cập nhật",
+        "actions": "Thao tác",
+        "edit": "Chỉnh sửa",
+        "delete": "Xóa",
+        "back": "Quay lại"
       }
     }
   },

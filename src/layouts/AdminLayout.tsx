@@ -1,6 +1,13 @@
 import { useLocation, Outlet, Link } from "react-router";
 import { useTranslation } from "react-i18next";
-import { UserCog, LogOut, Bell, Settings, Building2 } from "lucide-react";
+import {
+  UserCog,
+  LogOut,
+  Bell,
+  Settings,
+  Building2,
+  Users,
+} from "lucide-react";
 
 import {
   Sidebar,
@@ -112,6 +119,22 @@ export default function AdminLayout() {
                       <Building2 className="h-4 w-4" />
                       <span className="group-data-[collapsible=icon]:hidden">
                         {t("admin.hotels.title")}
+                      </span>
+                    </SidebarMenuButton>
+                  </Link>
+                </SidebarMenuItem>
+
+                {/* User Management */}
+                <SidebarMenuItem>
+                  <Link to="/admin/users">
+                    <SidebarMenuButton
+                      isActive={location.pathname.startsWith("/admin/users")}
+                      tooltip={t("admin.users.title")}
+                      className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg group-data-[collapsible=icon]:justify-center"
+                    >
+                      <Users className="h-4 w-4" />
+                      <span className="group-data-[collapsible=icon]:hidden">
+                        {t("admin.users.title")}
                       </span>
                     </SidebarMenuButton>
                   </Link>

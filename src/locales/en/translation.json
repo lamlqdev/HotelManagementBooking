@@ -1158,6 +1158,61 @@
           "actions": "Actions"
         }
       }
+    },
+    "users": {
+      "title": "User Management",
+      "description": "Manage and monitor all users in the system",
+      "addNew": "Add User",
+      "searchPlaceholder": "Search by name or email...",
+      "table": {
+        "name": "Name",
+        "email": "Email",
+        "phone": "Phone",
+        "role": "Role",
+        "status": "Status",
+        "emailVerified": "Email Verified",
+        "createdAt": "Created At"
+      },
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "roles": {
+        "admin": "Administrator",
+        "user": "User",
+        "hotel_owner": "Hotel Owner"
+      },
+      "filters": {
+        "title": "Filters",
+        "role": "Role",
+        "status": "Status",
+        "emailVerified": "Email Verified",
+        "apply": "Apply",
+        "reset": "Reset"
+      },
+      "noUsers": "No users found",
+      "actions": {
+        "edit": "Edit",
+        "delete": "Delete",
+        "view": "View Details"
+      },
+      "details": {
+        "title": "User Details",
+        "basicInfo": "Basic Information",
+        "additionalInfo": "Additional Information",
+        "name": "Full Name",
+        "email": "Email",
+        "phone": "Phone Number",
+        "role": "Role",
+        "status": "Status",
+        "emailVerified": "Email Verified",
+        "createdAt": "Created At",
+        "updatedAt": "Updated At",
+        "actions": "Actions",
+        "edit": "Edit",
+        "delete": "Delete",
+        "back": "Back"
+      }
     }
   },
   "greetings": {
