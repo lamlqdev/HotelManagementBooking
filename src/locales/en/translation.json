@@ -658,12 +658,35 @@
     "address": "Address",
     "enter_address": "Enter your address",
     "travel_preferences": "Travel Preferences",
-    "preferred_airline": "Preferred Airlines",
+    "preferred_airline": "Preferred Airline",
     "preferred_hotel_type": "Preferred Hotel Type",
     "meal_preferences": "Meal Preferences",
     "vegetarian": "Vegetarian",
+    "avatar_change_hint": "Click the camera icon to change your avatar",
+    "avatar_description": "Your avatar will be displayed in the profile section",
     "avatar_upload_success": "Avatar uploaded successfully",
-    "avatar_upload_error": "Failed to upload avatar"
+    "avatar_upload_error": "Error uploading avatar",
+    "avatar_uploading": "Uploading avatar...",
+    "avatar_remove": "Remove Avatar",
+    "avatar_remove_confirm": "Are you sure you want to remove your avatar?",
+    "avatar_remove_success": "Avatar removed successfully",
+    "avatar_remove_error": "Error removing avatar",
+    "save_changes": "Save Changes",
+    "save_success": "Changes saved successfully",
+    "save_error": "Error saving changes",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "view": "View",
+    "loading": "Loading...",
+    "error": {
+      "load_profile": "Could not load profile information",
+      "update_profile": "Could not update profile information",
+      "upload_avatar": "Could not upload avatar",
+      "remove_avatar": "Could not remove avatar"
+    },
+    "created_at": "Created at",
+    "updated_at": "Updated at",
+    "save": "Save"
   },
   "partnership": {
     "hero": {
@@ -931,7 +954,11 @@
       "amenities": "Amenities",
       "selectedAmenities": "Selected Amenities",
       "availableAmenities": "Available Amenities",
-      "website": "Website"
+      "website": "Website",
+      "location": "Location",
+      "locationDescription": "Location Description",
+      "locationDescriptionPlaceholder": "Describe the location of the hotel",
+      "removeImage": "Remove Image"
     },
     "contact": {
       "title": "Contact Information",

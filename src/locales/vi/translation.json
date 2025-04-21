@@ -663,7 +663,33 @@
     "meal_preferences": "Sở thích ẩm thực",
     "vegetarian": "Ăn chay",
     "avatar_upload_success": "Ảnh đại diện đã được tải lên thành công",
-    "avatar_upload_error": "Lỗi tải lên ảnh đại diện"
+    "avatar_upload_error": "Lỗi tải lên ảnh đại diện",
+    "avatar_uploading": "Đang tải lên ảnh đại diện...",
+    "avatar_remove": "Xóa ảnh đại diện",
+    "avatar_remove_confirm": "Bạn có chắc chắn muốn xóa ảnh đại diện?",
+    "avatar_remove_success": "Đã xóa ảnh đại diện thành công",
+    "avatar_remove_error": "Lỗi khi xóa ảnh đại diện",
+    "save_changes": "Lưu thay đổi",
+    "save_success": "Đã lưu thay đổi thành công",
+    "save_error": "Lỗi khi lưu thay đổi",
+    "cancel": "Hủy",
+    "edit": "Chỉnh sửa",
+    "view": "Xem",
+    "loading": "Đang tải...",
+    "email_change_disabled": "Email không thể thay đổi",
+    "file_too_large": "Kích thước file quá lớn (tối đa 5MB)",
+    "invalid_file_type": "Định dạng file không hợp lệ",
+    "avatar": "Ảnh đại diện",
+    "avatar_change_hint": "Nhấp vào biểu tượng máy ảnh để thay đổi ảnh đại diện",
+    "avatar_description": "Ảnh đại diện của bạn sẽ hiển thị trong phần hồ sơ",
+    "created_at": "Ngày tạo",
+    "updated_at": "Ngày cập nhật",
+    "error": {
+      "load_profile": "Không thể tải thông tin hồ sơ",
+      "update_profile": "Không thể cập nhật thông tin hồ sơ",
+      "upload_avatar": "Không thể tải lên ảnh đại diện",
+      "remove_avatar": "Không thể xóa ảnh đại diện"
+    }
   },
   "partnership": {
     "hero": {
@@ -945,7 +971,11 @@
       "amenities": "Tiện nghi",
       "selectedAmenities": "Tiện nghi đã chọn",
       "availableAmenities": "Tiện nghi có sẵn",
-      "website": "Website"
+      "website": "Website",
+      "location": "Địa điểm",
+      "locationDescription": "Mô tả địa điểm",
+      "locationDescriptionPlaceholder": "Mô tả địa điểm khách sạn",
+      "removeImage": "Xóa ảnh"
     },
     "contact": {
       "title": "Thông tin liên hệ",

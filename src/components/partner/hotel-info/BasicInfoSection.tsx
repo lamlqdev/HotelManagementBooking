@@ -1,10 +1,20 @@
-import { Building2, MapPin, FileText, Globe } from "lucide-react";
+import { Building2, MapPin, FileText, Globe, Map } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Hotel } from "@/types/hotel";
+import { Location } from "@/api/location/types";
+import { locationApi } from "@/api/location/location.api";
 
 interface BasicInfoSectionProps {
   hotel: Hotel;
@@ -15,7 +25,9 @@ interface BasicInfoSectionProps {
     description?: string;
     address?: string;
     website?: string;
+    locationId?: string;
   };
+  location?: Location;
 }
 
 export const BasicInfoSection = ({
@@ -23,8 +35,29 @@ export const BasicInfoSection = ({
   isEditing,
   onInputChange,
   editedData,
+  location,
 }: BasicInfoSectionProps) => {
   const { t } = useTranslation();
+  const [locations, setLocations] = useState<Location[]>([]);
+  const [isLoadingLocations, setIsLoadingLocations] = useState(false);
+
+  useEffect(() => {
+    const fetchLocations = async () => {
+      setIsLoadingLocations(true);
+      try {
+        const response = await locationApi.getLocations();
+        if (response.success) {
+          setLocations(response.data);
+        }
+      } catch (error) {
+        console.error("Lỗi khi tải danh sách địa điểm:", error);
+      } finally {
+        setIsLoadingLocations(false);
+      }
+    };
+
+    fetchLocations();
+  }, []);
 
   return (
     <Card>
@@ -65,6 +98,42 @@ export const BasicInfoSection = ({
             className="flex-1"
             placeholder={t("hotelInfo.general.address")}
           />
+        </div>
+
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 w-[180px]">
+            <Map className="w-4 h-4" />
+            <Label htmlFor="location">{t("hotelInfo.general.location")}</Label>
+          </div>
+          {isEditing ? (
+            <Select
+              onValueChange={(value) => onInputChange("locationId", value)}
+              defaultValue={editedData.locationId ?? hotel.locationId}
+              disabled={isLoadingLocations}
+            >
+              <SelectTrigger className="flex-1">
+                <SelectValue
+                  placeholder={t("hotelInfo.general.location_placeholder")}
+                />
+              </SelectTrigger>
+              <SelectContent>
+                {locations.map((loc) => (
+                  <SelectItem key={loc._id} value={loc._id}>
+                    {loc.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          ) : (
+            <Input
+              id="location"
+              name="location"
+              value={location?.name || ""}
+              disabled={true}
+              className="flex-1"
+              placeholder={t("hotelInfo.general.location")}
+            />
+          )}
         </div>
 
         <div className="flex items-start gap-4">

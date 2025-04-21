@@ -11,6 +11,7 @@ import { AlertCircle } from "lucide-react";
 
 import { hotelApi } from "@/api/hotel/hotel.api";
 import { amenitiesApi } from "@/api/amenities/amenities.api";
+import { locationApi } from "@/api/location/location.api";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { setCurrentHotel } from "@/features/hotel/hotelSlice";
 import { Amenity } from "@/types/amenity";
@@ -60,6 +61,15 @@ const HotelInfoPage = () => {
     queryFn: () => amenitiesApi.getAmenities(),
   });
 
+  const hotel = hotels?.data[0];
+
+  // Thêm query để lấy thông tin location
+  const { data: locationData, isLoading: isLoadingLocation } = useQuery({
+    queryKey: ["location", hotel?.locationId],
+    queryFn: () => locationApi.getLocation(hotel?.locationId || ""),
+    enabled: !!hotel?.locationId,
+  });
+
   // Lưu thông tin hotel vào Redux khi lấy được dữ liệu
   useEffect(() => {
     if (hotels?.data[0] && !currentHotel) {
@@ -72,8 +82,14 @@ const HotelInfoPage = () => {
       if (!hotel?._id) throw new Error("Hotel ID is required");
       return hotelApi.updateHotel(hotel._id, data);
     },
-    onSuccess: () => {
+    onSuccess: (response) => {
       queryClient.invalidateQueries({ queryKey: ["hotel"] });
+
+      // Cập nhật Redux store với thông tin khách sạn mới
+      if (response.success && response.data) {
+        dispatch(setCurrentHotel(response.data));
+      }
+
       toast.success(t("hotelInfo.messages.updateSuccess"));
       setIsEditing(false);
       setEditedData({});
@@ -83,7 +99,6 @@ const HotelInfoPage = () => {
     },
   });
 
-  const hotel = hotels?.data[0];
   const availableAmenities = (amenitiesData?.data || []).filter(
     (amenity: Amenity) => amenity.type === "hotel"
   );
@@ -200,7 +215,7 @@ const HotelInfoPage = () => {
     });
   };
 
-  if (isLoadingHotels || isLoadingAmenities) {
+  if (isLoadingHotels || isLoadingAmenities || isLoadingLocation) {
     return (
       <div className="container mx-auto px-4 space-y-6">
         <div className="flex justify-between items-center">
@@ -277,6 +292,7 @@ const HotelInfoPage = () => {
           handleInputChange(field as keyof EditedHotelData, value)
         }
         editedData={editedData}
+        location={locationData?.data}
       />
 
       {/* Phần ảnh */}
