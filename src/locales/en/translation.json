@@ -1056,7 +1056,11 @@
         "no": "Smoking not allowed"
       },
       "booking_status": "Booking Status",
-      "available": "Available"
+      "available": "Available",
+      "discount": "discount",
+      "valid_until": "Valid until",
+      "current_discount": "Current Discount",
+      "no_promotions": "No promotions available"
     },
     "dialog": {
       "add": {
@@ -1117,7 +1121,17 @@
         "discount": "Discount (%)",
         "discount_placeholder": "Enter discount percentage",
         "valid_until": "Valid Until",
-        "add": "Add Promotion"
+        "add": "Add Promotion",
+        "discount_percent": "Discount Percentage",
+        "start_date": "Start Date",
+        "end_date": "End Date",
+        "select_end_date": "Select end date",
+        "success": "Promotion added successfully",
+        "error": "Failed to add promotion. Please try again later."
+      },
+      "remove_discount": {
+        "success": "Discount removed successfully",
+        "error": "Failed to remove discount. Please try again later."
       }
     },
     "management": {

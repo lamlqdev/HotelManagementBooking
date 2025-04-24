@@ -520,6 +520,15 @@ export default function RoomManagementPage() {
                 </div>
                 <div className="font-semibold">
                   {room.price.toLocaleString()}đ
+                  {room.discountPercent > 0 && (
+                    <div className="text-xs text-muted-foreground line-through">
+                      {(
+                        room.price *
+                        (1 + room.discountPercent / 100)
+                      ).toLocaleString()}
+                      đ
+                    </div>
+                  )}
                 </div>
               </div>
               <Link to={`/partner/hotels/rooms/${room._id}`}>

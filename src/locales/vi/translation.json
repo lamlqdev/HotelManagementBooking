@@ -1076,7 +1076,11 @@
         "no": "Không cho phép hút thuốc"
       },
       "booking_status": "Tình trạng đặt phòng",
-      "available": "Đang có sẵn"
+      "available": "Đang có sẵn",
+      "discount": "giảm giá",
+      "valid_until": "Có hiệu lực đến",
+      "current_discount": "Khuyến mãi hiện tại",
+      "no_promotions": "Không có khuyến mãi nào"
     },
     "dialog": {
       "add": {
@@ -1137,7 +1141,17 @@
         "discount": "Giảm giá (%)",
         "discount_placeholder": "Nhập phần trăm giảm giá",
         "valid_until": "Hạn sử dụng",
-        "add": "Thêm khuyến mãi"
+        "add": "Thêm khuyến mãi",
+        "discount_percent": "Phần trăm giảm giá",
+        "start_date": "Ngày bắt đầu",
+        "end_date": "Ngày kết thúc",
+        "select_end_date": "Chọn ngày kết thúc",
+        "success": "Thêm khuyến mãi thành công",
+        "error": "Không thể thêm khuyến mãi. Vui lòng thử lại sau."
+      },
+      "remove_discount": {
+        "success": "Đã xóa khuyến mãi thành công",
+        "error": "Không thể xóa khuyến mãi. Vui lòng thử lại sau."
       }
     },
     "management": {

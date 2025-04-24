@@ -19,6 +19,7 @@ import {
   Users,
   Dog,
   Ban,
+  Trash2,
 } from "lucide-react";
 import { useAppSelector } from "@/store/hooks";
 
@@ -41,6 +42,7 @@ export default function RoomDetailPage() {
   const [isEditing, setIsEditing] = useState(false);
   const [isUpdatingPrice, setIsUpdatingPrice] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isRemovingDiscount, setIsRemovingDiscount] = useState(false);
   const [confirmName, setConfirmName] = useState("");
   const queryClient = useQueryClient();
   const { currentHotel } = useAppSelector((state) => state.hotel);
@@ -67,12 +69,25 @@ export default function RoomDetailPage() {
       queryClient.invalidateQueries({ queryKey: ["rooms"] });
       toast.success(t("room.dialog.delete.success"));
       setIsDeleting(false);
-      // Chuyển hướng về trang quản lý phòng
       navigate("/partner/hotels/rooms");
     },
     onError: (error: Error) => {
       toast.error(error.message || t("room.dialog.delete.error"));
       setIsDeleting(false);
+    },
+  });
+
+  // Mutation để xóa khuyến mãi
+  const removeDiscountMutation = useMutation({
+    mutationFn: () => roomApi.removeRoomDiscount(id || ""),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["room", id] });
+      toast.success(t("room.dialog.remove_discount.success"));
+      setIsRemovingDiscount(false);
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || t("room.dialog.remove_discount.error"));
+      setIsRemovingDiscount(false);
     },
   });
 
@@ -99,20 +114,13 @@ export default function RoomDetailPage() {
     deleteRoomMutation.mutate();
   };
 
-  const handleConfirmNameChange = (name: string) => {
-    setConfirmName(name);
+  const handleRemoveDiscount = () => {
+    setIsRemovingDiscount(true);
+    removeDiscountMutation.mutate();
   };
 
-  const handleAddPromotion = (promotion: {
-    name: string;
-    code: string;
-    discount: number;
-    validUntil: string;
-  }) => {
-    // TODO: Implement API call to add promotion
-    toast.success(t("room.dialog.add_promotion.success"));
-    console.log("Adding promotion:", promotion);
-    refetch();
+  const handleConfirmNameChange = (name: string) => {
+    setConfirmName(name);
   };
 
   // Hiển thị trạng thái loading
@@ -468,7 +476,7 @@ export default function RoomDetailPage() {
                   <span className="w-2 h-2 rounded-full bg-primary"></span>
                   {t("room.detail.promotions")}
                 </h3>
-                <AddPromotionDialog onAdd={handleAddPromotion} />
+                <AddPromotionDialog roomId={id || ""} />
               </div>
               <div className="space-y-4">
                 {/* Promotions sẽ được thêm sau khi có API */}
@@ -490,6 +498,19 @@ export default function RoomDetailPage() {
                       <span className="font-semibold text-primary">
                         -{room.discountPercent}%
                       </span>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="text-destructive hover:text-destructive/90 hover:bg-destructive/10"
+                        onClick={handleRemoveDiscount}
+                        disabled={isRemovingDiscount}
+                      >
+                        {isRemovingDiscount ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                          <Trash2 className="w-4 h-4" />
+                        )}
+                      </Button>
                     </div>
                   </div>
                 ) : (
