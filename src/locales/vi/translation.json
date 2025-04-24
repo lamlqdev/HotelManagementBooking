@@ -51,7 +51,10 @@
     "clearFilters": "Xóa bỏ bộ lọc",
     "yes": "Có",
     "no": "Không",
-    "all": "Tất cả"
+    "all": "Tất cả",
+    "people": "người",
+    "rooms": "phòng",
+    "nights": "đêm"
   },
   "nav": {
     "home": "Trang chủ",
@@ -1046,8 +1049,32 @@
       "basic_info": "Thông tin cơ bản",
       "amenities": "Tiện nghi",
       "settings": "Cài đặt phòng",
-      "check_in_out": "Thời gian check-in/out",
-      "cancel_policy": "Chính sách hủy",
+      "check_in": "Nhận phòng",
+      "check_out": "Trả phòng",
+      "check_in_out": {
+        "title": "Thời gian check-in/out"
+      },
+      "cancel_policy": {
+        "title": "Chính sách hủy phòng",
+        "24h-full-refund": "Hoàn tiền 100% nếu hủy trước 24h",
+        "24h-half-refund": "Hoàn tiền 50% nếu hủy trước 24h",
+        "no-refund": "Không hoàn tiền khi hủy"
+      },
+      "children_policy": {
+        "title": "Chính sách trẻ em",
+        "yes": "Cho phép trẻ em",
+        "no": "Không cho phép trẻ em"
+      },
+      "pet_policy": {
+        "title": "Chính sách thú cưng",
+        "yes": "Cho phép thú cưng",
+        "no": "Không cho phép thú cưng"
+      },
+      "smoking_policy": {
+        "title": "Chính sách hút thuốc",
+        "yes": "Cho phép hút thuốc",
+        "no": "Không cho phép hút thuốc"
+      },
       "booking_status": "Tình trạng đặt phòng",
       "available": "Đang có sẵn"
     },
@@ -1089,7 +1116,10 @@
         "confirm_text": "Vui lòng nhập tên phòng để xác nhận",
         "confirm_placeholder": "Nhập tên phòng",
         "delete": "Xóa phòng",
-        "cancel": "Hủy"
+        "cancel": "Hủy",
+        "success": "Phòng đã được xóa thành công",
+        "error": "Không thể xóa phòng. Vui lòng thử lại sau.",
+        "name_mismatch": "Tên phòng bạn nhập không khớp với tên phòng trong hệ thống."
       },
       "update_price": {
         "title": "Cập nhật giá phòng",

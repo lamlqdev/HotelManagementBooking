@@ -48,7 +48,10 @@
     "showing": "Showing",
     "of": "of",
     "results": "results",
-    "clearFilters": "Clear filters"
+    "clearFilters": "Clear filters",
+    "people": "people",
+    "rooms": "rooms",
+    "nights": "nights"
   },
   "nav": {
     "home": "Home",
@@ -1026,8 +1029,32 @@
       "basic_info": "Basic Information",
       "amenities": "Amenities",
       "settings": "Room Settings",
-      "check_in_out": "Check-in/out Time",
-      "cancel_policy": "Cancellation Policy",
+      "check_in": "Check-in",
+      "check_out": "Check-out",
+      "check_in_out": {
+        "title": "Check-in/out Time"
+      },
+      "cancel_policy": {
+        "title": "Cancellation Policy",
+        "24h-full-refund": "100% refund if cancelled 24h before check-in",
+        "24h-half-refund": "50% refund if cancelled 24h before check-in",
+        "no-refund": "No refund for cancellations"
+      },
+      "children_policy": {
+        "title": "Children Policy",
+        "yes": "Children allowed",
+        "no": "Children not allowed"
+      },
+      "pet_policy": {
+        "title": "Pet Policy",
+        "yes": "Pets allowed",
+        "no": "Pets not allowed"
+      },
+      "smoking_policy": {
+        "title": "Smoking Policy",
+        "yes": "Smoking allowed",
+        "no": "Smoking not allowed"
+      },
       "booking_status": "Booking Status",
       "available": "Available"
     },
@@ -1069,7 +1096,10 @@
         "confirm_text": "Please enter the room name to confirm",
         "confirm_placeholder": "Enter room name",
         "delete": "Delete Room",
-        "cancel": "Cancel"
+        "cancel": "Cancel",
+        "success": "Room deleted successfully",
+        "error": "Failed to delete room. Please try again later.",
+        "name_mismatch": "The room name you entered does not match the room name in the system."
       },
       "update_price": {
         "title": "Update Room Price",

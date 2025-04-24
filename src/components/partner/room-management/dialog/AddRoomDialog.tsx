@@ -137,8 +137,10 @@ export function AddRoomDialog({
       validUrls.push(URL.createObjectURL(file));
     });
 
-    setSelectedImages([...selectedImages, ...validFiles]);
+    const updatedImages = [...selectedImages, ...validFiles];
+    setSelectedImages(updatedImages);
     setImagePreviewUrls([...imagePreviewUrls, ...validUrls]);
+    form.setValue("images", updatedImages);
   };
 
   const removeImage = (index: number) => {
@@ -153,6 +155,7 @@ export function AddRoomDialog({
 
     setSelectedImages(newSelectedImages);
     setImagePreviewUrls(newImagePreviewUrls);
+    form.setValue("images", newSelectedImages);
   };
 
   // Lọc chỉ lấy tiện ích phòng

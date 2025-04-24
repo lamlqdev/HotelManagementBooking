@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,7 +12,6 @@ import { Input } from "@/components/ui/input";
 import { useTranslation } from "react-i18next";
 
 interface DeleteRoomDialogProps {
-  roomName: string;
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   onDelete: () => void;
@@ -19,13 +19,26 @@ interface DeleteRoomDialogProps {
 }
 
 export function DeleteRoomDialog({
-  roomName,
   isOpen,
   onOpenChange,
   onDelete,
   onConfirmNameChange,
 }: DeleteRoomDialogProps) {
   const { t } = useTranslation();
+  const [inputValue, setInputValue] = useState("");
+
+  // Reset input value when dialog opens
+  useEffect(() => {
+    if (isOpen) {
+      setInputValue("");
+    }
+  }, [isOpen]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setInputValue(value);
+    onConfirmNameChange(value);
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -99,8 +112,8 @@ export function DeleteRoomDialog({
           </div>
           <Input
             placeholder={t("room.dialog.delete.confirm_placeholder")}
-            value={roomName}
-            onChange={(e) => onConfirmNameChange(e.target.value)}
+            value={inputValue}
+            onChange={handleInputChange}
           />
         </div>
         <DialogFooter>

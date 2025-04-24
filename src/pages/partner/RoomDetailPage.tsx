@@ -1,99 +1,106 @@
-import { useParams } from "react-router";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { useParams, Link, useNavigate } from "react-router";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 import {
-  Building2,
-  BedDouble,
-  Users,
-  Wifi,
-  Tv,
-  Coffee,
-  Dumbbell,
+  AlertCircle,
   ArrowLeft,
-  Calendar,
-  Clock,
-  Shield,
-  Ruler,
+  BedDouble,
+  Building2,
   ChevronLeft,
   ChevronRight,
+  Clock,
   Image as ImageIcon,
+  Loader2,
+  Ruler,
+  Shield,
   Tag,
+  Users,
+  Dog,
+  Ban,
 } from "lucide-react";
-import { Link } from "react-router";
-import { useState } from "react";
-import { EditRoomDialog } from "@/components/partner/room-management/dialog/EditRoomDialog";
-import { DeleteRoomDialog } from "@/components/partner/room-management/dialog/DeleteRoomDialog";
-import { UpdatePriceDialog } from "@/components/partner/room-management/dialog/UpdatePriceDialog";
-import { AddPromotionDialog } from "@/components/partner/room-management/dialog/AddPromotionDialog";
-import { Room } from "@/types/room";
+import { useAppSelector } from "@/store/hooks";
 
-// Mock data - sau này sẽ được thay thế bằng API call
-const roomDetail: Room = {
-  id: 1,
-  name: "Phòng Deluxe",
-  type: "Deluxe",
-  price: 1500000,
-  floor: 2,
-  images: [
-    "https://images.unsplash.com/photo-1611892440504-42a792e24d32?q=80&w=2070&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1591088398332-8a7791972843?q=80&w=1974&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=2070&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1611892440504-42a792e24d32?q=80&w=2070&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1591088398332-8a7791972843?q=80&w=1974&auto=format&fit=crop",
-  ],
-  description:
-    "Phòng Deluxe rộng rãi với tầm nhìn đẹp ra thành phố, được trang bị đầy đủ tiện nghi hiện đại. Phòng có diện tích 35m² với giường đôi rộng rãi, phòng tắm riêng và ban công thoáng mát.",
-  amenities: [
-    { name: "WiFi miễn phí", icon: Wifi, selected: true },
-    { name: "TV màn hình phẳng", icon: Tv, selected: true },
-    { name: "Máy pha cà phê", icon: Coffee, selected: true },
-    { name: "Phòng tập gym", icon: Dumbbell, selected: true },
-  ],
-  capacity: 2,
-  bedType: "Giường đôi",
-  size: "35m²",
-  checkIn: "14:00",
-  checkOut: "12:00",
-  cancelPolicy: "Miễn phí hủy trong vòng 24h trước khi nhận phòng",
-  promotions: [
-    {
-      id: 1,
-      name: "Giảm 20% cho đặt phòng trước 7 ngày",
-      discount: 20,
-      validUntil: "2024-12-31",
-      code: "EARLY20",
-    },
-    {
-      id: 2,
-      name: "Tặng 1 đêm miễn phí cho đặt 3 đêm",
-      discount: 100,
-      validUntil: "2024-12-31",
-      code: "STAY3GET1",
-    },
-  ],
-};
+import { roomApi } from "@/api/room/room.api";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+
+import { AddPromotionDialog } from "@/components/partner/room-management/dialog/AddPromotionDialog";
+import { DeleteRoomDialog } from "@/components/partner/room-management/dialog/DeleteRoomDialog";
+import { EditRoomDialog } from "@/components/partner/room-management/dialog/EditRoomDialog";
+import { UpdatePriceDialog } from "@/components/partner/room-management/dialog/UpdatePriceDialog";
+import { getAmenityIcon } from "@/utils/amenityIcons";
 
 export default function RoomDetailPage() {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
+  const { t } = useTranslation();
+  const navigate = useNavigate();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
-  const [editedRoom, setEditedRoom] = useState<Room>(roomDetail);
   const [isUpdatingPrice, setIsUpdatingPrice] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [confirmName, setConfirmName] = useState("");
+  const queryClient = useQueryClient();
+  const { currentHotel } = useAppSelector((state) => state.hotel);
 
-  const handleSave = (updatedRoom: Room) => {
-    setEditedRoom(updatedRoom);
+  const {
+    data: roomResponse,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ["room", id],
+    queryFn: () => roomApi.getRoom(id || ""),
+    enabled: !!id,
+  });
+
+  const room = roomResponse?.data;
+
+  // Mutation để xóa phòng
+  const deleteRoomMutation = useMutation({
+    mutationFn: () => roomApi.deleteRoom(id || ""),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["room", id] });
+      queryClient.invalidateQueries({ queryKey: ["rooms"] });
+      toast.success(t("room.dialog.delete.success"));
+      setIsDeleting(false);
+      // Chuyển hướng về trang quản lý phòng
+      navigate("/partner/hotels/rooms");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || t("room.dialog.delete.error"));
+      setIsDeleting(false);
+    },
+  });
+
+  const handleSave = () => {
+    // TODO: Implement API call to update room
+    toast.success(t("room.dialog.edit.success"));
     setIsEditing(false);
+    refetch();
   };
 
-  const handleUpdatePrice = (price: number) => {
-    setEditedRoom({ ...editedRoom, price });
+  const handleUpdatePrice = () => {
+    // TODO: Implement API call to update price
+    toast.success(t("room.dialog.update_price.success"));
     setIsUpdatingPrice(false);
+    refetch();
   };
 
   const handleDelete = () => {
-    // TODO: Implement API call to delete room
-    setIsDeleting(false);
+    if (confirmName !== room?.roomName) {
+      toast.error(t("room.dialog.delete.name_mismatch"));
+      return;
+    }
+
+    deleteRoomMutation.mutate();
+  };
+
+  const handleConfirmNameChange = (name: string) => {
+    setConfirmName(name);
   };
 
   const handleAddPromotion = (promotion: {
@@ -103,8 +110,53 @@ export default function RoomDetailPage() {
     validUntil: string;
   }) => {
     // TODO: Implement API call to add promotion
+    toast.success(t("room.dialog.add_promotion.success"));
     console.log("Adding promotion:", promotion);
+    refetch();
   };
+
+  // Hiển thị trạng thái loading
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-[calc(100vh-200px)]">
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-primary" />
+          <p className="text-muted-foreground">{t("common.loading")}</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Hiển thị lỗi nếu có
+  if (isError || !room) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Link to="/partner/hotels/rooms">
+              <Button variant="ghost" size="icon">
+                <ArrowLeft className="w-4 h-4" />
+              </Button>
+            </Link>
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              {t("room.detail.title")}
+            </h1>
+          </div>
+        </div>
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>{t("error.title")}</AlertTitle>
+          <AlertDescription>
+            {error instanceof Error ? error.message : t("error.loadRoomFailed")}
+          </AlertDescription>
+        </Alert>
+        <Button onClick={() => refetch()}>
+          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+          {t("common.retry")}
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -117,24 +169,21 @@ export default function RoomDetailPage() {
             </Button>
           </Link>
           <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            Chi tiết phòng
+            {t("room.detail.title")}
           </h1>
         </div>
         <div className="flex gap-3">
           <EditRoomDialog
-            room={editedRoom}
+            room={room}
             isOpen={isEditing}
             onOpenChange={setIsEditing}
             onSave={handleSave}
           />
           <DeleteRoomDialog
-            roomName={editedRoom.name}
             isOpen={isDeleting}
             onOpenChange={setIsDeleting}
             onDelete={handleDelete}
-            onConfirmNameChange={(name) =>
-              setEditedRoom({ ...editedRoom, name })
-            }
+            onConfirmNameChange={handleConfirmNameChange}
           />
         </div>
       </div>
@@ -143,16 +192,16 @@ export default function RoomDetailPage() {
       <Card className="overflow-hidden border border-border/50 shadow-sm">
         <div className="relative h-[600px]">
           <img
-            src={roomDetail.images[currentImageIndex]}
-            alt={`${roomDetail.name} - Hình ${currentImageIndex + 1}`}
+            src={room.images[currentImageIndex]?.url || ""}
+            alt={`${room.roomName} - Hình ${currentImageIndex + 1}`}
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-black/40">
             <div className="absolute bottom-0 left-0 right-0 p-6">
               <h2 className="text-4xl font-bold text-white mb-2">
-                {roomDetail.name}
+                {room.roomName}
               </h2>
-              <p className="text-xl text-white/90">{roomDetail.type}</p>
+              <p className="text-xl text-white/90">{room.roomType}</p>
             </div>
           </div>
           <Button
@@ -161,9 +210,7 @@ export default function RoomDetailPage() {
             className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white"
             onClick={() =>
               setCurrentImageIndex(
-                (prev) =>
-                  (prev - 1 + roomDetail.images.length) %
-                  roomDetail.images.length
+                (prev) => (prev - 1 + room.images.length) % room.images.length
               )
             }
           >
@@ -174,9 +221,7 @@ export default function RoomDetailPage() {
             size="icon"
             className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white"
             onClick={() =>
-              setCurrentImageIndex(
-                (prev) => (prev + 1) % roomDetail.images.length
-              )
+              setCurrentImageIndex((prev) => (prev + 1) % room.images.length)
             }
           >
             <ChevronRight className="w-6 h-6" />
@@ -184,12 +229,12 @@ export default function RoomDetailPage() {
           <div className="absolute bottom-4 right-4 flex items-center gap-2 bg-black/50 px-3 py-1 rounded-full text-white">
             <ImageIcon className="w-4 h-4" />
             <span>
-              {currentImageIndex + 1}/{roomDetail.images.length}
+              {currentImageIndex + 1}/{room.images.length}
             </span>
           </div>
         </div>
         <div className="p-4 flex gap-2 overflow-x-auto">
-          {roomDetail.images.map((image, index) => (
+          {room.images.map((image, index) => (
             <div
               key={index}
               className={`relative w-24 h-24 rounded-lg overflow-hidden cursor-pointer flex-shrink-0 ${
@@ -198,7 +243,7 @@ export default function RoomDetailPage() {
               onClick={() => setCurrentImageIndex(index)}
             >
               <img
-                src={image}
+                src={image.url}
                 alt={`Thumbnail ${index + 1}`}
                 className="w-full h-full object-cover"
               />
@@ -218,41 +263,49 @@ export default function RoomDetailPage() {
                 <div>
                   <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-primary"></span>
-                    Thông tin cơ bản
+                    {t("room.detail.basic_info")}
                   </h3>
                   <p className="text-muted-foreground">
-                    {roomDetail.description}
+                    {/* Mô tả phòng sẽ được thêm sau */}
                   </p>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   <div className="flex items-center gap-2 p-3 rounded-lg bg-secondary/50">
                     <Building2 className="w-5 h-5 text-primary" />
                     <div>
-                      <p className="text-sm text-muted-foreground">Tầng</p>
-                      <p className="font-medium">{roomDetail.floor}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {t("room.dialog.edit.floor")}
+                      </p>
+                      <p className="font-medium">{room.floor}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2 p-3 rounded-lg bg-secondary/50">
                     <BedDouble className="w-5 h-5 text-primary" />
                     <div>
                       <p className="text-sm text-muted-foreground">
-                        Loại giường
+                        {t("room.dialog.edit.bed_type")}
                       </p>
-                      <p className="font-medium">{roomDetail.bedType}</p>
+                      <p className="font-medium">{room.bedType}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2 p-3 rounded-lg bg-secondary/50">
                     <Users className="w-5 h-5 text-primary" />
                     <div>
-                      <p className="text-sm text-muted-foreground">Sức chứa</p>
-                      <p className="font-medium">{roomDetail.capacity} người</p>
+                      <p className="text-sm text-muted-foreground">
+                        {t("room.dialog.edit.capacity")}
+                      </p>
+                      <p className="font-medium">
+                        {room.capacity} {t("common.people")}
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2 p-3 rounded-lg bg-secondary/50">
                     <Ruler className="w-5 h-5 text-primary" />
                     <div>
-                      <p className="text-sm text-muted-foreground">Diện tích</p>
-                      <p className="font-medium">{roomDetail.size}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {t("room.dialog.edit.size")}
+                      </p>
+                      <p className="font-medium">{room.squareMeters}m²</p>
                     </div>
                   </div>
                 </div>
@@ -265,21 +318,18 @@ export default function RoomDetailPage() {
             <CardContent className="p-6">
               <h3 className="text-xl font-semibold mb-6 flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-primary"></span>
-                Tiện nghi
+                {t("room.detail.amenities")}
               </h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {roomDetail.amenities.map((amenity, index) => {
-                  const Icon = amenity.icon;
-                  return (
-                    <div
-                      key={index}
-                      className="flex items-center gap-2 p-3 rounded-lg bg-secondary/50 hover:bg-secondary/80 transition-colors"
-                    >
-                      <Icon className="w-5 h-5 text-primary" />
-                      <span>{amenity.name}</span>
-                    </div>
-                  );
-                })}
+                {room.amenities.map((amenity, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center gap-2 p-3 text-primary rounded-lg bg-secondary/50 hover:bg-secondary/80 transition-colors"
+                  >
+                    {amenity.icon && getAmenityIcon(amenity.icon)}
+                    <span>{amenity.name}</span>
+                  </div>
+                ))}
               </div>
             </CardContent>
           </Card>
@@ -289,33 +339,74 @@ export default function RoomDetailPage() {
             <CardContent className="p-6">
               <h3 className="text-xl font-semibold mb-6 flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-primary"></span>
-                Cài đặt phòng
+                {t("room.detail.settings")}
               </h3>
               <div className="space-y-6">
                 <div className="flex items-start gap-3">
                   <Clock className="w-5 h-5 text-primary mt-1" />
                   <div>
-                    <h4 className="font-medium mb-1">Thời gian check-in/out</h4>
+                    <h4 className="font-medium mb-1">
+                      {t("room.detail.check_in_out.title")}
+                    </h4>
                     <p className="text-muted-foreground">
-                      Check-in: {roomDetail.checkIn} - Check-out:{" "}
-                      {roomDetail.checkOut}
+                      {t("room.detail.check_in")}:{" "}
+                      {currentHotel?.policies.checkInTime}
+                      <br />
+                      {t("room.detail.check_out")}:{" "}
+                      {currentHotel?.policies.checkOutTime}
                     </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <Shield className="w-5 h-5 text-primary mt-1" />
                   <div>
-                    <h4 className="font-medium mb-1">Chính sách hủy</h4>
+                    <h4 className="font-medium mb-1">
+                      {t("room.detail.cancel_policy.title")}
+                    </h4>
                     <p className="text-muted-foreground">
-                      {roomDetail.cancelPolicy}
+                      {t(
+                        `room.detail.cancel_policy.${currentHotel?.policies.cancellationPolicy}`
+                      )}
                     </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Calendar className="w-5 h-5 text-primary mt-1" />
+                  <Users className="w-5 h-5 text-primary mt-1" />
                   <div>
-                    <h4 className="font-medium mb-1">Tình trạng đặt phòng</h4>
-                    <p className="text-muted-foreground">Đang có sẵn</p>
+                    <h4 className="font-medium mb-1">
+                      {t("room.detail.children_policy.title")}
+                    </h4>
+                    <p className="text-muted-foreground">
+                      {t(
+                        `room.detail.children_policy.${currentHotel?.policies.childrenPolicy}`
+                      )}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Dog className="w-5 h-5 text-primary mt-1" />
+                  <div>
+                    <h4 className="font-medium mb-1">
+                      {t("room.detail.pet_policy.title")}
+                    </h4>
+                    <p className="text-muted-foreground">
+                      {t(
+                        `room.detail.pet_policy.${currentHotel?.policies.petPolicy}`
+                      )}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Ban className="w-5 h-5 text-primary mt-1" />
+                  <div>
+                    <h4 className="font-medium mb-1">
+                      {t("room.detail.smoking_policy.title")}
+                    </h4>
+                    <p className="text-muted-foreground">
+                      {t(
+                        `room.detail.smoking_policy.${currentHotel?.policies.smokingPolicy}`
+                      )}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -330,16 +421,38 @@ export default function RoomDetailPage() {
             <CardContent className="p-6">
               <h3 className="text-xl font-semibold mb-6 flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-primary"></span>
-                Giá phòng
+                {t("room.detail.price")}
               </h3>
               <div className="text-center mb-6">
                 <p className="text-3xl font-bold text-primary">
-                  {editedRoom.price.toLocaleString()}đ
+                  {room.price.toLocaleString()}đ
                 </p>
-                <p className="text-muted-foreground">/ đêm</p>
+                <p className="text-muted-foreground">
+                  {t("room.detail.per_night")}
+                </p>
+                {room.discountPercent > 0 && (
+                  <div className="mt-2">
+                    <p className="text-sm text-muted-foreground line-through">
+                      {(
+                        room.price *
+                        (1 + room.discountPercent / 100)
+                      ).toLocaleString()}
+                      đ
+                    </p>
+                    <p className="text-sm font-medium text-destructive">
+                      -{room.discountPercent}% {t("room.detail.discount")}
+                    </p>
+                    {room.discountStartDate && room.discountEndDate && (
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {t("room.detail.valid_until")}:{" "}
+                        {new Date(room.discountEndDate).toLocaleDateString()}
+                      </p>
+                    )}
+                  </div>
+                )}
               </div>
               <UpdatePriceDialog
-                price={editedRoom.price}
+                price={room.price}
                 isOpen={isUpdatingPrice}
                 onOpenChange={setIsUpdatingPrice}
                 onUpdate={handleUpdatePrice}
@@ -353,30 +466,37 @@ export default function RoomDetailPage() {
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-semibold flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-primary"></span>
-                  Khuyến mãi
+                  {t("room.detail.promotions")}
                 </h3>
                 <AddPromotionDialog onAdd={handleAddPromotion} />
               </div>
               <div className="space-y-4">
-                {roomDetail.promotions.map((promo) => (
-                  <div
-                    key={promo.id}
-                    className="flex items-center justify-between p-4 rounded-lg bg-secondary/50"
-                  >
+                {/* Promotions sẽ được thêm sau khi có API */}
+                {room.discountPercent > 0 ? (
+                  <div className="flex items-center justify-between p-4 rounded-lg bg-secondary/50">
                     <div>
-                      <h4 className="font-medium">{promo.name}</h4>
+                      <h4 className="font-medium">
+                        {t("room.detail.current_discount")}
+                      </h4>
                       <p className="text-sm text-muted-foreground">
-                        Mã: {promo.code} | HSD: {promo.validUntil}
+                        {t("room.detail.valid_until")}:{" "}
+                        {new Date(
+                          room.discountEndDate || ""
+                        ).toLocaleDateString()}
                       </p>
                     </div>
                     <div className="flex items-center gap-2">
                       <Tag className="w-5 h-5 text-primary" />
                       <span className="font-semibold text-primary">
-                        -{promo.discount}%
+                        -{room.discountPercent}%
                       </span>
                     </div>
                   </div>
-                ))}
+                ) : (
+                  <p className="text-center text-muted-foreground py-4">
+                    {t("room.detail.no_promotions")}
+                  </p>
+                )}
               </div>
             </CardContent>
           </Card>
