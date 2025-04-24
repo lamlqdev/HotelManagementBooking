@@ -48,10 +48,8 @@
     "showing": "Showing",
     "of": "of",
     "results": "results",
-    "clearFilters": "Clear filters",
-    "people": "people",
-    "rooms": "rooms",
-    "nights": "nights"
+    "view_details": "View details",
+    "error_loading_data": "Could not load data. Please try again later."
   },
   "nav": {
     "home": "Home",
@@ -241,8 +239,16 @@
       "destination": "Where do you want to go?",
       "guests": "{{adults}} adults, {{children}} children"
     },
-    "results_count_one": "Found {{count}} result",
-    "results_count_other": "Found {{count}} results",
+    "results": "{{count}} search results",
+    "sort_by": "Sort by",
+    "select_sort": "Select sorting",
+    "sort": {
+      "price_asc": "Price: Low to High",
+      "price_desc": "Price: High to Low",
+      "rating_desc": "Rating: High to Low",
+      "rating_asc": "Rating: Low to High"
+    },
+    "no_results": "No results found",
     "price": {
       "per_night": "per night"
     }
@@ -259,8 +265,7 @@
     "card": {
       "select_room": "Select room",
       "original_price": "Original price",
-      "reviews_count_one": "{{count}} review",
-      "reviews_count_other": "{{count}} reviews"
+      "reviews_count": "{{count}} reviews"
     }
   },
   "travel": {

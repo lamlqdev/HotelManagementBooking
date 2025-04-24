@@ -9,78 +9,20 @@ import {
 import { Badge } from "../../ui/badge";
 import { Button } from "../../ui/button";
 import { Star } from "lucide-react";
-
-interface HotelDeal {
-  id: number;
-  name: string;
-  location: string;
-  image: string;
-  rating: number;
-  originalPrice: number;
-  discountedPrice: number;
-  discountPercent: number;
-}
-
-const hotelDeals: HotelDeal[] = [
-  {
-    id: 1,
-    name: "Vinpearl Resort & Spa Hạ Long",
-    location: "Hạ Long",
-    image:
-      "https://images.unsplash.com/photo-1571896349842-33c89424de2d?q=80&w=800&h=600&fit=crop",
-    rating: 4.8,
-    originalPrice: 5200000,
-    discountedPrice: 3640000,
-    discountPercent: 30,
-  },
-  {
-    id: 2,
-    name: "La Siesta Hoi An Resort & Spa",
-    location: "Hội An",
-    image:
-      "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=800&h=600&fit=crop",
-    rating: 4.9,
-    originalPrice: 4800000,
-    discountedPrice: 2880000,
-    discountPercent: 40,
-  },
-  {
-    id: 3,
-    name: "Dalat Palace Heritage Hotel",
-    location: "Đà Lạt",
-    image:
-      "https://images.unsplash.com/photo-1582719508461-905c673771fd?q=80&w=800&h=600&fit=crop",
-    rating: 4.7,
-    originalPrice: 3800000,
-    discountedPrice: 2660000,
-    discountPercent: 30,
-  },
-  {
-    id: 4,
-    name: "InterContinental Phu Quoc",
-    location: "Phú Quốc",
-    image:
-      "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?q=80&w=800&h=600&fit=crop",
-    rating: 4.9,
-    originalPrice: 6500000,
-    discountedPrice: 4550000,
-    discountPercent: 30,
-  },
-  {
-    id: 5,
-    name: "Mia Resort Nha Trang",
-    location: "Nha Trang",
-    image:
-      "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?q=80&w=800&h=600&fit=crop",
-    rating: 4.6,
-    originalPrice: 4200000,
-    discountedPrice: 2940000,
-    discountPercent: 30,
-  },
-];
+import { useQuery } from "@tanstack/react-query";
+import { hotelApi } from "@/api/hotel/hotel.api";
+import { Skeleton } from "../../ui/skeleton";
+import { Alert, AlertDescription, AlertTitle } from "../../ui/alert";
+import { AlertCircle } from "lucide-react";
 
 export default function HotelDeals() {
   const { t } = useTranslation();
+
+  // Sử dụng React Query để gọi API lấy danh sách khách sạn đang có giảm giá
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["discounted-hotels"],
+    queryFn: () => hotelApi.getDiscountedHotels({ limit: 8 }),
+  });
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("vi-VN", {
@@ -89,6 +31,74 @@ export default function HotelDeals() {
       maximumFractionDigits: 0,
     }).format(price);
   };
+
+  // Xử lý trạng thái loading
+  if (isLoading) {
+    return (
+      <section className="py-12 bg-background">
+        <div className="container">
+          <div className="flex items-center justify-between mb-8">
+            <Skeleton className="h-10 w-48" />
+            <Skeleton className="h-10 w-24" />
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {Array.from({ length: 4 }).map((_, index) => (
+              <div
+                key={index}
+                className="bg-card rounded-lg overflow-hidden border border-border"
+              >
+                <Skeleton className="aspect-[4/3] w-full" />
+                <div className="p-4 space-y-2">
+                  <Skeleton className="h-4 w-1/3" />
+                  <Skeleton className="h-5 w-full" />
+                  <Skeleton className="h-4 w-1/2" />
+                  <Skeleton className="h-6 w-2/3" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Xử lý trạng thái error
+  if (isError) {
+    return (
+      <section className="py-12 bg-background">
+        <div className="container">
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>{t("common.error")}</AlertTitle>
+            <AlertDescription>
+              {t("common.error_loading_data")}
+            </AlertDescription>
+          </Alert>
+        </div>
+      </section>
+    );
+  }
+
+  // Xử lý trạng thái không có dữ liệu
+  if (!data?.data || data.data.length === 0) {
+    return (
+      <section className="py-12 bg-background">
+        <div className="container">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-3xl font-bold">{t("hotels.best_deals")}</h2>
+            <Button variant="outline" className="font-medium">
+              {t("common.view_all")}
+            </Button>
+          </div>
+          <div className="text-center py-12">
+            <p className="text-muted-foreground">
+              {t("hotels.no_deals_available")}
+            </p>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-12 bg-background">
@@ -108,22 +118,27 @@ export default function HotelDeals() {
             className="w-full"
           >
             <CarouselContent className="-ml-4">
-              {hotelDeals.map((hotel) => (
+              {data.data.map((hotel) => (
                 <CarouselItem
-                  key={hotel.id}
+                  key={hotel._id}
                   className="pl-4 basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4"
                 >
                   <div className="bg-card rounded-lg overflow-hidden border border-border group cursor-pointer">
                     <div className="relative aspect-[4/3]">
                       <img
-                        src={hotel.image}
+                        src={
+                          hotel.featuredImage?.url ||
+                          "https://via.placeholder.com/800x600"
+                        }
                         alt={hotel.name}
                         className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                         loading="lazy"
                       />
-                      <Badge className="absolute top-3 right-3 bg-red-500 hover:bg-red-600">
-                        -{hotel.discountPercent}%
-                      </Badge>
+                      {hotel.highestDiscountPercent > 0 && (
+                        <Badge className="absolute top-3 right-3 bg-red-500 hover:bg-red-600">
+                          -{hotel.highestDiscountPercent}%
+                        </Badge>
+                      )}
                     </div>
                     <div className="p-4">
                       <div className="flex items-center gap-1 mb-2">
@@ -136,14 +151,16 @@ export default function HotelDeals() {
                         {hotel.name}
                       </h3>
                       <p className="text-muted-foreground text-sm mb-3">
-                        {hotel.location}
+                        {hotel.locationDescription || hotel.address}
                       </p>
                       <div className="space-y-1">
-                        <p className="text-sm line-through text-muted-foreground">
-                          {formatPrice(hotel.originalPrice)}
-                        </p>
+                        {hotel.lowestPrice > hotel.lowestDiscountedPrice && (
+                          <p className="text-sm line-through text-muted-foreground">
+                            {formatPrice(hotel.lowestPrice)}
+                          </p>
+                        )}
                         <p className="text-lg font-bold text-primary">
-                          {formatPrice(hotel.discountedPrice)}
+                          {formatPrice(hotel.lowestDiscountedPrice)}
                         </p>
                       </div>
                     </div>

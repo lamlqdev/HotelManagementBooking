@@ -48,13 +48,8 @@
     "showing": "Hiển thị",
     "of": "của",
     "results": "kết quả",
-    "clearFilters": "Xóa bỏ bộ lọc",
-    "yes": "Có",
-    "no": "Không",
-    "all": "Tất cả",
-    "people": "người",
-    "rooms": "phòng",
-    "nights": "đêm"
+    "view_details": "Xem chi tiết",
+    "error_loading_data": "Không thể tải dữ liệu. Vui lòng thử lại sau."
   },
   "nav": {
     "home": "Trang chủ",
@@ -244,8 +239,16 @@
       "destination": "Bạn muốn đi đâu?",
       "guests": "{{adults}} người lớn, {{children}} trẻ em"
     },
-    "results_count_one": "Tìm thấy {{count}} kết quả",
-    "results_count_other": "Tìm thấy {{count}} kết quả",
+    "results": "{{count}} kết quả tìm kiếm",
+    "sort_by": "Sắp xếp theo",
+    "select_sort": "Chọn cách sắp xếp",
+    "sort": {
+      "price_asc": "Giá tăng dần",
+      "price_desc": "Giá giảm dần",
+      "rating_desc": "Đánh giá cao nhất",
+      "rating_asc": "Đánh giá thấp nhất"
+    },
+    "no_results": "Không tìm thấy kết quả nào",
     "price": {
       "per_night": "mỗi đêm"
     }
@@ -262,8 +265,7 @@
     "card": {
       "select_room": "Chọn phòng",
       "original_price": "Giá gốc",
-      "reviews_count_one": "{{count}} đánh giá",
-      "reviews_count_other": "{{count}} đánh giá"
+      "reviews_count": "{{count}} đánh giá"
     }
   },
   "travel": {

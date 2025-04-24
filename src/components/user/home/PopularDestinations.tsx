@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { AlertCircle } from "lucide-react";
+import { useNavigate } from "react-router";
 
 import {
   Carousel,
@@ -16,11 +17,20 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export default function PopularDestinations() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["popularLocations"],
     queryFn: () => locationApi.getPopularLocations(),
   });
+
+  const handleDestinationClick = (locationId: string, locationName: string) => {
+    navigate(
+      `/search?locationId=${locationId}&locationName=${encodeURIComponent(
+        locationName
+      )}`
+    );
+  };
 
   if (isLoading) {
     return (
@@ -86,7 +96,12 @@ export default function PopularDestinations() {
                   key={destination._id}
                   className="pl-4 basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4"
                 >
-                  <div className="relative group overflow-hidden rounded-lg cursor-pointer">
+                  <div
+                    className="relative group overflow-hidden rounded-lg cursor-pointer"
+                    onClick={() =>
+                      handleDestinationClick(destination._id, destination.name)
+                    }
+                  >
                     <div className="relative aspect-[4/3]">
                       <img
                         src={destination.image?.url || "/placeholder-image.jpg"}
