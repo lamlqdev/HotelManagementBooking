@@ -1,7 +1,8 @@
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { AlertCircle, Heart } from "lucide-react";
+import { AlertCircle } from "lucide-react";
+import NoData from "@/assets/illustration/NoData.svg";
 
 import { favouriteApi } from "@/api/favourite/favourite.api";
 import { Button } from "@/components/ui/button";
@@ -64,7 +65,7 @@ const FavouriteHotelPage = () => {
           <h1 className="text-3xl font-bold">{t("hotels.favorites")}</h1>
         </div>
         <div className="flex flex-col items-center justify-center py-12 text-center">
-          <Heart className="w-12 h-12 text-muted-foreground mb-4" />
+          <img src={NoData} alt="No data" className="w-96 h-96 mb-4" />
           <h3 className="text-xl font-semibold mb-2">
             {t("favourite.no_favourites")}
           </h3>

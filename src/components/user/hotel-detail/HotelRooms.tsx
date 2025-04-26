@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router";
 import { FaBed, FaUserFriends, FaRulerCombined } from "react-icons/fa";
+import NoData from "@/assets/illustration/NoData.svg";
 
 import { Room } from "@/types/room";
 import { getAmenityIcon } from "@/utils/amenityIcons";
@@ -21,6 +22,29 @@ const HotelRooms = ({ rooms }: HotelRoomsProps) => {
   const handleBookRoom = (roomId: string) => {
     navigate(`/booking-information?roomId=${roomId}`);
   };
+
+  if (!rooms || rooms.length === 0) {
+    return (
+      <section id="phòng">
+        <h2 className="text-2xl font-bold mb-6 text-foreground">
+          Danh sách phòng
+        </h2>
+        <div className="flex flex-col items-center justify-center py-12 text-center">
+          <img
+            src={NoData}
+            alt="No rooms available"
+            className="w-96 h-96 mb-4"
+          />
+          <h3 className="text-xl font-semibold mb-2">
+            Hiện không có phòng nào
+          </h3>
+          <p className="text-muted-foreground">
+            Vui lòng quay lại sau để xem các phòng mới
+          </p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="phòng">

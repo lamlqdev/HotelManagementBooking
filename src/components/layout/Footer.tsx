@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
-import logo from "../../assets/images/logo.png";
+import { Logo } from "@/components/ui/logo";
 
 const Footer = () => {
   const { t } = useTranslation();
@@ -16,7 +16,7 @@ const Footer = () => {
           {/* Logo section */}
           <div>
             <Link to="/" className="flex items-center" onClick={scrollToTop}>
-              <img src={logo} alt={t("common.logo_alt")} className="h-32" />
+              <Logo className="h-32" showDot={false} />
             </Link>
           </div>
 

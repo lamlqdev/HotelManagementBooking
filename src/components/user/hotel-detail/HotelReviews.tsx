@@ -2,6 +2,7 @@ import { FaStar } from "react-icons/fa";
 import { Review } from "@/types/review";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { FaInfoCircle } from "react-icons/fa";
+import Reviews from "@/assets/illustration/Reviews.svg";
 
 interface ReviewStats {
   overall: number;
@@ -18,6 +19,23 @@ interface HotelReviewsProps {
 }
 
 const HotelReviews = ({ reviewStats, reviews }: HotelReviewsProps) => {
+  if (!reviews || reviews.length === 0) {
+    return (
+      <section id="đánh giá">
+        <h2 className="text-2xl font-bold mb-6 text-foreground">
+          Đánh giá từ khách hàng
+        </h2>
+        <div className="flex flex-col items-center justify-center py-12 text-center">
+          <img src={Reviews} alt="No reviews" className="w-96 h-96 mb-4" />
+          <h3 className="text-xl font-semibold mb-2">Chưa có đánh giá nào</h3>
+          <p className="text-muted-foreground">
+            Hãy là người đầu tiên đánh giá khách sạn này
+          </p>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section id="đánh giá">
       <h2 className="text-2xl font-bold mb-6 text-foreground">
