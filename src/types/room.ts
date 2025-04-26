@@ -10,6 +10,7 @@ export type Room = {
   _id: string;
   hotelId: string;
   roomName: string;
+  description: string;
   floor: number;
   roomType: "Standard" | "Superior" | "Deluxe" | "Suite" | "Family";
   bedType: "Single" | "Twin" | "Double" | "Queen" | "King";

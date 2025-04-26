@@ -91,20 +91,6 @@ export default function RoomDetailPage() {
     },
   });
 
-  const handleSave = () => {
-    // TODO: Implement API call to update room
-    toast.success(t("room.dialog.edit.success"));
-    setIsEditing(false);
-    refetch();
-  };
-
-  const handleUpdatePrice = () => {
-    // TODO: Implement API call to update price
-    toast.success(t("room.dialog.update_price.success"));
-    setIsUpdatingPrice(false);
-    refetch();
-  };
-
   const handleDelete = () => {
     if (confirmName !== room?.roomName) {
       toast.error(t("room.dialog.delete.name_mismatch"));
@@ -185,7 +171,6 @@ export default function RoomDetailPage() {
             room={room}
             isOpen={isEditing}
             onOpenChange={setIsEditing}
-            onSave={handleSave}
           />
           <DeleteRoomDialog
             isOpen={isDeleting}
@@ -273,8 +258,8 @@ export default function RoomDetailPage() {
                     <span className="w-2 h-2 rounded-full bg-primary"></span>
                     {t("room.detail.basic_info")}
                   </h3>
-                  <p className="text-muted-foreground">
-                    {/* Mô tả phòng sẽ được thêm sau */}
+                  <p className="text-muted-foreground mb-4">
+                    {room.description}
                   </p>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -433,7 +418,13 @@ export default function RoomDetailPage() {
               </h3>
               <div className="text-center mb-6">
                 <p className="text-3xl font-bold text-primary">
-                  {room.price.toLocaleString()}đ
+                  {room.discountPercent > 0
+                    ? (
+                        room.price *
+                        (1 - room.discountPercent / 100)
+                      ).toLocaleString()
+                    : room.price.toLocaleString()}
+                  đ
                 </p>
                 <p className="text-muted-foreground">
                   {t("room.detail.per_night")}
@@ -441,11 +432,7 @@ export default function RoomDetailPage() {
                 {room.discountPercent > 0 && (
                   <div className="mt-2">
                     <p className="text-sm text-muted-foreground line-through">
-                      {(
-                        room.price *
-                        (1 + room.discountPercent / 100)
-                      ).toLocaleString()}
-                      đ
+                      {room.price.toLocaleString()}đ
                     </p>
                     <p className="text-sm font-medium text-destructive">
                       -{room.discountPercent}% {t("room.detail.discount")}
@@ -460,10 +447,10 @@ export default function RoomDetailPage() {
                 )}
               </div>
               <UpdatePriceDialog
+                roomId={id || ""}
                 price={room.price}
                 isOpen={isUpdatingPrice}
                 onOpenChange={setIsUpdatingPrice}
-                onUpdate={handleUpdatePrice}
               />
             </CardContent>
           </Card>

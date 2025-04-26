@@ -1089,11 +1089,12 @@
     },
     "dialog": {
       "add": {
-        "title": "Thêm phòng mới",
-        "description": "Điền thông tin để thêm phòng mới vào khách sạn của bạn",
-        "add": "Thêm phòng",
+        "add": "Thêm",
+        "title": "Thêm phòng",
+        "description": "Thêm một phòng mới vào khách sạn của bạn",
+        "adding": "Đang thêm...",
         "success": "Thêm phòng thành công",
-        "error": "Không thể thêm phòng. Vui lòng thử lại sau."
+        "error": "Có lỗi xảy ra khi thêm phòng"
       },
       "edit": {
         "title": "Chỉnh sửa thông tin phòng",
@@ -1116,7 +1117,11 @@
         "max_images_error": "Bạn chỉ có thể tải lên tối đa 10 ảnh",
         "invalid_image_format": "Định dạng ảnh không hợp lệ",
         "image_too_large": "Kích thước ảnh quá lớn (tối đa 5MB)",
-        "upload_hint": "Click hoặc kéo thả hình ảnh vào đây"
+        "upload_hint": "Click hoặc kéo thả hình ảnh vào đây",
+        "success": "Phòng đã được cập nhật thành công",
+        "error": "Có lỗi xảy ra khi cập nhật phòng",
+        "saving": "Đang lưu...",
+        "min_images_error": "Vui lòng tải lên ít nhất 1 ảnh"
       },
       "delete": {
         "title": "Xác nhận xóa phòng",
@@ -1134,8 +1139,12 @@
         "title": "Cập nhật giá phòng",
         "new_price": "Giá mới",
         "apply_from": "Áp dụng từ ngày hiện tại",
+        "cancel": "Hủy",
         "update": "Cập nhật",
-        "cancel": "Hủy"
+        "updating": "Đang cập nhật...",
+        "success": "Cập nhật giá phòng thành công",
+        "error": "Có lỗi xảy ra khi cập nhật giá phòng",
+        "invalid_price": "Giá phòng không hợp lệ"
       },
       "add_promotion": {
         "title": "Thêm khuyến mãi mới",

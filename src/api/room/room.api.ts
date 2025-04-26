@@ -6,7 +6,7 @@ import {
   RoomSearchParams,
   RoomDiscountParams,
   CreateRoomFormData,
-  UpdateRoomData,
+  UpdateRoomFormData,
 } from "./types";
 
 const baseUrl = "/rooms";
@@ -42,6 +42,7 @@ export const roomApi = {
     // Thêm các trường thông tin cơ bản
     formData.append("hotelId", hotelId);
     formData.append("roomName", data.roomName);
+    formData.append("description", data.description);
     formData.append("floor", data.floor.toString());
     formData.append("roomType", data.roomType);
     formData.append("bedType", data.bedType);
@@ -80,36 +81,11 @@ export const roomApi = {
   // Cập nhật thông tin phòng
   updateRoom: async (
     id: string,
-    data: UpdateRoomData
+    data: UpdateRoomFormData
   ): Promise<RoomResponse> => {
-    const formData = new FormData();
-
-    // Thêm các trường thông tin cơ bản nếu có
-    if (data.roomType) formData.append("roomType", data.roomType);
-    if (data.bedType) formData.append("bedType", data.bedType);
-    if (data.price) formData.append("price", data.price.toString());
-    if (data.capacity) formData.append("capacity", data.capacity.toString());
-    if (data.squareMeters)
-      formData.append("squareMeters", data.squareMeters.toString());
-    if (data.cancellationPolicy)
-      formData.append("cancellationPolicy", data.cancellationPolicy);
-    if (data.status) formData.append("status", data.status);
-
-    // Thêm amenities nếu có
-    if (data.amenities && data.amenities.length > 0) {
-      formData.append("amenities", JSON.stringify(data.amenities));
-    }
-
-    // Thêm ảnh nếu có
-    if (data.images) {
-      data.images.forEach((image: File) => {
-        formData.append("images", image);
-      });
-    }
-
     const response = await axiosInstance.put<RoomResponse>(
       `${baseUrl}/${id}`,
-      formData,
+      data,
       {
         headers: {
           "Content-Type": "multipart/form-data",

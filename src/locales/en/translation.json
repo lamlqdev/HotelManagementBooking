@@ -1072,11 +1072,12 @@
     },
     "dialog": {
       "add": {
-        "title": "Add New Room",
-        "description": "Fill in the information to add a new room to your hotel",
-        "add": "Add Room",
+        "add": "Add",
+        "title": "Add Room",
+        "description": "Add a new room to your hotel",
+        "adding": "Adding...",
         "success": "Room added successfully",
-        "error": "Failed to add room. Please try again later."
+        "error": "An error occurred while adding the room"
       },
       "edit": {
         "title": "Edit Room Information",
@@ -1099,7 +1100,11 @@
         "max_images_error": "You can only upload a maximum of 10 images",
         "invalid_image_format": "Invalid image format",
         "image_too_large": "Image size too large (maximum 5MB)",
-        "upload_hint": "Click or drag and drop images here"
+        "upload_hint": "Click or drag and drop images here",
+        "success": "Room updated successfully",
+        "error": "An error occurred while updating the room",
+        "saving": "Saving...",
+        "min_images_error": "Please upload at least 1 image"
       },
       "delete": {
         "title": "Confirm Delete Room",
@@ -1117,8 +1122,12 @@
         "title": "Update Room Price",
         "new_price": "New Price",
         "apply_from": "Apply from current date",
+        "cancel": "Cancel",
         "update": "Update",
-        "cancel": "Cancel"
+        "updating": "Updating...",
+        "success": "Room price updated successfully",
+        "error": "An error occurred while updating room price",
+        "invalid_price": "Invalid room price"
       },
       "add_promotion": {
         "title": "Add New Promotion",

@@ -11,33 +11,248 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Plus, Pencil } from "lucide-react";
+import { Plus, Pencil, Loader2, X } from "lucide-react";
 import { Room } from "@/types/room";
 import { useTranslation } from "react-i18next";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { roomApi } from "@/api/room/room.api";
+import { UpdateRoomData } from "@/api/room/types";
+import { useState, useEffect } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { amenitiesApi } from "@/api/amenities/amenities.api";
+import { Amenity } from "@/types/amenity";
+import { getAmenityIcon } from "@/utils/amenityIcons";
 
 interface EditRoomDialogProps {
   room: Room;
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
-  onSave: (room: Room) => void;
 }
 
 export function EditRoomDialog({
   room,
   isOpen,
   onOpenChange,
-  onSave,
 }: EditRoomDialogProps) {
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
+  const [editedRoom, setEditedRoom] = useState<Room>(room);
+  const [newImages, setNewImages] = useState<File[]>([]);
+  const [imagePreviewUrls, setImagePreviewUrls] = useState<string[]>([]);
 
-  const handleAmenityToggle = (index: number, amenities: Room["amenities"]) => {
-    const newAmenities = [...amenities];
-    newAmenities[index] = {
-      ...newAmenities[index],
-      selected: !newAmenities[index].selected,
-    };
-    return newAmenities;
+  // Reset state when dialog opens
+  useEffect(() => {
+    if (isOpen) {
+      setEditedRoom(room);
+      setNewImages([]);
+      setImagePreviewUrls([]);
+    }
+  }, [isOpen, room]);
+
+  // Lấy danh sách tiện nghi từ API
+  const { data: amenitiesResponse } = useQuery({
+    queryKey: ["amenities"],
+    queryFn: () => amenitiesApi.getAmenities(),
+  });
+
+  // Lọc chỉ lấy tiện nghi phòng
+  const availableAmenities =
+    amenitiesResponse?.data.filter(
+      (amenity: Amenity) => amenity.type === "room"
+    ) || [];
+
+  // Lọc tiện nghi đã chọn và chưa chọn
+  const selectedAmenities = availableAmenities.filter((amenity: Amenity) =>
+    editedRoom.amenities.some((a) => a._id === amenity._id)
+  );
+
+  const unselectedAmenities = availableAmenities.filter(
+    (amenity: Amenity) =>
+      !editedRoom.amenities.some((a) => a._id === amenity._id)
+  );
+
+  const updateRoomMutation = useMutation({
+    mutationFn: (data: UpdateRoomData) => {
+      const formData = new FormData();
+
+      // Thêm các trường thông tin cơ bản nếu có
+      if (data.roomName) formData.append("roomName", data.roomName);
+      if (data.floor) formData.append("floor", data.floor.toString());
+      if (data.roomType) formData.append("roomType", data.roomType);
+      if (data.bedType) formData.append("bedType", data.bedType);
+      if (data.description) formData.append("description", data.description);
+      if (data.capacity) formData.append("capacity", data.capacity.toString());
+      if (data.squareMeters)
+        formData.append("squareMeters", data.squareMeters.toString());
+      if (data.status) formData.append("status", data.status);
+
+      // Thêm amenities nếu có
+      if (data.amenities && data.amenities.length > 0) {
+        formData.append("amenities", JSON.stringify(data.amenities));
+      }
+
+      // Thêm danh sách ảnh cũ cần giữ lại
+      const existingImages = editedRoom.images.filter((img) => img.publicId);
+      if (existingImages.length > 0) {
+        formData.append("existingImages", JSON.stringify(existingImages));
+      }
+
+      // Thêm hình ảnh mới
+      newImages.forEach((image) => {
+        formData.append("images", image);
+      });
+
+      return roomApi.updateRoom(room._id, formData);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["room", room._id] });
+      queryClient.invalidateQueries({ queryKey: ["rooms"] });
+      toast.success(t("room.dialog.edit.success"));
+      onOpenChange(false);
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || t("room.dialog.edit.error"));
+    },
+  });
+
+  const handleAmenityToggle = (amenityId: string) => {
+    const isSelected = editedRoom.amenities.some((a) => a._id === amenityId);
+    const amenity = availableAmenities.find((a) => a._id === amenityId);
+
+    if (!amenity) return;
+
+    if (isSelected) {
+      setEditedRoom((prev) => ({
+        ...prev,
+        amenities: prev.amenities.filter((a) => a._id !== amenityId),
+      }));
+    } else {
+      setEditedRoom((prev) => ({
+        ...prev,
+        amenities: [...prev.amenities, amenity],
+      }));
+    }
   };
+
+  const handleImageDelete = (imageUrl: string) => {
+    // Chỉ cho phép xóa nếu còn ít nhất 1 hình
+    if (editedRoom.images.length <= 1) {
+      toast.error(t("room.dialog.edit.min_images_error"));
+      return;
+    }
+
+    // Nếu là ảnh mới (không có publicId), xóa khỏi newImages
+    const imageToDelete = editedRoom.images.find((img) => img.url === imageUrl);
+    if (imageToDelete && !imageToDelete.publicId) {
+      const fileToRemove = newImages.find(
+        (file) => URL.createObjectURL(file) === imageUrl
+      );
+      if (fileToRemove) {
+        setNewImages((prev) => prev.filter((file) => file !== fileToRemove));
+      }
+    }
+
+    setEditedRoom((prev) => ({
+      ...prev,
+      images: prev.images.filter((img) => img.url !== imageUrl),
+    }));
+  };
+
+  const handleImageAdd = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files) {
+      // Kiểm tra số lượng ảnh tối đa (ví dụ: 10 ảnh)
+      if (editedRoom.images.length + files.length > 10) {
+        toast.error(t("room.dialog.edit.max_images_error"));
+        return;
+      }
+
+      // Kiểm tra kích thước và định dạng ảnh
+      const validFiles: File[] = [];
+      const validUrls: string[] = [];
+
+      Array.from(files).forEach((file) => {
+        // Kiểm tra định dạng
+        if (!file.type.startsWith("image/")) {
+          toast.error(t("room.dialog.edit.invalid_image_format"));
+          return;
+        }
+
+        // Kiểm tra kích thước (tối đa 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+          toast.error(t("room.dialog.edit.image_too_large"));
+          return;
+        }
+
+        validFiles.push(file);
+        validUrls.push(URL.createObjectURL(file));
+      });
+
+      setNewImages((prev) => [...prev, ...validFiles]);
+      setImagePreviewUrls((prev) => [...prev, ...validUrls]);
+
+      // Thêm ảnh mới vào editedRoom
+      setEditedRoom((prev) => ({
+        ...prev,
+        images: [
+          ...prev.images,
+          ...validFiles.map((file) => ({
+            url: URL.createObjectURL(file),
+            publicId: "",
+            filename: file.name,
+          })),
+        ],
+      }));
+    }
+  };
+
+  const handleSave = () => {
+    // Kiểm tra số lượng hình ảnh tối thiểu
+    if (editedRoom.images.length === 0) {
+      toast.error(t("room.dialog.edit.min_images_error"));
+      return;
+    }
+
+    const updateData: UpdateRoomData = {};
+
+    if (editedRoom.roomName !== room.roomName)
+      updateData.roomName = editedRoom.roomName;
+    if (editedRoom.roomType !== room.roomType)
+      updateData.roomType = editedRoom.roomType;
+    if (editedRoom.bedType !== room.bedType)
+      updateData.bedType = editedRoom.bedType;
+    if (editedRoom.description !== room.description)
+      updateData.description = editedRoom.description;
+    if (editedRoom.capacity !== room.capacity)
+      updateData.capacity = editedRoom.capacity;
+    if (editedRoom.squareMeters !== room.squareMeters)
+      updateData.squareMeters = editedRoom.squareMeters;
+    if (editedRoom.status !== room.status)
+      updateData.status = editedRoom.status;
+    if (editedRoom.floor !== room.floor) updateData.floor = editedRoom.floor;
+    if (
+      JSON.stringify(editedRoom.amenities.map((a) => a._id)) !==
+      JSON.stringify(room.amenities.map((a) => a._id))
+    ) {
+      updateData.amenities = editedRoom.amenities.map((a) => a._id);
+    }
+
+    updateRoomMutation.mutate(updateData);
+  };
+
+  // Cleanup URLs when component unmounts
+  useEffect(() => {
+    return () => {
+      imagePreviewUrls.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, [imagePreviewUrls]);
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -59,59 +274,29 @@ export function EditRoomDialog({
           <div className="space-y-4">
             <h3 className="font-medium">{t("room.dialog.edit.images")}</h3>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {room.images.map((image, index) => (
+              {editedRoom.images.map((image, index) => (
                 <div key={index} className="relative group">
                   <img
-                    src={image}
+                    src={image.url}
                     alt={`${t("room.dialog.edit.images")} ${index + 1}`}
                     className="w-full h-32 object-cover rounded-lg"
                   />
-                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
-                    <Button
-                      variant="destructive"
-                      size="icon"
-                      className="bg-destructive/80 hover:bg-destructive"
-                      onClick={() => {
-                        const newImages = [...room.images];
-                        newImages.splice(index, 1);
-                        onSave({ ...room, images: newImages });
-                      }}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M3 6h18" />
-                        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-                        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-                      </svg>
-                    </Button>
-                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleImageDelete(image.url)}
+                    className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
                 </div>
               ))}
               <div className="relative h-32 rounded-lg border-2 border-dashed border-border/50 flex items-center justify-center cursor-pointer hover:border-primary/50 transition-colors">
                 <input
                   type="file"
                   accept="image/*"
+                  multiple
                   className="absolute inset-0 opacity-0 cursor-pointer"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      const reader = new FileReader();
-                      reader.onload = (e) => {
-                        const newImage = e.target?.result as string;
-                        onSave({ ...room, images: [...room.images, newImage] });
-                      };
-                      reader.readAsDataURL(file);
-                    }
-                  }}
+                  onChange={handleImageAdd}
                 />
                 <Plus className="w-8 h-8 text-muted-foreground" />
               </div>
@@ -125,26 +310,49 @@ export function EditRoomDialog({
               <div className="space-y-2">
                 <Label>{t("room.dialog.edit.name")}</Label>
                 <Input
-                  value={room.name}
-                  onChange={(e) => onSave({ ...room, name: e.target.value })}
+                  value={editedRoom.roomName || ""}
+                  onChange={(e) =>
+                    setEditedRoom((prev) => ({
+                      ...prev,
+                      roomName: e.target.value,
+                    }))
+                  }
                 />
               </div>
               <div className="space-y-2">
                 <Label>{t("room.dialog.edit.type")}</Label>
-                <Input
-                  value={room.type}
-                  onChange={(e) => onSave({ ...room, type: e.target.value })}
-                />
+                <Select
+                  value={editedRoom.roomType}
+                  onValueChange={(value) =>
+                    setEditedRoom((prev) => ({
+                      ...prev,
+                      roomType: value as Room["roomType"],
+                    }))
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue
+                      placeholder={t("room.dialog.edit.select_type")}
+                    />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Standard">Phòng Tiêu Chuẩn</SelectItem>
+                    <SelectItem value="Superior">Phòng Superior</SelectItem>
+                    <SelectItem value="Deluxe">Phòng Deluxe</SelectItem>
+                    <SelectItem value="Suite">Phòng Suite</SelectItem>
+                    <SelectItem value="Family">Phòng Gia Đình</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
               <div className="space-y-2 md:col-span-2">
                 <Label>{t("room.dialog.edit.description")}</Label>
                 <Textarea
-                  value={room.description}
+                  value={editedRoom.description || ""}
                   onChange={(e) =>
-                    onSave({
-                      ...room,
+                    setEditedRoom((prev) => ({
+                      ...prev,
                       description: e.target.value,
-                    })
+                    }))
                   }
                   rows={4}
                 />
@@ -153,45 +361,61 @@ export function EditRoomDialog({
                 <Label>{t("room.dialog.edit.floor")}</Label>
                 <Input
                   type="number"
-                  value={room.floor}
-                  onChange={(e) =>
-                    onSave({
-                      ...room,
-                      floor: parseInt(e.target.value),
-                    })
-                  }
+                  value={editedRoom.floor || ""}
+                  onChange={(e) => {
+                    const value =
+                      e.target.value === "" ? 0 : parseInt(e.target.value);
+                    setEditedRoom((prev) => ({ ...prev, floor: value }));
+                  }}
                 />
               </div>
               <div className="space-y-2">
                 <Label>{t("room.dialog.edit.bed_type")}</Label>
-                <Input
-                  value={room.bedType}
-                  onChange={(e) =>
-                    onSave({
-                      ...room,
-                      bedType: e.target.value,
-                    })
+                <Select
+                  value={editedRoom.bedType}
+                  onValueChange={(value) =>
+                    setEditedRoom((prev) => ({
+                      ...prev,
+                      bedType: value as Room["bedType"],
+                    }))
                   }
-                />
+                >
+                  <SelectTrigger>
+                    <SelectValue
+                      placeholder={t("room.dialog.edit.select_bed_type")}
+                    />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Single">1 Giường Đơn</SelectItem>
+                    <SelectItem value="Double">1 Giường Đôi</SelectItem>
+                    <SelectItem value="Twin">2 Giường Đơn</SelectItem>
+                    <SelectItem value="Queen">1 Giường Queen</SelectItem>
+                    <SelectItem value="King">1 Giường King</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
               <div className="space-y-2">
                 <Label>{t("room.dialog.edit.capacity")}</Label>
                 <Input
                   type="number"
-                  value={room.capacity}
-                  onChange={(e) =>
-                    onSave({
-                      ...room,
-                      capacity: parseInt(e.target.value),
-                    })
-                  }
+                  value={editedRoom.capacity || ""}
+                  onChange={(e) => {
+                    const value =
+                      e.target.value === "" ? 0 : parseInt(e.target.value);
+                    setEditedRoom((prev) => ({ ...prev, capacity: value }));
+                  }}
                 />
               </div>
               <div className="space-y-2">
                 <Label>{t("room.dialog.edit.size")}</Label>
                 <Input
-                  value={room.size}
-                  onChange={(e) => onSave({ ...room, size: e.target.value })}
+                  type="number"
+                  value={editedRoom.squareMeters || ""}
+                  onChange={(e) => {
+                    const value =
+                      e.target.value === "" ? 0 : parseInt(e.target.value);
+                    setEditedRoom((prev) => ({ ...prev, squareMeters: value }));
+                  }}
                 />
               </div>
             </div>
@@ -200,32 +424,65 @@ export function EditRoomDialog({
           {/* Amenities */}
           <div className="space-y-4">
             <h3 className="font-medium">{t("room.dialog.edit.amenities")}</h3>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {room.amenities.map((amenity, index) => (
-                <div
-                  key={index}
-                  className="flex items-center space-x-2 p-3 rounded-lg border"
-                >
-                  <Checkbox
-                    id={`amenity-${index}`}
-                    checked={amenity.selected}
-                    onCheckedChange={() => {
-                      const newAmenities = handleAmenityToggle(
-                        index,
-                        room.amenities
-                      );
-                      onSave({ ...room, amenities: newAmenities });
-                    }}
-                  />
-                  <Label
-                    htmlFor={`amenity-${index}`}
-                    className="flex items-center gap-2 cursor-pointer"
-                  >
-                    <amenity.icon className="w-4 h-4" />
-                    {amenity.name}
-                  </Label>
+            <div className="space-y-6">
+              <div className="space-y-3">
+                <Label className="text-base font-semibold">
+                  {t("hotelInfo.general.selectedAmenities")}
+                </Label>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                  {selectedAmenities.map((amenity) => (
+                    <div
+                      key={amenity._id}
+                      className="flex items-center space-x-2 p-3 bg-primary/5 border border-primary/20 rounded-lg hover:bg-primary/10 transition-colors"
+                    >
+                      <Checkbox
+                        id={amenity._id}
+                        checked={true}
+                        onCheckedChange={() => handleAmenityToggle(amenity._id)}
+                        className="border-primary"
+                      />
+                      <div className="flex items-center gap-2">
+                        {getAmenityIcon(amenity.icon || "default-icon")}
+                        <Label
+                          htmlFor={amenity._id}
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          {amenity.name}
+                        </Label>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
+
+              <div className="space-y-3">
+                <Label className="text-base font-semibold">
+                  {t("hotelInfo.general.availableAmenities")}
+                </Label>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                  {unselectedAmenities.map((amenity) => (
+                    <div
+                      key={amenity._id}
+                      className="flex items-center space-x-2 p-3 bg-secondary/5 border border-border rounded-lg hover:bg-secondary/10 transition-colors"
+                    >
+                      <Checkbox
+                        id={amenity._id}
+                        checked={false}
+                        onCheckedChange={() => handleAmenityToggle(amenity._id)}
+                      />
+                      <div className="flex items-center gap-2">
+                        {getAmenityIcon(amenity.icon || "default-icon")}
+                        <Label
+                          htmlFor={amenity._id}
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          {amenity.name}
+                        </Label>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -233,8 +490,15 @@ export function EditRoomDialog({
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             {t("room.dialog.edit.cancel")}
           </Button>
-          <Button onClick={() => onSave(room)}>
-            {t("room.dialog.edit.save")}
+          <Button onClick={handleSave} disabled={updateRoomMutation.isPending}>
+            {updateRoomMutation.isPending ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                {t("room.dialog.edit.saving")}
+              </>
+            ) : (
+              t("room.dialog.edit.save")
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>

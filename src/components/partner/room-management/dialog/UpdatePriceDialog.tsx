@@ -1,3 +1,10 @@
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
+import { Calendar, Loader2 } from "lucide-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+import { roomApi } from "@/api/room/room.api";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -9,23 +16,47 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Calendar } from "lucide-react";
-import { useTranslation } from "react-i18next";
 
 interface UpdatePriceDialogProps {
+  roomId: string;
   price: number;
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
-  onUpdate: (price: number) => void;
 }
 
 export function UpdatePriceDialog({
+  roomId,
   price,
   isOpen,
   onOpenChange,
-  onUpdate,
 }: UpdatePriceDialogProps) {
   const { t } = useTranslation();
+  const [newPrice, setNewPrice] = useState(price);
+  const queryClient = useQueryClient();
+
+  const updatePriceMutation = useMutation({
+    mutationFn: (price: number) => {
+      const formData = new FormData();
+      formData.append("price", price.toString());
+      return roomApi.updateRoom(roomId, formData);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["room", roomId] });
+      toast.success(t("room.dialog.update_price.success"));
+      onOpenChange(false);
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || t("room.dialog.update_price.error"));
+    },
+  });
+
+  const handleUpdate = () => {
+    if (newPrice <= 0) {
+      toast.error(t("room.dialog.update_price.invalid_price"));
+      return;
+    }
+    updatePriceMutation.mutate(newPrice);
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -44,8 +75,8 @@ export function UpdatePriceDialog({
             <div className="relative">
               <Input
                 type="number"
-                value={price}
-                onChange={(e) => onUpdate(Number(e.target.value))}
+                value={newPrice}
+                onChange={(e) => setNewPrice(Number(e.target.value))}
                 className="pl-8"
                 min={0}
               />
@@ -62,8 +93,18 @@ export function UpdatePriceDialog({
             <Button variant="outline" onClick={() => onOpenChange(false)}>
               {t("room.dialog.update_price.cancel")}
             </Button>
-            <Button onClick={() => onUpdate(price)}>
-              {t("room.dialog.update_price.update")}
+            <Button
+              onClick={handleUpdate}
+              disabled={updatePriceMutation.isPending}
+            >
+              {updatePriceMutation.isPending ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  {t("room.dialog.update_price.updating")}
+                </>
+              ) : (
+                t("room.dialog.update_price.update")
+              )}
             </Button>
           </DialogFooter>
         </div>

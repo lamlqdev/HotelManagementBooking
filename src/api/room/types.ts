@@ -49,20 +49,26 @@ export type RoomDiscountParams = {
 };
 
 export type UpdateRoomData = {
-  roomType?: "Standard" | "Superior" | "Deluxe" | "Suite" | "Family";
-  bedType?: "Single" | "Twin" | "Double" | "Queen" | "King";
+  roomName?: string;
+  floor?: number;
+  roomType?: string;
+  bedType?: string;
+  description?: string;
   price?: number;
   capacity?: number;
   squareMeters?: number;
+  cancellationPolicy?: string;
+  status?: string;
   amenities?: string[];
   images?: File[];
-  cancellationPolicy?: "flexible" | "moderate" | "strict";
-  status?: "available" | "booked" | "maintenance";
 };
+
+export type UpdateRoomFormData = FormData;
 
 export const createRoomSchema = z.object({
   hotelId: z.string().min(1, "Vui lòng chọn khách sạn"),
   roomName: z.string().min(1, "Vui lòng nhập tên phòng"),
+  description: z.string().min(1, "Vui lòng nhập mô tả phòng"),
   floor: z
     .number()
     .min(1, "Vui lòng nhập số tầng")

@@ -42,6 +42,7 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Textarea } from "@/components/ui/textarea";
 
 interface AddRoomDialogProps {
   onAdd: (room: CreateRoomFormData) => void;
@@ -69,6 +70,7 @@ export function AddRoomDialog({
     defaultValues: {
       hotelId: currentHotel?._id || "",
       roomName: "",
+      description: "",
       floor: 1,
       roomType: "Standard",
       bedType: "Single",
@@ -166,9 +168,18 @@ export function AddRoomDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button disabled={isLoading}>
-          <Plus className="w-4 h-4 mr-2" />
-          {t("room.dialog.add.title")}
+        <Button>
+          {isLoading ? (
+            <>
+              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              {t("room.dialog.add.adding")}
+            </>
+          ) : (
+            <>
+              <Plus className="w-4 h-4 mr-2" />
+              {t("room.dialog.add.title")}
+            </>
+          )}
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
@@ -197,6 +208,19 @@ export function AddRoomDialog({
                       <FormLabel>{t("room.dialog.edit.name")}</FormLabel>
                       <FormControl>
                         <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem className="md:col-span-2">
+                      <FormLabel>{t("room.dialog.edit.description")}</FormLabel>
+                      <FormControl>
+                        <Textarea {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
