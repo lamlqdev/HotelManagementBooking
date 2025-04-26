@@ -1,4 +1,7 @@
-import { FaStar, FaThumbsUp } from "react-icons/fa";
+import { FaStar } from "react-icons/fa";
+import { Review } from "@/types/review";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { FaInfoCircle } from "react-icons/fa";
 
 interface ReviewStats {
   overall: number;
@@ -7,24 +10,6 @@ interface ReviewStats {
     stars: number;
     count: number;
   }[];
-}
-
-interface ReviewUser {
-  name: string;
-  avatar: string;
-  country: string;
-}
-
-interface Review {
-  id: number;
-  user: ReviewUser;
-  rating: number;
-  date: string;
-  title: string;
-  comment: string;
-  stay: string;
-  likes: number;
-  photos: string[];
 }
 
 interface HotelReviewsProps {
@@ -93,65 +78,73 @@ const HotelReviews = ({ reviewStats, reviews }: HotelReviewsProps) => {
 
         {/* Reviews List */}
         <div className="space-y-6">
-          {reviews.map((review) => (
-            <div key={review.id} className="bg-card rounded-lg shadow-md p-6">
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex gap-4">
-                  <img
-                    src={review.user.avatar}
-                    alt={review.user.name}
-                    className="w-12 h-12 rounded-full object-cover"
-                  />
-                  <div>
-                    <h4 className="font-medium text-foreground">
-                      {review.user.name}
-                    </h4>
-                    <div className="text-sm text-muted-foreground">
-                      {review.user.country}
+          {reviews.length > 0 ? (
+            reviews.map((review) => (
+              <div
+                key={review._id}
+                className="bg-card rounded-lg shadow-md p-6"
+              >
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex gap-4">
+                    <img
+                      src={`https://ui-avatars.com/api/?name=${
+                        review.isAnonymous ? "Anonymous" : review.userId.name
+                      }`}
+                      alt={
+                        review.isAnonymous
+                          ? "Người dùng ẩn danh"
+                          : review.userId.name
+                      }
+                      className="w-12 h-12 rounded-full object-cover"
+                    />
+                    <div>
+                      <h4 className="font-medium text-foreground">
+                        {review.isAnonymous
+                          ? "Người dùng ẩn danh"
+                          : review.userId.name}
+                      </h4>
+                      <div className="text-sm text-muted-foreground">
+                        Việt Nam
+                      </div>
                     </div>
                   </div>
+                  <div className="text-sm text-muted-foreground">
+                    {new Date(review.createdAt).toLocaleDateString("vi-VN")}
+                  </div>
                 </div>
-                <div className="text-sm text-muted-foreground">
-                  {new Date(review.date).toLocaleDateString("vi-VN")}
-                </div>
-              </div>
 
-              <div className="mb-3">
-                <div className="flex items-center gap-2 mb-2">
-                  {Array.from({ length: review.rating }).map((_, index) => (
-                    <FaStar key={index} className="text-yellow-400" />
-                  ))}
+                <div className="mb-3">
+                  <div className="flex items-center gap-2 mb-2">
+                    {Array.from({ length: review.rating }).map((_, index) => (
+                      <FaStar key={index} className="text-yellow-400" />
+                    ))}
+                  </div>
+                  <h3 className="font-medium mb-2 text-foreground">
+                    {review.title}
+                  </h3>
+                  <p className="text-muted-foreground mb-3">{review.comment}</p>
+                  <div className="text-sm text-muted-foreground mb-4">
+                    Đã lưu trú
+                  </div>
                 </div>
-                <h3 className="font-medium mb-2 text-foreground">
-                  {review.title}
-                </h3>
-                <p className="text-muted-foreground mb-3">{review.comment}</p>
-                <div className="text-sm text-muted-foreground mb-4">
-                  {review.stay}
-                </div>
-              </div>
 
-              {review.photos.length > 0 && (
-                <div className="flex gap-2 mb-4">
-                  {review.photos.map((photo, index) => (
-                    <img
-                      key={index}
-                      src={photo}
-                      alt={`Review photo ${index + 1}`}
-                      className="w-20 h-20 object-cover rounded-lg"
-                    />
-                  ))}
-                </div>
-              )}
-
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <button className="flex items-center gap-1 hover:text-primary transition-colors">
-                  <FaThumbsUp />
-                  <span>Hữu ích ({review.likes})</span>
-                </button>
+                {review.response && (
+                  <div className="bg-muted p-4 rounded-lg mb-4">
+                    <h4 className="font-medium mb-2">Phản hồi từ khách sạn:</h4>
+                    <p className="text-muted-foreground">{review.response}</p>
+                  </div>
+                )}
               </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <Alert>
+              <FaInfoCircle className="h-4 w-4" />
+              <AlertDescription>
+                Chưa có đánh giá nào cho khách sạn này. Hãy là người đầu tiên
+                đánh giá!
+              </AlertDescription>
+            </Alert>
+          )}
         </div>
       </div>
     </section>

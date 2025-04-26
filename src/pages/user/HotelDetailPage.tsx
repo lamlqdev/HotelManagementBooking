@@ -1,9 +1,7 @@
-import { useState } from "react";
-import { BiWifi, BiSwim } from "react-icons/bi";
-import { MdBusinessCenter, MdLocalParking, MdAcUnit } from "react-icons/md";
-import { AiFillLike } from "react-icons/ai";
-import { FaWifi, FaCoffee, FaSmokingBan } from "react-icons/fa";
-import { BsWindow } from "react-icons/bs";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router";
+import { useQuery } from "@tanstack/react-query";
+import { FaExclamationTriangle } from "react-icons/fa";
 
 import HotelHeader from "@/components/user/hotel-detail/HotelHeader";
 import HotelGallery from "@/components/user/hotel-detail/HotelGallery";
@@ -13,141 +11,144 @@ import HotelRooms from "@/components/user/hotel-detail/HotelRooms";
 import HotelReviews from "@/components/user/hotel-detail/HotelReviews";
 import ChatSupport from "@/components/common/ChatSupport";
 
+import { hotelApi } from "@/api/hotel/hotel.api";
+import { amenitiesApi } from "@/api/amenities/amenities.api";
+import { roomApi } from "@/api/room/room.api";
+import { reviewApi } from "@/api/review/review.api";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+
 const HotelDetailPage = () => {
   const [activeTab, setActiveTab] = useState("tổng quan");
+  const { id } = useParams<{ id: string }>();
 
-  // Mảng hình ảnh từ Unsplash
-  const hotelImages = [
-    "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200",
-    "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800",
-    "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800",
-    "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800",
-    "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=800",
-    "https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=800",
-  ];
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
-  const nearbyPlaces = [
-    { name: "Hotel Penselvenyia", distance: "2 min drive" },
-    { name: "Travis Bakery store house", distance: "10 min drive" },
-    { name: "Olivia Johnson Garden", distance: "15 min drive" },
-    { name: "Norman Opera Circus", distance: "18 min drive" },
-    { name: "Rockdeset hotel", distance: "32 min drive" },
-  ];
+  const {
+    data: hotelResponse,
+    isLoading: isLoadingHotel,
+    error: hotelError,
+  } = useQuery({
+    queryKey: ["hotel", id],
+    queryFn: () => hotelApi.getHotel(id as string),
+    enabled: !!id,
+  });
 
-  const amenities = [
-    { icon: BiWifi, name: "Free wifi" },
-    { icon: MdBusinessCenter, name: "Business Services" },
-    { icon: MdLocalParking, name: "Parking available" },
-    { icon: BiSwim, name: "Swimming pool" },
-    { icon: AiFillLike, name: "Top rated in area" },
-  ];
+  const { data: amenitiesResponse, isLoading: isLoadingAmenities } = useQuery({
+    queryKey: ["amenities"],
+    queryFn: () => amenitiesApi.getAmenities(),
+  });
 
-  const roomTypes = [
-    {
-      id: 1,
-      name: "Deluxe Double Room",
-      size: "30m²",
-      maxGuests: 2,
-      bedType: "1 giường đôi lớn",
-      price: 1200000,
-      originalPrice: 1500000,
-      amenities: [
-        { icon: FaWifi, name: "WiFi miễn phí" },
-        { icon: MdAcUnit, name: "Điều hòa" },
-        { icon: FaCoffee, name: "Bữa sáng miễn phí" },
-        { icon: BsWindow, name: "View thành phố" },
-        { icon: FaSmokingBan, name: "Không hút thuốc" },
-      ],
-      image:
-        "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800",
-      perks: ["Hủy phòng miễn phí", "Không cần thanh toán trước"],
-    },
-    {
-      id: 2,
-      name: "Premium Twin Room",
-      size: "35m²",
-      maxGuests: 3,
-      bedType: "2 giường đơn",
-      price: 1400000,
-      originalPrice: 1800000,
-      amenities: [
-        { icon: FaWifi, name: "WiFi miễn phí" },
-        { icon: MdAcUnit, name: "Điều hòa" },
-        { icon: FaCoffee, name: "Bữa sáng miễn phí" },
-        { icon: BsWindow, name: "View biển" },
-        { icon: FaSmokingBan, name: "Không hút thuốc" },
-      ],
-      image:
-        "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?w=800",
-      perks: ["Hủy phòng miễn phí", "Không cần thanh toán trước"],
-    },
-  ];
+  const { data: roomsResponse, isLoading: isLoadingRooms } = useQuery({
+    queryKey: ["rooms", id],
+    queryFn: () => roomApi.getRooms(id as string),
+    enabled: !!id,
+  });
 
+  const { data: reviewsResponse, isLoading: isLoadingReviews } = useQuery({
+    queryKey: ["reviews", id],
+    queryFn: () => reviewApi.getHotelReviews(id as string),
+    enabled: !!id,
+  });
+
+  // Xử lý trạng thái loading
+  if (
+    isLoadingHotel ||
+    isLoadingAmenities ||
+    isLoadingRooms ||
+    isLoadingReviews
+  ) {
+    return (
+      <div className="container mx-auto px-4 py-6 pt-32 space-y-6">
+        <div className="space-y-4">
+          <Skeleton className="h-10 w-3/4" />
+          <Skeleton className="h-6 w-1/2" />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-7 gap-3">
+          <Skeleton className="md:col-span-4 aspect-[4/3] rounded-lg" />
+          <div className="md:col-span-3 grid grid-cols-2 gap-3">
+            <Skeleton className="aspect-[4/3] rounded-lg" />
+            <Skeleton className="aspect-[4/3] rounded-lg" />
+            <Skeleton className="aspect-[4/3] rounded-lg" />
+            <Skeleton className="aspect-[4/3] rounded-lg" />
+          </div>
+        </div>
+        <div className="space-y-4">
+          <Skeleton className="h-8 w-1/4" />
+          <Skeleton className="h-24 w-full" />
+        </div>
+      </div>
+    );
+  }
+
+  // Xử lý trạng thái lỗi
+  if (hotelError) {
+    return (
+      <div className="container mx-auto px-4 py-6 pt-32">
+        <Alert variant="destructive">
+          <FaExclamationTriangle className="h-4 w-4" />
+          <AlertTitle>Lỗi</AlertTitle>
+          <AlertDescription>
+            Không thể tải thông tin khách sạn. Vui lòng thử lại sau.
+          </AlertDescription>
+        </Alert>
+      </div>
+    );
+  }
+
+  // Kiểm tra dữ liệu
+  if (!hotelResponse || !hotelResponse.data) {
+    return (
+      <div className="container mx-auto px-4 py-6 pt-32">
+        <Alert variant="destructive">
+          <FaExclamationTriangle className="h-4 w-4" />
+          <AlertTitle>Không tìm thấy</AlertTitle>
+          <AlertDescription>
+            Không tìm thấy thông tin khách sạn.
+          </AlertDescription>
+        </Alert>
+      </div>
+    );
+  }
+
+  const hotel = hotelResponse.data;
+  const amenities = amenitiesResponse?.data || [];
+  const rooms = roomsResponse?.data || [];
+  const reviews = reviewsResponse?.data || [];
+
+  // Lọc các tiện ích của khách sạn
+  const hotelAmenities = amenities.filter((amenity) =>
+    hotel.amenities.includes(amenity._id)
+  );
+
+  // Tính toán thống kê đánh giá
   const reviewStats = {
-    overall: 4.5,
-    total: 1200,
+    overall: hotel.rating || 0,
+    total: reviews.length,
     distribution: [
-      { stars: 5, count: 800 },
-      { stars: 4, count: 250 },
-      { stars: 3, count: 100 },
-      { stars: 2, count: 30 },
-      { stars: 1, count: 20 },
+      { stars: 5, count: reviews.filter((r) => r.rating === 5).length },
+      { stars: 4, count: reviews.filter((r) => r.rating === 4).length },
+      { stars: 3, count: reviews.filter((r) => r.rating === 3).length },
+      { stars: 2, count: reviews.filter((r) => r.rating === 2).length },
+      { stars: 1, count: reviews.filter((r) => r.rating === 1).length },
     ],
   };
 
-  const reviews = [
-    {
-      id: 1,
-      user: {
-        name: "Nguyễn Văn A",
-        avatar:
-          "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100",
-        country: "Việt Nam",
-      },
-      rating: 5,
-      date: "2024-03-15",
-      title: "Trải nghiệm tuyệt vời",
-      comment:
-        "Khách sạn rất sạch sẽ và thoải mái. Nhân viên thân thiện và nhiệt tình. View phòng đẹp, đặc biệt là vào buổi sáng. Sẽ quay lại lần sau.",
-      stay: "2 đêm - Phòng Deluxe Double",
-      likes: 24,
-      photos: [
-        "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=300",
-        "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=300",
-      ],
-    },
-    {
-      id: 2,
-      user: {
-        name: "Trần Thị B",
-        avatar:
-          "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100",
-        country: "Việt Nam",
-      },
-      rating: 4,
-      date: "2024-03-10",
-      title: "Dịch vụ tốt, giá cả hợp lý",
-      comment:
-        "Vị trí thuận tiện, gần các điểm tham quan. Phòng ốc thoáng mát, sạch sẽ. Bữa sáng đa dạng. Chỉ có điều hơi ồn một chút vào buổi tối.",
-      stay: "3 đêm - Phòng Premium Twin",
-      likes: 15,
-      photos: [],
-    },
-  ];
-
-  const description = [
-    "Featuring free WiFi throughout the property, Lakeside Motel Waterfront offers accommodations in Lakes Entrance, 19 mi from Bairnsdale. Free private parking is available on site.",
-    "Each room at this motel is air conditioned and comes with a flat-screen TV. You will find a kettle, toaster and a microwave in the room. Each room is fitted with a private bathroom. Guests have access to barbecue facilities and a lovely large lawn area. Metung is 6.8 mi from Lakeside Motel Waterfront, while Paynesville is 14 mi from the property.",
-    "Couples in particular like the location – they rated it 9.2 for a two-person trip.",
-  ];
+  const hotelImages = [
+    hotel.featuredImage?.url,
+    ...(hotel.images?.map((img) => img.url) || []),
+  ].filter(Boolean) as string[];
 
   return (
     <div className="container mx-auto px-4 py-6 pt-32">
       <HotelHeader
-        name="Lakeside Motel Warefront"
-        rating={4.5}
-        totalReviews={1200}
-        address="Lorem ipsum road, Tantruim-2322, Melbourne, Australia"
+        id={hotel._id}
+        name={hotel.name}
+        rating={hotel.rating}
+        totalReviews={reviews.length}
+        address={hotel.address}
       />
 
       <HotelGallery images={hotelImages} />
@@ -156,12 +157,11 @@ const HotelDetailPage = () => {
 
       <div className="mt-6 space-y-12">
         <HotelOverview
-          description={description}
-          amenities={amenities}
-          nearbyPlaces={nearbyPlaces}
+          description={hotel.description}
+          amenities={hotelAmenities}
         />
 
-        <HotelRooms rooms={roomTypes} />
+        <HotelRooms rooms={rooms} />
 
         <HotelReviews reviewStats={reviewStats} reviews={reviews} />
       </div>
