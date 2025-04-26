@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { FaHeart, FaMapMarkerAlt, FaStar } from "react-icons/fa";
 import { toast } from "sonner";
-
+import { useTranslation } from "react-i18next";
 import { favouriteApi } from "@/api/favourite/favourite.api";
 import { useAppSelector } from "@/store/hooks";
 
@@ -23,6 +23,7 @@ const HotelHeader = ({
 }: HotelHeaderProps) => {
   const { isAuthenticated } = useAppSelector((state) => state.auth);
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
 
   // Query để kiểm tra trạng thái yêu thích
   const { data: favoriteStatus, isLoading: isCheckingFavorite } = useQuery({
@@ -43,12 +44,16 @@ const HotelHeader = ({
       queryClient.invalidateQueries({ queryKey: ["favorite", id] });
       toast.success(
         favoriteStatus?.isFavorite
-          ? "Đã xóa khách sạn khỏi danh sách yêu thích"
-          : "Đã thêm khách sạn vào danh sách yêu thích"
+          ? t("favourite.remove_success")
+          : t("favourite.add_success")
       );
     },
     onError: (error) => {
-      toast.error("Có lỗi xảy ra. Vui lòng thử lại sau.");
+      toast.error(
+        favoriteStatus?.isFavorite
+          ? t("favourite.remove_error")
+          : t("favourite.add_error")
+      );
       console.error("Lỗi khi thay đổi trạng thái yêu thích:", error);
     },
   });

@@ -37,7 +37,7 @@ export const favouriteApi = {
     page: number = 1,
     limit: number = 10
   ): Promise<PopularHotelsResponse> => {
-    const response = await axiosInstance.get(`${API_URL}/popular`, {
+    const response = await axiosInstance.get(`${API_URL}/popular-hotels`, {
       params: { page, limit },
     });
     return response.data;

@@ -49,7 +49,8 @@
     "of": "của",
     "results": "kết quả",
     "view_details": "Xem chi tiết",
-    "error_loading_data": "Không thể tải dữ liệu. Vui lòng thử lại sau."
+    "error_loading_data": "Không thể tải dữ liệu. Vui lòng thử lại sau.",
+    "favorites": "Yêu thích"
   },
   "nav": {
     "home": "Trang chủ",
@@ -647,7 +648,8 @@
     "manage": "Quản lý",
     "hotelInfo": "Thông tin khách sạn",
     "bookingOrders": "Đơn đặt phòng",
-    "revenue": "Doanh thu"
+    "revenue": "Doanh thu",
+    "favouriteHotels": "Khách sạn yêu thích"
   },
   "profile": {
     "title": "Hồ sơ của tôi",
@@ -1347,5 +1349,16 @@
     "result": "Các Bước Tiếp Theo",
     "result_desc": "Sau khi được phê duyệt, bạn sẽ nhận được email với hướng dẫn đăng nhập. Sau đó, bạn có thể truy cập tất cả các tính năng của tài khoản.",
     "back_to_home": "Quay Lại Trang Chủ"
+  },
+  "favourite": {
+    "login_required": "Vui lòng đăng nhập để thêm khách sạn vào danh sách yêu thích",
+    "remove_success": "Khách sạn đã được xóa khỏi danh sách yêu thích",
+    "remove_error": "Không thể xóa khách sạn khỏi danh sách yêu thích",
+    "add_success": "Khách sạn đã được thêm vào danh sách yêu thích",
+    "add_error": "Không thể thêm khách sạn vào danh sách yêu thích",
+    "view_all": "Xem tất cả",
+    "no_favourites": "Không có khách sạn yêu thích",
+    "no_favourites_user": "Bạn chưa có khách sạn nào trong danh sách yêu thích",
+    "no_favourites_description": "Hệ thống chưa có khách sạn nào được yêu thích"
   }
 }

@@ -34,6 +34,7 @@ import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
 // User Pages
 import SettingPage from "./pages/shared/SettingPage";
 import UserProfilePage from "./pages/user/ProfilePage";
+import FavouriteHotelPage from "./pages/shared/FavouriteHotelPage";
 
 // Partner Pages
 import RevenuePage from "./pages/partner/RevenuePage";
@@ -95,6 +96,18 @@ function App() {
             <Route element={<Layout />}>
               <Route path="/settings" element={<SettingPage />} />
               <Route path="/profile" element={<UserProfilePage />} />
+            </Route>
+          </Route>
+
+          {/* Favourite Hotels Page - Có thể truy cập bởi cả user và partner */}
+          <Route
+            element={<PrivateRoute role="user" allowMultipleRoles={true} />}
+          >
+            <Route element={<Layout />}>
+              <Route
+                path="/favourite-hotels"
+                element={<FavouriteHotelPage />}
+              />
             </Route>
           </Route>
 

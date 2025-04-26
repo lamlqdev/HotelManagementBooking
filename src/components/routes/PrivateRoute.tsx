@@ -3,9 +3,13 @@ import { useAppSelector } from "@/store/hooks";
 
 interface PrivateRouteProps {
   role: "user" | "admin" | "partner";
+  allowMultipleRoles?: boolean;
 }
 
-const PrivateRoute = ({ role }: PrivateRouteProps) => {
+const PrivateRoute = ({
+  role,
+  allowMultipleRoles = false,
+}: PrivateRouteProps) => {
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
   const location = useLocation();
 
@@ -17,6 +21,11 @@ const PrivateRoute = ({ role }: PrivateRouteProps) => {
   // Nếu đã đăng nhập nhưng không có thông tin user hoặc role
   if (!user || !user.role) {
     return <Navigate to="/login" replace />;
+  }
+
+  // Nếu allowMultipleRoles là true, cho phép truy cập nếu user đã đăng nhập
+  if (allowMultipleRoles) {
+    return <Outlet />;
   }
 
   // Kiểm tra role có phù hợp không

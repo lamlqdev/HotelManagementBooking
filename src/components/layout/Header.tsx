@@ -140,6 +140,11 @@ const Header = () => {
                             {t("dropdown.revenue")}
                           </Link>
                         </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link to="/favourite-hotels">
+                            {t("dropdown.favouriteHotels")}
+                          </Link>
+                        </DropdownMenuItem>
                       </>
                     )}
 
@@ -150,6 +155,11 @@ const Header = () => {
                         </DropdownMenuItem>
                         <DropdownMenuItem asChild>
                           <Link to="/bookings">{t("dropdown.myBookings")}</Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link to="/favourite-hotels">
+                            {t("dropdown.favouriteHotels")}
+                          </Link>
                         </DropdownMenuItem>
                       </>
                     )}

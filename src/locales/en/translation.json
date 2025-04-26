@@ -49,7 +49,8 @@
     "of": "of",
     "results": "results",
     "view_details": "View details",
-    "error_loading_data": "Could not load data. Please try again later."
+    "error_loading_data": "Could not load data. Please try again later.",
+    "favorites": "Favorites"
   },
   "nav": {
     "home": "Home",
@@ -647,7 +648,8 @@
     "manage": "Manage",
     "hotelInfo": "Hotel Information",
     "bookingOrders": "Booking Orders",
-    "revenue": "Revenue"
+    "revenue": "Revenue",
+    "favouriteHotels": "Favourite Hotels"
   },
   "profile": {
     "title": "My Profile",
@@ -1289,5 +1291,15 @@
   "error": {
     "title": "Error",
     "loadRoomsFailed": "Failed to load rooms. Please try again later."
+  },
+  "favourite": {
+    "login_required": "Please login to add this hotel to your favourites",
+    "remove_success": "Hotel removed from favourites successfully",
+    "remove_error": "Failed to remove hotel from favourites",
+    "add_success": "Hotel added to favourites successfully",
+    "add_error": "Failed to add hotel to favourites",
+    "view_all": "View All",
+    "no_favourites_description": "No hotels have been added to favourites yet",
+    "no_favourites_user": "You have no hotels in your favourites"
   }
 }
