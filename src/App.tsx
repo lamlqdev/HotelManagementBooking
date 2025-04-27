@@ -55,7 +55,7 @@ import PartnerRegistrationDetails from "@/pages/admin/PartnerRegistrationDetails
 import HotelsPage from "./pages/admin/HotelsManagementPage";
 import UsersManagementPage from "./pages/admin/UsersManagementPage";
 import UserDetailPage from "./pages/admin/UserDetailPage";
-
+import HotelDetailAdminPage from "./pages/admin/HotelDetailPage";
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
@@ -99,7 +99,7 @@ function App() {
             </Route>
           </Route>
 
-          {/* Favourite Hotels Page - Có thể truy cập bởi cả user và partner */}
+          {/* Shared Page - Có thể truy cập bởi cả user và partner */}
           <Route
             element={<PrivateRoute role="user" allowMultipleRoles={true} />}
           >
@@ -143,6 +143,7 @@ function App() {
               <Route path="hotels" element={<HotelsPage />} />
               <Route path="users" element={<UsersManagementPage />} />
               <Route path="users/:id" element={<UserDetailPage />} />
+              <Route path="hotels/:id" element={<HotelDetailAdminPage />} />
             </Route>
           </Route>
         </Routes>

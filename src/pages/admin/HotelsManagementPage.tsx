@@ -34,10 +34,20 @@ import {
   PaginationPrevious,
   PaginationEllipsis,
 } from "@/components/ui/pagination";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useNavigate } from "react-router";
 
 export default function HotelsManagementPage() {
   const { t } = useTranslation();
   const [currentPage, setCurrentPage] = useState(1);
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const navigate = useNavigate();
 
   // Sử dụng React Query để lấy danh sách khách sạn
   const { data, isLoading, error } = useQuery({
@@ -66,10 +76,24 @@ export default function HotelsManagementPage() {
   }
 
   const totalPages = data?.pagination?.totalPages || 1;
-  const hotels = data?.data || [];
+  const allHotels = data?.data || [];
+
+  // Lọc khách sạn theo trạng thái
+  const hotels =
+    statusFilter === "all"
+      ? allHotels
+      : allHotels.filter((hotel: Hotel) => hotel.status === statusFilter);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
+  };
+
+  const handleStatusFilterChange = (value: string) => {
+    setStatusFilter(value);
+  };
+
+  const handleRowClick = (hotelId: string) => {
+    navigate(`/admin/hotels/${hotelId}`);
   };
 
   const renderPaginationItems = () => {
@@ -165,6 +189,28 @@ export default function HotelsManagementPage() {
                 className="pl-9"
               />
             </div>
+            <Select
+              value={statusFilter}
+              onValueChange={handleStatusFilterChange}
+            >
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder={t("admin.hotels.filterByStatus")} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">
+                  {t("admin.hotels.status.all")}
+                </SelectItem>
+                <SelectItem value="active">
+                  {t("admin.hotels.status.active")}
+                </SelectItem>
+                <SelectItem value="inactive">
+                  {t("admin.hotels.status.inactive")}
+                </SelectItem>
+                <SelectItem value="pending">
+                  {t("admin.hotels.status.pending")}
+                </SelectItem>
+              </SelectContent>
+            </Select>
             <Button variant="outline">
               <Filter className="h-4 w-4 mr-2" />
               {t("common.filter")}
@@ -221,7 +267,11 @@ export default function HotelsManagementPage() {
                 ))
               ) : hotels.length > 0 ? (
                 hotels.map((hotel: Hotel) => (
-                  <TableRow key={hotel._id} className="hover:bg-transparent">
+                  <TableRow
+                    key={hotel._id}
+                    className="hover:bg-muted/50 cursor-pointer transition-colors"
+                    onClick={() => handleRowClick(hotel._id)}
+                  >
                     <TableCell className="max-w-[25%]">
                       <span className="font-medium truncate block">
                         {hotel.name}

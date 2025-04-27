@@ -9,6 +9,9 @@
     "view_all": "Xem tất cả",
     "reviews": "đánh giá",
     "back": "Quay lại",
+    "all": "Tất cả",
+    "yes": "Có",
+    "no": "Không",
     "search": "Tìm kiếm",
     "menu": "Menu",
     "close": "Đóng",
@@ -51,7 +54,8 @@
     "view_details": "Xem chi tiết",
     "error_loading_data": "Không thể tải dữ liệu. Vui lòng thử lại sau.",
     "favorites": "Yêu thích",
-    "people": "Người"
+    "people": "Người",
+    "clearFilter": "Xóa bộ lọc"
   },
   "nav": {
     "home": "Trang chủ",
@@ -1282,10 +1286,55 @@
         "smokingAllowed": "Cho phép hút thuốc"
       },
       "status": {
+        "all": "Tất cả",
         "active": "Đang hoạt động",
         "inactive": "Ngừng hoạt động",
         "pending": "Đang chờ duyệt"
-      }
+      },
+      "details": {
+        "basicInfo": "Thông tin cơ bản",
+        "address": "Địa chỉ",
+        "rating": "Đánh giá",
+        "website": "Website",
+        "noWebsite": "Không có website",
+        "ownerId": "ID chủ sở hữu",
+        "description": "Mô tả",
+        "policies": "Chính sách",
+        "checkInOut": "Giờ nhận/trả phòng",
+        "cancellationPolicy": "Chính sách hủy",
+        "childrenPolicy": "Chính sách trẻ em",
+        "petPolicy": "Chính sách thú cưng",
+        "smokingPolicy": "Chính sách hút thuốc",
+        "pricing": "Thông tin giá",
+        "lowestPrice": "Giá thấp nhất",
+        "lowestDiscountedPrice": "Giá khuyến mãi thấp nhất",
+        "highestDiscountPercent": "Giảm giá cao nhất",
+        "additionalInfo": "Thông tin bổ sung",
+        "statistics": "Thống kê",
+        "favoriteCount": "Số lượt yêu thích",
+        "createdAt": "Ngày tạo",
+        "updatedAt": "Ngày cập nhật",
+        "amenities": "Tiện ích",
+        "noAmenities": "Không có tiện ích",
+        "images": "Hình ảnh khách sạn",
+        "partnerInfo": "Thông tin đối tác",
+        "reviews": "Đánh giá"
+      },
+      "policies": {
+        "cancellation": {
+          "24h-full-refund": "Hoàn tiền 100% trong 24h",
+          "24h-half-refund": "Hoàn tiền 50% trong 24h",
+          "no-refund": "Không hoàn tiền"
+        },
+        "childrenAllowed": "Cho phép trẻ em",
+        "childrenNotAllowed": "Không cho phép trẻ em",
+        "petsAllowed": "Cho phép thú cưng",
+        "petsNotAllowed": "Không cho phép thú cưng",
+        "smokingAllowed": "Cho phép hút thuốc",
+        "smokingNotAllowed": "Không cho phép hút thuốc"
+      },
+      "notFound": "Không tìm thấy khách sạn",
+      "notFoundMessage": "Không thể tìm thấy khách sạn được yêu cầu."
     },
     "users": {
       "title": "Quản lý người dùng",

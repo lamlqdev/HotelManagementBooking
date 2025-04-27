@@ -9,6 +9,9 @@
     "view_all": "View all",
     "reviews": "reviews",
     "back": "Back",
+    "all": "All",
+    "yes": "Yes",
+    "no": "No",
     "search": "Search",
     "menu": "Menu",
     "close": "Close",
@@ -51,7 +54,8 @@
     "view_details": "View details",
     "error_loading_data": "Could not load data. Please try again later.",
     "favorites": "Favorites",
-    "people": "People"
+    "people": "People",
+    "clearFilter": "Clear filter"
   },
   "nav": {
     "home": "Home",
@@ -1200,10 +1204,55 @@
         "smokingAllowed": "Smoking Allowed"
       },
       "status": {
+        "all": "All",
         "active": "Active",
         "inactive": "Inactive",
         "pending": "Pending"
-      }
+      },
+      "details": {
+        "basicInfo": "Basic Information",
+        "address": "Address",
+        "rating": "Rating",
+        "website": "Website",
+        "noWebsite": "No website",
+        "ownerId": "Owner ID",
+        "description": "Description",
+        "policies": "Policies",
+        "checkInOut": "Check-in/Check-out",
+        "cancellationPolicy": "Cancellation Policy",
+        "childrenPolicy": "Children Policy",
+        "petPolicy": "Pet Policy",
+        "smokingPolicy": "Smoking Policy",
+        "pricing": "Pricing Information",
+        "lowestPrice": "Lowest Price",
+        "lowestDiscountedPrice": "Lowest Discounted Price",
+        "highestDiscountPercent": "Highest Discount",
+        "additionalInfo": "Additional Information",
+        "statistics": "Statistics",
+        "favoriteCount": "Favorite Count",
+        "createdAt": "Created At",
+        "updatedAt": "Updated At",
+        "amenities": "Amenities",
+        "noAmenities": "No amenities",
+        "images": "Hotel Images",
+        "partnerInfo": "Partner Information",
+        "reviews": "Reviews"
+      },
+      "policies": {
+        "cancellation": {
+          "24h-full-refund": "24h Full Refund",
+          "24h-half-refund": "24h Half Refund",
+          "no-refund": "No Refund"
+        },
+        "childrenAllowed": "Children Allowed",
+        "childrenNotAllowed": "Children Not Allowed",
+        "petsAllowed": "Pets Allowed",
+        "petsNotAllowed": "Pets Not Allowed",
+        "smokingAllowed": "Smoking Allowed",
+        "smokingNotAllowed": "Smoking Not Allowed"
+      },
+      "notFound": "Hotel Not Found",
+      "notFoundMessage": "The requested hotel could not be found."
     },
     "partners": {
       "approval": {
