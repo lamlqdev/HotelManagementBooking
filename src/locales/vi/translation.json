@@ -1391,7 +1391,49 @@
         "actions": "Thao tác",
         "edit": "Chỉnh sửa",
         "delete": "Xóa",
-        "back": "Quay lại"
+        "back": "Quay lại",
+        "deactivate": "Vô hiệu hóa tài khoản",
+        "activate": "Kích hoạt lại tài khoản"
+      },
+      "deactivate": {
+        "title": "Vô hiệu hóa tài khoản",
+        "description": "Bạn sắp vô hiệu hóa tài khoản này. Người dùng sẽ không thể đăng nhập vào hệ thống cho đến khi tài khoản được kích hoạt lại.",
+        "reason": "Lý do vô hiệu hóa",
+        "reasonPlaceholder": "Nhập lý do vô hiệu hóa tài khoản",
+        "confirm": "Vô hiệu hóa",
+        "reasonRequired": "Vui lòng nhập lý do vô hiệu hóa tài khoản",
+        "success": "Vô hiệu hóa tài khoản thành công",
+        "successMessage": "Tài khoản đã được vô hiệu hóa thành công",
+        "error": "Lỗi vô hiệu hóa tài khoản"
+      },
+      "activate": {
+        "success": "Kích hoạt lại tài khoản thành công",
+        "successMessage": "Tài khoản đã được kích hoạt lại thành công",
+        "error": "Lỗi kích hoạt lại tài khoản"
+      },
+      "delete": {
+        "title": "Xóa người dùng",
+        "description": "Bạn có chắc chắn muốn xóa người dùng này? Hành động này không thể hoàn tác.",
+        "confirm": "Xóa",
+        "success": "Xóa người dùng thành công",
+        "successMessage": "Người dùng đã được xóa khỏi hệ thống",
+        "error": "Không thể xóa người dùng"
+      },
+      "edit": {
+        "title": "Chỉnh sửa thông tin người dùng",
+        "description": "Cập nhật thông tin cơ bản của người dùng",
+        "name": "Họ và tên",
+        "namePlaceholder": "Nhập họ và tên",
+        "email": "Email",
+        "emailPlaceholder": "Nhập email",
+        "phone": "Số điện thoại",
+        "phonePlaceholder": "Nhập số điện thoại",
+        "role": "Vai trò",
+        "save": "Lưu thay đổi",
+        "success": "Cập nhật thành công",
+        "successMessage": "Thông tin người dùng đã được cập nhật",
+        "error": "Lỗi cập nhật",
+        "requiredFields": "Vui lòng điền đầy đủ thông tin bắt buộc"
       }
     }
   },

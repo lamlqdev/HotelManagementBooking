@@ -144,6 +144,7 @@ function App() {
               <Route path="users" element={<UsersManagementPage />} />
               <Route path="users/:id" element={<UserDetailPage />} />
               <Route path="hotels/:id" element={<HotelDetailAdminPage />} />
+              <Route path="settings" element={<SettingPage />} />
             </Route>
           </Route>
         </Routes>

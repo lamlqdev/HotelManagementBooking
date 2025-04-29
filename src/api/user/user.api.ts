@@ -10,6 +10,9 @@ import {
   UpdateUserResponse,
   DeleteUserResponse,
   GetUserStatsResponse,
+  DeactivateUserRequest,
+  DeactivateUserResponse,
+  ActivateUserResponse,
 } from "./types";
 
 export const userApi = {
@@ -59,6 +62,24 @@ export const userApi = {
 
   getUserStats: async (): Promise<GetUserStatsResponse> => {
     const response = await axios.get<GetUserStatsResponse>("/users/stats");
+    return response.data;
+  },
+
+  deactivateUser: async (
+    id: string,
+    data: DeactivateUserRequest
+  ): Promise<DeactivateUserResponse> => {
+    const response = await axios.patch<DeactivateUserResponse>(
+      `/users/${id}/deactivate`,
+      data
+    );
+    return response.data;
+  },
+
+  activateUser: async (id: string): Promise<ActivateUserResponse> => {
+    const response = await axios.patch<ActivateUserResponse>(
+      `/users/${id}/activate`
+    );
     return response.data;
   },
 };

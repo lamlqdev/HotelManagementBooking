@@ -97,3 +97,27 @@ export interface GetUserStatsResponse {
   success: boolean;
   data: UserStats;
 }
+
+export interface DeactivateUserRequest {
+  reason: string;
+}
+
+export interface DeactivateUserResponse {
+  success: boolean;
+  message: string;
+  data: {
+    userId: string;
+    status: string;
+    deactivationReason: string;
+    deactivatedAt: number;
+  };
+}
+
+export interface ActivateUserResponse {
+  success: boolean;
+  message: string;
+  data: {
+    userId: string;
+    status: string;
+  };
+}

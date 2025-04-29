@@ -10,10 +10,13 @@ export default function SettingPage() {
   const { t } = useTranslation();
   const location = useLocation();
   const isPartnerRoute = location.pathname.startsWith("/partner");
+  const isAdminRoute = location.pathname.startsWith("/admin");
 
   return (
     <div
-      className={`container mx-auto mb-12 ${!isPartnerRoute ? "mt-32" : ""}`}
+      className={`container mx-auto mb-12 ${
+        !isPartnerRoute && !isAdminRoute ? "mt-32" : ""
+      }`}
     >
       <h1 className="text-2xl font-bold mb-4">{t("settings.title")}</h1>
 

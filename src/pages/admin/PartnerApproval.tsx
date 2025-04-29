@@ -18,6 +18,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { partnerApi } from "@/api/partner/partner.api";
 import { PartnerResponse, Partner } from "@/api/partner/types";
 import { formatDate } from "@/utils/timeUtils";
+import NoPartnerRegister from "@/assets/illustration/NoPartnerRegister.svg";
 
 const PartnerApproval = () => {
   const { t } = useTranslation();
@@ -126,11 +127,17 @@ const PartnerApproval = () => {
                 ))
               ) : (
                 <TableRow className="hover:bg-transparent">
-                  <TableCell
-                    colSpan={6}
-                    className="text-center py-8 text-muted-foreground"
-                  >
-                    {t("admin.partners.approval.noPendingRequests")}
+                  <TableCell colSpan={6} className="text-center py-8">
+                    <div className="flex flex-col items-center gap-4">
+                      <img
+                        src={NoPartnerRegister}
+                        alt="No pending partners"
+                        className="w-96 h-96 object-contain"
+                      />
+                      <p className="text-muted-foreground">
+                        {t("admin.partners.approval.noPendingRequests")}
+                      </p>
+                    </div>
                   </TableCell>
                 </TableRow>
               )}
