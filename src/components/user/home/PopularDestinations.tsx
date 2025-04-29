@@ -14,6 +14,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { locationApi } from "@/api/location/location.api";
 import { PopularLocation } from "@/api/location/types";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import NoLocationHotel from "@/assets/illustration/NoLocationHotel.svg";
 
 export default function PopularDestinations() {
   const { t } = useTranslation();
@@ -78,6 +79,28 @@ export default function PopularDestinations() {
 
   const popularDestinations = data?.data || [];
 
+  if (popularDestinations.length === 0) {
+    return (
+      <section className="py-6">
+        <div className="container">
+          <h2 className="text-3xl font-bold mb-8">
+            {t("destinations.popular")}
+          </h2>
+          <div className="flex flex-col items-center justify-center py-12">
+            <img
+              src={NoLocationHotel}
+              alt="Không có địa điểm"
+              className="w-96 h-96 mb-4"
+            />
+            <p className="text-lg text-gray-500">
+              {t("destinations.no_popular_destinations")}
+            </p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="py-12">
       <div className="container">
@@ -125,8 +148,12 @@ export default function PopularDestinations() {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="hidden md:flex -left-4 bg-white hover:bg-white/90 text-foreground hover:text-foreground/90 border-none shadow-md" />
-            <CarouselNext className="hidden md:flex -right-4 bg-white hover:bg-white/90 text-foreground hover:text-foreground/90 border-none shadow-md" />
+            {popularDestinations.length > 4 && (
+              <>
+                <CarouselPrevious className="hidden md:flex -left-4 bg-white hover:bg-white/90 text-foreground hover:text-foreground/90 border-none shadow-md" />
+                <CarouselNext className="hidden md:flex -right-4 bg-white hover:bg-white/90 text-foreground hover:text-foreground/90 border-none shadow-md" />
+              </>
+            )}
           </Carousel>
         </div>
       </div>

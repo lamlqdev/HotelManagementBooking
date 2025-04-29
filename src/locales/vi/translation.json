@@ -262,7 +262,8 @@
   "destinations": {
     "popular": "Địa điểm nổi tiếng",
     "hotel_count_one": "{{count}} khách sạn",
-    "hotel_count_other": "{{count}} khách sạn"
+    "hotel_count_other": "{{count}} khách sạn",
+    "no_popular_destinations": "Không có địa điểm phổ biến nào"
   },
   "hotels": {
     "best_deals": "Ưu đãi tốt nhất",
@@ -272,7 +273,8 @@
       "select_room": "Chọn phòng",
       "original_price": "Giá gốc",
       "reviews_count": "{{count}} đánh giá"
-    }
+    },
+    "no_deals_available": "Chưa có ưu đãi nào"
   },
   "travel": {
     "inspiration": {

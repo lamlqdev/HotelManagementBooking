@@ -1,4 +1,11 @@
 import { useTranslation } from "react-i18next";
+import { useQuery } from "@tanstack/react-query";
+import { AlertCircle, Star } from "lucide-react";
+
+import { hotelApi } from "@/api/hotel/hotel.api";
+
+import NoDealHotel from "@/assets/illustration/NoDealHotel.svg";
+
 import {
   Carousel,
   CarouselContent,
@@ -8,12 +15,8 @@ import {
 } from "../../ui/carousel";
 import { Badge } from "../../ui/badge";
 import { Button } from "../../ui/button";
-import { Star } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
-import { hotelApi } from "@/api/hotel/hotel.api";
 import { Skeleton } from "../../ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "../../ui/alert";
-import { AlertCircle } from "lucide-react";
 
 export default function HotelDeals() {
   const { t } = useTranslation();
@@ -82,16 +85,16 @@ export default function HotelDeals() {
   // Xử lý trạng thái không có dữ liệu
   if (!data?.data || data.data.length === 0) {
     return (
-      <section className="py-12 bg-background">
+      <section className="py-6">
         <div className="container">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-3xl font-bold">{t("hotels.best_deals")}</h2>
-            <Button variant="outline" className="font-medium">
-              {t("common.view_all")}
-            </Button>
-          </div>
-          <div className="text-center py-12">
-            <p className="text-muted-foreground">
+          <h2 className="text-3xl font-bold mb-8">{t("hotels.best_deals")}</h2>
+          <div className="flex flex-col items-center justify-center py-12">
+            <img
+              src={NoDealHotel}
+              alt="Không có khách sạn"
+              className="w-96 h-96 mb-4"
+            />
+            <p className="text-lg text-gray-500">
               {t("hotels.no_deals_available")}
             </p>
           </div>

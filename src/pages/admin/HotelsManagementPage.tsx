@@ -1,38 +1,23 @@
+import { useState } from "react";
+import { useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
-import {
-  Building2,
-  Search,
-  Plus,
-  Filter,
-  Star,
-  MapPin,
-  Clock,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Skeleton } from "@/components/ui/skeleton";
 import { useQuery } from "@tanstack/react-query";
+
 import { hotelApi } from "@/api/hotel/hotel.api";
 import { Hotel } from "@/types/hotel";
+
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { useState } from "react";
+import { Input } from "@/components/ui/input";
 import {
   Pagination,
   PaginationContent,
+  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-  PaginationEllipsis,
 } from "@/components/ui/pagination";
 import {
   Select,
@@ -41,7 +26,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useNavigate } from "react-router";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
+import {
+  Building2,
+  Clock,
+  Filter,
+  MapPin,
+  Plus,
+  Search,
+  Star,
+} from "lucide-react";
 
 export default function HotelsManagementPage() {
   const { t } = useTranslation();
@@ -269,21 +272,21 @@ export default function HotelsManagementPage() {
                 hotels.map((hotel: Hotel) => (
                   <TableRow
                     key={hotel._id}
-                    className="hover:bg-muted/50 cursor-pointer transition-colors"
+                    className="cursor-pointer hover:bg-transparent"
                     onClick={() => handleRowClick(hotel._id)}
                   >
-                    <TableCell className="max-w-[25%]">
+                    <TableCell className="max-w-[25%] py-4">
                       <span className="font-medium truncate block">
                         {hotel.name}
                       </span>
                     </TableCell>
-                    <TableCell className="max-w-[20%]">
+                    <TableCell className="max-w-[20%] py-4">
                       <div className="flex items-center gap-1">
                         <MapPin className="h-3 w-3 flex-shrink-0 text-muted-foreground" />
                         <span className="truncate">{hotel.address}</span>
                       </div>
                     </TableCell>
-                    <TableCell className="max-w-[15%]">
+                    <TableCell className="max-w-[15%] py-4">
                       <div className="flex items-center gap-1 text-sm">
                         <Clock className="h-3 w-3 flex-shrink-0 text-muted-foreground" />
                         <span className="whitespace-nowrap">
@@ -292,7 +295,7 @@ export default function HotelsManagementPage() {
                         </span>
                       </div>
                     </TableCell>
-                    <TableCell className="max-w-[20%]">
+                    <TableCell className="max-w-[20%] py-4">
                       <div className="flex flex-wrap gap-1">
                         {hotel.policies.childrenPolicy === "yes" && (
                           <Badge variant="outline" className="text-xs">
@@ -311,13 +314,13 @@ export default function HotelsManagementPage() {
                         )}
                       </div>
                     </TableCell>
-                    <TableCell className="max-w-[10%]">
+                    <TableCell className="max-w-[10%] py-4">
                       <div className="flex items-center gap-1">
                         <Star className="h-4 w-4 text-yellow-400 fill-yellow-400 flex-shrink-0" />
                         <span className="font-medium">{hotel.rating || 0}</span>
                       </div>
                     </TableCell>
-                    <TableCell className="max-w-[10%]">
+                    <TableCell className="max-w-[10%] py-4">
                       <Badge
                         variant={
                           hotel.status === "active" ? "default" : "secondary"

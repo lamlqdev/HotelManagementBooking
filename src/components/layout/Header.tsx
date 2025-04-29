@@ -164,9 +164,12 @@ const Header = () => {
                       </>
                     )}
 
-                    <DropdownMenuItem asChild>
-                      <Link to="/settings">{t("dropdown.settings")}</Link>
-                    </DropdownMenuItem>
+                    {user.role !== "partner" && (
+                      <DropdownMenuItem asChild>
+                        <Link to="/settings">{t("dropdown.settings")}</Link>
+                      </DropdownMenuItem>
+                    )}
+
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={handleLogout}>
                       {t("dropdown.logout")}

@@ -319,24 +319,24 @@ export default function UsersManagementPage() {
                     className="hover:bg-transparent cursor-pointer"
                     onClick={() => handleUserClick(user._id)}
                   >
-                    <TableCell className="max-w-[20%]">
+                    <TableCell className="max-w-[20%] py-4">
                       <span className="font-medium truncate block">
                         {user.name}
                       </span>
                     </TableCell>
-                    <TableCell className="max-w-[20%]">
+                    <TableCell className="max-w-[20%] py-4">
                       <div className="flex items-center gap-1">
                         <Mail className="h-3 w-3 flex-shrink-0 text-muted-foreground" />
                         <span className="truncate">{user.email}</span>
                       </div>
                     </TableCell>
-                    <TableCell className="max-w-[15%]">
+                    <TableCell className="max-w-[15%] py-4">
                       <div className="flex items-center gap-1">
                         <Phone className="h-3 w-3 flex-shrink-0 text-muted-foreground" />
                         <span className="truncate">{user.phone}</span>
                       </div>
                     </TableCell>
-                    <TableCell className="max-w-[15%]">
+                    <TableCell className="max-w-[15%] py-4">
                       <div className="flex items-center gap-1">
                         <Shield className="h-3 w-3 flex-shrink-0 text-muted-foreground" />
                         <span className="truncate">
@@ -344,7 +344,7 @@ export default function UsersManagementPage() {
                         </span>
                       </div>
                     </TableCell>
-                    <TableCell className="max-w-[10%]">
+                    <TableCell className="max-w-[10%] py-4">
                       <Badge
                         variant={
                           user.status === "active" ? "default" : "secondary"
@@ -358,7 +358,7 @@ export default function UsersManagementPage() {
                         )}
                       </Badge>
                     </TableCell>
-                    <TableCell className="max-w-[10%]">
+                    <TableCell className="max-w-[10%] py-4">
                       <Badge
                         variant={user.isEmailVerified ? "default" : "secondary"}
                         className="whitespace-nowrap"
@@ -368,7 +368,7 @@ export default function UsersManagementPage() {
                           : t("common.no")}
                       </Badge>
                     </TableCell>
-                    <TableCell className="max-w-[10%]">
+                    <TableCell className="max-w-[10%] py-4">
                       <span className="text-sm text-muted-foreground">
                         {format(new Date(user.createdAt), "dd/MM/yyyy", {
                           locale: vi,

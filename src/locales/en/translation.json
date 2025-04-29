@@ -262,7 +262,8 @@
   "destinations": {
     "popular": "Popular destinations",
     "hotel_count_one": "{{count}} hotel",
-    "hotel_count_other": "{{count}} hotels"
+    "hotel_count_other": "{{count}} hotels",
+    "no_popular_destinations": "No popular destinations"
   },
   "hotels": {
     "best_deals": "Best deals",
@@ -272,7 +273,8 @@
       "select_room": "Select room",
       "original_price": "Original price",
       "reviews_count": "{{count}} reviews"
-    }
+    },
+    "no_deals_available": "No deals available"
   },
   "travel": {
     "inspiration": {
