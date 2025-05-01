@@ -2,7 +2,7 @@ import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { User } from "@/types/auth";
 import { AxiosError } from "axios";
 import { AuthState } from "./types";
-import { clearHotel } from "../hotel/hotelSlice";
+import { clearCurrentHotel } from "../hotel/hotelSlice";
 
 const initialState: AuthState = {
   user: null,
@@ -21,7 +21,7 @@ export const logout = createAsyncThunk(
 
       // Reset state
       dispatch(resetAuth());
-      dispatch(clearHotel());
+      dispatch(clearCurrentHotel());
 
       return { success: true };
     } catch (error) {

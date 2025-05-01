@@ -44,6 +44,7 @@
     "view": "View",
     "delete": "Delete",
     "save": "Save",
+    "saving": "Saving...",
     "confirm": "Confirm",
     "loading": "Loading...",
     "noData": "No data",
@@ -640,12 +641,25 @@
     }
   },
   "settings": {
-    "title": "Settings",
+    "title": "System Settings",
+    "general": "User",
     "appearance": "Appearance",
     "theme": "Theme",
     "themeDescription": "Change the application theme",
     "language": "Language",
-    "languageDescription": "Select the language you want to use"
+    "languageDescription": "Select the language you want to use",
+    "account": "Account",
+    "changePassword": {
+      "title": "Change Password",
+      "description": "Change your password to secure your account",
+      "currentPassword": "Current Password",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm Password",
+      "submit": "Change Password",
+      "saving": "Saving...",
+      "success": "Password changed successfully",
+      "error": "Failed to change password"
+    }
   },
   "dropdown": {
     "profile": "Profile",

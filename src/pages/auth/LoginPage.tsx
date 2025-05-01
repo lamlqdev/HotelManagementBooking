@@ -20,7 +20,7 @@ import {
 
 import { authApi } from "@/api/auth/auth.api";
 import { loginSchema, LoginFormData, ApiError } from "@/api/auth/types";
-import { setCredentials, setUser } from "@/features/auth/authSlice";
+import { setCredentials, setUser, resetAuth } from "@/features/auth/authSlice";
 import { useAppDispatch } from "@/store/hooks";
 
 const LoginPage = () => {
@@ -66,6 +66,18 @@ const LoginPage = () => {
         try {
           const userResponse = await authApi.getMe();
           if (userResponse.success) {
+            // Kiểm tra trạng thái của user
+            if (userResponse.data.status !== "active") {
+              // Nếu user không active, xóa token và thông báo
+              localStorage.removeItem("accessToken");
+              localStorage.removeItem("refreshToken");
+              dispatch(resetAuth());
+              toast.error(
+                "Tài khoản của bạn đã bị khóa hoặc chưa được kích hoạt"
+              );
+              return;
+            }
+
             dispatch(setUser(userResponse.data));
             toast.success("Đăng nhập thành công");
 

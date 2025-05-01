@@ -44,6 +44,7 @@
     "view": "Xem",
     "delete": "Xóa",
     "save": "Lưu",
+    "saving": "Đang lưu...",
     "confirm": "Xác nhận",
     "loading": "Đang tải...",
     "noData": "Không có dữ liệu",
@@ -640,12 +641,25 @@
     }
   },
   "settings": {
-    "title": "Cài đặt",
+    "title": "Cài đặt hệ thống",
+    "general": "Người dùng",
     "appearance": "Giao diện",
     "theme": "Chủ đề",
     "themeDescription": "Thay đổi chủ đề của ứng dụng",
     "language": "Ngôn ngữ",
-    "languageDescription": "Chọn ngôn ngữ bạn muốn sử dụng"
+    "languageDescription": "Chọn ngôn ngữ bạn muốn sử dụng",
+    "account": "Tài khoản",
+    "changePassword": {
+      "title": "Đổi mật khẩu",
+      "description": "Thay đổi mật khẩu của bạn để bảo mật tài khoản",
+      "currentPassword": "Mật khẩu hiện tại",
+      "newPassword": "Mật khẩu mới",
+      "confirmPassword": "Xác nhận mật khẩu",
+      "submit": "Đổi mật khẩu",
+      "saving": "Đang lưu...",
+      "success": "Đổi mật khẩu thành công",
+      "error": "Đổi mật khẩu thất bại"
+    }
   },
   "dropdown": {
     "profile": "Hồ sơ",

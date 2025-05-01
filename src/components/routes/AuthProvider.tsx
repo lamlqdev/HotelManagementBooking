@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
 import { AxiosError } from "axios";
@@ -8,10 +8,12 @@ import { useAppDispatch } from "@/store/hooks";
 import { setUser, setCredentials, resetAuth } from "@/features/auth/authSlice";
 
 import { authApi } from "@/api/auth/auth.api";
+import LoadingSvg from "@/assets/illustration/Loading.svg";
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const initializeAuth = async () => {
@@ -67,10 +69,19 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           navigate("/login");
         }
       }
+      setIsLoading(false);
     };
 
     initializeAuth();
   }, [dispatch, navigate]);
+
+  if (isLoading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-background">
+        <img src={LoadingSvg} alt="Loading" className="w-96 h-96" />
+      </div>
+    );
+  }
 
   return <>{children}</>;
 };

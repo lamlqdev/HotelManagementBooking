@@ -121,3 +121,27 @@ export interface ActivateUserResponse {
     status: string;
   };
 }
+
+export interface ChangePasswordResponse {
+  success: boolean;
+  message: string;
+}
+
+export const changePasswordSchema = z
+  .object({
+    currentPassword: z.string().min(1, "Vui lòng nhập mật khẩu hiện tại"),
+    newPassword: z
+      .string()
+      .min(8, "Mật khẩu phải có ít nhất 8 ký tự")
+      .regex(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/,
+        "Mật khẩu phải chứa ít nhất 1 chữ hoa, 1 chữ thường và 1 số"
+      ),
+    confirmPassword: z.string().min(1, "Vui lòng xác nhận mật khẩu"),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Mật khẩu xác nhận không khớp",
+    path: ["confirmPassword"],
+  });
+
+export type ChangePasswordFormData = z.infer<typeof changePasswordSchema>;

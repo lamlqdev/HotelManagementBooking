@@ -43,7 +43,6 @@ const HotelInfoPage = () => {
   const [editedData, setEditedData] = useState<EditedHotelData>({});
   const { t } = useTranslation();
   const { user } = useAppSelector((state) => state.auth);
-  const { currentHotel } = useAppSelector((state) => state.hotel);
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
 
@@ -54,6 +53,8 @@ const HotelInfoPage = () => {
   } = useQuery({
     queryKey: ["hotel"],
     queryFn: () => hotelApi.getMyHotels({ ownerId: user?.id }),
+    gcTime: 10 * 60 * 1000, // Giữ cache trong 10 phút
+    staleTime: 5 * 60 * 1000, // Cache trong 5 phút
   });
 
   const { data: amenitiesData, isLoading: isLoadingAmenities } = useQuery({
@@ -72,10 +73,10 @@ const HotelInfoPage = () => {
 
   // Lưu thông tin hotel vào Redux khi lấy được dữ liệu
   useEffect(() => {
-    if (hotels?.data[0] && !currentHotel) {
+    if (hotels?.data?.[0]) {
       dispatch(setCurrentHotel(hotels.data[0]));
     }
-  }, [hotels, dispatch, currentHotel]);
+  }, [hotels, dispatch]);
 
   const updateHotelMutation = useMutation({
     mutationFn: (data: EditedHotelData) => {

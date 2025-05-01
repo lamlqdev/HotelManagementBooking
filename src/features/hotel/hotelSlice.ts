@@ -1,11 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { HotelState } from "./types";
 import { Hotel } from "@/types/hotel";
 
+interface HotelState {
+  currentHotel: Hotel | null;
+}
+
 const initialState: HotelState = {
-  currentHotel: null,
-  isLoading: false,
-  error: null,
+  currentHotel: localStorage.getItem("currentHotel")
+    ? JSON.parse(localStorage.getItem("currentHotel")!)
+    : null,
 };
 
 const hotelSlice = createSlice({
@@ -14,23 +17,14 @@ const hotelSlice = createSlice({
   reducers: {
     setCurrentHotel: (state, action: PayloadAction<Hotel>) => {
       state.currentHotel = action.payload;
-      state.error = null;
+      localStorage.setItem("currentHotel", JSON.stringify(action.payload));
     },
-    setLoading: (state, action: PayloadAction<boolean>) => {
-      state.isLoading = action.payload;
-    },
-    setError: (state, action: PayloadAction<string>) => {
-      state.error = action.payload;
-      state.isLoading = false;
-    },
-    clearHotel: (state) => {
+    clearCurrentHotel: (state) => {
       state.currentHotel = null;
-      state.error = null;
+      localStorage.removeItem("currentHotel");
     },
   },
 });
 
-export const { setCurrentHotel, setLoading, setError, clearHotel } =
-  hotelSlice.actions;
-
+export const { setCurrentHotel, clearCurrentHotel } = hotelSlice.actions;
 export default hotelSlice.reducer;

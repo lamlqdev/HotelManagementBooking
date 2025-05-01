@@ -13,6 +13,8 @@ import {
   DeactivateUserRequest,
   DeactivateUserResponse,
   ActivateUserResponse,
+  ChangePasswordFormData,
+  ChangePasswordResponse,
 } from "./types";
 
 export const userApi = {
@@ -80,6 +82,13 @@ export const userApi = {
     const response = await axios.patch<ActivateUserResponse>(
       `/users/${id}/activate`
     );
+    return response.data;
+  },
+
+  changePassword: async (
+    data: ChangePasswordFormData
+  ): Promise<ChangePasswordResponse> => {
+    const response = await axios.put(`/users/change-password`, data);
     return response.data;
   },
 };

@@ -1,5 +1,7 @@
 import { Navigate, Outlet, useLocation } from "react-router";
+import { useEffect, useState } from "react";
 import { useAppSelector } from "@/store/hooks";
+import LoadingSvg from "@/assets/illustration/Loading.svg";
 
 interface PrivateRouteProps {
   role: "user" | "admin" | "partner";
@@ -12,6 +14,24 @@ const PrivateRoute = ({
 }: PrivateRouteProps) => {
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
   const location = useLocation();
+  const [isChecking, setIsChecking] = useState(true);
+
+  useEffect(() => {
+    // Đợi một khoảng thời gian ngắn để AuthProvider hoàn thành việc khôi phục phiên đăng nhập
+    const timer = setTimeout(() => {
+      setIsChecking(false);
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isChecking) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-background">
+        <img src={LoadingSvg} alt="Loading" className="w-96 h-96" />
+      </div>
+    );
+  }
 
   // Nếu chưa đăng nhập, chuyển hướng đến trang login
   if (!isAuthenticated) {
