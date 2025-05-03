@@ -4,9 +4,14 @@ import { BookingContactForm } from "@/components/user/booking/BookingContactForm
 import { BookingSpecialRequests } from "@/components/user/booking/BookingSpecialRequests";
 import { BookingSummary } from "@/components/user/booking/BookingSummary";
 import { formatTimeDisplay } from "@/utils/timeUtils";
+import { useEffect } from "react";
 
 const BookingInformationPage = () => {
   const { t } = useTranslation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const hotelInfo = {
     name: "Lakeside Motel Warefront",

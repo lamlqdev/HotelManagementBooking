@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { AlertCircle, Star } from "lucide-react";
+import { useNavigate } from "react-router";
 
 import { hotelApi } from "@/api/hotel/hotel.api";
 
@@ -20,6 +21,7 @@ import { Alert, AlertDescription, AlertTitle } from "../../ui/alert";
 
 export default function HotelDeals() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   // Sử dụng React Query để gọi API lấy danh sách khách sạn đang có giảm giá
   const { data, isLoading, isError } = useQuery({
@@ -126,7 +128,10 @@ export default function HotelDeals() {
                   key={hotel._id}
                   className="pl-4 basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4"
                 >
-                  <div className="bg-card rounded-lg overflow-hidden border border-border group cursor-pointer">
+                  <div
+                    className="bg-card rounded-lg overflow-hidden border border-border group cursor-pointer"
+                    onClick={() => navigate(`/hoteldetail/${hotel._id}`)}
+                  >
                     <div className="relative aspect-[4/3]">
                       <img
                         src={

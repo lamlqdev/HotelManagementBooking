@@ -1,3 +1,5 @@
+import { useEffect, useRef } from "react";
+
 interface HotelTabsProps {
   activeTab: string;
   onTabChange: (tab: string) => void;
@@ -5,11 +7,39 @@ interface HotelTabsProps {
 
 const HotelTabs = ({ activeTab, onTabChange }: HotelTabsProps) => {
   const tabs = ["tổng quan", "phòng", "đánh giá"];
+  const observerRef = useRef<IntersectionObserver | null>(null);
+
+  useEffect(() => {
+    const options = {
+      root: null,
+      rootMargin: "-100px 0px -80% 0px", // Điều chỉnh margin để phù hợp với vị trí tab
+      threshold: 0,
+    };
+
+    observerRef.current = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          onTabChange(entry.target.id);
+        }
+      });
+    }, options);
+
+    tabs.forEach((tab) => {
+      const element = document.getElementById(tab);
+      if (element) {
+        observerRef.current?.observe(element);
+      }
+    });
+
+    return () => {
+      observerRef.current?.disconnect();
+    };
+  }, [onTabChange]);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
-      const offset = 100; // Offset để tránh header che mất content
+      const offset = 100;
       const bodyRect = document.body.getBoundingClientRect().top;
       const elementRect = element.getBoundingClientRect().top;
       const elementPosition = elementRect - bodyRect;

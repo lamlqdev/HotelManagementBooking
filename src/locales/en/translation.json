@@ -961,7 +961,13 @@
       "edit": "Edit",
       "cancel": "Cancel",
       "save": "Save",
-      "saving": "Saving..."
+      "saving": "Saving...",
+      "activate": "Activate",
+      "deactivate": "Deactivate"
+    },
+    "tooltips": {
+      "activate": "Activate hotel",
+      "deactivate": "Deactivate hotel"
     },
     "tabs": {
       "general": "General",
@@ -1040,8 +1046,8 @@
     "messages": {
       "updateSuccess": "Hotel information updated successfully",
       "updateFailed": "Failed to update hotel information",
-      "deleteSuccess": "Hotel deleted successfully",
-      "deleteFailed": "Failed to delete hotel"
+      "activateSuccess": "Hotel activated successfully",
+      "deactivateSuccess": "Hotel deactivated successfully"
     }
   },
   "room": {

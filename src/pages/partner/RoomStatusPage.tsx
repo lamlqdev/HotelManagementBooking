@@ -1,5 +1,15 @@
-import { Card, CardContent } from "@/components/ui/card";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   Select,
   SelectContent,
@@ -7,15 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { Eye, Edit, Building2 } from "lucide-react";
-import { useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -24,86 +26,44 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Link } from "react-router";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
-interface GuestInfo {
-  name: string;
-  phone: string;
-  checkIn: string;
-  checkOut: string;
-  numberOfGuests: number;
-  paymentStatus: string;
-}
+import { roomApi } from "@/api/room/room.api";
+import { useAppSelector } from "@/store/hooks";
+import { Room } from "@/types/room";
+import { formatDate } from "@/utils/timeUtils";
 
-interface MaintenanceInfo {
-  issue: string;
-  description: string;
-  startDate: string;
-  expectedEndDate: string;
-  status: string;
-  contractor: string;
-  cost: string;
-}
-
-interface Room {
-  id: number;
-  roomName: string;
-  currentStatus: string;
-  lastStatusChange: string;
-  guestInfo: GuestInfo | null;
-  maintenanceInfo: MaintenanceInfo | null;
-}
-
-// Mock data - sau này sẽ được thay thế bằng API call
-const rooms: Room[] = [
-  {
-    id: 1,
-    roomName: "Phòng Deluxe 101",
-    currentStatus: "available",
-    lastStatusChange: "2024-03-20T10:00:00",
-    guestInfo: null,
-    maintenanceInfo: null,
-  },
-  {
-    id: 2,
-    roomName: "Phòng Suite 102",
-    currentStatus: "occupied",
-    lastStatusChange: "2024-03-19T15:30:00",
-    guestInfo: {
-      name: "Nguyễn Văn A",
-      phone: "0123456789",
-      checkIn: "2024-03-19T15:30:00",
-      checkOut: "2024-03-22T12:00:00",
-      numberOfGuests: 2,
-      paymentStatus: "Đã thanh toán",
-    },
-    maintenanceInfo: null,
-  },
-  {
-    id: 3,
-    roomName: "Phòng Standard 103",
-    currentStatus: "maintenance",
-    lastStatusChange: "2024-03-21T08:00:00",
-    guestInfo: null,
-    maintenanceInfo: {
-      issue: "Sửa điều hòa",
-      description: "Điều hòa không làm lạnh, cần thay gas và vệ sinh dàn lạnh",
-      startDate: "2024-03-21T08:00:00",
-      expectedEndDate: "2024-03-22T17:00:00",
-      status: "in_progress",
-      contractor: "Công ty ABC",
-      cost: "2,500,000 VNĐ",
-    },
-  },
-];
+import { Eye } from "lucide-react";
 
 export default function RoomStatusPage() {
-  const [selectedRoom, setSelectedRoom] = useState<string>("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedFloor, setSelectedFloor] = useState<string>("all");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [showDetails, setShowDetails] = useState(false);
   const [selectedRoomDetails, setSelectedRoomDetails] = useState<Room | null>(
     null
   );
+
+  // Lấy thông tin hotel từ Redux
+  const { currentHotel } = useAppSelector((state) => state.hotel);
+
+  // Lấy danh sách phòng từ API
+  const { data: roomsData, isLoading } = useQuery({
+    queryKey: ["rooms", currentHotel?._id, currentPage],
+    queryFn: () =>
+      roomApi.getRooms(currentHotel?._id || "", {
+        page: currentPage,
+        limit: 10,
+      }),
+    enabled: !!currentHotel?._id,
+  });
 
   const handleViewDetails = (room: Room) => {
     setSelectedRoomDetails(room);
@@ -118,7 +78,7 @@ export default function RoomStatusPage() {
             Trống
           </Badge>
         );
-      case "occupied":
+      case "booked":
         return (
           <Badge variant="default" className="bg-[#1167b1] text-white">
             Đã đặt
@@ -136,7 +96,7 @@ export default function RoomStatusPage() {
     switch (status) {
       case "available":
         return `${baseClass} bg-[#1167b1]/30`;
-      case "occupied":
+      case "booked":
         return `${baseClass} bg-[#1167b1]`;
       case "maintenance":
         return `${baseClass} bg-destructive`;
@@ -145,116 +105,200 @@ export default function RoomStatusPage() {
     }
   };
 
-  return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-foreground">
-          Quản lý tình trạng phòng
-        </h1>
-        <div className="flex gap-2">
-          <Link to="/partner/rooms">
-            <Button variant="outline">
-              <Building2 className="w-4 h-4 mr-2" />
-              Quản lý phòng
-            </Button>
-          </Link>
-        </div>
-      </div>
+  const totalPages = roomsData?.pagination?.totalPages || 1;
+  const allRooms = roomsData?.data || [];
 
-      <Card>
-        <CardContent className="p-4">
-          <div className="flex gap-6 mb-8">
-            <Select value={selectedRoom} onValueChange={setSelectedRoom}>
-              <SelectTrigger className="w-[250px] h-11 bg-card border-input rounded-md">
-                <SelectValue placeholder="Chọn phòng" />
+  // Lấy danh sách tầng duy nhất từ danh sách phòng
+  const uniqueFloors = Array.from(
+    new Set(allRooms.map((room: Room) => room.floor))
+  ).sort((a, b) => a - b);
+
+  // Lọc phòng theo tầng và trạng thái
+  const rooms = allRooms.filter((room: Room) => {
+    const matchesFloor =
+      selectedFloor === "all" || room.floor === parseInt(selectedFloor);
+    const matchesStatus =
+      statusFilter === "all" || room.status === statusFilter;
+    return matchesFloor && matchesStatus;
+  });
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  return (
+    <div className="container mx-auto px-4">
+      <div className="max-w-6xl mx-auto">
+        <Card className="p-6">
+          <div className="mb-6">
+            <h1 className="text-2xl font-bold">Quản lý tình trạng phòng</h1>
+            <p className="text-muted-foreground mt-2">
+              Xem và quản lý tình trạng các phòng trong khách sạn
+            </p>
+          </div>
+
+          <div className="flex items-center gap-4 mb-6">
+            <Select value={selectedFloor} onValueChange={setSelectedFloor}>
+              <SelectTrigger className="w-[250px]">
+                <SelectValue placeholder="Chọn tầng" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Tất cả phòng</SelectItem>
-                {rooms.map((room) => (
-                  <SelectItem key={room.id} value={room.id.toString()}>
-                    {room.roomName}
+                <SelectItem value="all">Tất cả tầng</SelectItem>
+                {uniqueFloors.map((floor) => (
+                  <SelectItem key={floor} value={floor.toString()}>
+                    Tầng {floor}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
 
             <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-[250px] h-11 bg-card border-input rounded-md">
+              <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Lọc theo trạng thái" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Tất cả trạng thái</SelectItem>
                 <SelectItem value="available">Trống</SelectItem>
-                <SelectItem value="occupied">Đã đặt</SelectItem>
+                <SelectItem value="booked">Đã đặt</SelectItem>
                 <SelectItem value="maintenance">Đang bảo trì</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
-          <div className="rounded-md border border-border shadow-sm overflow-hidden bg-card">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-muted/10 hover:bg-muted/10">
-                  <TableHead className="font-semibold text-muted-foreground py-4 text-base">
-                    Phòng
-                  </TableHead>
-                  <TableHead className="font-semibold text-muted-foreground py-4 text-base">
-                    Trạng thái
-                  </TableHead>
-                  <TableHead className="font-semibold text-muted-foreground py-4 text-base">
-                    Cập nhật lúc
-                  </TableHead>
-                  <TableHead className="text-right font-semibold text-muted-foreground py-4 text-base w-[250px]">
-                    Thao tác
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {rooms.map((room) => (
+          <Table>
+            <TableHeader>
+              <TableRow className="hover:bg-transparent">
+                <TableHead className="w-[25%]">Phòng</TableHead>
+                <TableHead className="w-[20%]">Loại phòng</TableHead>
+                <TableHead className="w-[15%]">Tầng</TableHead>
+                <TableHead className="w-[20%]">Trạng thái</TableHead>
+                <TableHead className="w-[10%]">Cập nhật lúc</TableHead>
+                <TableHead className="w-[10%] text-right">Thao tác</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {isLoading ? (
+                // Hiển thị skeleton khi đang loading
+                Array.from({ length: 5 }).map((_, index) => (
+                  <TableRow key={index} className="hover:bg-transparent">
+                    <TableCell>
+                      <Skeleton className="h-6 w-32" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-6 w-24" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-6 w-16" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-6 w-20" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-6 w-24" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-6 w-16 ml-auto" />
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : rooms.length > 0 ? (
+                rooms.map((room) => (
                   <TableRow
-                    key={room.id}
+                    key={room._id}
                     className="hover:bg-muted/5 transition-colors"
                   >
-                    <TableCell className="font-medium text-foreground py-4 text-base">
+                    <TableCell className="font-medium text-foreground py-4">
                       {room.roomName}
+                    </TableCell>
+                    <TableCell className="text-muted-foreground py-4">
+                      {room.roomType}
+                    </TableCell>
+                    <TableCell className="text-muted-foreground py-4">
+                      Tầng {room.floor}
                     </TableCell>
                     <TableCell className="py-4">
                       <div className="flex items-center gap-3">
-                        <div className={getStatusDot(room.currentStatus)} />
-                        {getStatusBadge(room.currentStatus)}
+                        <div className={getStatusDot(room.status)} />
+                        {getStatusBadge(room.status)}
                       </div>
                     </TableCell>
-                    <TableCell className="text-muted-foreground py-4 text-base">
-                      {new Date(room.lastStatusChange).toLocaleString()}
+                    <TableCell className="text-muted-foreground py-4">
+                      {formatDate(room.updatedAt)}
                     </TableCell>
                     <TableCell className="text-right py-4">
-                      <div className="flex justify-end gap-3">
-                        <Button
-                          variant="outline"
-                          size="default"
-                          onClick={() => handleViewDetails(room)}
-                          className="hover:bg-primary hover:text-primary-foreground transition-colors border-primary/20"
-                        >
-                          <Eye className="w-4 h-4 mr-2" />
-                          Chi tiết
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="default"
-                          className="hover:bg-primary hover:text-primary-foreground transition-colors border-primary/20"
-                        >
-                          <Edit className="w-4 h-4 mr-2" />
-                          Cập nhật
-                        </Button>
-                      </div>
+                      <Button
+                        variant="outline"
+                        size="default"
+                        onClick={() => handleViewDetails(room)}
+                        className="hover:bg-primary hover:text-primary-foreground transition-colors border-primary/20"
+                      >
+                        <Eye className="w-4 h-4 mr-2" />
+                        Chi tiết
+                      </Button>
                     </TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-        </CardContent>
-      </Card>
+                ))
+              ) : (
+                <TableRow className="hover:bg-transparent">
+                  <TableCell
+                    colSpan={6}
+                    className="text-center py-8 text-muted-foreground"
+                  >
+                    Không có phòng nào
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+
+          {/* Pagination */}
+          {rooms.length > 0 && (
+            <div className="mt-4">
+              <div className="text-sm text-muted-foreground text-center mb-4">
+                Hiển thị {(currentPage - 1) * 10 + 1}-
+                {Math.min(currentPage * 10, roomsData?.count || 0)} trong tổng
+                số {roomsData?.total || 0} kết quả
+              </div>
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      className={
+                        currentPage === 1
+                          ? "pointer-events-none opacity-50"
+                          : "cursor-pointer"
+                      }
+                    />
+                  </PaginationItem>
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                    (page) => (
+                      <PaginationItem key={page}>
+                        <PaginationLink
+                          onClick={() => handlePageChange(page)}
+                          isActive={currentPage === page}
+                        >
+                          {page}
+                        </PaginationLink>
+                      </PaginationItem>
+                    )
+                  )}
+                  <PaginationItem>
+                    <PaginationNext
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      className={
+                        currentPage === totalPages
+                          ? "pointer-events-none opacity-50"
+                          : "cursor-pointer"
+                      }
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </div>
+          )}
+        </Card>
+      </div>
 
       <Dialog open={showDetails} onOpenChange={setShowDetails}>
         <DialogContent className="max-w-[700px] bg-card p-8 rounded-lg">
@@ -263,133 +307,81 @@ export default function RoomStatusPage() {
               {selectedRoomDetails?.roomName}
               {selectedRoomDetails && (
                 <div className="flex items-center gap-3">
-                  <div
-                    className={getStatusDot(selectedRoomDetails.currentStatus)}
-                  />
-                  {getStatusBadge(selectedRoomDetails.currentStatus)}
+                  <div className={getStatusDot(selectedRoomDetails.status)} />
+                  {getStatusBadge(selectedRoomDetails.status)}
                 </div>
               )}
             </DialogTitle>
           </DialogHeader>
 
           <div className="space-y-8">
-            {selectedRoomDetails?.currentStatus === "occupied" &&
-              selectedRoomDetails?.guestInfo && (
-                <div className="space-y-6">
-                  <h3 className="font-semibold text-xl text-foreground">
-                    Thông tin đặt phòng
-                  </h3>
-                  <div className="grid grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <p className="text-sm text-muted-foreground">
-                        Tên khách hàng
-                      </p>
-                      <p className="text-foreground text-lg">
-                        {selectedRoomDetails.guestInfo.name}
-                      </p>
-                    </div>
-                    <div className="space-y-2">
-                      <p className="text-sm text-muted-foreground">
-                        Số điện thoại
-                      </p>
-                      <p className="text-foreground text-lg">
-                        {selectedRoomDetails.guestInfo.phone}
-                      </p>
-                    </div>
-                    <div className="space-y-2">
-                      <p className="text-sm text-muted-foreground">Check-in</p>
-                      <p className="text-foreground text-lg">
-                        {new Date(
-                          selectedRoomDetails.guestInfo.checkIn
-                        ).toLocaleString()}
-                      </p>
-                    </div>
-                    <div className="space-y-2">
-                      <p className="text-sm text-muted-foreground">Check-out</p>
-                      <p className="text-foreground text-lg">
-                        {new Date(
-                          selectedRoomDetails.guestInfo.checkOut
-                        ).toLocaleString()}
-                      </p>
-                    </div>
-                    <div className="space-y-2">
-                      <p className="text-sm text-muted-foreground">
-                        Số lượng khách
-                      </p>
-                      <p className="text-foreground text-lg">
-                        {selectedRoomDetails.guestInfo.numberOfGuests} người
-                      </p>
-                    </div>
-                    <div className="space-y-2">
-                      <p className="text-sm text-muted-foreground">
-                        Trạng thái thanh toán
-                      </p>
-                      <p className="text-foreground text-lg">
-                        {selectedRoomDetails.guestInfo.paymentStatus}
-                      </p>
-                    </div>
+            {selectedRoomDetails?.status === "booked" && (
+              <div className="space-y-6">
+                <h3 className="font-semibold text-xl text-foreground">
+                  Thông tin đặt phòng
+                </h3>
+                <div className="grid grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <p className="text-sm text-muted-foreground">Tên phòng</p>
+                    <p className="text-foreground text-lg">
+                      {selectedRoomDetails.roomName}
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-sm text-muted-foreground">Loại phòng</p>
+                    <p className="text-foreground text-lg">
+                      {selectedRoomDetails.roomType}
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-sm text-muted-foreground">Loại giường</p>
+                    <p className="text-foreground text-lg">
+                      {selectedRoomDetails.bedType}
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-sm text-muted-foreground">Sức chứa</p>
+                    <p className="text-foreground text-lg">
+                      {selectedRoomDetails.capacity} người
+                    </p>
                   </div>
                 </div>
-              )}
+              </div>
+            )}
 
-            {selectedRoomDetails?.currentStatus === "maintenance" &&
-              selectedRoomDetails?.maintenanceInfo && (
-                <div className="space-y-6">
-                  <h3 className="font-semibold text-xl text-foreground">
-                    Thông tin bảo trì
-                  </h3>
-                  <div className="grid grid-cols-2 gap-6">
-                    <div className="col-span-2 space-y-2">
-                      <p className="text-sm text-muted-foreground">Vấn đề</p>
-                      <p className="text-foreground text-lg">
-                        {selectedRoomDetails.maintenanceInfo.issue}
-                      </p>
-                    </div>
-                    <div className="col-span-2 space-y-2">
-                      <p className="text-sm text-muted-foreground">
-                        Mô tả chi tiết
-                      </p>
-                      <p className="text-foreground text-lg">
-                        {selectedRoomDetails.maintenanceInfo.description}
-                      </p>
-                    </div>
-                    <div className="space-y-2">
-                      <p className="text-sm text-muted-foreground">Bắt đầu</p>
-                      <p className="text-foreground text-lg">
-                        {new Date(
-                          selectedRoomDetails.maintenanceInfo.startDate
-                        ).toLocaleString()}
-                      </p>
-                    </div>
-                    <div className="space-y-2">
-                      <p className="text-sm text-muted-foreground">
-                        Dự kiến hoàn thành
-                      </p>
-                      <p className="text-foreground text-lg">
-                        {new Date(
-                          selectedRoomDetails.maintenanceInfo.expectedEndDate
-                        ).toLocaleString()}
-                      </p>
-                    </div>
-                    <div className="space-y-2">
-                      <p className="text-sm text-muted-foreground">
-                        Đơn vị thực hiện
-                      </p>
-                      <p className="text-foreground text-lg">
-                        {selectedRoomDetails.maintenanceInfo.contractor}
-                      </p>
-                    </div>
-                    <div className="space-y-2">
-                      <p className="text-sm text-muted-foreground">
-                        Chi phí dự kiến
-                      </p>
-                      <p className="text-foreground text-lg">
-                        {selectedRoomDetails.maintenanceInfo.cost}
-                      </p>
-                    </div>
+            {selectedRoomDetails?.status === "maintenance" && (
+              <div className="space-y-6">
+                <h3 className="font-semibold text-xl text-foreground">
+                  Thông tin bảo trì
+                </h3>
+                <div className="grid grid-cols-2 gap-6">
+                  <div className="col-span-2 space-y-2">
+                    <p className="text-sm text-muted-foreground">Tên phòng</p>
+                    <p className="text-foreground text-lg">
+                      {selectedRoomDetails.roomName}
+                    </p>
+                  </div>
+                  <div className="col-span-2 space-y-2">
+                    <p className="text-sm text-muted-foreground">Mô tả phòng</p>
+                    <p className="text-foreground text-lg">
+                      {selectedRoomDetails.description}
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-sm text-muted-foreground">Tầng</p>
+                    <p className="text-foreground text-lg">
+                      {selectedRoomDetails.floor}
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-sm text-muted-foreground">Diện tích</p>
+                    <p className="text-foreground text-lg">
+                      {selectedRoomDetails.squareMeters}m²
+                    </p>
                   </div>
                 </div>
-              )}
+              </div>
+            )}
           </div>
         </DialogContent>
       </Dialog>

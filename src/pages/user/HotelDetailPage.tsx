@@ -156,14 +156,20 @@ const HotelDetailPage = () => {
       <HotelTabs activeTab={activeTab} onTabChange={setActiveTab} />
 
       <div className="mt-6 space-y-12">
-        <HotelOverview
-          description={hotel.description}
-          amenities={hotelAmenities}
-        />
+        <div id="tổng quan">
+          <HotelOverview
+            description={hotel.description}
+            amenities={hotelAmenities}
+          />
+        </div>
 
-        <HotelRooms rooms={rooms} />
+        <div id="phòng">
+          <HotelRooms rooms={rooms} />
+        </div>
 
-        <HotelReviews reviewStats={reviewStats} reviews={reviews} />
+        <div id="đánh giá">
+          <HotelReviews reviewStats={reviewStats} reviews={reviews} />
+        </div>
       </div>
 
       <ChatSupport />

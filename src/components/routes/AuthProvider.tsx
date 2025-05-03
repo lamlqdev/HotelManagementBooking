@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router";
+import { useQuery, useMutation } from "@tanstack/react-query";
 
 import { AxiosError } from "axios";
 import { toast } from "sonner";
@@ -13,7 +14,46 @@ import LoadingSvg from "@/assets/illustration/Loading.svg";
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
+
+  const { isLoading: isLoadingUser } = useQuery({
+    queryKey: ["user"],
+    queryFn: () => authApi.getMe(),
+    enabled: false,
+    retry: false,
+  });
+
+  const { mutate: refreshTokenMutation, isPending: isLoadingRefresh } =
+    useMutation({
+      mutationFn: () => authApi.refreshToken(),
+      onSuccess: async (refreshResponse) => {
+        if (refreshResponse.success && refreshResponse.accessToken) {
+          const newUserResponse = await authApi.getMe();
+          if (newUserResponse.success) {
+            const storedRefreshToken = localStorage.getItem("refreshToken");
+            dispatch(
+              setCredentials({
+                accessToken: refreshResponse.accessToken,
+                refreshToken:
+                  refreshResponse.refreshToken ||
+                  (storedRefreshToken as string),
+              })
+            );
+            dispatch(setUser(newUserResponse.data));
+          }
+        }
+      },
+      onError: () => {
+        handleAuthError();
+      },
+    });
+
+  const handleAuthError = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    dispatch(resetAuth());
+    toast.error("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại");
+    navigate("/login");
+  };
 
   useEffect(() => {
     const initializeAuth = async () => {
@@ -22,10 +62,9 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       if (accessToken && refreshToken) {
         try {
-          // Thử lấy thông tin user trước
           const userResponse = await authApi.getMe();
+
           if (userResponse.success) {
-            // Nếu lấy được thông tin user, mới set credentials và user
             dispatch(
               setCredentials({
                 accessToken,
@@ -33,49 +72,23 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
               })
             );
             dispatch(setUser(userResponse.data));
+          } else {
+            handleAuthError();
           }
         } catch (error) {
-          if (error instanceof AxiosError) {
-            // Nếu lỗi 401, thử refresh token
-            if (error.response?.status === 401) {
-              try {
-                const refreshResponse = await authApi.refreshToken();
-                if (refreshResponse.success && refreshResponse.accessToken) {
-                  // Nếu refresh thành công, thử lấy thông tin user lại
-                  const newUserResponse = await authApi.getMe();
-                  if (newUserResponse.success) {
-                    dispatch(
-                      setCredentials({
-                        accessToken: refreshResponse.accessToken,
-                        refreshToken:
-                          refreshResponse.refreshToken || refreshToken,
-                      })
-                    );
-                    dispatch(setUser(newUserResponse.data));
-                    return;
-                  }
-                }
-              } catch (refreshError) {
-                console.error("Lỗi khi refresh token:", refreshError);
-              }
-            }
+          if (error instanceof AxiosError && error.response?.status === 401) {
+            refreshTokenMutation();
+          } else {
+            handleAuthError();
           }
-
-          // Nếu tất cả các cách khôi phục phiên đăng nhập đều thất bại
-          localStorage.removeItem("accessToken");
-          localStorage.removeItem("refreshToken");
-          dispatch(resetAuth());
-          toast.error("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại");
-          navigate("/login");
         }
       }
-      setIsLoading(false);
     };
 
     initializeAuth();
-  }, [dispatch, navigate]);
+  }, [dispatch, navigate, refreshTokenMutation]);
 
-  if (isLoading) {
+  if (isLoadingUser || isLoadingRefresh) {
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-background">
         <img src={LoadingSvg} alt="Loading" className="w-96 h-96" />

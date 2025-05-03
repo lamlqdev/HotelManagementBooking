@@ -1,24 +1,24 @@
-import { useState, useEffect } from "react";
-import { useTranslation } from "react-i18next";
+import { useEffect, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import { Loader2 } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
-
-import { hotelApi } from "@/api/hotel/hotel.api";
 import { amenitiesApi } from "@/api/amenities/amenities.api";
+import { hotelApi } from "@/api/hotel/hotel.api";
 import { locationApi } from "@/api/location/location.api";
-import { useAppSelector, useAppDispatch } from "@/store/hooks";
-import { setCurrentHotel } from "@/features/hotel/hotelSlice";
-import { Amenity } from "@/types/amenity";
+
+import { AmenitiesSection } from "@/components/partner/hotel-info/AmenitiesSection";
 import { BasicInfoSection } from "@/components/partner/hotel-info/BasicInfoSection";
 import { ImagesSection } from "@/components/partner/hotel-info/ImagesSection";
 import { PoliciesSection } from "@/components/partner/hotel-info/PoliciesSection";
-import { AmenitiesSection } from "@/components/partner/hotel-info/AmenitiesSection";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { setCurrentHotel } from "@/features/hotel/hotelSlice";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { Amenity } from "@/types/amenity";
+
+import { AlertCircle, Loader2, Power } from "lucide-react";
 
 interface EditedHotelData {
   name?: string;
@@ -36,6 +36,7 @@ interface EditedHotelData {
   amenities?: string[];
   featuredImage?: File;
   images?: File[];
+  status?: "active" | "inactive";
 }
 
 const HotelInfoPage = () => {
@@ -94,6 +95,30 @@ const HotelInfoPage = () => {
       toast.success(t("hotelInfo.messages.updateSuccess"));
       setIsEditing(false);
       setEditedData({});
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || t("hotelInfo.messages.updateFailed"));
+    },
+  });
+
+  const toggleHotelStatusMutation = useMutation({
+    mutationFn: (newStatus: "active" | "inactive") => {
+      if (!hotel?._id) throw new Error("Hotel ID is required");
+      const data: Partial<EditedHotelData> = { status: newStatus };
+      return hotelApi.updateHotel(hotel._id, data);
+    },
+    onSuccess: (response) => {
+      queryClient.invalidateQueries({ queryKey: ["hotel"] });
+
+      if (response.success && response.data) {
+        dispatch(setCurrentHotel(response.data));
+      }
+
+      toast.success(
+        response.data.status === "inactive"
+          ? t("hotelInfo.messages.deactivateSuccess")
+          : t("hotelInfo.messages.activateSuccess")
+      );
     },
     onError: (error: Error) => {
       toast.error(error.message || t("hotelInfo.messages.updateFailed"));
@@ -216,6 +241,11 @@ const HotelInfoPage = () => {
     });
   };
 
+  const handleToggleStatus = () => {
+    const newStatus = hotel?.status === "active" ? "inactive" : "active";
+    toggleHotelStatusMutation.mutate(newStatus);
+  };
+
   if (isLoadingHotels || isLoadingAmenities || isLoadingLocation) {
     return (
       <div className="container mx-auto px-4 space-y-6">
@@ -257,6 +287,25 @@ const HotelInfoPage = () => {
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">{t("hotelInfo.title")}</h1>
         <div className="flex gap-2">
+          <Button
+            variant="ghost"
+            className={`flex items-center gap-2 ${
+              hotel?.status === "active"
+                ? "bg-red-100 hover:bg-red-200 text-red-600"
+                : "bg-green-100 hover:bg-green-200 text-green-600"
+            }`}
+            onClick={handleToggleStatus}
+            disabled={toggleHotelStatusMutation.isPending}
+          >
+            {toggleHotelStatusMutation.isPending ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Power className="h-4 w-4" />
+            )}
+            {hotel?.status === "active"
+              ? t("hotelInfo.buttons.deactivate")
+              : t("hotelInfo.buttons.activate")}
+          </Button>
           {isEditing ? (
             <>
               <Button variant="outline" onClick={() => setIsEditing(false)}>

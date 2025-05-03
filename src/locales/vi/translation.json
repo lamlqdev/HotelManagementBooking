@@ -978,7 +978,13 @@
       "edit": "Chỉnh sửa",
       "cancel": "Hủy",
       "save": "Lưu",
-      "saving": "Đang lưu..."
+      "saving": "Đang lưu...",
+      "activate": "Kích hoạt",
+      "deactivate": "Vô hiệu hóa"
+    },
+    "tooltips": {
+      "activate": "Kích hoạt khách sạn",
+      "deactivate": "Vô hiệu hóa khách sạn"
     },
     "tabs": {
       "general": "Thông tin chung",
@@ -1055,10 +1061,10 @@
       "conference-hall": "Hội trường"
     },
     "messages": {
-      "updateSuccess": "Thông tin khách sạn đã được cập nhật thành công",
+      "updateSuccess": "Cập nhật thông tin khách sạn thành công",
       "updateFailed": "Cập nhật thông tin khách sạn thất bại",
-      "deleteSuccess": "Khách sạn đã được xóa thành công",
-      "deleteFailed": "Xóa khách sạn thất bại"
+      "activateSuccess": "Đã kích hoạt khách sạn thành công",
+      "deactivateSuccess": "Đã vô hiệu hóa khách sạn thành công"
     }
   },
   "room": {

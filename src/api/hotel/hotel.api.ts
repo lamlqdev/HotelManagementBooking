@@ -124,6 +124,7 @@ export const hotelApi = {
       amenities?: string[];
       featuredImage?: File;
       images?: File[];
+      status?: "active" | "inactive";
     }
   ): Promise<HotelResponse> => {
     const formData = new FormData();
@@ -152,6 +153,9 @@ export const hotelApi = {
         formData.append("amenities", amenityId);
       });
     }
+
+    // Thêm status nếu có
+    if (data.status) formData.append("status", data.status);
 
     // Thêm ảnh đại diện nếu có
     if (data.featuredImage) {
