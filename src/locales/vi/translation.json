@@ -15,14 +15,14 @@
     "search": "Tìm kiếm",
     "menu": "Menu",
     "close": "Đóng",
-    "readMore": "Đọc thêm",
+    "readMore": "Xem thêm",
     "bookNow": "Đặt ngay",
     "contact": "Liên hệ",
     "about": "Về chúng tôi",
     "blog": "Blog",
     "hotels": "Khách sạn",
     "destinations": "Điểm đến",
-    "packages": "Gói du lịch",
+    "packages": "Gói",
     "login": "Đăng nhập",
     "register": "Đăng ký",
     "logout": "Đăng xuất",
@@ -32,13 +32,13 @@
     "darkMode": "Chế độ tối",
     "lightMode": "Chế độ sáng",
     "save_changes": "Lưu thay đổi",
-    "cancel": "Hủy bỏ",
+    "cancel": "Hủy",
     "account": "Tài khoản",
     "notifications": "Thông báo",
     "personalInfo": "Thông tin cá nhân",
     "error": "Lỗi",
-    "errorMessage": "Đã có lỗi xảy ra. Vui lòng thử lại sau.",
-    "filter": "Lọc",
+    "errorMessage": "Đã xảy ra lỗi. Vui lòng thử lại sau.",
+    "filter": "Bộ lọc",
     "actions": "Thao tác",
     "edit": "Sửa",
     "view": "Xem",
@@ -56,7 +56,9 @@
     "error_loading_data": "Không thể tải dữ liệu. Vui lòng thử lại sau.",
     "favorites": "Yêu thích",
     "people": "Người",
-    "clearFilter": "Xóa bộ lọc"
+    "clearFilter": "Xóa bộ lọc",
+    "processing": "Đang xử lý...",
+    "optional": "Tùy chọn"
   },
   "nav": {
     "home": "Trang chủ",
@@ -644,8 +646,8 @@
     "title": "Cài đặt hệ thống",
     "general": "Người dùng",
     "appearance": "Giao diện",
-    "theme": "Chủ đề",
-    "themeDescription": "Thay đổi chủ đề của ứng dụng",
+    "theme": "Giao diện",
+    "themeDescription": "Thay đổi giao diện ứng dụng",
     "language": "Ngôn ngữ",
     "languageDescription": "Chọn ngôn ngữ bạn muốn sử dụng",
     "account": "Tài khoản",
@@ -659,6 +661,20 @@
       "saving": "Đang lưu...",
       "success": "Đổi mật khẩu thành công",
       "error": "Đổi mật khẩu thất bại"
+    },
+    "deactivateAccount": {
+      "title": "Vô hiệu hóa tài khoản",
+      "description": "Xác nhận vô hiệu hóa tài khoản của bạn",
+      "warning": "Vô hiệu hóa tài khoản sẽ xóa tất cả dữ liệu của bạn và không thể khôi phục lại",
+      "password": "Mật khẩu",
+      "passwordPlaceholder": "Nhập mật khẩu của bạn",
+      "reason": "Lý do",
+      "reasonPlaceholder": "Nhập lý do vô hiệu hóa tài khoản",
+      "confirm": "Xác nhận vô hiệu hóa tài khoản",
+      "success": "Tài khoản đã được vô hiệu hóa thành công",
+      "successMessage": "Tài khoản của bạn đã được vô hiệu hóa thành công",
+      "error": "Lỗi vô hiệu hóa tài khoản",
+      "passwordRequired": "Vui lòng nhập mật khẩu"
     }
   },
   "dropdown": {
@@ -1374,7 +1390,8 @@
       },
       "status": {
         "active": "Hoạt động",
-        "inactive": "Không hoạt động"
+        "inactive": "Không hoạt động",
+        "rejected": "Từ chối"
       },
       "roles": {
         "admin": "Quản trị viên",

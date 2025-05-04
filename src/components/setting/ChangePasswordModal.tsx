@@ -28,6 +28,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { userApi } from "@/api/user/user.api";
 import { ChangePasswordFormData, changePasswordSchema } from "@/api/user/types";
+import { logout } from "@/features/auth/authSlice";
+import { useAppDispatch } from "@/store/hooks";
 
 export function ChangePasswordModal() {
   const { t } = useTranslation();
@@ -35,6 +37,7 @@ export function ChangePasswordModal() {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const dispatch = useAppDispatch();
 
   const form = useForm<ChangePasswordFormData>({
     resolver: zodResolver(changePasswordSchema),
@@ -49,8 +52,7 @@ export function ChangePasswordModal() {
     mutationFn: userApi.changePassword,
     onSuccess: (response) => {
       toast.success(response.message);
-      setOpen(false);
-      form.reset();
+      dispatch(logout());
     },
     onError: (error) => {
       if (error instanceof AxiosError) {

@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { LanguageToggle } from "@/components/setting/LanguageToggle";
 import { ModeToggle } from "@/components/setting/ModeToggle";
 import { ChangePasswordModal } from "@/components/setting/ChangePasswordModal";
+import { DeactivateAccountModal } from "@/components/setting/DeactivateAccountModal";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
@@ -65,6 +66,22 @@ export default function SettingPage() {
               </div>
               <ChangePasswordModal />
             </div>
+            {!isAdminRoute && (
+              <>
+                <Separator />
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="font-medium text-destructive">
+                      {t("settings.deactivateAccount.title")}
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      {t("settings.deactivateAccount.warning")}
+                    </p>
+                  </div>
+                  <DeactivateAccountModal />
+                </div>
+              </>
+            )}
           </CardContent>
         </Card>
       </div>

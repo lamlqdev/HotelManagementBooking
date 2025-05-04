@@ -43,7 +43,7 @@ const HotelDetailPage = () => {
 
   const { data: roomsResponse, isLoading: isLoadingRooms } = useQuery({
     queryKey: ["rooms", id],
-    queryFn: () => roomApi.getRooms(id as string),
+    queryFn: () => roomApi.getRooms(id as string, { available: true }),
     enabled: !!id,
   });
 

@@ -56,7 +56,9 @@
     "error_loading_data": "Could not load data. Please try again later.",
     "favorites": "Favorites",
     "people": "People",
-    "clearFilter": "Clear filter"
+    "clearFilter": "Clear filter",
+    "processing": "Processing...",
+    "optional": "Optional"
   },
   "nav": {
     "home": "Home",
@@ -659,6 +661,20 @@
       "saving": "Saving...",
       "success": "Password changed successfully",
       "error": "Failed to change password"
+    },
+    "deactivateAccount": {
+      "title": "Deactivate Account",
+      "description": "Please enter your password to confirm account deactivation. This action cannot be undone.",
+      "warning": "Deactivating your account will permanently delete all your data.",
+      "password": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "reason": "Reason",
+      "reasonPlaceholder": "Why do you want to deactivate your account?",
+      "confirm": "Confirm Deactivation",
+      "success": "Account Deactivated",
+      "successMessage": "Your account has been successfully deactivated",
+      "error": "Error",
+      "passwordRequired": "Please enter your password"
     }
   },
   "dropdown": {
@@ -1307,7 +1323,8 @@
       },
       "status": {
         "active": "Active",
-        "inactive": "Inactive"
+        "inactive": "Inactive",
+        "rejected": "Rejected"
       },
       "roles": {
         "admin": "Administrator",

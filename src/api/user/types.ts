@@ -145,3 +145,19 @@ export const changePasswordSchema = z
   });
 
 export type ChangePasswordFormData = z.infer<typeof changePasswordSchema>;
+
+export interface DeactivateAccountRequest {
+  password: string;
+  reason?: string;
+}
+
+export interface DeactivateAccountResponse {
+  success: boolean;
+  message: string;
+  data: {
+    userId: string;
+    status: string;
+    deactivationReason?: string;
+    deactivatedAt?: Date;
+  };
+}
