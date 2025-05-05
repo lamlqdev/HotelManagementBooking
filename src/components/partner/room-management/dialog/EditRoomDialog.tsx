@@ -43,14 +43,19 @@ export function EditRoomDialog({
 }: EditRoomDialogProps) {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
-  const [editedRoom, setEditedRoom] = useState<Room>(room);
+  const [editedRoom, setEditedRoom] = useState<
+    Room & { imagesToDelete?: string[] }
+  >(room);
   const [newImages, setNewImages] = useState<File[]>([]);
   const [imagePreviewUrls, setImagePreviewUrls] = useState<string[]>([]);
 
   // Reset state when dialog opens
   useEffect(() => {
     if (isOpen) {
-      setEditedRoom(room);
+      setEditedRoom({
+        ...room,
+        imagesToDelete: [],
+      });
       setNewImages([]);
       setImagePreviewUrls([]);
     }
@@ -98,8 +103,18 @@ export function EditRoomDialog({
         formData.append("amenities", JSON.stringify(data.amenities));
       }
 
-      // Thêm danh sách ảnh cũ cần giữ lại
-      const existingImages = editedRoom.images.filter((img) => img.publicId);
+      // Thêm danh sách ảnh cần xóa
+      if (editedRoom.imagesToDelete && editedRoom.imagesToDelete.length > 0) {
+        formData.append(
+          "imagesToDelete",
+          JSON.stringify(editedRoom.imagesToDelete)
+        );
+      }
+
+      // Thêm danh sách ảnh cần giữ lại
+      const existingImages = editedRoom.images
+        .filter((img) => img.publicId)
+        .map((img) => img.publicId);
       if (existingImages.length > 0) {
         formData.append("existingImages", JSON.stringify(existingImages));
       }
@@ -142,20 +157,31 @@ export function EditRoomDialog({
   };
 
   const handleImageDelete = (imageUrl: string) => {
-    // Chỉ cho phép xóa nếu còn ít nhất 1 hình
     if (editedRoom.images.length <= 1) {
       toast.error(t("room.dialog.edit.min_images_error"));
       return;
     }
 
-    // Nếu là ảnh mới (không có publicId), xóa khỏi newImages
     const imageToDelete = editedRoom.images.find((img) => img.url === imageUrl);
-    if (imageToDelete && !imageToDelete.publicId) {
-      const fileToRemove = newImages.find(
-        (file) => URL.createObjectURL(file) === imageUrl
-      );
-      if (fileToRemove) {
-        setNewImages((prev) => prev.filter((file) => file !== fileToRemove));
+
+    if (imageToDelete) {
+      if (!imageToDelete.publicId) {
+        // Nếu là ảnh mới, xóa khỏi newImages
+        const fileToRemove = newImages.find(
+          (file) => URL.createObjectURL(file) === imageUrl
+        );
+        if (fileToRemove) {
+          setNewImages((prev) => prev.filter((file) => file !== fileToRemove));
+        }
+      } else {
+        // Nếu là ảnh cũ, thêm vào danh sách ảnh cần xóa
+        setEditedRoom((prev) => ({
+          ...prev,
+          imagesToDelete: [
+            ...(prev.imagesToDelete || []),
+            imageToDelete.publicId,
+          ],
+        }));
       }
     }
 

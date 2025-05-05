@@ -1,172 +1,166 @@
+import { format } from "date-fns";
+import { vi } from "date-fns/locale";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import { FaBed, FaUserFriends, FaRulerCombined } from "react-icons/fa";
-import NoData from "@/assets/illustration/NoData.svg";
+
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 
 import { Room } from "@/types/room";
 import { getAmenityIcon } from "@/utils/amenityIcons";
 
 interface HotelRoomsProps {
   rooms: Room[];
+  checkIn?: string;
+  checkOut?: string;
+  capacity?: number;
+  hotelId?: string;
 }
 
-const HotelRooms = ({ rooms }: HotelRoomsProps) => {
+const HotelRooms = ({
+  rooms,
+  checkIn,
+  checkOut,
+  capacity,
+  hotelId,
+}: HotelRoomsProps) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("vi-VN", {
       style: "currency",
       currency: "VND",
+      maximumFractionDigits: 0,
     }).format(price);
   };
 
-  const handleBookRoom = (roomId: string) => {
-    navigate(`/booking-information?roomId=${roomId}`);
+  const formatDate = (dateString: string) => {
+    return format(new Date(dateString), "dd/MM/yyyy", { locale: vi });
   };
 
-  if (!rooms || rooms.length === 0) {
+  const handleBookRoom = (roomId: string) => {
+    const params = new URLSearchParams();
+    if (hotelId) params.append("hotelId", hotelId);
+    if (checkIn) params.append("checkIn", checkIn);
+    if (checkOut) params.append("checkOut", checkOut);
+    if (capacity) params.append("capacity", capacity.toString());
+
+    navigate(`/booking-information/${roomId}?${params.toString()}`);
+  };
+
+  if (rooms.length === 0) {
     return (
-      <section id="phòng">
-        <h2 className="text-2xl font-bold mb-6 text-foreground">
-          Danh sách phòng
-        </h2>
-        <div className="flex flex-col items-center justify-center py-12 text-center">
-          <img
-            src={NoData}
-            alt="No rooms available"
-            className="w-96 h-96 mb-4"
-          />
-          <h3 className="text-xl font-semibold mb-2">
-            Hiện không có phòng nào
-          </h3>
-          <p className="text-muted-foreground">
-            Vui lòng quay lại sau để xem các phòng mới
-          </p>
-        </div>
-      </section>
+      <div className="text-center py-12">
+        <img
+          src="/no-data.svg"
+          alt="No rooms available"
+          className="mx-auto h-48 w-48 mb-4"
+        />
+        <p className="text-muted-foreground">
+          {t("hotel.rooms.no_rooms_available")}
+        </p>
+      </div>
     );
   }
 
   return (
-    <section id="phòng">
-      <h2 className="text-2xl font-bold mb-6 text-foreground">
-        Danh sách phòng
-      </h2>
-      <div className="space-y-6">
-        {rooms.map((room) => (
-          <div
-            key={room._id}
-            className="bg-card rounded-lg shadow-md overflow-hidden"
-          >
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* Room Image */}
-              <div className="relative h-[200px] md:h-full">
-                <img
-                  src={
-                    room.images && room.images.length > 0
-                      ? room.images[0].url
-                      : "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800"
-                  }
-                  alt={room.roomName}
-                  className="w-full h-full object-cover"
+    <div className="space-y-6">
+      <h3 className="text-2xl font-semibold">{t("hotel.rooms.title")}</h3>
+      {checkIn && checkOut && capacity && (
+        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg shadow-sm border border-blue-100 transition-all duration-300 hover:shadow-md">
+          <div className="flex items-center space-x-4">
+            <div className="flex-1">
+              <p className="text-sm text-gray-600 font-medium">
+                {t("hotel.rooms.search_info", {
+                  checkIn: formatDate(checkIn),
+                  checkOut: formatDate(checkOut),
+                  capacity,
+                })}
+              </p>
+            </div>
+            <div className="flex-shrink-0">
+              <svg
+                className="w-5 h-5 text-primary"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                 />
-              </div>
-
-              {/* Room Details */}
-              <div className="p-6 md:col-span-2">
-                <div className="flex flex-col h-full">
-                  <div className="flex-grow">
-                    <div className="flex justify-between items-start mb-4">
-                      <div>
-                        <h3 className="text-xl font-semibold mb-2 text-foreground">
-                          {room.roomName}
-                        </h3>
-                        <div className="flex items-center gap-4 text-sm text-muted-foreground mb-2">
-                          <div className="flex items-center gap-1">
-                            <FaBed />
-                            <span>{room.bedType}</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <FaUserFriends />
-                            <span>{room.capacity} khách</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <FaRulerCombined />
-                            <span>{room.squareMeters}m²</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-muted-foreground line-through text-sm">
-                          {formatPrice(room.price)}
-                        </div>
-                        <div className="text-xl font-bold text-primary">
-                          {formatPrice(
-                            room.price * (1 - room.discountPercent / 100)
-                          )}
-                        </div>
-                        <div className="text-muted-foreground text-sm">
-                          /phòng/đêm
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Amenities */}
-                    <div className="mb-4">
-                      <div className="flex flex-wrap gap-4">
-                        {room.amenities.map((amenity, index) => {
-                          const IconComponent = getAmenityIcon(
-                            amenity.icon || "wifi"
-                          );
-                          return (
-                            <div
-                              key={index}
-                              className="flex items-center gap-1 text-muted-foreground"
-                            >
-                              {IconComponent}
-                              <span className="text-sm">{amenity.name}</span>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-
-                    {/* Perks */}
-                    <div className="space-y-1 mb-4">
-                      {room.cancellationPolicy === "flexible" && (
-                        <div className="flex items-center gap-2 text-sm text-green-600">
-                          <div className="w-1.5 h-1.5 rounded-full bg-green-600"></div>
-                          Hủy phòng miễn phí
-                        </div>
-                      )}
-                      {room.cancellationPolicy === "moderate" && (
-                        <div className="flex items-center gap-2 text-sm text-green-600">
-                          <div className="w-1.5 h-1.5 rounded-full bg-green-600"></div>
-                          Hủy phòng với phí phạt
-                        </div>
-                      )}
-                      <div className="flex items-center gap-2 text-sm text-green-600">
-                        <div className="w-1.5 h-1.5 rounded-full bg-green-600"></div>
-                        Không cần thanh toán trước
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Book Button */}
-                  <div className="flex items-center justify-between mt-4 pt-4 border-t">
-                    <button
-                      onClick={() => handleBookRoom(room._id)}
-                      className="px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
-                    >
-                      Đặt ngay
-                    </button>
-                  </div>
-                </div>
-              </div>
+              </svg>
             </div>
           </div>
+        </div>
+      )}
+      <div className="space-y-4">
+        {rooms.map((room) => (
+          <Card
+            key={room._id}
+            className="flex flex-row items-center rounded-xl shadow-sm overflow-hidden"
+          >
+            {/* Hình ảnh */}
+            <div className="w-[35%] min-w-[160px] h-40 md:h-48 flex-shrink-0">
+              <img
+                src={room.images?.[0]?.url || "/placeholder-room.jpg"}
+                alt={room.roomName}
+                className="w-full h-full object-cover"
+              />
+            </div>
+            {/* Thông tin phòng */}
+            <div className="flex-1 flex flex-row items-center justify-between px-6 py-4 bg-white">
+              <div>
+                <h4 className="text-lg font-semibold mb-2">{room.roomName}</h4>
+                <div className="flex items-center gap-4 mb-2 text-muted-foreground">
+                  <div className="flex items-center gap-1 text-base">
+                    <FaBed /> {room.bedType}
+                  </div>
+                  <div className="flex items-center gap-1 text-base">
+                    <FaUserFriends /> {room.capacity} người
+                  </div>
+                  <div className="flex items-center gap-1 text-base">
+                    <FaRulerCombined /> {room.squareMeters}m²
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {room.amenities.map((amenity, idx) => (
+                    <Badge
+                      key={idx}
+                      variant="secondary"
+                      className="flex items-center gap-1 text-xs px-2 py-1 bg-blue-50 text-primary border-none"
+                    >
+                      {getAmenityIcon(amenity.icon || "")}
+                      <span>{amenity.name}</span>
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+              {/* Giá và nút đặt phòng */}
+              <div className="flex flex-col items-end min-w-[140px] ml-6">
+                <p className="text-2xl font-bold text-primary mb-1">
+                  {formatPrice(room.price)}
+                </p>
+                <p className="text-xs text-muted-foreground mb-2">
+                  {t("hotel.rooms.per_night")}
+                </p>
+                <Button
+                  onClick={() => handleBookRoom(room._id)}
+                  className="w-full"
+                >
+                  {t("hotel.rooms.book_now")}
+                </Button>
+              </div>
+            </div>
+          </Card>
         ))}
       </div>
-    </section>
+    </div>
   );
 };
 

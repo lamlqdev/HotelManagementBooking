@@ -1,31 +1,77 @@
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Calendar } from "../ui/calendar";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { format, startOfDay } from "date-fns";
-import { vi, enUS } from "date-fns/locale";
-import { CalendarIcon, MapPinIcon, Search, Users } from "lucide-react";
+import { enUS, vi } from "date-fns/locale";
+import { useTranslation } from "react-i18next";
+import { useQuery } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
+
+import { locationApi } from "@/api/location/location.api";
+import { Location } from "@/types/location";
+
+import { Button } from "../ui/button";
+import { Calendar } from "../ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+
+import { CalendarIcon, Search } from "lucide-react";
 
 interface SearchBoxProps {
   className?: string;
   onSearch?: (searchParams: {
-    destination: string;
-    checkIn: Date | undefined;
-    checkOut: Date | undefined;
-    adults: number;
-    children: number;
+    locationName: string;
+    checkIn: string;
+    checkOut: string;
+    capacity: number;
   }) => void;
+  defaultValues?: {
+    locationName?: string;
+    checkIn?: string;
+    checkOut?: string;
+    capacity?: number;
+  };
 }
 
-const SearchBox = ({ className, onSearch }: SearchBoxProps) => {
+const SearchBox = ({ className, onSearch, defaultValues }: SearchBoxProps) => {
   const { t, i18n } = useTranslation();
-  const [destination, setDestination] = useState("");
+  const [selectedLocation, setSelectedLocation] = useState<Location | null>(
+    null
+  );
   const [checkIn, setCheckIn] = useState<Date>();
   const [checkOut, setCheckOut] = useState<Date>();
-  const [adults, setAdults] = useState(2);
-  const [children, setChildren] = useState(0);
+  const [capacity, setCapacity] = useState(defaultValues?.capacity || 2);
+
+  const { data: locations = [], isLoading: isLoadingLocations } = useQuery({
+    queryKey: ["locations"],
+    queryFn: async () => {
+      const response = await locationApi.getLocations();
+      return response.success ? response.data : [];
+    },
+  });
+
+  useEffect(() => {
+    if (defaultValues?.locationName && locations.length > 0) {
+      const location = locations.find(
+        (loc) => loc.name === defaultValues.locationName
+      );
+      if (location) {
+        setSelectedLocation(location);
+      }
+    }
+    if (defaultValues?.checkIn) {
+      setCheckIn(new Date(defaultValues.checkIn));
+    }
+    if (defaultValues?.checkOut) {
+      setCheckOut(new Date(defaultValues.checkOut));
+    }
+    if (defaultValues?.capacity) {
+      setCapacity(defaultValues.capacity);
+    }
+  }, [defaultValues, locations]);
 
   const formatDate = (date: Date) => {
     const formatted = format(date, "PPP", {
@@ -35,13 +81,18 @@ const SearchBox = ({ className, onSearch }: SearchBoxProps) => {
   };
 
   const handleSearch = () => {
-    onSearch?.({
-      destination,
-      checkIn,
-      checkOut,
-      adults,
-      children,
-    });
+    if (!selectedLocation || !checkIn || !checkOut) {
+      return;
+    }
+
+    const searchParams = {
+      locationName: selectedLocation.name,
+      checkIn: format(checkIn, "yyyy-MM-dd"),
+      checkOut: format(checkOut, "yyyy-MM-dd"),
+      capacity: capacity,
+    };
+
+    onSearch?.(searchParams);
   };
 
   return (
@@ -49,20 +100,30 @@ const SearchBox = ({ className, onSearch }: SearchBoxProps) => {
       className={`bg-background/80 backdrop-blur-sm p-8 rounded-lg shadow-lg ${className}`}
     >
       <div className="flex flex-col md:flex-row gap-4 items-end">
-        {/* Destination */}
+        {/* Location Dropdown */}
         <div className="flex-1 w-full">
           <label className="text-sm font-medium mb-2 block">
             {t("search.destination")}
           </label>
-          <div className="relative">
-            <MapPinIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder={t("search.placeholder.destination")}
-              value={destination}
-              onChange={(e) => setDestination(e.target.value)}
-              className="pl-9"
-            />
-          </div>
+          <Select
+            value={selectedLocation?._id}
+            onValueChange={(value) => {
+              const location = locations.find((loc) => loc._id === value);
+              setSelectedLocation(location || null);
+            }}
+            disabled={isLoadingLocations}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder={t("search.placeholder.destination")} />
+            </SelectTrigger>
+            <SelectContent>
+              {locations.map((location) => (
+                <SelectItem key={location._id} value={location._id}>
+                  {location.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         {/* Check-in */}
@@ -136,76 +197,35 @@ const SearchBox = ({ className, onSearch }: SearchBoxProps) => {
           </Popover>
         </div>
 
-        {/* Guests */}
+        {/* Capacity */}
         <div className="flex-1 w-full">
           <label className="text-sm font-medium mb-2 block">
             {t("search.guests")}
           </label>
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                className="w-full justify-start text-left font-normal"
-              >
-                <Users className="mr-2 h-4 w-4" />
-                <span>
-                  {t("search.placeholder.guests", { adults, children })}
-                </span>
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-80" align="start">
-              <div className="grid gap-4">
-                <div className="flex items-center justify-between">
-                  <div className="grid gap-1">
-                    <p className="font-medium">{t("search.adults")}</p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={() => setAdults(Math.max(1, adults - 1))}
-                    >
-                      -
-                    </Button>
-                    <span className="w-8 text-center">{adults}</span>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={() => setAdults(adults + 1)}
-                    >
-                      +
-                    </Button>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="grid gap-1">
-                    <p className="font-medium">{t("search.children")}</p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={() => setChildren(Math.max(0, children - 1))}
-                    >
-                      -
-                    </Button>
-                    <span className="w-8 text-center">{children}</span>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={() => setChildren(children + 1)}
-                    >
-                      +
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </PopoverContent>
-          </Popover>
+          <Select
+            value={capacity.toString()}
+            onValueChange={(value) => setCapacity(Number(value))}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder={t("search.placeholder.guests")} />
+            </SelectTrigger>
+            <SelectContent>
+              {[1, 2, 3, 4, 5, 6].map((num) => (
+                <SelectItem key={num} value={num.toString()}>
+                  {num} {t("search.guests")}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         {/* Search Button */}
-        <Button onClick={handleSearch} className="flex-none h-10" size="lg">
+        <Button
+          onClick={handleSearch}
+          className="flex-none h-10"
+          size="lg"
+          disabled={!selectedLocation || !checkIn || !checkOut}
+        >
           <Search className="mr-2 h-4 w-4" />
           {t("search.search_button")}
         </Button>

@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { Room } from "@/types/room";
+import { Hotel } from "@/types/hotel";
 
 export type RoomResponse = {
   success: boolean;
@@ -17,6 +18,17 @@ export type RoomsResponse = {
     totalPages: number;
   };
   data: Room[];
+};
+
+export type HotelResponse = {
+  success: boolean;
+  count: number;
+  total: number;
+  pagination: {
+    currentPage: number;
+    totalPages: number;
+  };
+  data: Hotel[];
 };
 
 export type RoomQueryParams = {

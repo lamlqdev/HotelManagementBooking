@@ -13,23 +13,17 @@ const HomePage = () => {
   const { t } = useTranslation();
 
   const handleSearch = (searchParams: {
-    destination: string;
-    checkIn: Date | undefined;
-    checkOut: Date | undefined;
-    adults: number;
-    children: number;
+    locationName: string;
+    checkIn: string;
+    checkOut: string;
+    capacity: number;
   }) => {
     // Tạo URL search params
     const params = new URLSearchParams();
-    params.append("destination", searchParams.destination);
-    if (searchParams.checkIn) {
-      params.append("checkIn", searchParams.checkIn.toISOString());
-    }
-    if (searchParams.checkOut) {
-      params.append("checkOut", searchParams.checkOut.toISOString());
-    }
-    params.append("adults", searchParams.adults.toString());
-    params.append("children", searchParams.children.toString());
+    params.append("locationName", searchParams.locationName);
+    params.append("checkIn", searchParams.checkIn);
+    params.append("checkOut", searchParams.checkOut);
+    params.append("capacity", searchParams.capacity.toString());
 
     // Chuyển hướng đến trang kết quả tìm kiếm
     navigate(`/search?${params.toString()}`);

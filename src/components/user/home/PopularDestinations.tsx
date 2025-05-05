@@ -25,12 +25,8 @@ export default function PopularDestinations() {
     queryFn: () => locationApi.getPopularLocations(),
   });
 
-  const handleDestinationClick = (locationId: string, locationName: string) => {
-    navigate(
-      `/search?locationId=${locationId}&locationName=${encodeURIComponent(
-        locationName
-      )}`
-    );
+  const handleDestinationClick = (locationName: string) => {
+    navigate(`/search?locationName=${encodeURIComponent(locationName)}`);
   };
 
   if (isLoading) {
@@ -121,9 +117,7 @@ export default function PopularDestinations() {
                 >
                   <div
                     className="relative group overflow-hidden rounded-lg cursor-pointer"
-                    onClick={() =>
-                      handleDestinationClick(destination._id, destination.name)
-                    }
+                    onClick={() => handleDestinationClick(destination.name)}
                   >
                     <div className="relative aspect-[4/3]">
                       <img

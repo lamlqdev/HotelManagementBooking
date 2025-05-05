@@ -1,60 +1,14 @@
-import { FaWifi, FaParking, FaSwimmingPool, FaUtensils } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
+import { useParams, useSearchParams } from "react-router";
+
 import { BookingContactForm } from "@/components/user/booking/BookingContactForm";
 import { BookingSpecialRequests } from "@/components/user/booking/BookingSpecialRequests";
 import { BookingSummary } from "@/components/user/booking/BookingSummary";
-import { formatTimeDisplay } from "@/utils/timeUtils";
-import { useEffect } from "react";
 
 const BookingInformationPage = () => {
   const { t } = useTranslation();
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
-  const hotelInfo = {
-    name: "Lakeside Motel Warefront",
-    rating: 4.5,
-    reviews: 128,
-    checkIn: formatTimeDisplay("14:00"),
-    checkOut: formatTimeDisplay("12:00"),
-    address: "Lorem ipsum road, Tantruim-2322, Melbourne, Australia",
-    image:
-      "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1000&auto=format&fit=crop",
-    bookingDates: {
-      checkIn: {
-        date: "Thứ 3, 18 thg 3 2025",
-        time: formatTimeDisplay("14:00"),
-      },
-      checkOut: {
-        date: "Thứ 4, 19 thg 3 2025",
-        time: formatTimeDisplay("12:00"),
-      },
-      nights: 1,
-    },
-    amenities: [
-      { icon: FaWifi, name: t("booking.bookingSummary.amenities.wifi") },
-      { icon: FaParking, name: t("booking.bookingSummary.amenities.parking") },
-      {
-        icon: FaSwimmingPool,
-        name: t("booking.bookingSummary.amenities.pool"),
-      },
-      {
-        icon: FaUtensils,
-        name: t("booking.bookingSummary.amenities.restaurant"),
-      },
-    ],
-  };
-
-  const bookingDetails = {
-    roomType: "Deluxe Double Room",
-    guests: 2,
-    rooms: 1,
-    nightsStay: 2,
-    pricePerNight: 1200000,
-    totalPrice: 2400000,
-  };
+  const { roomId } = useParams();
+  const [searchParams] = useSearchParams();
 
   const onSubmit = () => {
     // Xử lý submit form và chuyển đến trang thanh toán
@@ -75,8 +29,13 @@ const BookingInformationPage = () => {
         {/* Thông tin đặt phòng */}
         <div className="lg:col-span-1">
           <BookingSummary
-            hotelInfo={hotelInfo}
-            bookingDetails={bookingDetails}
+            roomId={roomId!}
+            searchParams={{
+              hotelId: searchParams.get("hotelId") || "",
+              checkIn: searchParams.get("checkIn") || "",
+              checkOut: searchParams.get("checkOut") || "",
+              capacity: parseInt(searchParams.get("capacity") || "1"),
+            }}
             onSubmit={onSubmit}
           />
         </div>

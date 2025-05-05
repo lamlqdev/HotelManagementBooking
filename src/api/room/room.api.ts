@@ -7,6 +7,7 @@ import {
   RoomDiscountParams,
   CreateRoomFormData,
   UpdateRoomFormData,
+  HotelResponse,
 } from "./types";
 
 const baseUrl = "/rooms";
@@ -103,12 +104,17 @@ export const roomApi = {
     return response.data;
   },
 
-  // Tìm kiếm phòng
-  searchRooms: async (params: RoomSearchParams): Promise<RoomsResponse> => {
-    const response = await axiosInstance.get<RoomsResponse>(
+  // Tìm kiếm khách sạn theo tiêu chí
+  searchRooms: async (params: RoomSearchParams): Promise<HotelResponse> => {
+    const response = await axiosInstance.get<HotelResponse>(
       `${baseUrl}/search`,
       {
-        params,
+        params: {
+          ...params,
+          sort: params.sort || "price",
+          page: params.page || 1,
+          limit: params.limit || 10,
+        },
       }
     );
     return response.data;

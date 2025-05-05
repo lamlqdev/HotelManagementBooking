@@ -2,12 +2,14 @@ import { useTranslation } from "react-i18next";
 import { useNavigate, useSearchParams } from "react-router";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { format } from "date-fns";
 
 import HeroBanner from "@/components/common/HeroBanner";
 import SearchBox from "@/components/common/SearchBox";
 import HotelList from "@/components/user/search-hotel/HotelList";
 import FilterSection from "@/components/user/search-hotel/FilterSection";
-import { hotelApi } from "@/api/hotel/hotel.api";
+import { roomApi } from "@/api/room/room.api";
+import { Hotel } from "@/types/hotel";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
@@ -18,52 +20,91 @@ const SearchResultPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   // Lấy các tham số từ URL
-  const locationId = searchParams.get("locationId");
-  // Các tham số khác có thể được sử dụng trong tương lai
-  // const checkIn = searchParams.get("checkIn");
-  // const checkOut = searchParams.get("checkOut");
-  // const adults = searchParams.get("adults");
-  // const children = searchParams.get("children");
+  const locationName = searchParams.get("locationName");
+  const checkIn = searchParams.get("checkIn");
+  const checkOut = searchParams.get("checkOut");
+  const capacity = searchParams.get("capacity");
+
+  // Nếu chỉ có locationName, tự động điền các thông tin còn lại
+  const defaultCheckIn = new Date();
+  const defaultCheckOut = new Date();
+  defaultCheckOut.setDate(defaultCheckOut.getDate() + 1);
+
+  const finalCheckIn = checkIn || format(defaultCheckIn, "yyyy-MM-dd");
+  const finalCheckOut = checkOut || format(defaultCheckOut, "yyyy-MM-dd");
+  const finalCapacity = capacity || "1";
 
   // State management
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState("");
 
-  // Sử dụng React Query để lấy danh sách khách sạn
-  const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["hotels", locationId, currentPage, sortBy],
-    queryFn: () => {
-      if (locationId) {
-        return hotelApi.getHotelsByLocation(locationId);
-      } else {
-        // Nếu không có locationId, trả về danh sách khách sạn mặc định
-        return hotelApi.getHotels({
-          page: currentPage,
-          limit: 10,
-          sort: sortBy,
-        });
+  // Sử dụng React Query để lấy danh sách khách sạn/phòng
+  const { data, isLoading, isError, error } = useQuery<{
+    success: boolean;
+    data: Hotel[];
+    pagination: { totalPages: number };
+    message?: string;
+  }>({
+    queryKey: [
+      "hotels",
+      locationName,
+      finalCheckIn,
+      finalCheckOut,
+      finalCapacity,
+      currentPage,
+      sortBy,
+    ],
+    queryFn: async () => {
+      try {
+        // Nếu có locationName -> gọi API searchRooms với thông tin mặc định
+        if (locationName) {
+          const response = await roomApi.searchRooms({
+            locationName,
+            checkIn: finalCheckIn,
+            checkOut: finalCheckOut,
+            capacity: parseInt(finalCapacity),
+            page: currentPage,
+            limit: 10,
+            sort: sortBy || undefined,
+          });
+          return response;
+        }
+
+        // Nếu không có đủ thông tin -> trả về danh sách rỗng
+        return { success: true, data: [], pagination: { totalPages: 0 } };
+      } catch (error) {
+        // Nếu là lỗi 404 (không tìm thấy kết quả), trả về danh sách rỗng với message từ server
+        const axiosError = error as {
+          response?: { status?: number; data?: { message?: string } };
+        };
+        if (axiosError?.response?.status === 404) {
+          return {
+            success: true,
+            data: [],
+            pagination: { totalPages: 0 },
+            message:
+              axiosError.response?.data?.message ||
+              t("search.no_results_description"),
+          };
+        }
+        // Nếu là lỗi khác, throw error để React Query xử lý
+        throw error;
       }
     },
-    enabled: !!locationId || currentPage > 0,
+    enabled: !!locationName,
   });
 
   const handleSearch = (searchParams: {
-    destination: string;
-    checkIn: Date | undefined;
-    checkOut: Date | undefined;
-    adults: number;
-    children: number;
+    locationName: string;
+    checkIn: string;
+    checkOut: string;
+    capacity: number;
   }) => {
     const params = new URLSearchParams();
-    params.append("destination", searchParams.destination);
-    if (searchParams.checkIn) {
-      params.append("checkIn", searchParams.checkIn.toISOString());
-    }
-    if (searchParams.checkOut) {
-      params.append("checkOut", searchParams.checkOut.toISOString());
-    }
-    params.append("adults", searchParams.adults.toString());
-    params.append("children", searchParams.children.toString());
+    params.append("locationName", searchParams.locationName);
+    params.append("checkIn", searchParams.checkIn);
+    params.append("checkOut", searchParams.checkOut);
+    params.append("capacity", searchParams.capacity.toString());
 
     navigate(`/search?${params.toString()}`);
   };
@@ -71,37 +112,78 @@ const SearchResultPage = () => {
   // Handlers for filters
   const handlePriceChange = (range: [number, number]) => {
     const [min, max] = range;
-    setSearchParams((prev: URLSearchParams) => {
-      const newParams = new URLSearchParams(prev);
-      newParams.set("minPrice", min.toString());
-      newParams.set("maxPrice", max.toString());
-      return newParams;
-    });
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set("minPrice", min.toString());
+    newParams.set("maxPrice", max.toString());
+    setSearchParams(newParams);
   };
 
   const handleStarChange = (stars: number[]) => {
-    setSearchParams((prev: URLSearchParams) => {
-      const newParams = new URLSearchParams(prev);
-      if (stars.length > 0) {
-        newParams.set("stars", stars.join(","));
-      } else {
-        newParams.delete("stars");
-      }
-      return newParams;
-    });
+    const newParams = new URLSearchParams(searchParams);
+    if (stars.length > 0) {
+      newParams.set("stars", stars.join(","));
+    } else {
+      newParams.delete("stars");
+    }
+    setSearchParams(newParams);
   };
 
   const handleAmenitiesChange = (amenities: string[]) => {
-    setSearchParams((prev: URLSearchParams) => {
-      const newParams = new URLSearchParams(prev);
-      if (amenities.length > 0) {
-        newParams.set("amenities", amenities.join(","));
-      } else {
-        newParams.delete("amenities");
-      }
-      return newParams;
-    });
+    const newParams = new URLSearchParams(searchParams);
+    if (amenities.length > 0) {
+      newParams.set("amenities", amenities.join(","));
+    } else {
+      newParams.delete("amenities");
+    }
+    setSearchParams(newParams);
   };
+
+  const handleHotelClick = (hotelId: string) => {
+    const params = new URLSearchParams();
+    params.append("checkIn", finalCheckIn);
+    params.append("checkOut", finalCheckOut);
+    params.append("capacity", finalCapacity);
+    navigate(`/hoteldetail/${hotelId}?${params.toString()}`);
+  };
+
+  // Xử lý trạng thái không có kết quả
+  if (!isLoading && !isError && data?.data.length === 0) {
+    return (
+      <div>
+        <div className="relative mb-24">
+          <HeroBanner
+            imageUrl="https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=2948&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            title={t("banner.home.title")}
+            description={t("banner.home.description")}
+          />
+
+          <div className="absolute left-0 right-0 bottom-0 transform translate-y-1/2 px-4">
+            <div className="container mx-auto max-w-6xl">
+              <SearchBox
+                onSearch={handleSearch}
+                defaultValues={{
+                  locationName: locationName || undefined,
+                  checkIn: finalCheckIn,
+                  checkOut: finalCheckOut,
+                  capacity: parseInt(finalCapacity),
+                }}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="container mx-auto max-w-6xl px-4 py-8">
+          <Alert>
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>{t("search.no_results")}</AlertTitle>
+            <AlertDescription>
+              {data?.message || t("search.no_results_description")}
+            </AlertDescription>
+          </Alert>
+        </div>
+      </div>
+    );
+  }
 
   // Xử lý trạng thái loading
   if (isLoading) {
@@ -116,7 +198,15 @@ const SearchResultPage = () => {
 
           <div className="absolute left-0 right-0 bottom-0 transform translate-y-1/2 px-4">
             <div className="container mx-auto max-w-6xl">
-              <SearchBox onSearch={handleSearch} />
+              <SearchBox
+                onSearch={handleSearch}
+                defaultValues={{
+                  locationName: locationName || undefined,
+                  checkIn: finalCheckIn,
+                  checkOut: finalCheckOut,
+                  capacity: parseInt(finalCapacity),
+                }}
+              />
             </div>
           </div>
         </div>
@@ -172,7 +262,15 @@ const SearchResultPage = () => {
 
           <div className="absolute left-0 right-0 bottom-0 transform translate-y-1/2 px-4">
             <div className="container mx-auto max-w-6xl">
-              <SearchBox onSearch={handleSearch} />
+              <SearchBox
+                onSearch={handleSearch}
+                defaultValues={{
+                  locationName: locationName || undefined,
+                  checkIn: finalCheckIn,
+                  checkOut: finalCheckOut,
+                  capacity: parseInt(finalCapacity),
+                }}
+              />
             </div>
           </div>
         </div>
@@ -192,7 +290,7 @@ const SearchResultPage = () => {
     );
   }
 
-  const hotels = data?.data || [];
+  const rooms = data?.data || [];
   const totalPages = data?.pagination?.totalPages || 1;
 
   return (
@@ -206,7 +304,15 @@ const SearchResultPage = () => {
 
         <div className="absolute left-0 right-0 bottom-0 transform translate-y-1/2 px-4">
           <div className="container mx-auto max-w-6xl">
-            <SearchBox onSearch={handleSearch} />
+            <SearchBox
+              onSearch={handleSearch}
+              defaultValues={{
+                locationName: locationName || undefined,
+                checkIn: finalCheckIn,
+                checkOut: finalCheckOut,
+                capacity: parseInt(finalCapacity),
+              }}
+            />
           </div>
         </div>
       </div>
@@ -225,11 +331,12 @@ const SearchResultPage = () => {
           {/* Hotel List Section */}
           <div className="col-span-9">
             <HotelList
-              hotels={hotels}
+              hotels={rooms}
               currentPage={currentPage}
               totalPages={totalPages}
               onPageChange={setCurrentPage}
               onSortChange={setSortBy}
+              onHotelClick={handleHotelClick}
             />
           </div>
         </div>

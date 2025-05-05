@@ -255,7 +255,9 @@
       "price_asc": "Giá tăng dần",
       "price_desc": "Giá giảm dần",
       "rating_desc": "Đánh giá cao nhất",
-      "rating_asc": "Đánh giá thấp nhất"
+      "rating_asc": "Đánh giá thấp nhất",
+      "discount_asc": "Giảm giá tăng dần",
+      "discount_desc": "Giảm giá giảm dần"
     },
     "no_results": "Không tìm thấy kết quả nào",
     "price": {
@@ -369,10 +371,7 @@
       },
       "nights": "đêm",
       "amenities": {
-        "wifi": "WiFi miễn phí",
-        "parking": "Bãi đỗ xe",
-        "pool": "Bể bơi",
-        "restaurant": "Nhà hàng"
+        "title": "Tiện nghi"
       },
       "details": {
         "roomType": "Loại phòng",
@@ -1500,5 +1499,28 @@
     "no_favourites": "Không có khách sạn yêu thích",
     "no_favourites_user": "Bạn chưa có khách sạn nào trong danh sách yêu thích",
     "no_favourites_description": "Hệ thống chưa có khách sạn nào được yêu thích"
+  },
+  "hotel": {
+    "overview": {
+      "amenities": "Các tiện ích"
+    },
+    "rooms": {
+      "title": "Phòng có sẵn",
+      "no_rooms_available": "Không có phòng nào",
+      "search_info": "Tìm kiếm phòng từ {{checkIn}} đến {{checkOut}} với {{capacity}} người",
+      "per_night": "1 đêm",
+      "book_now": "Đặt phòng"
+    },
+    "reviews": {
+      "title": "Đánh giá",
+      "no_reviews": "Chưa có đánh giá nào",
+      "no_reviews_description": "Hãy là người đầu tiên đánh giá khách sạn này",
+      "total_reviews": "đánh giá",
+      "stayed": "Đã lưu trú",
+      "hotel_response": "Phản hồi từ khách sạn",
+      "response_placeholder": "Nhập phản hồi từ khách sạn",
+      "response_success": "Phản hồi đã được gửi thành công",
+      "response_error": "Không thể gửi phản hồi"
+    }
   }
 }

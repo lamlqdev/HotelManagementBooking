@@ -1,5 +1,4 @@
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router";
 
 import {
   Select,
@@ -17,6 +16,7 @@ import {
   PaginationPrevious,
 } from "../../ui/pagination";
 import { Button } from "../../ui/button";
+
 import { Hotel } from "@/types/hotel";
 
 interface HotelListProps {
@@ -25,6 +25,7 @@ interface HotelListProps {
   totalPages: number;
   onPageChange: (page: number) => void;
   onSortChange: (value: string) => void;
+  onHotelClick: (hotelId: string) => void;
 }
 
 const HotelList = ({
@@ -33,9 +34,9 @@ const HotelList = ({
   totalPages,
   onPageChange,
   onSortChange,
+  onHotelClick,
 }: HotelListProps) => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("vi-VN", {
@@ -60,17 +61,23 @@ const HotelList = ({
               <SelectValue placeholder={t("search.select_sort")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="price_asc">
+              <SelectItem value="price">
                 {t("search.sort.price_asc")}
               </SelectItem>
-              <SelectItem value="price_desc">
+              <SelectItem value="-price">
                 {t("search.sort.price_desc")}
               </SelectItem>
-              <SelectItem value="rating_desc">
+              <SelectItem value="rating">
+                {t("search.sort.rating_asc")}
+              </SelectItem>
+              <SelectItem value="-rating">
                 {t("search.sort.rating_desc")}
               </SelectItem>
-              <SelectItem value="rating_asc">
-                {t("search.sort.rating_asc")}
+              <SelectItem value="discountPercent">
+                {t("search.sort.discount_asc")}
+              </SelectItem>
+              <SelectItem value="-discountPercent">
+                {t("search.sort.discount_desc")}
               </SelectItem>
             </SelectContent>
           </Select>
@@ -138,7 +145,7 @@ const HotelList = ({
                 <div className="flex justify-end mt-4">
                   <Button
                     variant="default"
-                    onClick={() => navigate(`/hoteldetail/${hotel._id}`)}
+                    onClick={() => onHotelClick(hotel._id)}
                   >
                     {t("common.view_details")}
                   </Button>

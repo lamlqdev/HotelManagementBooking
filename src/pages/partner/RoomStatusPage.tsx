@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -34,13 +34,14 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { Input } from "@/components/ui/input";
 
 import { roomApi } from "@/api/room/room.api";
 import { useAppSelector } from "@/store/hooks";
 import { Room } from "@/types/room";
 import { formatDate } from "@/utils/timeUtils";
 
-import { Eye } from "lucide-react";
+import { Eye, Wrench } from "lucide-react";
 
 export default function RoomStatusPage() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -50,6 +51,8 @@ export default function RoomStatusPage() {
   const [selectedRoomDetails, setSelectedRoomDetails] = useState<Room | null>(
     null
   );
+  const [searchTerm, setSearchTerm] = useState("");
+  const queryClient = useQueryClient();
 
   // Lấy thông tin hotel từ Redux
   const { currentHotel } = useAppSelector((state) => state.hotel);
@@ -63,6 +66,26 @@ export default function RoomStatusPage() {
         limit: 10,
       }),
     enabled: !!currentHotel?._id,
+  });
+
+  // Thêm mutation để cập nhật trạng thái phòng
+  const updateRoomStatusMutation = useMutation({
+    mutationFn: async ({
+      roomId,
+      status,
+    }: {
+      roomId: string;
+      status: string;
+    }) => {
+      const formData = new FormData();
+      formData.append("status", status);
+      return roomApi.updateRoom(roomId, formData);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["rooms", currentHotel?._id, currentPage],
+      });
+    },
   });
 
   const handleViewDetails = (room: Room) => {
@@ -85,7 +108,14 @@ export default function RoomStatusPage() {
           </Badge>
         );
       case "maintenance":
-        return <Badge variant="destructive">Đang bảo trì</Badge>;
+        return (
+          <Badge
+            variant="outline"
+            className="bg-accent/10 text-accent border-accent/20"
+          >
+            Đang bảo trì
+          </Badge>
+        );
       default:
         return <Badge variant="outline">Không xác định</Badge>;
     }
@@ -99,7 +129,7 @@ export default function RoomStatusPage() {
       case "booked":
         return `${baseClass} bg-[#1167b1]`;
       case "maintenance":
-        return `${baseClass} bg-destructive`;
+        return `${baseClass} bg-accent/50`;
       default:
         return `${baseClass} bg-muted`;
     }
@@ -113,17 +143,28 @@ export default function RoomStatusPage() {
     new Set(allRooms.map((room: Room) => room.floor))
   ).sort((a, b) => a - b);
 
-  // Lọc phòng theo tầng và trạng thái
+  // Lọc phòng theo tầng, trạng thái và tên phòng
   const rooms = allRooms.filter((room: Room) => {
     const matchesFloor =
       selectedFloor === "all" || room.floor === parseInt(selectedFloor);
     const matchesStatus =
       statusFilter === "all" || room.status === statusFilter;
-    return matchesFloor && matchesStatus;
+    const matchesName = room.roomName
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+    return matchesFloor && matchesStatus && matchesName;
   });
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
+  };
+
+  const handleUpdateToMaintenance = (roomId: string) => {
+    updateRoomStatusMutation.mutate({ roomId, status: "maintenance" });
+  };
+
+  const handleUpdateToAvailable = (roomId: string) => {
+    updateRoomStatusMutation.mutate({ roomId, status: "available" });
   };
 
   return (
@@ -137,7 +178,13 @@ export default function RoomStatusPage() {
             </p>
           </div>
 
-          <div className="flex items-center gap-4 mb-6">
+          <div className="flex flex-col md:flex-row md:items-center gap-4 mb-6">
+            <Input
+              placeholder="Tìm kiếm theo tên phòng..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="md:w-[300px]"
+            />
             <Select value={selectedFloor} onValueChange={setSelectedFloor}>
               <SelectTrigger className="w-[250px]">
                 <SelectValue placeholder="Chọn tầng" />
@@ -226,15 +273,39 @@ export default function RoomStatusPage() {
                       {formatDate(room.updatedAt)}
                     </TableCell>
                     <TableCell className="text-right py-4">
-                      <Button
-                        variant="outline"
-                        size="default"
-                        onClick={() => handleViewDetails(room)}
-                        className="hover:bg-primary hover:text-primary-foreground transition-colors border-primary/20"
-                      >
-                        <Eye className="w-4 h-4 mr-2" />
-                        Chi tiết
-                      </Button>
+                      <div className="flex items-center justify-end gap-2">
+                        <Button
+                          variant="outline"
+                          size="default"
+                          onClick={() => handleViewDetails(room)}
+                          className="hover:bg-accent hover:text-accent-foreground border-accent text-accent min-w-[170px] justify-center"
+                        >
+                          <Eye className="w-4 h-4 mr-2" />
+                          Chi tiết
+                        </Button>
+                        {room.status === "available" && (
+                          <Button
+                            variant="outline"
+                            size="default"
+                            onClick={() => handleUpdateToMaintenance(room._id)}
+                            className="hover:bg-accent hover:text-accent-foreground border-accent text-accent min-w-[170px] justify-center"
+                          >
+                            <Wrench className="w-4 h-4 mr-2" />
+                            Chuyển sang bảo trì
+                          </Button>
+                        )}
+                        {room.status === "maintenance" && (
+                          <Button
+                            variant="outline"
+                            size="default"
+                            onClick={() => handleUpdateToAvailable(room._id)}
+                            className="hover:bg-[#1167b1] hover:text-white border-[#1167b1] text-[#1167b1] min-w-[170px] justify-center"
+                          >
+                            <Wrench className="w-4 h-4 mr-2" />
+                            Kết thúc bảo trì
+                          </Button>
+                        )}
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))

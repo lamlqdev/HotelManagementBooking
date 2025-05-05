@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router";
+import { useParams, useSearchParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import { FaExclamationTriangle } from "react-icons/fa";
 
@@ -21,6 +21,12 @@ import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 const HotelDetailPage = () => {
   const [activeTab, setActiveTab] = useState("tổng quan");
   const { id } = useParams<{ id: string }>();
+  const [searchParams] = useSearchParams();
+
+  // Lấy thông tin tìm kiếm từ URL
+  const checkIn = searchParams.get("checkIn");
+  const checkOut = searchParams.get("checkOut");
+  const capacity = searchParams.get("capacity");
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -164,7 +170,13 @@ const HotelDetailPage = () => {
         </div>
 
         <div id="phòng">
-          <HotelRooms rooms={rooms} />
+          <HotelRooms
+            rooms={rooms}
+            checkIn={checkIn || undefined}
+            checkOut={checkOut || undefined}
+            capacity={capacity ? parseInt(capacity) : undefined}
+            hotelId={hotel._id}
+          />
         </div>
 
         <div id="đánh giá">

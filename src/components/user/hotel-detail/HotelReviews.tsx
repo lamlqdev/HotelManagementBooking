@@ -1,7 +1,9 @@
-import { FaStar } from "react-icons/fa";
-import { Review } from "@/types/review";
+import { FaStar, FaInfoCircle } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
+
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { FaInfoCircle } from "react-icons/fa";
+
+import { Review } from "@/types/review";
 import Reviews from "@/assets/illustration/Reviews.svg";
 
 interface ReviewStats {
@@ -19,17 +21,21 @@ interface HotelReviewsProps {
 }
 
 const HotelReviews = ({ reviewStats, reviews }: HotelReviewsProps) => {
+  const { t } = useTranslation();
+
   if (!reviews || reviews.length === 0) {
     return (
       <section id="đánh giá">
         <h2 className="text-2xl font-bold mb-6 text-foreground">
-          Đánh giá từ khách hàng
+          {t("hotel.reviews.title")}
         </h2>
         <div className="flex flex-col items-center justify-center py-12 text-center">
           <img src={Reviews} alt="No reviews" className="w-96 h-96 mb-4" />
-          <h3 className="text-xl font-semibold mb-2">Chưa có đánh giá nào</h3>
+          <h3 className="text-xl font-semibold mb-2">
+            {t("hotel.reviews.no_reviews")}
+          </h3>
           <p className="text-muted-foreground">
-            Hãy là người đầu tiên đánh giá khách sạn này
+            {t("hotel.reviews.no_reviews_description")}
           </p>
         </div>
       </section>
@@ -39,7 +45,7 @@ const HotelReviews = ({ reviewStats, reviews }: HotelReviewsProps) => {
   return (
     <section id="đánh giá">
       <h2 className="text-2xl font-bold mb-6 text-foreground">
-        Đánh giá từ khách hàng
+        {t("hotel.reviews.title")}
       </h2>
       <div className="space-y-8">
         {/* Overall Rating Section */}
@@ -61,7 +67,7 @@ const HotelReviews = ({ reviewStats, reviews }: HotelReviewsProps) => {
                 )}
               </div>
               <div className="text-muted-foreground">
-                {reviewStats.total} đánh giá
+                {reviewStats.total} {t("hotel.reviews.total_reviews")}
               </div>
             </div>
 
@@ -142,13 +148,15 @@ const HotelReviews = ({ reviewStats, reviews }: HotelReviewsProps) => {
                   </h3>
                   <p className="text-muted-foreground mb-3">{review.comment}</p>
                   <div className="text-sm text-muted-foreground mb-4">
-                    Đã lưu trú
+                    {t("hotel.reviews.stayed")}
                   </div>
                 </div>
 
                 {review.response && (
                   <div className="bg-muted p-4 rounded-lg mb-4">
-                    <h4 className="font-medium mb-2">Phản hồi từ khách sạn:</h4>
+                    <h4 className="font-medium mb-2">
+                      {t("hotel.reviews.hotel_response")}
+                    </h4>
                     <p className="text-muted-foreground">{review.response}</p>
                   </div>
                 )}
@@ -158,8 +166,7 @@ const HotelReviews = ({ reviewStats, reviews }: HotelReviewsProps) => {
             <Alert>
               <FaInfoCircle className="h-4 w-4" />
               <AlertDescription>
-                Chưa có đánh giá nào cho khách sạn này. Hãy là người đầu tiên
-                đánh giá!
+                {t("hotel.reviews.no_reviews_description")}
               </AlertDescription>
             </Alert>
           )}

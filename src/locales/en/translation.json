@@ -255,7 +255,9 @@
       "price_asc": "Price: Low to High",
       "price_desc": "Price: High to Low",
       "rating_desc": "Rating: High to Low",
-      "rating_asc": "Rating: Low to High"
+      "rating_asc": "Rating: Low to High",
+      "discount_asc": "Discount: Low to High",
+      "discount_desc": "Discount: High to Low"
     },
     "no_results": "No results found",
     "price": {
@@ -369,10 +371,7 @@
       },
       "nights": "nights",
       "amenities": {
-        "wifi": "Free WiFi",
-        "parking": "Parking",
-        "pool": "Swimming pool",
-        "restaurant": "Restaurant"
+        "title": "Amenities"
       },
       "details": {
         "roomType": "Room type",
@@ -387,6 +386,7 @@
         "pricePerNight": "Price per night",
         "totalPrice": "Total price"
       },
+
       "coupon": {
         "placeholder": "Enter coupon code"
       },
@@ -1441,5 +1441,28 @@
     "view_all": "View All",
     "no_favourites_description": "No hotels have been added to favourites yet",
     "no_favourites_user": "You have no hotels in your favourites"
+  },
+  "hotel": {
+    "overview": {
+      "amenities": "Amenities"
+    },
+    "rooms": {
+      "title": "Available Rooms",
+      "no_rooms_available": "No rooms available",
+      "search_info": "Search rooms from {{checkIn}} to {{checkOut}} with {{capacity}} people",
+      "per_night": "1 night",
+      "book_now": "Book Now"
+    },
+    "reviews": {
+      "title": "Reviews",
+      "no_reviews": "No reviews yet",
+      "no_reviews_description": "Be the first to review this hotel",
+      "total_reviews": "reviews",
+      "stayed": "Stayed",
+      "hotel_response": "Hotel Response",
+      "response_placeholder": "Enter hotel response",
+      "response_success": "Response sent successfully",
+      "response_error": "Failed to send response"
+    }
   }
 }

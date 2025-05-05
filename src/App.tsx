@@ -70,7 +70,7 @@ function App() {
           <Route path="/partnership" element={<Partnership />} />
           <Route path="/register-partner" element={<RegisterPartner />} />
           <Route
-            path="/booking-information"
+            path="/booking-information/:roomId"
             element={<BookingInformationPage />}
           />
           <Route
