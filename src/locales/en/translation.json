@@ -327,6 +327,10 @@
   },
   "booking": {
     "pageTitle": "Booking information",
+    "contactRequired": "Please fill in contact information first",
+    "success": "Booking created successfully",
+    "error": "Failed to create booking",
+    "errorDescription": "An error occurred while creating your booking. Please try again later.",
     "contactInfo": {
       "title": "Contact information",
       "description": "Please fill in all information accurately to ensure you receive the booking confirmation via email.",
@@ -359,7 +363,7 @@
         "placeholder": "Example: non-smoking room, high floor, etc."
       }
     },
-    "bookingSummary": {
+    "summary": {
       "title": "Booking details",
       "checkIn": {
         "label": "Check-in",
@@ -386,12 +390,13 @@
         "pricePerNight": "Price per night",
         "totalPrice": "Total price"
       },
-
       "coupon": {
         "placeholder": "Enter coupon code"
       },
       "submitButton": "Proceed to payment"
-    }
+    },
+    "submitting": "Processing...",
+    "confirm": "Confirm booking"
   },
   "about": {
     "features": {

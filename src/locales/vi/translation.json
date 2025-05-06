@@ -327,39 +327,43 @@
   },
   "booking": {
     "pageTitle": "Thông tin đặt phòng",
+    "contactRequired": "Vui lòng điền thông tin liên hệ trước",
+    "success": "Đặt phòng thành công",
+    "error": "Đặt phòng thất bại",
+    "errorDescription": "Đã xảy ra lỗi khi tạo đặt phòng. Vui lòng thử lại sau.",
     "contactInfo": {
       "title": "Thông tin liên hệ",
-      "description": "Hãy điền chính xác tất cả thông tin để đảm bảo bạn nhận được Phiếu xác nhận đặt phòng qua email của mình.",
+      "description": "Vui lòng điền đầy đủ thông tin để nhận xác nhận đặt phòng qua email.",
       "bookingFor": {
         "label": "Bạn đặt phòng cho ai?",
         "self": "Đặt cho bản thân",
         "other": "Đặt cho người khác"
       },
-      "guestName": "Tên người lưu trú *",
+      "guestName": "Tên khách *",
       "contactName": "Tên người liên hệ *",
       "email": "Email *",
       "phone": "Số điện thoại *"
     },
     "specialRequests": {
       "title": "Yêu cầu đặc biệt",
-      "description": "Khi nhận phòng, khách sạn sẽ thông báo liệu yêu cầu này có được đáp ứng hay không. Một số yêu cầu cần trả thêm phí để sử dụng nhưng bạn hoàn toàn có thể hủy yêu cầu sau đó.",
+      "description": "Khi nhận phòng, khách sạn sẽ thông báo cho bạn về khả năng đáp ứng các yêu cầu này. Một số yêu cầu có thể phát sinh thêm phí, nhưng bạn luôn có thể hủy yêu cầu sau.",
       "checkInOut": {
-        "title": "Thời gian check-in/check-out ưu tiên",
+        "title": "Thời gian nhận/trả phòng mong muốn",
         "checkIn": {
-          "label": "Yêu cầu giờ check-in",
-          "placeholder": "Chọn giờ check-in"
+          "label": "Thời gian nhận phòng",
+          "placeholder": "Chọn thời gian nhận phòng"
         },
         "checkOut": {
-          "label": "Yêu cầu giờ check-out",
-          "placeholder": "Chọn giờ check-out"
+          "label": "Thời gian trả phòng",
+          "placeholder": "Chọn thời gian trả phòng"
         }
       },
       "other": {
         "label": "Yêu cầu khác",
-        "placeholder": "Ví dụ: phòng không hút thuốc, phòng tầng cao, etc."
+        "placeholder": "Ví dụ: phòng không hút thuốc, tầng cao, v.v."
       }
     },
-    "bookingSummary": {
+    "summary": {
       "title": "Chi tiết đặt phòng",
       "checkIn": {
         "label": "Nhận phòng",
@@ -371,7 +375,7 @@
       },
       "nights": "đêm",
       "amenities": {
-        "title": "Tiện nghi"
+        "title": "Tiện ích"
       },
       "details": {
         "roomType": "Loại phòng",
@@ -384,13 +388,15 @@
       },
       "pricing": {
         "pricePerNight": "Giá mỗi đêm",
-        "totalPrice": "Tổng tiền"
+        "totalPrice": "Tổng giá"
       },
       "coupon": {
         "placeholder": "Nhập mã giảm giá"
       },
       "submitButton": "Tiến hành thanh toán"
-    }
+    },
+    "submitting": "Đang xử lý...",
+    "confirm": "Xác nhận đặt phòng"
   },
   "about": {
     "features": {

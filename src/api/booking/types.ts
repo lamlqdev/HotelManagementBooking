@@ -1,3 +1,4 @@
+import { z } from "zod";
 import {
   Booking,
   BookingContactInfo,
@@ -20,7 +21,9 @@ export interface CreateBookingRequest {
 export interface CreateBookingResponse {
   success: boolean;
   data: Booking;
-  paymentUrl: string;
+  paymentUrl: {
+    payUrl: string;
+  };
 }
 
 export interface GetMyBookingsResponse {
@@ -72,4 +75,44 @@ export interface PaymentStatusResponse {
 export interface CancelBookingResponse {
   success: boolean;
   message: string;
+}
+
+export const contactFormSchema = z.object({
+  bookingFor: z.enum(["self", "other"]),
+  guestName: z.string().optional(),
+  contactName: z.string().min(1, "Vui lòng nhập tên"),
+  email: z.string().email("Email không hợp lệ"),
+  phone: z.string().min(10, "Số điện thoại phải có ít nhất 10 số"),
+});
+
+export type ContactFormData = z.infer<typeof contactFormSchema>;
+
+export const specialRequestsSchema = z.object({
+  earlyCheckIn: z.boolean().optional(),
+  lateCheckOut: z.boolean().optional(),
+  checkInTime: z.string().optional(),
+  checkOutTime: z.string().optional(),
+  additionalRequests: z.string().optional(),
+});
+
+export type SpecialRequestsData = z.infer<typeof specialRequestsSchema>;
+
+export interface BookingContactFormProps {
+  onSubmit: (data: ContactFormData) => void;
+}
+
+export interface BookingSpecialRequestsProps {
+  onSubmit: (data: SpecialRequestsData) => void;
+}
+
+export interface BookingSummaryProps {
+  roomId: string;
+  searchParams: {
+    hotelId: string;
+    checkIn: string;
+    checkOut: string;
+    capacity: number;
+  };
+  onSubmit: () => Promise<void>;
+  isSubmitting: boolean;
 }

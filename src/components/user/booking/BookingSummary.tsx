@@ -15,22 +15,13 @@ import { HotelInfo } from "@/components/user/booking/HotelInfo";
 import { PricingSummary } from "@/components/user/booking/PricingSummary";
 
 import { getAmenityIcon } from "@/utils/amenityIcons";
-
-interface BookingSummaryProps {
-  roomId: string;
-  searchParams: {
-    hotelId: string;
-    checkIn: string;
-    checkOut: string;
-    capacity: number;
-  };
-  onSubmit: () => void;
-}
+import type { BookingSummaryProps } from "@/api/booking/types";
 
 export const BookingSummary = ({
   roomId,
   searchParams,
   onSubmit,
+  isSubmitting,
 }: BookingSummaryProps) => {
   const { t } = useTranslation();
 
@@ -89,11 +80,12 @@ export const BookingSummary = ({
   };
 
   return (
-    <div className="bg-card rounded-lg shadow-md p-6 sticky top-24">
+    <div className="bg-card rounded-lg shadow-md p-6 sticky top-32">
       <h2 className="text-xl font-semibold mb-4 text-card-foreground">
-        {t("booking.bookingSummary.title")}
+        {t("booking.summary.title")}
       </h2>
-      <div className="space-y-6">
+
+      <div className="space-y-4">
         <HotelInfo
           name={hotel.name}
           rating={hotel.rating}
@@ -118,7 +110,7 @@ export const BookingSummary = ({
 
         <div className="border-t border-border dark:border-primary/30 pt-4">
           <h3 className="text-lg font-medium mb-3">
-            {t("booking.bookingSummary.amenities.title")}
+            {t("booking.summary.amenities.title")}
           </h3>
           <div className="grid grid-cols-2 gap-3">
             {room.amenities.map((amenity, index) => (
@@ -149,16 +141,22 @@ export const BookingSummary = ({
             <MdLocalOffer className="absolute top-3 left-3 text-muted-foreground" />
             <Input
               type="text"
-              placeholder={t("booking.bookingSummary.coupon.placeholder")}
+              placeholder={t("booking.summary.coupon.placeholder")}
               className="pl-10 dark:border-2 dark:border-primary/30 dark:hover:border-primary/50 dark:focus:border-primary dark:focus:ring-2 dark:focus:ring-primary/20 dark:text-foreground dark:placeholder:text-muted-foreground"
             />
           </div>
         </div>
-
-        <Button type="button" className="w-full" onClick={onSubmit}>
-          {t("booking.bookingSummary.submitButton")}
-        </Button>
       </div>
+
+      <Button
+        onClick={onSubmit}
+        disabled={isSubmitting}
+        className="w-full mt-6"
+      >
+        {isSubmitting
+          ? t("booking.submitting")
+          : t("booking.summary.submitButton")}
+      </Button>
     </div>
   );
 };

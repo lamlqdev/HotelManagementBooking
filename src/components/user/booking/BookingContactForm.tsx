@@ -1,22 +1,45 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useState, useEffect } from "react";
 import { FaUser, FaEnvelope, FaPhone } from "react-icons/fa";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useTranslation } from "react-i18next";
+import type { UseFormReturn } from "react-hook-form";
+import type { ContactFormData } from "@/api/booking/types";
+import { useAppSelector } from "@/store/hooks";
 
-interface BookingContactFormData {
-  bookingFor: "self" | "other";
-  guestName?: string;
-  contactName: string;
-  email: string;
-  phone: string;
+interface BookingContactFormProps {
+  form: UseFormReturn<ContactFormData>;
 }
 
-export const BookingContactForm = () => {
+export const BookingContactForm = ({ form }: BookingContactFormProps) => {
   const { t } = useTranslation();
   const [bookingFor, setBookingFor] = useState<"self" | "other">("self");
-  const { register, handleSubmit } = useForm<BookingContactFormData>();
+  const user = useAppSelector((state) => state.auth.user);
+
+  const {
+    register,
+    formState: { errors },
+    setValue,
+  } = form;
+
+  useEffect(() => {
+    if (bookingFor === "self" && user) {
+      setValue("contactName", user.name);
+      setValue("email", user.email);
+      setValue("phone", user.phone || "");
+    }
+  }, [bookingFor, user, setValue]);
+
+  const handleBookingForChange = (value: "self" | "other") => {
+    setBookingFor(value);
+    setValue("bookingFor", value);
+
+    if (value === "other") {
+      setValue("contactName", "");
+      setValue("email", "");
+      setValue("phone", "");
+    }
+  };
 
   return (
     <div className="bg-card rounded-lg shadow-md p-6">
@@ -35,7 +58,7 @@ export const BookingContactForm = () => {
             <label className="flex items-center space-x-2">
               <Checkbox
                 checked={bookingFor === "self"}
-                onCheckedChange={() => setBookingFor("self")}
+                onCheckedChange={() => handleBookingForChange("self")}
                 className="dark:border-2 dark:border-primary dark:data-[state=checked]:bg-primary dark:data-[state=checked]:text-primary-foreground"
               />
               <span>{t("booking.contactInfo.bookingFor.self")}</span>
@@ -43,7 +66,7 @@ export const BookingContactForm = () => {
             <label className="flex items-center space-x-2">
               <Checkbox
                 checked={bookingFor === "other"}
-                onCheckedChange={() => setBookingFor("other")}
+                onCheckedChange={() => handleBookingForChange("other")}
                 className="dark:border-2 dark:border-primary dark:data-[state=checked]:bg-primary dark:data-[state=checked]:text-primary-foreground"
               />
               <span>{t("booking.contactInfo.bookingFor.other")}</span>
@@ -51,45 +74,42 @@ export const BookingContactForm = () => {
           </div>
         </div>
 
-        {bookingFor === "other" && (
-          <div className="relative">
-            <FaUser className="absolute top-3 left-3 text-muted-foreground" />
-            <Input
-              {...register("guestName", { required: true })}
-              placeholder={t("booking.contactInfo.guestName")}
-              className="pl-10 dark:border-2 dark:border-primary/30 dark:hover:border-primary/50 dark:focus:border-primary dark:focus:ring-2 dark:focus:ring-primary/20 dark:text-foreground dark:placeholder:text-muted-foreground"
-            />
-          </div>
-        )}
-
         <div className="relative">
           <FaUser className="absolute top-3 left-3 text-muted-foreground" />
           <Input
-            {...register("contactName", { required: true })}
+            {...register("contactName")}
             placeholder={t("booking.contactInfo.contactName")}
             className="pl-10 dark:border-2 dark:border-primary/30 dark:hover:border-primary/50 dark:focus:border-primary dark:focus:ring-2 dark:focus:ring-primary/20 dark:text-foreground dark:placeholder:text-muted-foreground"
           />
+          {errors.contactName && (
+            <p className="text-sm text-red-500 mt-1">
+              {errors.contactName.message}
+            </p>
+          )}
         </div>
 
         <div className="relative">
           <FaEnvelope className="absolute top-3 left-3 text-muted-foreground" />
           <Input
-            {...register("email", {
-              required: true,
-              pattern: /^\S+@\S+$/i,
-            })}
+            {...register("email")}
             placeholder={t("booking.contactInfo.email")}
             className="pl-10 dark:border-2 dark:border-primary/30 dark:hover:border-primary/50 dark:focus:border-primary dark:focus:ring-2 dark:focus:ring-primary/20 dark:text-foreground dark:placeholder:text-muted-foreground"
           />
+          {errors.email && (
+            <p className="text-sm text-red-500 mt-1">{errors.email.message}</p>
+          )}
         </div>
 
         <div className="relative">
           <FaPhone className="absolute top-3 left-3 text-muted-foreground" />
           <Input
-            {...register("phone", { required: true })}
+            {...register("phone")}
             placeholder={t("booking.contactInfo.phone")}
             className="pl-10 dark:border-2 dark:border-primary/30 dark:hover:border-primary/50 dark:focus:border-primary dark:focus:ring-2 dark:focus:ring-primary/20 dark:text-foreground dark:placeholder:text-muted-foreground"
           />
+          {errors.phone && (
+            <p className="text-sm text-red-500 mt-1">{errors.phone.message}</p>
+          )}
         </div>
       </form>
     </div>
