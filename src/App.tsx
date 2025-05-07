@@ -53,6 +53,8 @@ import HotelsPage from "./pages/admin/HotelsManagementPage";
 import UsersManagementPage from "./pages/admin/UsersManagementPage";
 import UserDetailPage from "./pages/admin/UserDetailPage";
 import HotelDetailAdminPage from "./pages/admin/HotelDetailPage";
+import VoucherManagementPage from "./pages/admin/VoucherManagementPage";
+
 function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
@@ -132,6 +134,7 @@ function App() {
             <Route path="users" element={<UsersManagementPage />} />
             <Route path="users/:id" element={<UserDetailPage />} />
             <Route path="hotels/:id" element={<HotelDetailAdminPage />} />
+            <Route path="vouchers" element={<VoucherManagementPage />} />
             <Route path="settings" element={<SettingPage />} />
           </Route>
         </Route>

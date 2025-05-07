@@ -76,7 +76,12 @@ export const BookingSummary = ({
   const nights = calculateNights(searchParams.checkIn, searchParams.checkOut);
 
   const formatDate = (dateString: string) => {
-    return format(new Date(dateString), "EEEE, d 'thg' M yyyy", { locale: vi });
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) {
+      console.error("Invalid date:", dateString);
+      return "Invalid date";
+    }
+    return format(date, "EEEE, d 'thg' M yyyy", { locale: vi });
   };
 
   return (

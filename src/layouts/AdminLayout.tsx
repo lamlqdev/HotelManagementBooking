@@ -7,6 +7,7 @@ import {
   Settings,
   Building2,
   Users,
+  Ticket,
 } from "lucide-react";
 
 import {
@@ -135,6 +136,22 @@ export default function AdminLayout() {
                       <Users className="h-4 w-4" />
                       <span className="group-data-[collapsible=icon]:hidden">
                         {t("admin.users.title")}
+                      </span>
+                    </SidebarMenuButton>
+                  </Link>
+                </SidebarMenuItem>
+
+                {/* Voucher Management */}
+                <SidebarMenuItem>
+                  <Link to="/admin/vouchers">
+                    <SidebarMenuButton
+                      isActive={location.pathname.startsWith("/admin/vouchers")}
+                      tooltip={t("admin.vouchers.title")}
+                      className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg group-data-[collapsible=icon]:justify-center"
+                    >
+                      <Ticket className="h-4 w-4" />
+                      <span className="group-data-[collapsible=icon]:hidden">
+                        {t("admin.vouchers.title")}
                       </span>
                     </SidebarMenuButton>
                   </Link>

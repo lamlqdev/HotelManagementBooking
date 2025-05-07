@@ -9,6 +9,8 @@
     "view_all": "Xem tất cả",
     "reviews": "đánh giá",
     "back": "Quay lại",
+    "create": "Tạo",
+    "creating": "Đang tạo...",
     "all": "Tất cả",
     "yes": "Có",
     "no": "Không",
@@ -1254,6 +1256,54 @@
     "dashboard": {
       "partners": "Đối tác"
     },
+    "vouchers": {
+      "title": "Quản lý Voucher",
+      "description": "Quản lý voucher trong hệ thống",
+      "create": "Tạo Voucher",
+      "searchPlaceholder": "Tìm kiếm voucher...",
+      "filters": {
+        "reset": "Đặt lại bộ lọc",
+        "status": "Trạng thái",
+        "type": "Loại"
+      },
+      "status": {
+        "active": "Đang hoạt động",
+        "inactive": "Không hoạt động",
+        "expired": "Đã hết hạn"
+      },
+      "types": {
+        "percentage": "Phần trăm",
+        "fixed": "Giá trị cố định"
+      },
+      "table": {
+        "code": "Mã",
+        "name": "Tên",
+        "type": "Loại",
+        "value": "Giá trị",
+        "status": "Trạng thái",
+        "expiryDate": "Ngày hết hạn",
+        "createdAt": "Ngày tạo"
+      },
+      "noVouchers": "Không tìm thấy voucher nào",
+      "form": {
+        "code": "Mã voucher",
+        "codePlaceholder": "Nhập mã voucher",
+        "discount": "Giảm giá",
+        "discountPlaceholder": "Nhập số tiền giảm giá",
+        "value": "Giá trị",
+        "valuePlaceholder": "Nhập giá trị voucher",
+        "expiryDate": "Ngày hết hạn",
+        "expiryDatePlaceholder": "Nhập ngày hết hạn",
+        "maxDiscount": "Giảm giá tối đa",
+        "maxDiscountPlaceholder": "Nhập số tiền giảm giá tối đa",
+        "usageLimit": "Giới hạn sử dụng",
+        "usageLimitPlaceholder": "Nhập giới hạn sử dụng",
+        "minOrderValue": "Giá trị đơn hàng tối thiểu",
+        "minOrderValuePlaceholder": "Nhập giá trị đơn hàng tối thiểu",
+        "type": "Loại voucher",
+        "typePlaceholder": "Chọn loại voucher"
+      }
+    },
     "partners": {
       "approval": {
         "title": "Duyệt đăng ký đối tác",
@@ -1315,6 +1365,7 @@
       "addNew": "Thêm khách sạn",
       "searchPlaceholder": "Tìm kiếm khách sạn...",
       "noHotels": "Không có khách sạn nào",
+
       "table": {
         "name": "Tên khách sạn",
         "location": "Địa điểm",
@@ -1322,11 +1373,6 @@
         "policies": "Chính sách",
         "rating": "Đánh giá",
         "status": "Trạng thái"
-      },
-      "policies": {
-        "childrenAllowed": "Cho phép trẻ em",
-        "petsAllowed": "Cho phép thú cưng",
-        "smokingAllowed": "Cho phép hút thuốc"
       },
       "status": {
         "all": "Tất cả",

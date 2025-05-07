@@ -1,13 +1,11 @@
 import { Voucher } from "@/types/voucher";
+
 export interface CreateVoucherRequest {
   code: string;
   discount: number;
-  discountType: "percentage" | "fixed";
-  maxDiscount?: number;
   expiryDate: string;
   usageLimit?: number;
   minOrderValue?: number;
-  type: "room" | "hotel" | "all";
 }
 
 export interface CreateVoucherResponse {

@@ -8,6 +8,8 @@
     "logo_alt": "BookIt Logo",
     "view_all": "View all",
     "reviews": "reviews",
+    "create": "Create",
+    "creating": "Creating...",
     "back": "Back",
     "all": "All",
     "yes": "Yes",
@@ -1227,6 +1229,85 @@
     "dashboard": {
       "partners": "Partners"
     },
+    "vouchers": {
+      "title": "Vouchers Management",
+      "description": "Manage vouchers in the system",
+      "addNew": "Add Voucher",
+      "searchPlaceholder": "Search vouchers...",
+      "noVouchers": "No vouchers found",
+      "table": {
+        "name": "Voucher Name",
+        "code": "Voucher Code",
+        "discount": "Discount",
+        "validUntil": "Valid Until",
+        "actions": "Actions"
+      },
+      "create": "Create Voucher",
+      "edit": "Edit Voucher",
+      "delete": "Delete Voucher",
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "success": "Success",
+      "error": "Error",
+      "modal": {
+        "create": {
+          "title": "Create Voucher",
+          "name": "Voucher Name",
+          "namePlaceholder": "Enter voucher name",
+          "code": "Voucher Code",
+          "codePlaceholder": "Enter voucher code",
+          "discount": "Discount",
+          "discountPlaceholder": "Enter discount percentage",
+          "validUntil": "Valid Until",
+          "validUntilPlaceholder": "Enter valid until date",
+          "add": "Add Voucher"
+        },
+        "edit": {
+          "title": "Edit Voucher",
+          "name": "Voucher Name",
+          "namePlaceholder": "Enter voucher name",
+          "code": "Voucher Code",
+          "codePlaceholder": "Enter voucher code",
+          "discount": "Discount",
+          "discountPlaceholder": "Enter discount percentage",
+          "validUntil": "Valid Until",
+          "validUntilPlaceholder": "Enter valid until date",
+          "update": "Update Voucher"
+        }
+      },
+      "filters": {
+        "reset": "Reset Filters",
+        "status": "Status",
+        "type": "Type"
+      },
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive",
+        "expired": "Expired"
+      },
+      "types": {
+        "percentage": "Percentage",
+        "fixed": "Fixed Amount"
+      },
+      "form": {
+        "code": "Voucher Code",
+        "codePlaceholder": "Enter voucher code",
+        "discount": "Discount",
+        "discountPlaceholder": "Enter discount percentage",
+        "value": "Value",
+        "valuePlaceholder": "Enter voucher value",
+        "expiryDate": "Expiry Date",
+        "expiryDatePlaceholder": "Enter expiry date",
+        "maxDiscount": "Maximum Discount",
+        "maxDiscountPlaceholder": "Enter maximum discount amount",
+        "usageLimit": "Usage Limit",
+        "usageLimitPlaceholder": "Enter usage limit",
+        "minOrderValue": "Minimum Order Value",
+        "minOrderValuePlaceholder": "Enter minimum order value",
+        "type": "Voucher Type",
+        "typePlaceholder": "Select voucher type"
+      }
+    },
     "hotels": {
       "title": "Hotels Management",
       "description": "Manage hotels in the system",
@@ -1240,11 +1321,6 @@
         "rating": "Rating",
         "checkInOut": "Check-in/Check-out",
         "status": "Status"
-      },
-      "policies": {
-        "childrenAllowed": "Children Allowed",
-        "petsAllowed": "Pets Allowed",
-        "smokingAllowed": "Smoking Allowed"
       },
       "status": {
         "all": "All",

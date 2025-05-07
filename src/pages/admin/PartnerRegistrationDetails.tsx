@@ -14,8 +14,8 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import ApprovePartnerModal from "@/components/admin/modal/ApprovePartnerModal";
-import RejectPartnerModal from "@/components/admin/modal/RejectPartnerModal";
+import ApprovePartnerModal from "@/components/admin/partner-register-management/ApprovePartnerModal";
+import RejectPartnerModal from "@/components/admin/partner-register-management/RejectPartnerModal";
 
 import { partnerApi } from "@/api/partner/partner.api";
 import { Partner } from "@/api/partner/types";
