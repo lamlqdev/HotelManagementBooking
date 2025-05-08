@@ -19,6 +19,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Logo } from "@/components/ui/logo";
 
 import { authApi } from "@/api/auth/auth.api";
 import { registerSchema, RegisterFormData, ApiError } from "@/api/auth/types";
@@ -98,11 +99,9 @@ const RegisterPage = () => {
         <div className="flex-1 flex items-center justify-center p-4 sm:px-6 lg:px-8 bg-background">
           <div className="max-w-md w-full bg-card p-6 rounded-lg shadow-md border border-border">
             <div className="flex flex-col items-center">
-              <img
-                src="/src/assets/images/logo.png"
-                alt="BookIt Logo"
-                className="mb-2 h-24"
-              />
+              <Link to="/">
+                <Logo className="mb-2 h-24 cursor-pointer" />
+              </Link>
               <h2 className="text-2xl font-bold text-card-foreground mb-6">
                 {t("auth.register.title")}
               </h2>

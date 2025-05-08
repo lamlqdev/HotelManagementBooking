@@ -125,14 +125,7 @@ const BookingInformationPage = () => {
   }
 
   if (createBookingMutation.isError) {
-    return (
-      <div className="container mx-auto px-4 py-8 pt-32 text-center">
-        <h1 className="text-2xl font-bold mb-6 text-red-500">
-          {t("booking.error")}
-        </h1>
-        <p className="text-muted-foreground">{t("booking.errorDescription")}</p>
-      </div>
-    );
+    toast.error(t("booking.error"));
   }
 
   return (

@@ -10,6 +10,8 @@
     "reviews": "đánh giá",
     "back": "Quay lại",
     "create": "Tạo",
+    "reject": "Từ chối",
+    "approve": "Phê duyệt",
     "creating": "Đang tạo...",
     "all": "Tất cả",
     "yes": "Có",
@@ -430,7 +432,10 @@
       "paymentMethodZaloPay": "ZaloPay",
       "paymentMethodVNPay": "VNPay",
       "status": "Trạng thái đặt phòng",
-      "paymentStatus": "Trạng thái thanh toán"
+      "paymentStatus": "Trạng thái thanh toán",
+      "cancelSuccess": "Đã hủy đặt phòng thành công",
+      "cancelling": "Đang hủy đặt phòng...",
+      "cancelError": "Có lỗi xảy ra khi hủy đặt phòng. Vui lòng thử lại sau."
     },
     "myBookingPage": {
       "title": "Lịch sử đặt phòng của tôi",
@@ -1390,32 +1395,32 @@
             "approve": "Duyệt đơn đăng ký",
             "reject": "Từ chối đơn đăng ký",
             "cancel": "Hủy"
+          }
+        },
+        "modal": {
+          "approve": {
+            "title": "Xác nhận duyệt đơn đăng ký",
+            "description": "Bạn có chắc chắn muốn duyệt đơn đăng ký này? Đối tác sẽ được thông báo qua email.",
+            "confirm": "Xác nhận duyệt",
+            "cancel": "Hủy"
           },
-          "modal": {
-            "approve": {
-              "title": "Xác nhận duyệt đơn đăng ký",
-              "description": "Bạn có chắc chắn muốn duyệt đơn đăng ký này? Đối tác sẽ được thông báo qua email.",
-              "confirm": "Xác nhận duyệt",
-              "cancel": "Hủy"
+          "reject": {
+            "title": "Xác nhận từ chối đơn đăng ký",
+            "description": "Vui lòng chọn lý do từ chối và cung cấp thêm thông tin chi tiết.",
+            "reasons": {
+              "title": "Lý do từ chối",
+              "incomplete": "Thông tin không đầy đủ",
+              "invalid": "Thông tin không hợp lệ",
+              "duplicate": "Đơn đăng ký trùng lặp",
+              "other": "Lý do khác"
             },
-            "reject": {
-              "title": "Xác nhận từ chối đơn đăng ký",
-              "description": "Vui lòng chọn lý do từ chối và cung cấp thêm thông tin chi tiết.",
-              "reasons": {
-                "title": "Lý do từ chối",
-                "incomplete": "Thông tin không đầy đủ",
-                "invalid": "Thông tin không hợp lệ",
-                "duplicate": "Đơn đăng ký trùng lặp",
-                "other": "Lý do khác"
-              },
-              "details": {
-                "title": "Chi tiết bổ sung",
-                "placeholder": "Nhập thông tin chi tiết về lý do từ chối...",
-                "required": "Vui lòng nhập thông tin chi tiết"
-              },
-              "confirm": "Xác nhận từ chối",
-              "cancel": "Hủy"
-            }
+            "details": {
+              "title": "Chi tiết bổ sung",
+              "placeholder": "Nhập thông tin chi tiết về lý do từ chối...",
+              "required": "Vui lòng nhập thông tin chi tiết"
+            },
+            "confirm": "Xác nhận từ chối",
+            "cancel": "Hủy"
           }
         }
       }

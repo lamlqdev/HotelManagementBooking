@@ -72,7 +72,7 @@ export const bookingApi = {
 
   // Hủy booking
   cancelBooking: async (bookingId: string): Promise<CancelBookingResponse> => {
-    const response = await axiosInstance.post(`${API_URL}/${bookingId}/cancel`);
+    const response = await axiosInstance.patch(`${API_URL}/${bookingId}/cancel`);
     return response.data;
   },
 };

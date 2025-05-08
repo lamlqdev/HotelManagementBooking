@@ -9,6 +9,8 @@
     "view_all": "View all",
     "reviews": "reviews",
     "create": "Create",
+    "reject": "Reject",
+    "approve": "Approve",
     "creating": "Creating...",
     "back": "Back",
     "all": "All",
@@ -430,7 +432,10 @@
       "paymentMethodZaloPay": "ZaloPay",
       "paymentMethodVNPay": "VNPay",
       "status": "Booking status",
-      "paymentStatus": "Payment status"
+      "paymentStatus": "Payment status",
+      "cancelSuccess": "Booking cancelled successfully",
+      "cancelling": "Cancelling...",
+      "cancelError": "An error occurred while cancelling the booking. Please try again later."
     },
     "myBookingPage": {
       "title": "My booking history",
@@ -1446,6 +1451,37 @@
           "address": "Address",
           "submittedAt": "Submitted At",
           "actions": "Actions"
+        },
+        "rejecting": "Rejecting...",
+        "approving": "Approving...",
+        "rejectSuccess": "Partner registration request rejected successfully",
+        "approveSuccess": "Partner registration request approved successfully",
+        "rejectError": "Failed to reject partner registration request",
+        "approveError": "Failed to approve partner registration request",
+        "modal": {
+          "reject": {
+            "title": "Reject Partner Registration",
+            "description": "Are you sure you want to reject this partner registration request?",
+            "confirm": "Reject",
+            "cancel": "Cancel",
+            "reasons": {
+              "title": "Reasons",
+              "incomplete": "Incomplete",
+              "not_interested": "Not Interested",
+              "invalid": "Invalid",
+              "duplicate": "Duplicate",
+              "other": "Other"
+            },
+            "reason": "Reason",
+            "reasonPlaceholder": "Enter the reason for rejecting the partner registration request",
+            "reasonRequired": "Please enter a reason for rejecting the partner registration request"
+          },
+          "approve": {
+            "title": "Approve Partner Registration",
+            "description": "Are you sure you want to approve this partner registration request?",
+            "confirm": "Approve",
+            "cancel": "Cancel"
+          }
         }
       }
     },

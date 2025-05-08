@@ -22,6 +22,7 @@ import { authApi } from "@/api/auth/auth.api";
 import { loginSchema, LoginFormData, ApiError } from "@/api/auth/types";
 import { setCredentials, setUser, resetAuth } from "@/features/auth/authSlice";
 import { useAppDispatch } from "@/store/hooks";
+import { Logo } from "@/components/ui/logo";
 
 const LoginPage = () => {
   const { t } = useTranslation();
@@ -139,11 +140,9 @@ const LoginPage = () => {
       <div className="flex-1 flex items-center justify-center p-4 sm:px-6 lg:px-8 bg-background">
         <div className="max-w-md w-full bg-card p-6 rounded-lg shadow-md border border-border">
           <div className="flex flex-col items-center">
-            <img
-              src="/src/assets/images/logo.png"
-              alt="BookIt Logo"
-              className="mb-2 h-24"
-            />
+            <Link to="/">
+              <Logo className="mb-2 h-24 cursor-pointer" />
+            </Link>
             <h2 className="text-2xl font-bold text-card-foreground mb-6">
               {t("auth.login.title")}
             </h2>
@@ -249,7 +248,12 @@ const LoginPage = () => {
                 </div>
 
                 <div className="mt-4 grid grid-cols-1 gap-2">
-                  <Button variant="outline" type="button" className="w-full">
+                  <Button
+                    variant="outline"
+                    type="button"
+                    className="w-full"
+                    onClick={() => authApi.googleAuth()}
+                  >
                     <img
                       src="/src/assets/images/google.svg"
                       alt="Google logo"
@@ -261,6 +265,7 @@ const LoginPage = () => {
                   <Button
                     type="button"
                     className="w-full bg-[#4267B2] hover:bg-[#365899]"
+                    onClick={() => authApi.facebookAuth()}
                   >
                     <img
                       src="/src/assets/images/facebook.svg"

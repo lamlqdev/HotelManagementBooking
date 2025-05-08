@@ -21,6 +21,9 @@ import { format, differenceInCalendarDays } from "date-fns";
 import type { MyBookingItem } from "@/api/booking/types";
 import { useTranslation } from "react-i18next";
 import { Badge } from "@/components/ui/badge";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { bookingApi } from "@/api/booking/booking.api";
 
 interface BookingDetailModalProps {
   booking: MyBookingItem;
@@ -62,6 +65,32 @@ export const BookingDetailModal = ({
       : booking.paymentStatus === "failed"
       ? "destructive"
       : "outline";
+
+  // Mutation huỷ đặt phòng
+  const cancelMutation = useMutation({
+    mutationFn: () => bookingApi.cancelBooking(booking._id),
+    onSuccess: (response) => {
+      if (response.success) {
+        toast.success(
+          t("booking.detailModal.cancelSuccess") || "Huỷ đặt phòng thành công"
+        );
+        onClose();
+      } else {
+        toast.error(response.message || "Huỷ đặt phòng thất bại");
+      }
+    },
+    onError: (error: unknown) => {
+      const err = error as {
+        response?: { data?: { message?: string } };
+        message?: string;
+      };
+      toast.error(
+        err?.response?.data?.message ||
+          err?.message ||
+          "Có lỗi xảy ra khi huỷ đặt phòng"
+      );
+    },
+  });
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -256,8 +285,14 @@ export const BookingDetailModal = ({
             {t("booking.detailModal.close")}
           </Button>
           {booking.status === "pending" && (
-            <Button variant="destructive">
-              {t("booking.detailModal.cancel")}
+            <Button
+              variant="destructive"
+              onClick={() => cancelMutation.mutate()}
+              disabled={cancelMutation.isPending}
+            >
+              {cancelMutation.isPending
+                ? t("booking.detailModal.cancelling") || "Đang huỷ..."
+                : t("booking.detailModal.cancel")}
             </Button>
           )}
         </div>

@@ -103,20 +103,25 @@ export function EditRoomDialog({
         formData.append("amenities", JSON.stringify(data.amenities));
       }
 
-      // Thêm danh sách ảnh cần xóa
+      // Xử lý xóa ảnh cụ thể
       if (editedRoom.imagesToDelete && editedRoom.imagesToDelete.length > 0) {
         formData.append(
-          "imagesToDelete",
+          "removeImageIds",
           JSON.stringify(editedRoom.imagesToDelete)
         );
       }
 
-      // Thêm danh sách ảnh cần giữ lại
-      const existingImages = editedRoom.images
-        .filter((img) => img.publicId)
-        .map((img) => img.publicId);
-      if (existingImages.length > 0) {
-        formData.append("existingImages", JSON.stringify(existingImages));
+      // Nếu không còn ảnh nào (tức là xóa hết)
+      if (editedRoom.images.length === 0) {
+        formData.append("removeImages", "true");
+      }
+
+      // Nếu chỉ còn ảnh mới (tức là thay toàn bộ)
+      if (
+        editedRoom.images.length === newImages.length &&
+        editedRoom.images.every((img) => !img.publicId)
+      ) {
+        formData.append("imageAction", "replace");
       }
 
       // Thêm hình ảnh mới

@@ -190,36 +190,6 @@ const PoliciesSection = ({ form }: PoliciesSectionProps) => {
           form={form}
         />
 
-        {form.watch("childrenPolicy") === "yes" && (
-          <FormField
-            control={form.control}
-            name="childrenAgeDefinition"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Độ tuổi được coi là trẻ em</FormLabel>
-                <Select
-                  onValueChange={(value) => field.onChange(Number(value))}
-                  value={field.value?.toString() || "12"}
-                >
-                  <FormControl>
-                    <SelectTrigger className="dark:border-gray-700 focus:dark:border-primary">
-                      <SelectValue placeholder="Chọn độ tuổi" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {Array.from({ length: 19 }, (_, i) => (
-                      <SelectItem key={i} value={i.toString()}>
-                        {i} tuổi
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        )}
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <PolicyRadioGroup
             label={t("register_partner.policies.pets")}

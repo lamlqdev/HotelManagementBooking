@@ -9,7 +9,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 
@@ -25,7 +24,6 @@ interface RejectPartnerModalProps {
   onOpenChange: (open: boolean) => void;
   onReject: (reasons: RejectReasons, details: string) => void;
   rejectReasons: RejectReasons;
-  onRejectReasonsChange: (reasons: RejectReasons) => void;
   rejectDetails: string;
   onRejectDetailsChange: (details: string) => void;
   isLoading?: boolean;
@@ -36,7 +34,6 @@ const RejectPartnerModal = ({
   onOpenChange,
   onReject,
   rejectReasons,
-  onRejectReasonsChange,
   rejectDetails,
   onRejectDetailsChange,
   isLoading = false,
@@ -60,93 +57,13 @@ const RejectPartnerModal = ({
         </AlertDialogHeader>
 
         <div className="space-y-6 py-4">
-          <div className="space-y-4">
-            <Label>{t("admin.partners.approval.modal.reject.reasons")}</Label>
-            <div className="space-y-2">
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="incomplete"
-                  checked={rejectReasons.incomplete}
-                  onCheckedChange={(checked) =>
-                    onRejectReasonsChange({
-                      ...rejectReasons,
-                      incomplete: checked === true,
-                    })
-                  }
-                  disabled={isLoading}
-                />
-                <label
-                  htmlFor="incomplete"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  {t("admin.partners.approval.modal.reject.reasons.incomplete")}
-                </label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="invalid"
-                  checked={rejectReasons.invalid}
-                  onCheckedChange={(checked) =>
-                    onRejectReasonsChange({
-                      ...rejectReasons,
-                      invalid: checked === true,
-                    })
-                  }
-                  disabled={isLoading}
-                />
-                <label
-                  htmlFor="invalid"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  {t("admin.partners.approval.modal.reject.reasons.invalid")}
-                </label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="duplicate"
-                  checked={rejectReasons.duplicate}
-                  onCheckedChange={(checked) =>
-                    onRejectReasonsChange({
-                      ...rejectReasons,
-                      duplicate: checked === true,
-                    })
-                  }
-                  disabled={isLoading}
-                />
-                <label
-                  htmlFor="duplicate"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  {t("admin.partners.approval.modal.reject.reasons.duplicate")}
-                </label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="other"
-                  checked={rejectReasons.other}
-                  onCheckedChange={(checked) =>
-                    onRejectReasonsChange({
-                      ...rejectReasons,
-                      other: checked === true,
-                    })
-                  }
-                  disabled={isLoading}
-                />
-                <label
-                  htmlFor="other"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  {t("admin.partners.approval.modal.reject.reasons.other")}
-                </label>
-              </div>
-            </div>
-          </div>
-
           <div className="space-y-2">
-            <Label>{t("admin.partners.approval.modal.reject.details")}</Label>
+            <Label>
+              {t("admin.partners.approval.modal.reject.details.title")}
+            </Label>
             <Textarea
               placeholder={t(
-                "admin.partners.approval.modal.reject.detailsPlaceholder"
+                "admin.partners.approval.modal.reject.details.placeholder"
               )}
               value={rejectDetails}
               onChange={(e) => onRejectDetailsChange(e.target.value)}
