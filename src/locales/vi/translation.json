@@ -398,7 +398,68 @@
       "submitButton": "Tiến hành thanh toán"
     },
     "submitting": "Đang xử lý...",
-    "confirm": "Xác nhận đặt phòng"
+    "confirm": "Xác nhận đặt phòng",
+    "detailModal": {
+      "title": "Chi tiết đặt phòng",
+      "roomInfo": "Thông tin phòng",
+      "contactInfo": "Thông tin liên hệ",
+      "bookingInfo": "Thông tin đặt phòng",
+      "paymentInfo": "Thông tin thanh toán",
+      "room": "Phòng",
+      "roomType": "Loại phòng",
+      "bedType": "Loại giường",
+      "capacity": "Sức chứa",
+      "floor": "Tầng",
+      "area": "Diện tích",
+      "amenities": "Tiện ích",
+      "specialRequests": "Yêu cầu đặc biệt",
+      "nights": "Số đêm",
+      "bookingId": "Mã đặt phòng",
+      "name": "Tên",
+      "email": "Email",
+      "phone": "Số điện thoại",
+      "checkIn": "Nhận phòng",
+      "checkOut": "Trả phòng",
+      "createdAt": "Đặt lúc",
+      "paymentMethod": "Phương thức",
+      "originalPrice": "Giá gốc",
+      "discount": "Giảm giá",
+      "total": "Tổng tiền",
+      "close": "Đóng",
+      "cancel": "Hủy đặt phòng",
+      "paymentMethodZaloPay": "ZaloPay",
+      "paymentMethodVNPay": "VNPay",
+      "status": "Trạng thái đặt phòng",
+      "paymentStatus": "Trạng thái thanh toán"
+    },
+    "myBookingPage": {
+      "title": "Lịch sử đặt phòng của tôi",
+      "description": "Xem và quản lý các đặt phòng của bạn",
+      "noBooking": "Bạn chưa có đặt phòng nào",
+      "errorTitle": "Có lỗi xảy ra khi tải dữ liệu",
+      "errorDesc": "Vui lòng thử lại sau",
+      "columns": {
+        "id": "Mã đặt phòng",
+        "room": "Phòng",
+        "checkIn": "Ngày nhận phòng",
+        "checkOut": "Ngày trả phòng",
+        "status": "Trạng thái",
+        "payment": "Thanh toán",
+        "total": "Tổng tiền"
+      },
+      "status": {
+        "confirmed": "Đã xác nhận",
+        "pending": "Đang chờ",
+        "cancelled": "Đã hủy",
+        "completed": "Hoàn thành"
+      },
+      "paymentStatus": {
+        "paid": "Đã thanh toán",
+        "pending": "Chờ thanh toán",
+        "failed": "Thanh toán thất bại",
+        "refunded": "Đã hoàn tiền"
+      }
+    }
   },
   "about": {
     "features": {

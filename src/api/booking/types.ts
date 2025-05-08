@@ -26,9 +26,67 @@ export interface CreateBookingResponse {
   };
 }
 
+export interface MyBookingRoom {
+  _id: string;
+  hotelId: string;
+  roomName: string;
+  description: string;
+  floor: number;
+  roomType: string;
+  bedType: string;
+  price: number;
+  capacity: number;
+  squareMeters: number;
+  amenities: string[];
+  images: {
+    url: string;
+    publicId: string;
+    filename: string;
+    _id: string;
+  }[];
+  cancellationPolicy: string;
+  discountPercent: number;
+  discountStartDate: string | null;
+  discountEndDate: string | null;
+  status: string;
+  __v: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface MyBookingItem {
+  _id: string;
+  user: string;
+  contactInfo: {
+    name: string;
+    email: string;
+    phone: string;
+  };
+  specialRequests: {
+    additionalRequests: string;
+    earlyCheckIn: boolean;
+    lateCheckOut: boolean;
+  };
+  room: MyBookingRoom;
+  bookingFor: string;
+  checkIn: string;
+  checkOut: string;
+  voucher: unknown;
+  originalPrice: number;
+  discountAmount: number;
+  finalPrice: number;
+  status: string;
+  paymentStatus: string;
+  paymentMethod: string;
+  refundStatus: string | null;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
 export interface GetMyBookingsResponse {
   success: boolean;
-  data: Booking[];
+  data: MyBookingItem[];
 }
 
 export interface UpdateBookingStatusRequest {

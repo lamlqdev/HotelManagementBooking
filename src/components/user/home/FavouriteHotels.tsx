@@ -1,10 +1,13 @@
 import { useTranslation } from "react-i18next";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { format } from "date-fns";
+import { useNavigate } from "react-router";
 
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { AlertCircle } from "lucide-react";
 
 import { favouriteApi } from "@/api/favourite/favourite.api";
+import { locationApi } from "@/api/location/location.api";
 import { Hotel } from "@/types/hotel";
 import { Button } from "../../ui/button";
 import { HotelCard } from "@/components/common/HotelCard";
@@ -18,9 +21,19 @@ import {
 
 import NoData from "@/assets/illustration/NoData.svg";
 
-export default function FavoriteHotels() {
+export default function FavouriteHotels() {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  // Thêm các giá trị mặc định cho ngày check-in và check-out
+  const defaultCheckIn = new Date();
+  const defaultCheckOut = new Date();
+  defaultCheckOut.setDate(defaultCheckOut.getDate() + 1);
+
+  const finalCheckIn = format(defaultCheckIn, "yyyy-MM-dd");
+  const finalCheckOut = format(defaultCheckOut, "yyyy-MM-dd");
+  const defaultCapacity = "1";
 
   // Query để lấy danh sách khách sạn phổ biến
   const {
@@ -31,6 +44,30 @@ export default function FavoriteHotels() {
     queryKey: ["popularHotels"],
     queryFn: () => favouriteApi.getPopularHotels(1, 10),
   });
+
+  // Hàm xử lý khi click vào khách sạn
+  const handleHotelClick = async (hotel: Hotel) => {
+    try {
+      // Lấy thông tin địa điểm từ locationId
+      const locationResponse = await locationApi.getLocation(hotel.locationId);
+      const locationName = locationResponse.data.name;
+
+      const params = new URLSearchParams();
+      params.append("locationName", locationName);
+      params.append("checkIn", finalCheckIn);
+      params.append("checkOut", finalCheckOut);
+      params.append("capacity", defaultCapacity);
+      navigate(`/hoteldetail/${hotel._id}?${params.toString()}`);
+    } catch (error) {
+      console.error("Error fetching location:", error);
+      // Nếu không lấy được locationName, vẫn chuyển hướng với các tham số khác
+      const params = new URLSearchParams();
+      params.append("checkIn", finalCheckIn);
+      params.append("checkOut", finalCheckOut);
+      params.append("capacity", defaultCapacity);
+      navigate(`/hoteldetail/${hotel._id}?${params.toString()}`);
+    }
+  };
 
   // Xử lý trạng thái loading
   if (isLoading) {
@@ -106,11 +143,8 @@ export default function FavoriteHotels() {
   return (
     <section className="py-12 bg-background">
       <div className="container">
-        <div className="flex items-center justify-between mb-8">
+        <div className="mb-8">
           <h2 className="text-3xl font-bold">{t("hotels.favorites")}</h2>
-          <Button variant="outline" className="font-medium">
-            {t("common.view_all")}
-          </Button>
         </div>
         <div className="relative">
           <Carousel
@@ -126,7 +160,9 @@ export default function FavoriteHotels() {
                   key={hotel._id}
                   className="pl-4 basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4"
                 >
-                  <HotelCard hotel={hotel} />
+                  <div onClick={() => handleHotelClick(hotel)}>
+                    <HotelCard hotel={hotel} />
+                  </div>
                 </CarouselItem>
               ))}
             </CarouselContent>

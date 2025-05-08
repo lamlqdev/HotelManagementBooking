@@ -5,7 +5,7 @@ import SearchBox from "@/components/common/SearchBox";
 import HeroBanner from "@/components/common/HeroBanner";
 import PopularDestinations from "@/components/user/home/PopularDestinations";
 import HotelDeals from "@/components/user/home/HotelDeals";
-import FavoriteHotels from "@/components/user/home/FavoriteHotels";
+import FavouriteHotels from "@/components/user/home/FavouriteHotels";
 import TravelInspiration from "@/components/user/home/TravelInspiration";
 
 const HomePage = () => {
@@ -51,7 +51,7 @@ const HomePage = () => {
         {/* Các section khác của trang chủ */}
         <PopularDestinations />
         <HotelDeals />
-        <FavoriteHotels />
+        <FavouriteHotels />
         <TravelInspiration />
       </div>
     </>

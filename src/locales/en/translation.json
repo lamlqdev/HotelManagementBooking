@@ -398,7 +398,68 @@
       "submitButton": "Proceed to payment"
     },
     "submitting": "Processing...",
-    "confirm": "Confirm booking"
+    "confirm": "Confirm booking",
+    "detailModal": {
+      "title": "Booking details",
+      "roomInfo": "Room information",
+      "contactInfo": "Contact information",
+      "bookingInfo": "Booking information",
+      "paymentInfo": "Payment information",
+      "room": "Room",
+      "roomType": "Room type",
+      "bedType": "Bed type",
+      "capacity": "Capacity",
+      "floor": "Floor",
+      "area": "Area",
+      "amenities": "Amenities",
+      "specialRequests": "Special requests",
+      "nights": "Nights",
+      "bookingId": "Booking ID",
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone number",
+      "checkIn": "Check-in",
+      "checkOut": "Check-out",
+      "createdAt": "Booked at",
+      "paymentMethod": "Method",
+      "originalPrice": "Original price",
+      "discount": "Discount",
+      "total": "Total",
+      "close": "Close",
+      "cancel": "Cancel booking",
+      "paymentMethodZaloPay": "ZaloPay",
+      "paymentMethodVNPay": "VNPay",
+      "status": "Booking status",
+      "paymentStatus": "Payment status"
+    },
+    "myBookingPage": {
+      "title": "My booking history",
+      "description": "View and manage your bookings",
+      "noBooking": "You have no bookings yet",
+      "errorTitle": "An error occurred while loading data",
+      "errorDesc": "Please try again later",
+      "columns": {
+        "id": "Booking ID",
+        "room": "Room",
+        "checkIn": "Check-in date",
+        "checkOut": "Check-out date",
+        "status": "Status",
+        "payment": "Payment",
+        "total": "Total"
+      },
+      "status": {
+        "confirmed": "Confirmed",
+        "pending": "Pending",
+        "cancelled": "Cancelled",
+        "completed": "Completed"
+      },
+      "paymentStatus": {
+        "paid": "Paid",
+        "pending": "Pending payment",
+        "failed": "Payment failed",
+        "refunded": "Refunded"
+      }
+    }
   },
   "about": {
     "features": {

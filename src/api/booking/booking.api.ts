@@ -24,7 +24,7 @@ export const bookingApi = {
 
   // Lấy danh sách booking của user
   getMyBookings: async (): Promise<GetMyBookingsResponse> => {
-    const response = await axiosInstance.get(API_URL);
+    const response = await axiosInstance.get(`${API_URL}/my-bookings`);
     return response.data;
   },
 

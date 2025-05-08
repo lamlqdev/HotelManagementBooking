@@ -32,6 +32,7 @@ import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
 import SettingPage from "./pages/shared/SettingPage";
 import UserProfilePage from "./pages/user/ProfilePage";
 import FavouriteHotelPage from "./pages/shared/FavouriteHotelPage";
+import MyBookingPage from "./pages/user/MyBookingPage";
 
 // Partner Pages
 import RevenuePage from "./pages/partner/RevenuePage";
@@ -54,6 +55,7 @@ import UsersManagementPage from "./pages/admin/UsersManagementPage";
 import UserDetailPage from "./pages/admin/UserDetailPage";
 import HotelDetailAdminPage from "./pages/admin/HotelDetailPage";
 import VoucherManagementPage from "./pages/admin/VoucherManagementPage";
+
 
 function App() {
   return (
@@ -94,6 +96,7 @@ function App() {
           <Route element={<Layout />}>
             <Route path="/settings" element={<SettingPage />} />
             <Route path="/profile" element={<UserProfilePage />} />
+            <Route path="/bookings" element={<MyBookingPage />} />
           </Route>
         </Route>
 
