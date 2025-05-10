@@ -111,6 +111,40 @@ export const BookingContactForm = ({ form }: BookingContactFormProps) => {
             <p className="text-sm text-red-500 mt-1">{errors.phone.message}</p>
           )}
         </div>
+
+        {/* Chọn phương thức thanh toán */}
+        <div className="space-y-2">
+          <label className="block text-sm font-medium">
+            {t(
+              "booking.contactInfo.paymentMethod.label",
+              "Phương thức thanh toán"
+            )}
+          </label>
+          <div className="flex gap-4">
+            <label className="flex items-center space-x-2">
+              <input
+                type="radio"
+                value="zalopay"
+                {...register("paymentMethod")}
+                defaultChecked
+              />
+              <span>ZaloPay</span>
+            </label>
+            <label className="flex items-center space-x-2">
+              <input
+                type="radio"
+                value="vnpay"
+                {...register("paymentMethod")}
+              />
+              <span>VNPay</span>
+            </label>
+          </div>
+          {errors.paymentMethod && (
+            <p className="text-sm text-red-500 mt-1">
+              {errors.paymentMethod.message}
+            </p>
+          )}
+        </div>
       </form>
     </div>
   );

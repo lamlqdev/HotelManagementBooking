@@ -1310,6 +1310,7 @@
       },
       "create": "Create Voucher",
       "edit": "Edit Voucher",
+      "detail": "Voucher Details",
       "delete": "Delete Voucher",
       "cancel": "Cancel",
       "confirm": "Confirm",
@@ -1370,9 +1371,22 @@
         "usageLimitPlaceholder": "Enter usage limit",
         "minOrderValue": "Minimum Order Value",
         "minOrderValuePlaceholder": "Enter minimum order value",
+        "discountType": "Discount Type",
+        "discountTypePercentage": "Percentage",
+        "discountTypeFixed": "Fixed Amount",
         "type": "Voucher Type",
-        "typePlaceholder": "Select voucher type"
-      }
+        "typePlaceholder": "Select voucher type",
+        "status": "Status",
+        "statusActive": "Active",
+        "statusInactive": "Inactive",
+        "statusExpired": "Expired"
+      },
+      "createSuccess": "Voucher created successfully",
+      "createError": "Failed to create voucher",
+      "updateSuccess": "Voucher updated successfully",
+      "updateError": "Failed to update voucher",
+      "deleteSuccess": "Voucher deleted successfully",
+      "deleteError": "Failed to delete voucher"
     },
     "hotels": {
       "title": "Hotels Management",

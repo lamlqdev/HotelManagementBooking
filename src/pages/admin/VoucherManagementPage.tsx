@@ -10,7 +10,6 @@ import {
   Calendar,
   Clock,
 } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -35,6 +34,9 @@ import { voucherApi } from "@/api/voucher/voucher.api";
 import { GetVouchersResponse } from "@/api/voucher/types";
 import NoDiscount from "@/assets/illustration/NoDiscount.svg";
 import CreateVoucherModal from "@/components/admin/voucher-management/CreateVoucherModal";
+import EditVoucherModal from "@/components/admin/voucher-management/EditVoucherModal";
+import { Voucher } from "@/types/voucher";
+import VoucherDetailModal from "@/components/admin/voucher-management/VoucherDetailModal";
 
 export default function VoucherManagementPage() {
   const { t } = useTranslation();
@@ -42,6 +44,10 @@ export default function VoucherManagementPage() {
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [typeFilter, setTypeFilter] = useState<string>("all");
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingVoucher, setEditingVoucher] = useState<Voucher | null>(null);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [selectedVoucher, setSelectedVoucher] = useState<Voucher | null>(null);
 
   const { data, isLoading, isError, refetch } = useQuery<GetVouchersResponse>({
     queryKey: ["vouchers"],
@@ -58,6 +64,16 @@ export default function VoucherManagementPage() {
       typeFilter === "all" || voucher.discountType === typeFilter;
     return matchesSearch && matchesStatus && matchesType;
   });
+
+  const handleEditVoucher = (voucher: Voucher) => {
+    setEditingVoucher(voucher);
+    setIsEditModalOpen(true);
+  };
+
+  const handleShowDetail = (voucher: Voucher) => {
+    setSelectedVoucher(voucher);
+    setIsDetailModalOpen(true);
+  };
 
   if (isError) {
     return (
@@ -189,6 +205,9 @@ export default function VoucherManagementPage() {
                 <TableHead className="w-[15%]">
                   {t("admin.vouchers.table.createdAt")}
                 </TableHead>
+                <TableHead className="w-[10%] text-center">
+                  {t("common.actions")}
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -206,6 +225,9 @@ export default function VoucherManagementPage() {
                     </TableCell>
                     <TableCell>
                       <Skeleton className="h-6 w-16" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-6 w-24" />
                     </TableCell>
                     <TableCell>
                       <Skeleton className="h-6 w-24" />
@@ -233,8 +255,12 @@ export default function VoucherManagementPage() {
               ) : (
                 filteredVouchers?.map((voucher) => (
                   <TableRow
-                    key={voucher.id}
+                    key={voucher._id}
                     className="hover:bg-transparent cursor-pointer"
+                    onClick={(e) => {
+                      if ((e.target as HTMLElement).closest("button")) return;
+                      handleShowDetail(voucher);
+                    }}
                   >
                     <TableCell className="max-w-[20%] py-4">
                       <div className="flex items-center gap-1">
@@ -289,6 +315,18 @@ export default function VoucherManagementPage() {
                         </span>
                       </div>
                     </TableCell>
+                    <TableCell className="max-w-[10%] py-4 text-center">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleEditVoucher(voucher);
+                        }}
+                      >
+                        {t("common.edit")}
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))
               )}
@@ -301,6 +339,22 @@ export default function VoucherManagementPage() {
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
       />
+
+      {editingVoucher && (
+        <EditVoucherModal
+          isOpen={isEditModalOpen}
+          onClose={() => setIsEditModalOpen(false)}
+          voucher={editingVoucher}
+        />
+      )}
+
+      {selectedVoucher && (
+        <VoucherDetailModal
+          isOpen={isDetailModalOpen}
+          onClose={() => setIsDetailModalOpen(false)}
+          voucher={selectedVoucher}
+        />
+      )}
     </div>
   );
 }

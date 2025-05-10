@@ -9,6 +9,10 @@ import {
   CheckVoucherResponse,
   PaymentStatusResponse,
   CancelBookingResponse,
+  GetHotelBookingsResponse,
+  GetAllBookingsResponse,
+  BookingDetailsResponse,
+  GetMyHotelBookingsResponse,
 } from "./types";
 
 const API_URL = "/bookings";
@@ -72,7 +76,68 @@ export const bookingApi = {
 
   // Hủy booking
   cancelBooking: async (bookingId: string): Promise<CancelBookingResponse> => {
-    const response = await axiosInstance.patch(`${API_URL}/${bookingId}/cancel`);
+    const response = await axiosInstance.patch(
+      `${API_URL}/${bookingId}/cancel`
+    );
+    return response.data;
+  },
+
+  // Lấy toàn bộ booking của một khách sạn
+  getHotelBookings: async (
+    hotelId: string,
+    params?: {
+      status?: string;
+      startDate?: string;
+      endDate?: string;
+      sort?: string;
+      page?: number;
+      limit?: number;
+    }
+  ): Promise<GetHotelBookingsResponse> => {
+    const response = await axiosInstance.get(`${API_URL}/hotel/${hotelId}`, {
+      params,
+    });
+    return response.data;
+  },
+
+  // Lấy toàn bộ booking trong hệ thống (cho admin)
+  getAllBookings: async (params?: {
+    status?: string;
+    paymentStatus?: string;
+    startDate?: string;
+    endDate?: string;
+    hotelId?: string;
+    userId?: string;
+    paymentMethod?: string;
+    sort?: string;
+    page?: number;
+    limit?: number;
+  }): Promise<GetAllBookingsResponse> => {
+    const response = await axiosInstance.get(`${API_URL}/all`, { params });
+    return response.data;
+  },
+
+  // Lấy chi tiết một booking
+  getBookingDetails: async (
+    bookingId: string
+  ): Promise<BookingDetailsResponse> => {
+    const response = await axiosInstance.get(`${API_URL}/${bookingId}`);
+    return response.data;
+  },
+
+  // Lấy danh sách booking của các khách sạn mà chủ khách sạn đang đăng nhập sở hữu
+  getMyHotelBookings: async (params?: {
+    status?: string;
+    startDate?: string;
+    endDate?: string;
+    sort?: string;
+    page?: number;
+    limit?: number;
+    hotelId?: string;
+  }): Promise<GetMyHotelBookingsResponse> => {
+    const response = await axiosInstance.get(`${API_URL}/my-hotels`, {
+      params,
+    });
     return response.data;
   },
 };

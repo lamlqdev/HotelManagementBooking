@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/select";
 import { voucherApi } from "@/api/voucher/voucher.api";
 import { toast } from "sonner";
+import { Voucher } from "@/types/voucher";
 
 const formSchema = z.object({
   code: z.string().min(1, "Vui lòng nhập mã voucher"),
@@ -38,58 +39,64 @@ const formSchema = z.object({
   minOrderValue: z.coerce.number().optional(),
   discountType: z.enum(["percentage", "fixed"]).default("percentage"),
   maxDiscount: z.coerce.number().nullable().optional(),
+  startDate: z.string().optional(),
+  status: z.enum(["active", "inactive", "expired"]).default("active"),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
-interface CreateVoucherModalProps {
+interface EditVoucherModalProps {
   isOpen: boolean;
   onClose: () => void;
+  voucher: Voucher;
 }
 
-export default function CreateVoucherModal({
+export default function EditVoucherModal({
   isOpen,
   onClose,
-}: CreateVoucherModalProps) {
+  voucher,
+}: EditVoucherModalProps) {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      code: "",
-      discount: 0,
-      expiryDate: "",
-      usageLimit: undefined,
-      minOrderValue: undefined,
-      discountType: "percentage",
-      maxDiscount: null,
+      code: voucher.code || "",
+      discount: voucher.discount || 0,
+      expiryDate: voucher.expiryDate
+        ? String(voucher.expiryDate).split("T")[0]
+        : "",
+      usageLimit: voucher.usageLimit,
+      minOrderValue: voucher.minOrderValue,
+      discountType: voucher.discountType || "percentage",
+      maxDiscount: voucher.maxDiscount ?? null,
+      status: voucher.status || "active",
     },
   });
 
-  const { mutate: createVoucher, isPending } = useMutation({
-    mutationFn: voucherApi.createVoucher,
+  const { mutate: updateVoucher, isPending } = useMutation({
+    mutationFn: (values: FormValues) =>
+      voucherApi.updateVoucher(voucher._id, {
+        ...values,
+        expiryDate: new Date(values.expiryDate).toISOString(),
+        maxDiscount:
+          values.discountType === "percentage" ? values.maxDiscount : null,
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["vouchers"] });
-      toast.success(t("admin.vouchers.createSuccess"));
+      toast.success(t("admin.vouchers.updateSuccess"));
       onClose();
       form.reset();
     },
     onError: (error) => {
-      toast.error(t("common.voucher.createError"));
+      toast.error(t("admin.vouchers.updateError"));
       console.error(error);
     },
   });
 
   const onSubmit = (values: FormValues) => {
-    createVoucher({
-      ...values,
-      expiryDate: new Date(values.expiryDate).toISOString(),
-      startDate: new Date().toISOString(),
-      status: "active",
-      maxDiscount:
-        values.discountType === "percentage" ? values.maxDiscount : null,
-    });
+    updateVoucher(values);
   };
 
   return (
@@ -97,7 +104,7 @@ export default function CreateVoucherModal({
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>
-            <span>{t("admin.vouchers.create")}</span>
+            <span>{t("admin.vouchers.edit")}</span>
           </DialogTitle>
         </DialogHeader>
 
@@ -113,6 +120,7 @@ export default function CreateVoucherModal({
                     <Input
                       placeholder={t("admin.vouchers.form.codePlaceholder")}
                       {...field}
+                      disabled
                     />
                   </FormControl>
                   <FormMessage />
@@ -130,66 +138,6 @@ export default function CreateVoucherModal({
                     <Input
                       type="number"
                       placeholder={t("admin.vouchers.form.valuePlaceholder")}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="expiryDate"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("admin.vouchers.form.expiryDate")}</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="date"
-                      min={new Date().toISOString().split("T")[0]}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="usageLimit"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("admin.vouchers.form.usageLimit")}</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      placeholder={t(
-                        "admin.vouchers.form.usageLimitPlaceholder"
-                      )}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="minOrderValue"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    {t("admin.vouchers.form.minOrderValue")}
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      placeholder={t(
-                        "admin.vouchers.form.minOrderValuePlaceholder"
-                      )}
                       {...field}
                     />
                   </FormControl>
@@ -258,6 +206,101 @@ export default function CreateVoucherModal({
               />
             )}
 
+            <FormField
+              control={form.control}
+              name="expiryDate"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("admin.vouchers.form.expiryDate")}</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="date"
+                      min={new Date().toISOString().split("T")[0]}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="usageLimit"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("admin.vouchers.form.usageLimit")}</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      placeholder={t(
+                        "admin.vouchers.form.usageLimitPlaceholder"
+                      )}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="minOrderValue"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    {t("admin.vouchers.form.minOrderValue")}
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      placeholder={t(
+                        "admin.vouchers.form.minOrderValuePlaceholder"
+                      )}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="status"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("admin.vouchers.form.status")}</FormLabel>
+                  <FormControl>
+                    <Select
+                      value={field.value}
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger>
+                        <SelectValue
+                          placeholder={t("admin.vouchers.form.status")}
+                        />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="active">
+                          {t("admin.vouchers.status.active")}
+                        </SelectItem>
+                        <SelectItem value="inactive">
+                          {t("admin.vouchers.status.inactive")}
+                        </SelectItem>
+                        <SelectItem value="expired">
+                          {t("admin.vouchers.status.expired")}
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <div className="flex justify-end gap-2">
               <Button
                 type="button"
@@ -268,7 +311,7 @@ export default function CreateVoucherModal({
                 {t("common.cancel")}
               </Button>
               <Button type="submit" disabled={isPending}>
-                {isPending ? t("common.creating") : t("admin.vouchers.create")}
+                {isPending ? t("common.saving") : t("common.save")}
               </Button>
             </div>
           </form>

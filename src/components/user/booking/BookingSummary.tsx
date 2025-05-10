@@ -21,7 +21,6 @@ export const BookingSummary = ({
   roomId,
   searchParams,
   onSubmit,
-  isSubmitting,
 }: BookingSummaryProps) => {
   const { t } = useTranslation();
 
@@ -153,14 +152,8 @@ export const BookingSummary = ({
         </div>
       </div>
 
-      <Button
-        onClick={onSubmit}
-        disabled={isSubmitting}
-        className="w-full mt-6"
-      >
-        {isSubmitting
-          ? t("booking.submitting")
-          : t("booking.summary.submitButton")}
+      <Button type="button" onClick={onSubmit} className="w-full mt-6">
+        {t("booking.summary.submitButton")}
       </Button>
     </div>
   );

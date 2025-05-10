@@ -1,5 +1,5 @@
 export interface Voucher {
-  id: string;
+  _id: string;
   code: string;
   discount: number;
   discountType: "fixed" | "percentage";

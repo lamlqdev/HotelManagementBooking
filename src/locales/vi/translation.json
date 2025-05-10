@@ -1326,6 +1326,7 @@
       "title": "Quản lý Voucher",
       "description": "Quản lý voucher trong hệ thống",
       "create": "Tạo Voucher",
+      "detail": "Chi tiết Voucher",
       "searchPlaceholder": "Tìm kiếm voucher...",
       "filters": {
         "reset": "Đặt lại bộ lọc",
@@ -1341,6 +1342,7 @@
         "percentage": "Phần trăm",
         "fixed": "Giá trị cố định"
       },
+      "edit": "Chỉnh sửa",
       "table": {
         "code": "Mã",
         "name": "Tên",
@@ -1367,8 +1369,21 @@
         "minOrderValue": "Giá trị đơn hàng tối thiểu",
         "minOrderValuePlaceholder": "Nhập giá trị đơn hàng tối thiểu",
         "type": "Loại voucher",
-        "typePlaceholder": "Chọn loại voucher"
-      }
+        "typePlaceholder": "Chọn loại voucher",
+        "discountType": "Loại giảm giá",
+        "discountTypePercentage": "Phần trăm",
+        "discountTypeFixed": "Số tiền cố định",
+        "status": "Trạng thái",
+        "statusActive": "Hoạt động",
+        "statusInactive": "Không hoạt động",
+        "statusExpired": "Đã hết hạn"
+      },
+      "createSuccess": "Tạo voucher thành công",
+      "createError": "Lỗi khi tạo voucher",
+      "updateSuccess": "Cập nhật voucher thành công",
+      "updateError": "Lỗi khi cập nhật voucher",
+      "deleteSuccess": "Xóa voucher thành công",
+      "deleteError": "Lỗi khi xóa voucher"
     },
     "partners": {
       "approval": {

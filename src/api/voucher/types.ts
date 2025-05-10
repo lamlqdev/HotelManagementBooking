@@ -3,9 +3,13 @@ import { Voucher } from "@/types/voucher";
 export interface CreateVoucherRequest {
   code: string;
   discount: number;
+  startDate?: string;
   expiryDate: string;
+  status?: "active" | "inactive" | "expired";
   usageLimit?: number;
   minOrderValue?: number;
+  discountType: "percentage" | "fixed";
+  maxDiscount?: number | null;
 }
 
 export interface CreateVoucherResponse {
@@ -15,15 +19,19 @@ export interface CreateVoucherResponse {
 
 export interface GetVouchersResponse {
   success: boolean;
+  count: number;
   data: Voucher[];
 }
 
 export interface UpdateVoucherRequest {
   discount?: number;
+  startDate?: string;
   expiryDate?: string;
   status?: "active" | "inactive" | "expired";
   usageLimit?: number;
   minOrderValue?: number;
+  discountType?: "percentage" | "fixed";
+  maxDiscount?: number | null;
 }
 
 export interface UpdateVoucherResponse {
@@ -33,6 +41,7 @@ export interface UpdateVoucherResponse {
 
 export interface GetAvailableVouchersRequest {
   roomId?: string;
+  serviceId?: string;
   totalAmount?: number;
 }
 
@@ -43,5 +52,6 @@ export interface AvailableVoucher extends Voucher {
 
 export interface GetAvailableVouchersResponse {
   success: boolean;
+  count: number;
   data: AvailableVoucher[];
 }

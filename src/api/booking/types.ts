@@ -21,9 +21,7 @@ export interface CreateBookingRequest {
 export interface CreateBookingResponse {
   success: boolean;
   data: Booking;
-  paymentUrl: {
-    payUrl: string;
-  };
+  paymentUrl: string;
 }
 
 export interface MyBookingRoom {
@@ -141,6 +139,7 @@ export const contactFormSchema = z.object({
   contactName: z.string().min(1, "Vui lòng nhập tên"),
   email: z.string().email("Email không hợp lệ"),
   phone: z.string().min(10, "Số điện thoại phải có ít nhất 10 số"),
+  paymentMethod: z.enum(["zalopay", "vnpay"]).default("zalopay"),
 });
 
 export type ContactFormData = z.infer<typeof contactFormSchema>;
@@ -172,5 +171,110 @@ export interface BookingSummaryProps {
     capacity: number;
   };
   onSubmit: () => Promise<void>;
-  isSubmitting: boolean;
+}
+
+export interface BookingUserInfo {
+  _id: string;
+  name: string;
+  email: string;
+  phone?: string;
+}
+
+export interface BookingRoomInfo {
+  _id: string;
+  roomType: string;
+  roomNumber?: string;
+  price: number;
+  hotelId?: string | HotelInfo;
+}
+
+export interface VoucherInfo {
+  code: string;
+  discount: number;
+  discountType: string;
+  expiryDate?: string;
+}
+
+export interface PaymentInfo {
+  amount: number;
+  transactionId: string;
+  status: string;
+  method: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface HotelInfo {
+  _id: string;
+  name: string;
+  address: string;
+  city?: string;
+  images?: Array<{ url: string; publicId: string; filename: string }>;
+  rating?: number;
+}
+
+export interface BookingDetailsResponse {
+  success: boolean;
+  data: {
+    _id: string;
+    user: BookingUserInfo;
+    room: BookingRoomInfo & { hotelId?: HotelInfo };
+    voucher?: VoucherInfo;
+    paymentId?: PaymentInfo;
+    contactInfo: BookingContactInfo;
+    specialRequests?: BookingSpecialRequests;
+    bookingFor: string;
+    checkIn: string;
+    checkOut: string;
+    originalPrice: number;
+    discountAmount: number;
+    finalPrice: number;
+    status: string;
+    paymentStatus: string;
+    paymentMethod: string;
+    refundStatus?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  };
+}
+
+export type BookingListItem = BookingDetailsResponse["data"];
+
+export interface Pagination {
+  total: number;
+  currentPage: number;
+  limit: number;
+  totalPages: number;
+}
+
+export interface BookingStats {
+  totalBookings: number;
+  totalRevenue?: number;
+  statusCounts?: Record<string, number>;
+  paymentMethodCounts?: Record<string, number>;
+  pendingBookings?: number;
+  confirmedBookings?: number;
+  cancelledBookings?: number;
+  completedBookings?: number;
+}
+
+export interface GetHotelBookingsResponse {
+  success: boolean;
+  data: BookingListItem[];
+  pagination: Pagination;
+}
+
+export interface GetAllBookingsResponse {
+  success: boolean;
+  data: BookingListItem[];
+  pagination: Pagination;
+  stats: BookingStats;
+}
+
+export interface GetMyHotelBookingsResponse {
+  success: boolean;
+  data: BookingListItem[];
+  pagination: Pagination;
+  stats: BookingStats;
+  message?: string;
 }

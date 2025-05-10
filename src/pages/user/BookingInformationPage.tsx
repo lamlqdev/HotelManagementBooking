@@ -12,7 +12,6 @@ import { BookingSummary } from "@/components/user/booking/BookingSummary";
 import { bookingApi } from "@/api/booking/booking.api";
 import type { ContactFormData, SpecialRequestsData } from "@/api/booking/types";
 import { contactFormSchema, specialRequestsSchema } from "@/api/booking/types";
-import { Skeleton } from "@/components/ui/skeleton";
 
 const BookingInformationPage = () => {
   const { t } = useTranslation();
@@ -34,6 +33,8 @@ const BookingInformationPage = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  let loadingToastId: string | number | undefined;
+
   const createBookingMutation = useMutation({
     mutationFn: async () => {
       const contactData = contactForm.getValues();
@@ -48,7 +49,7 @@ const BookingInformationPage = () => {
         checkIn: searchParams.get("checkIn") || "",
         checkOut: searchParams.get("checkOut") || "",
         voucherId: searchParams.get("voucherId") || undefined,
-        paymentMethod: "zalopay" as const,
+        paymentMethod: contactData.paymentMethod,
         bookingFor: contactData.bookingFor,
         contactInfo: {
           name: contactData.contactName,
@@ -73,16 +74,18 @@ const BookingInformationPage = () => {
 
       return bookingApi.createBooking(bookingData);
     },
+    onMutate: () => {
+      loadingToastId = toast.loading("Đang xử lý đặt phòng...");
+    },
     onSuccess: (response) => {
-      if (response.success) {
-        toast.success(t("booking.success"));
-        // Chuyển đến trang thanh toán
-        window.location.href = response.paymentUrl.payUrl;
-      } else {
-        toast.error(t("booking.error"));
-      }
+      toast.dismiss(loadingToastId);
+      toast.success(t("booking.success"));
+      // Chuyển đến trang thanh toán
+      console.log(response.paymentUrl);
+      window.location.href = response.paymentUrl;
     },
     onError: (error) => {
+      toast.dismiss(loadingToastId);
       console.error("Error creating booking:", error);
       toast.error(t("booking.error"));
     },
@@ -107,27 +110,6 @@ const BookingInformationPage = () => {
     createBookingMutation.mutate();
   };
 
-  if (createBookingMutation.isPending) {
-    return (
-      <div className="container mx-auto px-4 py-8 pt-32">
-        <Skeleton className="h-8 w-48 mb-6" />
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 space-y-6">
-            <Skeleton className="h-64 w-full" />
-            <Skeleton className="h-64 w-full" />
-          </div>
-          <div className="lg:col-span-1">
-            <Skeleton className="h-96 w-full" />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (createBookingMutation.isError) {
-    toast.error(t("booking.error"));
-  }
-
   return (
     <div className="container mx-auto px-4 py-8 pt-32">
       <h1 className="text-2xl font-bold mb-6">{t("booking.pageTitle")}</h1>
@@ -150,7 +132,6 @@ const BookingInformationPage = () => {
               capacity: parseInt(searchParams.get("capacity") || "1"),
             }}
             onSubmit={handleBookingSubmit}
-            isSubmitting={createBookingMutation.isPending}
           />
         </div>
       </div>
