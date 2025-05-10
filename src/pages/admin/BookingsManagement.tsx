@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -32,8 +33,7 @@ import { Search, RefreshCw, User } from "lucide-react";
 import { bookingApi } from "@/api/booking/booking.api";
 import { BookingListItem } from "@/api/booking/types";
 import { format } from "date-fns";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { useMemo } from "react";
+import { useNavigate } from "react-router";
 
 const STATUS_OPTIONS = [
   { value: "all", label: "Tất cả" },
@@ -42,31 +42,51 @@ const STATUS_OPTIONS = [
   { value: "completed", label: "Hoàn thành" },
   { value: "cancelled", label: "Đã hủy" },
 ];
+const PAYMENT_STATUS_OPTIONS = [
+  { value: "all", label: "Tất cả" },
+  { value: "pending", label: "Chờ thanh toán" },
+  { value: "paid", label: "Đã thanh toán" },
+  { value: "failed", label: "Thanh toán thất bại" },
+  { value: "refunded", label: "Đã hoàn tiền" },
+];
+const PAYMENT_METHOD_OPTIONS = [
+  { value: "all", label: "Tất cả" },
+  { value: "zalopay", label: "ZaloPay" },
+  { value: "vnpay", label: "VNPay" },
+];
 
-export default function BookingOrdersPage() {
+export default function BookingsManagement() {
+  const { t } = useTranslation();
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("all");
+  const [paymentStatus, setPaymentStatus] = useState("all");
+  const [paymentMethod, setPaymentMethod] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedBooking, setSelectedBooking] =
-    useState<BookingListItem | null>(null);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const navigate = useNavigate();
 
   const { data, isLoading } = useQuery({
-    queryKey: ["partner-bookings", search, status, currentPage],
+    queryKey: [
+      "admin-bookings",
+      search,
+      status,
+      paymentStatus,
+      paymentMethod,
+      currentPage,
+    ],
     queryFn: async () => {
-      const res = await bookingApi.getMyHotelBookings({
+      const res = await bookingApi.getAllBookings({
         page: currentPage,
         limit: 10,
         status: status === "all" ? undefined : status,
+        paymentStatus: paymentStatus === "all" ? undefined : paymentStatus,
+        paymentMethod: paymentMethod === "all" ? undefined : paymentMethod,
+        // Có thể bổ sung search vào backend nếu hỗ trợ
       });
       return res;
     },
   });
 
-  const bookings: BookingListItem[] = useMemo(
-    () => (data && "data" in data ? data.data : []),
-    [data]
-  );
+  const bookings: BookingListItem[] = data && "data" in data ? data.data : [];
   const totalPages =
     data && "pagination" in data && data.pagination?.totalPages
       ? data.pagination.totalPages
@@ -75,55 +95,21 @@ export default function BookingOrdersPage() {
   const handleResetFilters = () => {
     setSearch("");
     setStatus("all");
+    setPaymentStatus("all");
+    setPaymentMethod("all");
     setCurrentPage(1);
   };
 
   // Lọc client-side theo search (nếu backend chưa hỗ trợ)
-  const filteredBookings = useMemo(
-    () =>
-      bookings.filter((b) => {
-        const s = search.trim().toLowerCase();
-        if (!s) return true;
-        return (
-          b.contactInfo?.name?.toLowerCase().includes(s) ||
-          b.contactInfo?.email?.toLowerCase().includes(s) ||
-          b.contactInfo?.phone?.toLowerCase().includes(s)
-        );
-      }),
-    [bookings, search]
-  );
-
-  // Badge trạng thái
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case "pending":
-        return (
-          <Badge variant="outline" className="bg-yellow-100 text-yellow-800">
-            Chờ duyệt
-          </Badge>
-        );
-      case "confirmed":
-        return (
-          <Badge variant="outline" className="bg-green-100 text-green-800">
-            Đã xác nhận
-          </Badge>
-        );
-      case "completed":
-        return (
-          <Badge variant="outline" className="bg-blue-100 text-blue-800">
-            Hoàn thành
-          </Badge>
-        );
-      case "cancelled":
-        return (
-          <Badge variant="outline" className="bg-red-100 text-red-800">
-            Đã hủy
-          </Badge>
-        );
-      default:
-        return <Badge variant="outline">{status}</Badge>;
-    }
-  };
+  const filteredBookings = bookings.filter((b) => {
+    const s = search.trim().toLowerCase();
+    if (!s) return true;
+    return (
+      b.contactInfo?.name?.toLowerCase().includes(s) ||
+      b.contactInfo?.email?.toLowerCase().includes(s) ||
+      b.contactInfo?.phone?.toLowerCase().includes(s)
+    );
+  });
 
   return (
     <div className="container mx-auto px-4">
@@ -134,7 +120,7 @@ export default function BookingOrdersPage() {
               <div className="flex items-center gap-2">
                 <User className="h-6 w-6" />
                 <h1 className="text-2xl font-bold">
-                  Đơn đặt phòng của khách sạn
+                  {t("admin.bookings.title")}
                 </h1>
               </div>
               <Button variant="outline" onClick={handleResetFilters}>
@@ -143,7 +129,7 @@ export default function BookingOrdersPage() {
               </Button>
             </div>
             <p className="text-muted-foreground mt-2">
-              Danh sách đơn đặt phòng của các khách sạn bạn sở hữu
+              Danh sách toàn bộ đơn đặt phòng trong hệ thống
             </p>
           </div>
 
@@ -173,6 +159,40 @@ export default function BookingOrdersPage() {
                   </SelectTrigger>
                   <SelectContent>
                     {STATUS_OPTIONS.map((opt) => (
+                      <SelectItem key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-sm text-muted-foreground">
+                  Thanh toán
+                </label>
+                <Select value={paymentStatus} onValueChange={setPaymentStatus}>
+                  <SelectTrigger className="w-[160px]">
+                    <SelectValue placeholder="Trạng thái thanh toán" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {PAYMENT_STATUS_OPTIONS.map((opt) => (
+                      <SelectItem key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-sm text-muted-foreground">
+                  Phương thức
+                </label>
+                <Select value={paymentMethod} onValueChange={setPaymentMethod}>
+                  <SelectTrigger className="w-[160px]">
+                    <SelectValue placeholder="Phương thức thanh toán" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {PAYMENT_METHOD_OPTIONS.map((opt) => (
                       <SelectItem key={opt.value} value={opt.value}>
                         {opt.label}
                       </SelectItem>
@@ -217,7 +237,7 @@ export default function BookingOrdersPage() {
                 filteredBookings.map((b) => (
                   <TableRow key={b._id}>
                     <TableCell>{b._id.slice(-6).toUpperCase()}</TableCell>
-                    <TableCell>{b.contactInfo?.name || "-"}</TableCell>
+                    <TableCell>{b.user?.name || "-"}</TableCell>
                     <TableCell>
                       {typeof b.room.hotelId === "object"
                         ? b.room.hotelId?.name
@@ -233,15 +253,34 @@ export default function BookingOrdersPage() {
                     <TableCell className="font-semibold">
                       {b.finalPrice.toLocaleString()}₫
                     </TableCell>
-                    <TableCell>{getStatusBadge(b.status)}</TableCell>
+                    <TableCell>
+                      <Badge
+                        variant={
+                          b.status === "completed"
+                            ? "default"
+                            : b.status === "pending"
+                            ? "outline"
+                            : b.status === "cancelled"
+                            ? "destructive"
+                            : "secondary"
+                        }
+                      >
+                        {b.status === "pending"
+                          ? "Chờ duyệt"
+                          : b.status === "confirmed"
+                          ? "Đã xác nhận"
+                          : b.status === "completed"
+                          ? "Hoàn thành"
+                          : b.status === "cancelled"
+                          ? "Đã hủy"
+                          : b.status}
+                      </Badge>
+                    </TableCell>
                     <TableCell>
                       <Button
                         size="sm"
                         variant="outline"
-                        onClick={() => {
-                          setSelectedBooking(b);
-                          setIsDialogOpen(true);
-                        }}
+                        onClick={() => navigate(`/admin/bookings/${b._id}`)}
                       >
                         Xem chi tiết
                       </Button>
@@ -286,59 +325,6 @@ export default function BookingOrdersPage() {
           </div>
         </Card>
       </div>
-
-      {/* Popup chi tiết booking */}
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-3xl">
-          {selectedBooking && (
-            <div>
-              <h2 className="text-xl font-bold mb-2">
-                Chi tiết đơn #{selectedBooking._id.slice(-6).toUpperCase()}
-              </h2>
-              <div className="mb-4">
-                <span className="font-semibold">Khách hàng:</span>{" "}
-                {selectedBooking.contactInfo?.name} <br />
-                <span className="font-semibold">Email:</span>{" "}
-                {selectedBooking.contactInfo?.email} <br />
-                <span className="font-semibold">Điện thoại:</span>{" "}
-                {selectedBooking.contactInfo?.phone}
-              </div>
-              <div className="mb-4">
-                <span className="font-semibold">Khách sạn:</span>{" "}
-                {typeof selectedBooking.room.hotelId === "object"
-                  ? selectedBooking.room.hotelId?.name
-                  : "-"}{" "}
-                <br />
-                <span className="font-semibold">Phòng:</span>{" "}
-                {selectedBooking.room?.roomType}
-              </div>
-              <div className="mb-4">
-                <span className="font-semibold">Nhận phòng:</span>{" "}
-                {format(new Date(selectedBooking.checkIn), "dd/MM/yyyy")} <br />
-                <span className="font-semibold">Trả phòng:</span>{" "}
-                {format(new Date(selectedBooking.checkOut), "dd/MM/yyyy")}
-              </div>
-              <div className="mb-4">
-                <span className="font-semibold">Thành tiền:</span>{" "}
-                {selectedBooking.finalPrice.toLocaleString()}₫
-              </div>
-              <div className="mb-4">
-                <span className="font-semibold">Trạng thái:</span>{" "}
-                {getStatusBadge(selectedBooking.status)}
-              </div>
-              <div className="mb-4">
-                <span className="font-semibold">Yêu cầu đặc biệt:</span>{" "}
-                {selectedBooking.specialRequests?.additionalRequests ||
-                  "Không có"}
-              </div>
-              <div className="mb-4">
-                <span className="font-semibold">Ngày tạo:</span>{" "}
-                {format(new Date(selectedBooking.createdAt), "dd/MM/yyyy")}
-              </div>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }

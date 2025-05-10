@@ -1462,6 +1462,7 @@
         "pending": "Đang chờ duyệt"
       },
       "details": {
+        "title": "Thông tin chi tiết khách sạn",
         "basicInfo": "Thông tin cơ bản",
         "address": "Địa chỉ",
         "rating": "Đánh giá",
@@ -1604,6 +1605,9 @@
         "error": "Lỗi cập nhật",
         "requiredFields": "Vui lòng điền đầy đủ thông tin bắt buộc"
       }
+    },
+    "bookings": {
+      "title": "Quản lý đơn đặt phòng"
     }
   },
   "greetings": {

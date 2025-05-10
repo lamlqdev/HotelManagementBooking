@@ -141,6 +141,22 @@ export default function AdminLayout() {
                   </Link>
                 </SidebarMenuItem>
 
+                {/* Booking Management */}
+                <SidebarMenuItem>
+                  <Link to="/admin/bookings">
+                    <SidebarMenuButton
+                      isActive={location.pathname.startsWith("/admin/bookings")}
+                      tooltip={t("admin.bookings.title")}
+                      className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg group-data-[collapsible=icon]:justify-center"
+                    >
+                      <Bell className="h-4 w-4" />
+                      <span className="group-data-[collapsible=icon]:hidden">
+                        {t("admin.bookings.title")}
+                      </span>
+                    </SidebarMenuButton>
+                  </Link>
+                </SidebarMenuItem>
+
                 {/* Voucher Management */}
                 <SidebarMenuItem>
                   <Link to="/admin/vouchers">

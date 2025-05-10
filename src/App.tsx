@@ -55,7 +55,8 @@ import UsersManagementPage from "./pages/admin/UsersManagementPage";
 import UserDetailPage from "./pages/admin/UserDetailPage";
 import HotelDetailAdminPage from "./pages/admin/HotelDetailPage";
 import VoucherManagementPage from "./pages/admin/VoucherManagementPage";
-
+import BookingsManagement from "./pages/admin/BookingsManagement";
+import BookingDetailPage from "./pages/admin/BookingDetailPage";
 
 function App() {
   return (
@@ -139,6 +140,8 @@ function App() {
             <Route path="hotels/:id" element={<HotelDetailAdminPage />} />
             <Route path="vouchers" element={<VoucherManagementPage />} />
             <Route path="settings" element={<SettingPage />} />
+            <Route path="bookings" element={<BookingsManagement />} />
+            <Route path="bookings/:id" element={<BookingDetailPage />} />
           </Route>
         </Route>
       </Routes>

@@ -113,7 +113,9 @@ export const bookingApi = {
     page?: number;
     limit?: number;
   }): Promise<GetAllBookingsResponse> => {
-    const response = await axiosInstance.get(`${API_URL}/all`, { params });
+    const response = await axiosInstance.get(`${API_URL}/admin/all`, {
+      params,
+    });
     return response.data;
   },
 
