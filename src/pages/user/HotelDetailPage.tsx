@@ -17,6 +17,7 @@ import { roomApi } from "@/api/room/room.api";
 import { reviewApi } from "@/api/review/review.api";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { useAppSelector } from "@/store/hooks";
 
 const HotelDetailPage = () => {
   const [activeTab, setActiveTab] = useState("tổng quan");
@@ -58,6 +59,8 @@ const HotelDetailPage = () => {
     queryFn: () => reviewApi.getHotelReviews(id as string),
     enabled: !!id,
   });
+
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
 
   // Xử lý trạng thái loading
   if (
@@ -184,7 +187,7 @@ const HotelDetailPage = () => {
         </div>
       </div>
 
-      <ChatSupport />
+      {isAuthenticated && <ChatSupport receiverId={hotel.ownerId} />}
     </div>
   );
 };

@@ -18,6 +18,10 @@ const BookingInformationPage = () => {
   const { roomId } = useParams();
   const [searchParams] = useSearchParams();
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const contactForm = useForm<ContactFormData>({
     resolver: zodResolver(contactFormSchema),
     defaultValues: {
