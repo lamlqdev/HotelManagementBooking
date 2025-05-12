@@ -1563,7 +1563,23 @@
         "delete": "Xóa",
         "back": "Quay lại",
         "deactivate": "Vô hiệu hóa tài khoản",
-        "activate": "Kích hoạt lại tài khoản"
+        "activate": "Kích hoạt lại tài khoản",
+        "notify": "Gửi thông báo"
+      },
+      "notify": {
+        "title": "Thông báo người dùng",
+        "description": "Thông báo người dùng về tài khoản đã được kích hoạt hoặc vô hiệu hóa",
+        "success": "Thông báo người dùng thành công",
+        "error": "Lỗi thông báo người dùng",
+        "successMessage": "Thông báo đã được gửi thành công đến người dùng",
+        "errorMessage": "Lỗi khi gửi thông báo đến người dùng",
+        "titleLabel": "Tiêu đề",
+        "titlePlaceholder": "Nhập tiêu đề thông báo",
+        "messageLabel": "Nội dung",
+        "messagePlaceholder": "Nhập nội dung thông báo",
+        "send": "Gửi thông báo",
+        "cancel": "Hủy bỏ",
+        "requiredFields": "Vui lòng điền đầy đủ thông tin bắt buộc"
       },
       "deactivate": {
         "title": "Vô hiệu hóa tài khoản",

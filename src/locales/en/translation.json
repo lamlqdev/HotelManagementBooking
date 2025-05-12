@@ -1555,7 +1555,23 @@
         "delete": "Delete",
         "back": "Back",
         "deactivate": "Deactivate Account",
-        "activate": "Activate Account"
+        "activate": "Activate Account",
+        "notify": "Notify User"
+      },
+      "notify": {
+        "title": "Notify User",
+        "description": "Notify the user about the account activation or deactivation",
+        "titleLabel": "Title",
+        "titlePlaceholder": "Enter the title of the notification",
+        "messageLabel": "Message",
+        "messagePlaceholder": "Enter the message of the notification",
+        "send": "Send Notification",
+        "cancel": "Cancel",
+        "success": "Notification sent successfully",
+        "error": "Failed to send notification",
+        "successMessage": "The notification has been successfully sent to the user",
+        "errorMessage": "Failed to send notification to the user",
+        "requiredFields": "Please fill in all required fields"
       },
       "deactivate": {
         "title": "Deactivate Account",

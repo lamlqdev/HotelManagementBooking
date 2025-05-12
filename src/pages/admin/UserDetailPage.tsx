@@ -18,6 +18,7 @@ import {
   Pencil,
 } from "lucide-react";
 import { userApi } from "@/api/user/user.api";
+import { notificationApi } from "@/api/notification/notification.api";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -50,6 +51,8 @@ export default function UserDetailPage() {
     phone: "",
     role: "",
   });
+  const [isNotifyDialogOpen, setIsNotifyDialogOpen] = useState(false);
+  const [notifyForm, setNotifyForm] = useState({ title: "", message: "" });
 
   const {
     data: user,
@@ -131,6 +134,29 @@ export default function UserDetailPage() {
     },
   });
 
+  const notifyMutation = useMutation({
+    mutationFn: (data: { title: string; message: string }) =>
+      notificationApi.sendAdminNotification({
+        userIds: [id!],
+        title: data.title,
+        message: data.message,
+      }),
+    onSuccess: () => {
+      toast.success(t("admin.users.notify.success"), {
+        description: t("admin.users.notify.successMessage"),
+      });
+      setIsNotifyDialogOpen(false);
+      setNotifyForm({ title: "", message: "" });
+    },
+    onError: (
+      error: Error & { response?: { data?: { message?: string } } }
+    ) => {
+      toast.error(t("admin.users.notify.error"), {
+        description: error.response?.data?.message || t("common.errorMessage"),
+      });
+    },
+  });
+
   const handleDeactivate = () => {
     if (!deactivateReason.trim()) {
       toast.error(t("admin.users.deactivate.error"), {
@@ -153,6 +179,16 @@ export default function UserDetailPage() {
       return;
     }
     updateMutation.mutate(editForm);
+  };
+
+  const handleNotify = () => {
+    if (!notifyForm.title.trim() || !notifyForm.message.trim()) {
+      toast.error(t("admin.users.notify.error"), {
+        description: t("admin.users.notify.requiredFields"),
+      });
+      return;
+    }
+    notifyMutation.mutate(notifyForm);
   };
 
   // Cập nhật form khi user data thay đổi
@@ -552,6 +588,79 @@ export default function UserDetailPage() {
                       : t("admin.users.details.activate")}
                   </Button>
                 )}
+
+                {/* Gửi thông báo cho user */}
+                <Dialog
+                  open={isNotifyDialogOpen}
+                  onOpenChange={setIsNotifyDialogOpen}
+                >
+                  <DialogTrigger asChild>
+                    <Button variant="outline">
+                      <Mail className="h-4 w-4 mr-2" />
+                      {t("admin.users.details.notify")}
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>{t("admin.users.notify.title")}</DialogTitle>
+                      <DialogDescription>
+                        {t("admin.users.notify.description")}
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="space-y-4 py-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="notify-title">
+                          {t("admin.users.notify.titleLabel")}
+                        </Label>
+                        <Input
+                          id="notify-title"
+                          value={notifyForm.title}
+                          onChange={(e) =>
+                            setNotifyForm((f) => ({
+                              ...f,
+                              title: e.target.value,
+                            }))
+                          }
+                          placeholder={t("admin.users.notify.titlePlaceholder")}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="notify-message">
+                          {t("admin.users.notify.messageLabel")}
+                        </Label>
+                        <Input
+                          id="notify-message"
+                          value={notifyForm.message}
+                          onChange={(e) =>
+                            setNotifyForm((f) => ({
+                              ...f,
+                              message: e.target.value,
+                            }))
+                          }
+                          placeholder={t(
+                            "admin.users.notify.messagePlaceholder"
+                          )}
+                        />
+                      </div>
+                    </div>
+                    <DialogFooter>
+                      <Button
+                        variant="outline"
+                        onClick={() => setIsNotifyDialogOpen(false)}
+                      >
+                        {t("common.cancel")}
+                      </Button>
+                      <Button
+                        onClick={handleNotify}
+                        disabled={notifyMutation.isPending}
+                      >
+                        {notifyMutation.isPending
+                          ? t("common.loading")
+                          : t("admin.users.notify.send")}
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
               </div>
             </Card>
           </div>

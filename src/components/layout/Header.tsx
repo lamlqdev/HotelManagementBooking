@@ -15,11 +15,15 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "../ui/button";
 import { useAppDispatch } from "@/store/hooks";
 import { logout } from "@/features/auth/authSlice";
+import { useNotifications } from "@/hooks/useNotifications";
 
 const Header = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
+
+  const { notifications, unreadCount, markAllAsRead, markAsRead } =
+    useNotifications(user?.id);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -72,10 +76,72 @@ const Header = () => {
             {isAuthenticated && user ? (
               <>
                 {/* Notification Bell */}
-                <Button variant="ghost" size="icon" className="relative">
-                  <Bell className="h-5 w-5" />
-                  <span className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full" />
-                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="relative group"
+                    >
+                      <Bell className="h-5 w-5" />
+                      {unreadCount > 0 && (
+                        <span className="absolute -top-1 -right-1 flex items-center justify-center w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full border-2 border-white shadow z-10 transition-all duration-200 group-hover:scale-110 group-hover:shadow-lg">
+                          {unreadCount > 99 ? "99+" : unreadCount}
+                        </span>
+                      )}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    className="w-80 max-h-96 overflow-auto rounded-xl shadow-2xl border border-gray-200 bg-white p-0"
+                    align="end"
+                  >
+                    <div className="flex items-center justify-between px-4 py-2 border-b border-gray-100 bg-gray-50 rounded-t-xl">
+                      <span className="font-semibold text-base text-gray-800">
+                        {t("notification.title", "Thông báo")}
+                      </span>
+                      {unreadCount > 0 && (
+                        <button
+                          className="text-xs text-primary underline hover:text-primary/80 transition-colors"
+                          onClick={markAllAsRead}
+                        >
+                          {t(
+                            "notification.markAllAsRead",
+                            "Đánh dấu tất cả đã đọc"
+                          )}
+                        </button>
+                      )}
+                    </div>
+                    <DropdownMenuSeparator />
+                    {notifications.length === 0 ? (
+                      <div className="px-4 py-8 text-center text-muted-foreground text-sm">
+                        {t("notification.empty", "Không có thông báo nào")}
+                      </div>
+                    ) : (
+                      notifications.map((n) => (
+                        <DropdownMenuItem
+                          key={n.id}
+                          className={`flex flex-col items-start w-full cursor-pointer px-4 py-3 gap-1 transition-all rounded-lg mb-1 last:mb-0 border-l-4 group
+                            ${
+                              n.status === "unread"
+                                ? "bg-gray-50 border-primary"
+                                : "bg-white border-transparent"
+                            } focus:bg-transparent focus:text-inherit hover:bg-gray-100`}
+                          onClick={() => markAsRead(n.id)}
+                        >
+                          <span className="font-medium line-clamp-1 text-gray-900">
+                            {n.title}
+                          </span>
+                          <span className="text-xs text-gray-600 line-clamp-2">
+                            {n.message}
+                          </span>
+                          <span className="text-[10px] text-gray-400 mt-1">
+                            {new Date(n.createdAt).toLocaleString()}
+                          </span>
+                        </DropdownMenuItem>
+                      ))
+                    )}
+                  </DropdownMenuContent>
+                </DropdownMenu>
 
                 {/* User Avatar Dropdown */}
                 <DropdownMenu>
