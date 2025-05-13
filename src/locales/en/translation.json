@@ -435,7 +435,9 @@
       "paymentStatus": "Payment status",
       "cancelSuccess": "Booking cancelled successfully",
       "cancelling": "Cancelling...",
-      "cancelError": "An error occurred while cancelling the booking. Please try again later."
+      "cancelError": "An error occurred while cancelling the booking. Please try again later.",
+      "reviewHotel": "Review hotel",
+      "gotoHotel": "Go to hotel"
     },
     "myBookingPage": {
       "title": "My booking history",
@@ -1736,7 +1738,15 @@
       "hotel_response": "Hotel Response",
       "response_placeholder": "Enter hotel response",
       "response_success": "Response sent successfully",
-      "response_error": "Failed to send response"
+      "response_error": "Failed to send response",
+      "write_review": "Write a review",
+      "rating": "Rating (stars)",
+      "title_label": "Title",
+      "comment_label": "Content",
+      "anonymous": "Anonymous",
+      "sending": "Sending...",
+      "send": "Submit review",
+      "cancel": "Cancel"
     }
   }
 }

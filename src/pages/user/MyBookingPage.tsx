@@ -164,9 +164,32 @@ const MyBookingPage = () => {
                             ? "default"
                             : booking.status === "pending"
                             ? "secondary"
-                            : "destructive"
+                            : booking.status === "cancelled"
+                            ? "destructive"
+                            : "outline"
                         }
-                        className="whitespace-nowrap"
+                        className={`whitespace-nowrap
+                          ${
+                            booking.status === "confirmed"
+                              ? "bg-green-100 text-green-700 border-green-200"
+                              : ""
+                          }
+                          ${
+                            booking.status === "pending"
+                              ? "bg-yellow-100 text-yellow-700 border-yellow-200"
+                              : ""
+                          }
+                          ${
+                            booking.status === "cancelled"
+                              ? "bg-red-100 text-red-700 border-red-200"
+                              : ""
+                          }
+                          ${
+                            booking.status === "completed"
+                              ? "bg-blue-100 text-blue-700 border-blue-200"
+                              : ""
+                          }
+                        `}
                       >
                         {t(`booking.myBookingPage.status.${booking.status}`)}
                       </Badge>

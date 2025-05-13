@@ -2,7 +2,10 @@ export interface Hotel {
   _id: string;
   name: string;
   address: string;
-  locationId: string;
+  locationId: {
+    _id: string;
+    name: string;
+  };
   locationDescription?: string;
   rating: number;
   description: string;

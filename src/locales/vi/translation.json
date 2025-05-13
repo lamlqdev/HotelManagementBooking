@@ -435,7 +435,9 @@
       "paymentStatus": "Trạng thái thanh toán",
       "cancelSuccess": "Đã hủy đặt phòng thành công",
       "cancelling": "Đang hủy đặt phòng...",
-      "cancelError": "Có lỗi xảy ra khi hủy đặt phòng. Vui lòng thử lại sau."
+      "cancelError": "Có lỗi xảy ra khi hủy đặt phòng. Vui lòng thử lại sau.",
+      "reviewHotel": "Đánh giá khách sạn",
+      "gotoHotel": "Đến khách sạn"
     },
     "myBookingPage": {
       "title": "Lịch sử đặt phòng của tôi",
@@ -1734,7 +1736,15 @@
       "hotel_response": "Phản hồi từ khách sạn",
       "response_placeholder": "Nhập phản hồi từ khách sạn",
       "response_success": "Phản hồi đã được gửi thành công",
-      "response_error": "Không thể gửi phản hồi"
+      "response_error": "Không thể gửi phản hồi",
+      "write_review": "Viết đánh giá",
+      "rating": "Đánh giá (số sao)",
+      "title_label": "Tiêu đề",
+      "comment_label": "Nội dung",
+      "anonymous": "Ẩn danh",
+      "sending": "Đang gửi...",
+      "send": "Gửi đánh giá",
+      "cancel": "Huỷ"
     }
   }
 }

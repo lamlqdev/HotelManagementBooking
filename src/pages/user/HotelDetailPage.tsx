@@ -54,7 +54,11 @@ const HotelDetailPage = () => {
     enabled: !!id,
   });
 
-  const { data: reviewsResponse, isLoading: isLoadingReviews } = useQuery({
+  const {
+    data: reviewsResponse,
+    isLoading: isLoadingReviews,
+    refetch: refetchReviews,
+  } = useQuery({
     queryKey: ["reviews", id],
     queryFn: () => reviewApi.getHotelReviews(id as string),
     enabled: !!id,
@@ -183,7 +187,12 @@ const HotelDetailPage = () => {
         </div>
 
         <div id="đánh giá">
-          <HotelReviews reviewStats={reviewStats} reviews={reviews} />
+          <HotelReviews
+            reviewStats={reviewStats}
+            reviews={reviews}
+            rooms={rooms}
+            onReviewCreated={refetchReviews}
+          />
         </div>
       </div>
 

@@ -1,7 +1,7 @@
 import { Review } from "@/types/review";
 
 export interface CreateReviewRequest {
-  hotelId: string;
+  roomId: string;
   rating: number;
   title: string;
   comment: string;

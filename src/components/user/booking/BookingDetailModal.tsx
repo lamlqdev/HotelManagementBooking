@@ -24,6 +24,7 @@ import { Badge } from "@/components/ui/badge";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { bookingApi } from "@/api/booking/booking.api";
+import { useNavigate } from "react-router";
 
 interface BookingDetailModalProps {
   booking: MyBookingItem;
@@ -55,6 +56,17 @@ export const BookingDetailModal = ({
       : booking.status === "cancelled"
       ? "destructive"
       : "outline";
+
+  const statusClass =
+    booking.status === "confirmed"
+      ? "bg-green-100 text-green-700 border-green-200"
+      : booking.status === "pending"
+      ? "bg-yellow-100 text-yellow-700 border-yellow-200"
+      : booking.status === "cancelled"
+      ? "bg-red-100 text-red-700 border-red-200"
+      : booking.status === "completed"
+      ? "bg-blue-100 text-blue-700 border-blue-200"
+      : "";
 
   // Badge trạng thái thanh toán
   const paymentColor =
@@ -92,6 +104,8 @@ export const BookingDetailModal = ({
     },
   });
 
+  const navigate = useNavigate();
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl p-0 overflow-hidden">
@@ -103,7 +117,10 @@ export const BookingDetailModal = ({
             className="w-full h-48 object-cover rounded-t-lg"
           />
           <div className="absolute top-4 left-4 flex gap-2">
-            <Badge variant={statusColor} className="text-base px-3 py-1">
+            <Badge
+              variant={statusColor}
+              className={`text-base px-3 py-1 ${statusClass}`}
+            >
               {t(`booking.myBookingPage.status.${booking.status}`)}
             </Badge>
             <Badge variant={paymentColor} className="text-base px-3 py-1">
@@ -293,6 +310,21 @@ export const BookingDetailModal = ({
               {cancelMutation.isPending
                 ? t("booking.detailModal.cancelling") || "Đang huỷ..."
                 : t("booking.detailModal.cancel")}
+            </Button>
+          )}
+          {booking.status === "completed" ? (
+            <Button
+              variant="default"
+              onClick={() => navigate(`/hoteldetail/${booking.room.hotelId}`)}
+            >
+              {t("booking.detailModal.reviewHotel") || "Đánh giá khách sạn"}
+            </Button>
+          ) : (
+            <Button
+              variant="default"
+              onClick={() => navigate(`/hoteldetail/${booking.room.hotelId}`)}
+            >
+              {t("booking.detailModal.gotoHotel") || "Xem khách sạn"}
             </Button>
           )}
         </div>
