@@ -245,24 +245,6 @@ export default function PartnerLayout() {
                     </SidebarMenuButton>
                   </Link>
                 </SidebarMenuItem>
-
-                {/* Account Management */}
-                <SidebarMenuItem>
-                  <Link to="/partner/account">
-                    <SidebarMenuButton
-                      isActive={location.pathname.startsWith(
-                        "/partner/account"
-                      )}
-                      tooltip={t("partner.dashboard.account")}
-                      className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg group-data-[collapsible=icon]:justify-center"
-                    >
-                      <UserCog className="h-4 w-4" />
-                      <span className="group-data-[collapsible=icon]:hidden">
-                        {t("partner.dashboard.account")}
-                      </span>
-                    </SidebarMenuButton>
-                  </Link>
-                </SidebarMenuItem>
               </SidebarMenu>
             </SidebarContent>
 

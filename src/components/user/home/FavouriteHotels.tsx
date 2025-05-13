@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { useNavigate } from "react-router";
 
@@ -9,7 +9,6 @@ import { AlertCircle } from "lucide-react";
 import { favouriteApi } from "@/api/favourite/favourite.api";
 import { locationApi } from "@/api/location/location.api";
 import { Hotel } from "@/types/hotel";
-import { Button } from "../../ui/button";
 import { HotelCard } from "@/components/common/HotelCard";
 import {
   Carousel,
@@ -20,10 +19,10 @@ import {
 } from "../../ui/carousel";
 
 import NoData from "@/assets/illustration/NoData.svg";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export default function FavouriteHotels() {
   const { t } = useTranslation();
-  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   // Thêm các giá trị mặc định cho ngày check-in và check-out
@@ -93,21 +92,13 @@ export default function FavouriteHotels() {
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-3xl font-bold">{t("hotels.favorites")}</h2>
           </div>
-          <div className="flex flex-col items-center justify-center py-12 text-center">
-            <AlertCircle className="w-12 h-12 text-destructive mb-4" />
-            <h3 className="text-xl font-semibold mb-2">{t("common.error")}</h3>
-            <p className="text-muted-foreground mb-4">
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>{t("common.error")}</AlertTitle>
+            <AlertDescription>
               {t("common.error_loading_data")}
-            </p>
-            <Button
-              variant="outline"
-              onClick={() =>
-                queryClient.invalidateQueries({ queryKey: ["popularHotels"] })
-              }
-            >
-              {t("common.try_again")}
-            </Button>
-          </div>
+            </AlertDescription>
+          </Alert>
         </div>
       </section>
     );

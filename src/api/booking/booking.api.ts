@@ -37,7 +37,7 @@ export const bookingApi = {
     bookingId: string,
     data: UpdateBookingStatusRequest
   ): Promise<UpdateBookingStatusResponse> => {
-    const response = await axiosInstance.put(
+    const response = await axiosInstance.patch(
       `${API_URL}/${bookingId}/status`,
       data
     );

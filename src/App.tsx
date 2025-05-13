@@ -42,6 +42,7 @@ import RoomStatusPage from "./pages/partner/RoomStatusPage";
 import RoomDetailPage from "./pages/partner/RoomDetailPage";
 import BookingOrdersPage from "./pages/partner/BookingOrdersPage";
 import BookingRequestsPage from "./pages/partner/BookingRequestsPage";
+import BookingDetailPartnerPage from "./pages/partner/BookingDetailPage";
 import MessagesPage from "./pages/partner/MessagesPage";
 import AccountPage from "./pages/partner/AccountPage";
 import PartnerProfilePage from "./pages/partner/ProfilePage";
@@ -118,6 +119,10 @@ function App() {
             <Route path="hotels/status" element={<RoomStatusPage />} />
             <Route path="bookings/orders" element={<BookingOrdersPage />} />
             <Route path="bookings/requests" element={<BookingRequestsPage />} />
+            <Route
+              path="booking-detail/:id"
+              element={<BookingDetailPartnerPage />}
+            />
             <Route path="messages" element={<MessagesPage />} />
             <Route path="account" element={<AccountPage />} />
             <Route path="profile" element={<PartnerProfilePage />} />

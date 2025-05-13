@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from "react-router";
+import { useParams, useNavigate, useLocation } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import { bookingApi } from "@/api/booking/booking.api";
 import { format } from "date-fns";
@@ -17,10 +17,16 @@ import {
   ArrowLeft,
 } from "lucide-react";
 import { useRef } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function BookingDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
+  const { t } = useTranslation();
+
+  // Ưu tiên lấy booking từ state nếu có
+  const bookingFromState = location.state?.booking;
 
   const {
     data: bookingResponse,
@@ -32,34 +38,34 @@ export default function BookingDetailPage() {
       if (!id) throw new Error("Booking ID is required");
       return await bookingApi.getBookingDetails(id);
     },
-    enabled: !!id,
+    enabled: !!id && !bookingFromState, // chỉ gọi API nếu không có booking từ state
   });
 
   const sectionIds = [
-    { id: "booking-info", label: "Thông tin đơn đặt phòng" },
-    { id: "customer-info", label: "Thông tin khách hàng" },
-    { id: "payment-info", label: "Thông tin thanh toán" },
-    { id: "special-requests", label: "Yêu cầu đặc biệt" },
-    { id: "voucher", label: "Voucher" },
+    { id: "booking-info", label: t("partner.bookings.bookingInfo") },
+    { id: "customer-info", label: t("partner.bookings.customerInfo") },
+    { id: "payment-info", label: t("partner.bookings.paymentInfo") },
+    { id: "special-requests", label: t("partner.bookings.specialRequests") },
+    { id: "voucher", label: t("partner.bookings.voucher") },
   ];
   const sectionRefs = useRef<{ [key: string]: HTMLElement | null }>({});
 
-  if (error) {
+  if (!bookingFromState && error) {
     return (
       <div className="flex items-center justify-center h-full">
         <div className="text-center">
           <h2 className="text-xl font-semibold text-red-500">
-            Đã có lỗi xảy ra
+            {t("partner.bookings.errorTitle")}
           </h2>
           <p className="text-muted-foreground">
-            Không thể tải thông tin booking. Vui lòng thử lại sau.
+            {t("partner.bookings.errorDesc")}
           </p>
         </div>
       </div>
     );
   }
 
-  if (isLoading) {
+  if (!bookingFromState && isLoading) {
     return (
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto">
@@ -72,20 +78,22 @@ export default function BookingDetailPage() {
     );
   }
 
-  if (!bookingResponse || !bookingResponse.data) {
+  if (!bookingFromState && (!bookingResponse || !bookingResponse.data)) {
     return (
       <div className="flex items-center justify-center h-full">
         <div className="text-center">
-          <h2 className="text-xl font-semibold">Không tìm thấy booking</h2>
+          <h2 className="text-xl font-semibold">
+            {t("partner.bookings.notFoundTitle")}
+          </h2>
           <p className="text-muted-foreground">
-            Không thể tải thông tin booking. Vui lòng thử lại sau.
+            {t("partner.bookings.notFoundDesc")}
           </p>
         </div>
       </div>
     );
   }
 
-  const booking = bookingResponse.data;
+  const booking = bookingFromState || bookingResponse?.data;
 
   return (
     <div className="container mx-auto px-4 pb-12">
@@ -97,10 +105,12 @@ export default function BookingDetailPage() {
             className="mb-3"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Quay lại
+            {t("partner.bookings.back")}
           </Button>
           <h1 className="text-2xl font-bold">
-            Chi tiết đơn đặt phòng #{booking._id.slice(-6).toUpperCase()}
+            {t("partner.bookings.detailTitle", {
+              id: booking._id.slice(-6).toUpperCase(),
+            })}
           </h1>
         </div>
         <div className="flex flex-col md:flex-row gap-8">
@@ -116,13 +126,16 @@ export default function BookingDetailPage() {
             >
               <div className="bg-white rounded-2xl shadow-md p-6 border border-primary/10">
                 <h2 className="text-xl font-bold mb-4 text-primary flex items-center gap-2">
-                  <FileText className="h-6 w-6" /> Thông tin đơn đặt phòng
+                  <FileText className="h-6 w-6" />{" "}
+                  {t("partner.bookings.bookingInfo")}
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="space-y-4">
                     <div className="flex items-center gap-3 text-lg">
                       <Hotel className="h-5 w-5 text-primary" />
-                      <span className="font-semibold">Khách sạn:</span>
+                      <span className="font-semibold">
+                        {t("partner.bookings.hotel")}:
+                      </span>
                       <span>
                         {typeof booking.room.hotelId === "object"
                           ? booking.room.hotelId?.name
@@ -131,19 +144,25 @@ export default function BookingDetailPage() {
                     </div>
                     <div className="flex items-center gap-3 text-lg">
                       <FileText className="h-5 w-5 text-primary" />
-                      <span className="font-semibold">Phòng:</span>
+                      <span className="font-semibold">
+                        {t("partner.bookings.room")}:
+                      </span>
                       <span>{booking.room?.roomType}</span>
                     </div>
                     <div className="flex items-center gap-3 text-lg">
                       <CalendarIcon className="h-5 w-5 text-primary" />
-                      <span className="font-semibold">Nhận phòng:</span>
+                      <span className="font-semibold">
+                        {t("partner.bookings.checkIn")}:
+                      </span>
                       <span>
                         {format(new Date(booking.checkIn), "dd/MM/yyyy")}
                       </span>
                     </div>
                     <div className="flex items-center gap-3 text-lg">
                       <CalendarIcon className="h-5 w-5 text-primary" />
-                      <span className="font-semibold">Trả phòng:</span>
+                      <span className="font-semibold">
+                        {t("partner.bookings.checkOut")}:
+                      </span>
                       <span>
                         {format(new Date(booking.checkOut), "dd/MM/yyyy")}
                       </span>
@@ -152,12 +171,16 @@ export default function BookingDetailPage() {
                   <div className="space-y-4">
                     <div className="flex items-center gap-3 text-lg">
                       <User className="h-5 w-5 text-primary" />
-                      <span className="font-semibold">Khách hàng:</span>
+                      <span className="font-semibold">
+                        {t("partner.bookings.customer")}:
+                      </span>
                       <span>{booking.user?.name || "-"}</span>
                     </div>
                     <div className="flex items-center gap-3 text-lg">
                       <Clock className="h-5 w-5 text-primary" />
-                      <span className="font-semibold">Ngày tạo:</span>
+                      <span className="font-semibold">
+                        {t("partner.bookings.createdAt")}:
+                      </span>
                       <span>
                         {format(
                           new Date(booking.createdAt),
@@ -167,7 +190,9 @@ export default function BookingDetailPage() {
                     </div>
                     <div className="flex items-center gap-3 text-lg">
                       <Clock className="h-5 w-5 text-primary" />
-                      <span className="font-semibold">Ngày cập nhật:</span>
+                      <span className="font-semibold">
+                        {t("partner.bookings.updatedAt")}:
+                      </span>
                       <span>
                         {format(
                           new Date(booking.updatedAt),
@@ -189,23 +214,30 @@ export default function BookingDetailPage() {
             >
               <div className="bg-white rounded-2xl shadow-md p-6 border border-primary/10">
                 <h2 className="text-xl font-bold mb-4 text-primary flex items-center gap-2">
-                  <User className="h-6 w-6" /> Thông tin khách hàng
+                  <User className="h-6 w-6" />{" "}
+                  {t("partner.bookings.customerInfo")}
                 </h2>
                 <div className="space-y-4">
                   <div className="flex items-center gap-3 text-lg">
-                    <span className="font-semibold">Tên:</span>
+                    <span className="font-semibold">
+                      {t("partner.bookings.name")}:
+                    </span>
                     <span className="text-base">
                       {booking.contactInfo?.name}
                     </span>
                   </div>
                   <div className="flex items-center gap-3 text-lg">
-                    <span className="font-semibold">Email:</span>
+                    <span className="font-semibold">
+                      {t("partner.bookings.email")}:
+                    </span>
                     <span className="text-base">
                       {booking.contactInfo?.email}
                     </span>
                   </div>
                   <div className="flex items-center gap-3 text-lg">
-                    <span className="font-semibold">Điện thoại:</span>
+                    <span className="font-semibold">
+                      {t("partner.bookings.phone")}:
+                    </span>
                     <span className="text-base">
                       {booking.contactInfo?.phone}
                     </span>
@@ -223,21 +255,28 @@ export default function BookingDetailPage() {
             >
               <div className="bg-white rounded-2xl shadow-md p-6 border border-primary/10">
                 <h2 className="text-xl font-bold mb-4 text-primary flex items-center gap-2">
-                  <CreditCard className="h-6 w-6" /> Thông tin thanh toán
+                  <CreditCard className="h-6 w-6" />{" "}
+                  {t("partner.bookings.paymentInfo")}
                 </h2>
                 <div className="space-y-4">
                   <div className="flex items-center gap-3 text-lg">
-                    <span className="font-semibold">Thành tiền:</span>
+                    <span className="font-semibold">
+                      {t("partner.bookings.finalPrice")}:
+                    </span>
                     <span className="font-bold text-xl text-green-700">
                       {booking.finalPrice.toLocaleString()}₫
                     </span>
                   </div>
                   <div className="flex items-center gap-3 text-lg">
-                    <span className="font-semibold">Giá gốc:</span>
+                    <span className="font-semibold">
+                      {t("partner.bookings.originalPrice")}:
+                    </span>
                     <span>{booking.originalPrice.toLocaleString()}₫</span>
                   </div>
                   <div className="flex items-center gap-3 text-lg">
-                    <span className="font-semibold">Giảm giá:</span>
+                    <span className="font-semibold">
+                      {t("partner.bookings.discount")}:
+                    </span>
                     <span>
                       {booking.discountAmount > 0
                         ? `- ${booking.discountAmount.toLocaleString()}₫`
@@ -246,7 +285,7 @@ export default function BookingDetailPage() {
                   </div>
                   <div className="flex items-center gap-3 text-lg">
                     <span className="font-semibold">
-                      Trạng thái thanh toán:
+                      {t("partner.bookings.paymentStatus")}:
                     </span>
                     <Badge
                       className="text-base px-4 py-2 rounded-lg"
@@ -262,26 +301,20 @@ export default function BookingDetailPage() {
                           : "secondary"
                       }
                     >
-                      {booking.paymentStatus === "pending"
-                        ? "Chờ thanh toán"
-                        : booking.paymentStatus === "paid"
-                        ? "Đã thanh toán"
-                        : booking.paymentStatus === "failed"
-                        ? "Thanh toán thất bại"
-                        : booking.paymentStatus === "refunded"
-                        ? "Đã hoàn tiền"
-                        : booking.paymentStatus}
+                      {t(
+                        `partner.bookings.paymentStatus_${booking.paymentStatus}`
+                      ) || booking.paymentStatus}
                     </Badge>
                   </div>
                   <div className="flex items-center gap-3 text-lg">
                     <span className="font-semibold">
-                      Phương thức thanh toán:
+                      {t("partner.bookings.paymentMethod")}:
                     </span>
                     <span>
                       {booking.paymentMethod === "zalopay"
-                        ? "ZaloPay"
+                        ? t("partner.bookings.paymentMethod_zalopay")
                         : booking.paymentMethod === "vnpay"
-                        ? "VNPay"
+                        ? t("partner.bookings.paymentMethod_vnpay")
                         : booking.paymentMethod}
                     </span>
                   </div>
@@ -298,18 +331,23 @@ export default function BookingDetailPage() {
             >
               <div className="bg-white rounded-2xl shadow-md p-6 border border-primary/10">
                 <h2 className="text-xl font-bold mb-4 text-primary flex items-center gap-2">
-                  <Info className="h-6 w-6" /> Yêu cầu đặc biệt
+                  <Info className="h-6 w-6" />{" "}
+                  {t("partner.bookings.specialRequests")}
                 </h2>
                 <div className="font-semibold mb-2 text-lg">
-                  Nội dung yêu cầu:
+                  {t("partner.bookings.specialRequestsContent")}:
                 </div>
                 <div className="text-base text-muted-foreground">
                   {booking.specialRequests?.additionalRequests || "-"}
                   <div className="mt-1">
-                    Nhận sớm:{" "}
-                    {booking.specialRequests?.earlyCheckIn ? "Có" : "Không"} |
-                    Trả muộn:{" "}
-                    {booking.specialRequests?.lateCheckOut ? "Có" : "Không"}
+                    {t("partner.bookings.earlyCheckIn")}:{" "}
+                    {booking.specialRequests?.earlyCheckIn
+                      ? t("partner.bookings.yes")
+                      : t("partner.bookings.no")}{" "}
+                    |{t("partner.bookings.lateCheckOut")}:{" "}
+                    {booking.specialRequests?.lateCheckOut
+                      ? t("partner.bookings.yes")
+                      : t("partner.bookings.no")}
                   </div>
                 </div>
               </div>
@@ -325,7 +363,7 @@ export default function BookingDetailPage() {
               >
                 <div className="bg-white rounded-2xl shadow-md p-6 border border-primary/10">
                   <h2 className="text-xl font-bold mb-4 text-primary flex items-center gap-2">
-                    <Gift className="h-6 w-6" /> Voucher
+                    <Gift className="h-6 w-6" /> {t("partner.bookings.voucher")}
                   </h2>
                   <div className="flex items-center gap-3">
                     <Gift className="h-5 w-5 text-primary" />

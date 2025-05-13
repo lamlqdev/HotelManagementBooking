@@ -107,6 +107,9 @@ export default function HotelDeals() {
     return (
       <section className="py-12 bg-background">
         <div className="container">
+          <div className="mb-8">
+            <h2 className="text-3xl font-bold">{t("hotels.best_deals")}</h2>
+          </div>
           <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>{t("common.error")}</AlertTitle>
