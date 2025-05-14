@@ -33,6 +33,7 @@ import SettingPage from "./pages/shared/SettingPage";
 import UserProfilePage from "./pages/user/ProfilePage";
 import FavouriteHotelPage from "./pages/shared/FavouriteHotelPage";
 import MyBookingPage from "./pages/user/MyBookingPage";
+import NotificationsPage from "./pages/shared/NotificationsPage";
 
 // Partner Pages
 import RevenuePage from "./pages/partner/RevenuePage";
@@ -46,7 +47,6 @@ import BookingDetailPartnerPage from "./pages/partner/BookingDetailPage";
 import MessagesPage from "./pages/partner/MessagesPage";
 import AccountPage from "./pages/partner/AccountPage";
 import PartnerProfilePage from "./pages/partner/ProfilePage";
-import NotificationsPage from "./pages/partner/NotificationsPage";
 
 // Admin Pages
 import PartnerApproval from "./pages/admin/PartnerApproval";
@@ -147,6 +147,7 @@ function App() {
             <Route path="settings" element={<SettingPage />} />
             <Route path="bookings" element={<BookingsManagement />} />
             <Route path="bookings/:id" element={<BookingDetailPage />} />
+            <Route path="notifications" element={<NotificationsPage />} />
           </Route>
         </Route>
       </Routes>

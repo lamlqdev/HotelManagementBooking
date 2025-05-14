@@ -54,8 +54,6 @@ const HotelInfoPage = () => {
   } = useQuery({
     queryKey: ["hotel"],
     queryFn: () => hotelApi.getMyHotels({ ownerId: user?.id }),
-    gcTime: 10 * 60 * 1000, // Giữ cache trong 10 phút
-    staleTime: 5 * 60 * 1000, // Cache trong 5 phút
   });
 
   const { data: amenitiesData, isLoading: isLoadingAmenities } = useQuery({
@@ -67,9 +65,9 @@ const HotelInfoPage = () => {
 
   // Thêm query để lấy thông tin location
   const { data: locationData, isLoading: isLoadingLocation } = useQuery({
-    queryKey: ["location", hotel?.locationId],
-    queryFn: () => locationApi.getLocation(hotel?.locationId || ""),
-    enabled: !!hotel?.locationId,
+    queryKey: ["location", hotel?.locationId._id],
+    queryFn: () => locationApi.getLocation(hotel?.locationId._id || ""),
+    enabled: !!hotel?.locationId._id,
   });
 
   // Lưu thông tin hotel vào Redux khi lấy được dữ liệu
