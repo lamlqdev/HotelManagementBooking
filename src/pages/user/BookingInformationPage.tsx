@@ -1,8 +1,8 @@
 import { useTranslation } from "react-i18next";
 import { useParams, useSearchParams } from "react-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -12,11 +12,15 @@ import { BookingSummary } from "@/components/user/booking/BookingSummary";
 import { bookingApi } from "@/api/booking/booking.api";
 import type { ContactFormData, SpecialRequestsData } from "@/api/booking/types";
 import { contactFormSchema, specialRequestsSchema } from "@/api/booking/types";
+import { voucherApi } from "@/api/voucher/voucher.api";
 
 const BookingInformationPage = () => {
   const { t } = useTranslation();
   const { roomId } = useParams();
   const [searchParams] = useSearchParams();
+  const [selectedVoucherId, setSelectedVoucherId] = useState<
+    string | undefined
+  >(undefined);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -39,6 +43,13 @@ const BookingInformationPage = () => {
 
   let loadingToastId: string | number | undefined;
 
+  // Lấy danh sách voucher có thể sử dụng
+  const { data: availableVouchers, isLoading: isVoucherLoading } = useQuery({
+    queryKey: ["available-vouchers", roomId],
+    queryFn: () => voucherApi.getAvailableVouchers({ roomId: roomId! }),
+    enabled: !!roomId,
+  });
+
   const createBookingMutation = useMutation({
     mutationFn: async () => {
       const contactData = contactForm.getValues();
@@ -52,7 +63,7 @@ const BookingInformationPage = () => {
         roomId: roomId!,
         checkIn: searchParams.get("checkIn") || "",
         checkOut: searchParams.get("checkOut") || "",
-        voucherId: searchParams.get("voucherId") || undefined,
+        voucherId: selectedVoucherId || undefined,
         paymentMethod: contactData.paymentMethod,
         bookingFor: contactData.bookingFor,
         contactInfo: {
@@ -123,6 +134,50 @@ const BookingInformationPage = () => {
         <div className="lg:col-span-2 space-y-6">
           <BookingContactForm form={contactForm} />
           <BookingSpecialRequests form={specialRequestsForm} />
+          {/* Chọn voucher */}
+          <div className="bg-card rounded-lg shadow-md p-6">
+            <h2 className="text-xl font-semibold mb-2 text-card-foreground">
+              Chọn voucher
+            </h2>
+            <p className="text-sm text-muted-foreground mb-4">
+              Chọn một voucher bên dưới để áp dụng cho đơn đặt phòng của bạn
+              (nếu có).
+            </p>
+            {isVoucherLoading ? (
+              <div>Đang tải voucher...</div>
+            ) : availableVouchers &&
+              availableVouchers.data &&
+              availableVouchers.data.length > 0 ? (
+              <select
+                className="w-full border rounded px-3 py-2 dark:border-2 dark:border-primary/30 dark:hover:border-primary/50 dark:focus:border-primary dark:focus:ring-2 dark:focus:ring-primary/20 dark:text-foreground dark:placeholder:text-muted-foreground"
+                value={selectedVoucherId || ""}
+                onChange={(e) =>
+                  setSelectedVoucherId(e.target.value || undefined)
+                }
+              >
+                <option value="">Không sử dụng voucher</option>
+                {availableVouchers.data.map((voucher) => (
+                  <option key={voucher._id} value={voucher._id}>
+                    {voucher.code} - Giảm {voucher.discount}
+                    {voucher.discountType === "percentage" ? "%" : "₫"}
+                    {voucher.maxDiscount
+                      ? ` (Tối đa ${voucher.maxDiscount.toLocaleString()}₫)`
+                      : ""}
+                    {voucher.minOrderValue
+                      ? ` | Đơn tối thiểu ${voucher.minOrderValue.toLocaleString()}₫`
+                      : ""}
+                    {voucher.expiryDate
+                      ? ` | HSD: ${new Date(
+                          voucher.expiryDate
+                        ).toLocaleDateString("vi-VN")}`
+                      : ""}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <div>Không có voucher khả dụng</div>
+            )}
+          </div>
         </div>
 
         {/* Thông tin đặt phòng */}
@@ -135,6 +190,13 @@ const BookingInformationPage = () => {
               checkOut: searchParams.get("checkOut") || "",
               capacity: parseInt(searchParams.get("capacity") || "1"),
             }}
+            selectedVoucher={
+              selectedVoucherId && availableVouchers && availableVouchers.data
+                ? availableVouchers.data.find(
+                    (v) => v._id === selectedVoucherId
+                  )
+                : undefined
+            }
             onSubmit={handleBookingSubmit}
           />
         </div>

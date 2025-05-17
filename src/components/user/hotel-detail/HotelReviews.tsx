@@ -31,6 +31,7 @@ import {
   AlertDialogAction,
   AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
+import { useMutation } from "@tanstack/react-query";
 
 interface ReviewStats {
   overall: number;
@@ -48,6 +49,16 @@ interface HotelReviewsProps {
   onReviewCreated?: () => void;
 }
 
+// Định nghĩa type cho error trả về từ backend
+interface BackendError {
+  response?: {
+    data?: {
+      message?: string;
+    };
+  };
+  message?: string;
+}
+
 const HotelReviews = ({
   reviewStats,
   reviews,
@@ -61,10 +72,31 @@ const HotelReviews = ({
   const [title, setTitle] = useState("");
   const [comment, setComment] = useState("");
   const [isAnonymous, setIsAnonymous] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [editReviewId, setEditReviewId] = useState<string | null>(null);
   const [deleteReviewId, setDeleteReviewId] = useState<string | null>(null);
+
+  const createReviewMutation = useMutation({
+    mutationFn: (data: {
+      roomId: string;
+      rating: number;
+      title: string;
+      comment: string;
+      isAnonymous: boolean;
+    }) => reviewApi.createReview(data),
+  });
+
+  const updateReviewMutation = useMutation({
+    mutationFn: (params: {
+      id: string;
+      data: {
+        rating: number;
+        title: string;
+        comment: string;
+        isAnonymous: boolean;
+      };
+    }) => reviewApi.updateReview(params.id, params.data),
+  });
 
   const handleEdit = (review: Review) => {
     setEditReviewId(review._id);
@@ -77,7 +109,6 @@ const HotelReviews = ({
 
   const handleDelete = async () => {
     if (!deleteReviewId) return;
-    setLoading(true);
     try {
       await reviewApi.deleteReview(deleteReviewId);
       toast.success("Đã xoá đánh giá!");
@@ -86,8 +117,6 @@ const HotelReviews = ({
     } catch (err) {
       const error = err as { message?: string };
       toast.error(error?.message || "Xoá đánh giá thất bại");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -97,39 +126,60 @@ const HotelReviews = ({
       toast.error("Vui lòng chọn phòng và điền đầy đủ thông tin đánh giá");
       return;
     }
-    setLoading(true);
-    try {
-      if (editReviewId) {
-        await reviewApi.updateReview(editReviewId, {
-          rating,
-          title,
-          comment,
-          isAnonymous,
-        });
-        toast.success("Đã cập nhật đánh giá!");
-      } else {
-        await reviewApi.createReview({
-          roomId,
-          rating,
-          title,
-          comment,
-          isAnonymous,
-        });
-        toast.success("Đánh giá của bạn đã được gửi!");
-      }
-      setRoomId(rooms[0]?._id || "");
-      setRating(0);
-      setTitle("");
-      setComment("");
-      setIsAnonymous(false);
-      setShowForm(false);
-      setEditReviewId(null);
-      if (onReviewCreated) onReviewCreated();
-    } catch (err) {
-      const error = err as { message?: string };
-      toast.error(error?.message || "Gửi đánh giá thất bại");
-    } finally {
-      setLoading(false);
+
+    if (editReviewId) {
+      updateReviewMutation.mutate(
+        {
+          id: editReviewId,
+          data: { rating, title, comment, isAnonymous },
+        },
+        {
+          onSuccess: () => {
+            toast.success("Đã cập nhật đánh giá!");
+            setRoomId(rooms[0]?._id || "");
+            setRating(0);
+            setTitle("");
+            setComment("");
+            setIsAnonymous(false);
+            setShowForm(false);
+            setEditReviewId(null);
+            if (onReviewCreated) onReviewCreated();
+          },
+          onError: (err: unknown) => {
+            const error = err as BackendError;
+            const message =
+              error?.response?.data?.message ||
+              error?.message ||
+              "Gửi đánh giá thất bại";
+            toast.error(message);
+          },
+        }
+      );
+    } else {
+      createReviewMutation.mutate(
+        { roomId, rating, title, comment, isAnonymous },
+        {
+          onSuccess: () => {
+            toast.success("Đánh giá của bạn đã được gửi!");
+            setRoomId(rooms[0]?._id || "");
+            setRating(0);
+            setTitle("");
+            setComment("");
+            setIsAnonymous(false);
+            setShowForm(false);
+            setEditReviewId(null);
+            if (onReviewCreated) onReviewCreated();
+          },
+          onError: (err: unknown) => {
+            const error = err as BackendError;
+            const message =
+              error?.response?.data?.message ||
+              error?.message ||
+              "Gửi đánh giá thất bại";
+            toast.error(message);
+          },
+        }
+      );
     }
   };
 
@@ -142,6 +192,9 @@ const HotelReviews = ({
     setIsAnonymous(false);
     setEditReviewId(null);
   };
+
+  const loading =
+    createReviewMutation.isPending || updateReviewMutation.isPending;
 
   return (
     <section id="đánh giá">

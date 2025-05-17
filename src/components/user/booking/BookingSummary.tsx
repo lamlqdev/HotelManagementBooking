@@ -2,13 +2,11 @@ import { format } from "date-fns";
 import { vi } from "date-fns/locale";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { MdLocalOffer } from "react-icons/md";
 
 import { hotelApi } from "@/api/hotel/hotel.api";
 import { roomApi } from "@/api/room/room.api";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { BookingDates } from "@/components/user/booking/BookingDates";
 import { HotelInfo } from "@/components/user/booking/HotelInfo";
@@ -21,6 +19,7 @@ export const BookingSummary = ({
   roomId,
   searchParams,
   onSubmit,
+  selectedVoucher,
 }: BookingSummaryProps) => {
   const { t } = useTranslation();
 
@@ -83,6 +82,38 @@ export const BookingSummary = ({
     return format(date, "EEEE, d 'thg' M yyyy", { locale: vi });
   };
 
+  // Tính giá giảm và giá cuối cùng nếu có voucher
+  const originalPrice = room.price * nights;
+  let discountAmount = 0;
+  if (selectedVoucher) {
+    // Kiểm tra minOrderValue
+    if (
+      !selectedVoucher.minOrderValue ||
+      originalPrice >= selectedVoucher.minOrderValue
+    ) {
+      if (selectedVoucher.discountType === "percentage") {
+        discountAmount = Math.round(
+          (originalPrice * selectedVoucher.discount) / 100
+        );
+        if (
+          selectedVoucher.maxDiscount &&
+          discountAmount > selectedVoucher.maxDiscount
+        ) {
+          discountAmount = selectedVoucher.maxDiscount;
+        }
+      } else {
+        discountAmount = selectedVoucher.discount;
+        if (
+          selectedVoucher.maxDiscount &&
+          discountAmount > selectedVoucher.maxDiscount
+        ) {
+          discountAmount = selectedVoucher.maxDiscount;
+        }
+      }
+    }
+  }
+  const finalPrice = originalPrice - discountAmount;
+
   return (
     <div className="bg-card rounded-lg shadow-md p-6 sticky top-32">
       <h2 className="text-xl font-semibold mb-4 text-card-foreground">
@@ -136,19 +167,36 @@ export const BookingSummary = ({
             rooms={1}
             nightsStay={nights}
             pricePerNight={room.price}
-            totalPrice={room.price * nights}
+            totalPrice={originalPrice}
           />
-        </div>
-
-        <div className="border-t border-border dark:border-primary/30 pt-4">
-          <div className="relative">
-            <MdLocalOffer className="absolute top-3 left-3 text-muted-foreground" />
-            <Input
-              type="text"
-              placeholder={t("booking.summary.coupon.placeholder")}
-              className="pl-10 dark:border-2 dark:border-primary/30 dark:hover:border-primary/50 dark:focus:border-primary dark:focus:ring-2 dark:focus:ring-primary/20 dark:text-foreground dark:placeholder:text-muted-foreground"
-            />
-          </div>
+          {/* Hiển thị giá giảm và giá cuối cùng nếu có voucher */}
+          {discountAmount > 0 && (
+            <div className="mt-4">
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Giá gốc</span>
+                <span className="line-through text-muted-foreground">
+                  {originalPrice.toLocaleString()}₫
+                </span>
+              </div>
+              <div className="flex justify-between text-sm mt-1">
+                <span className="text-green-600 font-medium">Giảm giá</span>
+                <span className="text-green-600 font-medium">
+                  - {discountAmount.toLocaleString()}₫
+                </span>
+              </div>
+              <div className="flex justify-between text-base mt-2 font-bold">
+                <span className="text-primary">Giá cuối cùng</span>
+                <span className="text-primary">
+                  {finalPrice.toLocaleString()}₫
+                </span>
+              </div>
+            </div>
+          )}
+          {discountAmount === 0 && selectedVoucher && (
+            <div className="mt-4 text-sm text-yellow-600">
+              Không đủ điều kiện áp dụng voucher này.
+            </div>
+          )}
         </div>
       </div>
 

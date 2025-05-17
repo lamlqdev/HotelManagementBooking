@@ -5,6 +5,7 @@ import {
   BookingGuestInfo,
   BookingSpecialRequests,
 } from "@/types/booking";
+import type { AvailableVoucher } from "@/api/voucher/types";
 
 export interface CreateBookingRequest {
   roomId: string;
@@ -171,6 +172,7 @@ export interface BookingSummaryProps {
     capacity: number;
   };
   onSubmit: () => Promise<void>;
+  selectedVoucher?: AvailableVoucher;
 }
 
 export interface BookingUserInfo {

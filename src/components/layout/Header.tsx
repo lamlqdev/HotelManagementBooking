@@ -16,6 +16,15 @@ import { Button } from "../ui/button";
 import { useAppDispatch } from "@/store/hooks";
 import { logout } from "@/features/auth/authSlice";
 import { useNotifications } from "@/hooks/useNotifications";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import { useState } from "react";
+import type { Notification } from "@/types/notification";
 
 const Header = () => {
   const { t } = useTranslation();
@@ -24,6 +33,9 @@ const Header = () => {
 
   const { notifications, unreadCount, markAllAsRead, markAsRead } =
     useNotifications(user?.id);
+
+  const [selectedNotification, setSelectedNotification] =
+    useState<Notification | null>(null);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -126,7 +138,10 @@ const Header = () => {
                                 ? "bg-gray-50 border-primary"
                                 : "bg-white border-transparent"
                             } focus:bg-transparent focus:text-inherit hover:bg-gray-100`}
-                          onClick={() => markAsRead(n.id)}
+                          onClick={() => {
+                            markAsRead(n.id);
+                            setSelectedNotification(n);
+                          }}
                         >
                           <span className="font-medium line-clamp-1 text-gray-900">
                             {n.title}
@@ -142,6 +157,36 @@ const Header = () => {
                     )}
                   </DropdownMenuContent>
                 </DropdownMenu>
+
+                {/* Dialog hiển thị chi tiết thông báo */}
+                <Dialog
+                  open={!!selectedNotification}
+                  onOpenChange={(open) => {
+                    if (!open) setSelectedNotification(null);
+                  }}
+                >
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>{selectedNotification?.title}</DialogTitle>
+                    </DialogHeader>
+                    <DialogDescription>
+                      <div className="mb-2 text-sm text-muted-foreground">
+                        {selectedNotification?.status === "unread"
+                          ? "Chưa đọc"
+                          : "Đã đọc"}
+                      </div>
+                      <div className="mb-2 text-base text-foreground">
+                        {selectedNotification?.message}
+                      </div>
+                      <div className="text-xs text-gray-400">
+                        {selectedNotification &&
+                          new Date(
+                            selectedNotification.createdAt
+                          ).toLocaleString()}
+                      </div>
+                    </DialogDescription>
+                  </DialogContent>
+                </Dialog>
 
                 {/* User Avatar Dropdown */}
                 <DropdownMenu>

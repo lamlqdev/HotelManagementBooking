@@ -52,8 +52,9 @@ const HotelInfoPage = () => {
     isLoading: isLoadingHotels,
     error: hotelError,
   } = useQuery({
-    queryKey: ["hotel"],
+    queryKey: ["hotel", user?.id],
     queryFn: () => hotelApi.getMyHotels({ ownerId: user?.id }),
+    enabled: !!user?.id,
   });
 
   const { data: amenitiesData, isLoading: isLoadingAmenities } = useQuery({

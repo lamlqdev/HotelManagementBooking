@@ -71,10 +71,15 @@ export default function BookingOrdersPage() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const [updatingBookingId, setUpdatingBookingId] = useState<string | null>(
+    null
+  );
 
   const { data, isLoading } = useQuery({
     queryKey: ["partner-bookings", search, status, currentPage],
     queryFn: async () => {
+      if (!currentHotel?._id)
+        return { data: [], pagination: { totalPages: 1 } };
       const res = await bookingApi.getMyHotelBookings({
         page: currentPage,
         limit: 10,
@@ -147,7 +152,7 @@ export default function BookingOrdersPage() {
     }
   };
 
-  const { mutate: updateStatus, isPending: isUpdating } = useMutation({
+  const { mutate: updateStatus } = useMutation({
     mutationFn: async ({
       bookingId,
       status,
@@ -155,14 +160,17 @@ export default function BookingOrdersPage() {
       bookingId: string;
       status: "pending" | "confirmed" | "completed" | "cancelled";
     }) => {
+      setUpdatingBookingId(bookingId);
       await bookingApi.updateBookingStatus(bookingId, { status });
     },
     onSuccess: () => {
       toast.success(t("partner.bookings.updateStatusSuccess"));
       queryClient.invalidateQueries({ queryKey: ["partner-bookings"] });
+      setUpdatingBookingId(null);
     },
     onError: () => {
       toast.error(t("partner.bookings.updateStatusError"));
+      setUpdatingBookingId(null);
     },
   });
 
@@ -294,10 +302,10 @@ export default function BookingOrdersPage() {
                             <Button
                               size="sm"
                               variant="secondary"
-                              disabled={isUpdating}
+                              disabled={updatingBookingId === b._id}
                             >
                               <Repeat className="w-4 h-4 mr-1" />
-                              {isUpdating
+                              {updatingBookingId
                                 ? t("partner.bookings.updating")
                                 : t("partner.bookings.changeStatus")}
                             </Button>

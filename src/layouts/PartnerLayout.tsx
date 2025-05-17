@@ -12,7 +12,6 @@ import {
   LogOut,
   DollarSign,
   ClipboardList,
-  Ban,
   UserCog,
   ChevronDown,
   Bell,
@@ -208,19 +207,6 @@ export default function PartnerLayout() {
                           >
                             <FileEdit className="h-4 w-4" />
                             <span>{t("partner.bookings.orders")}</span>
-                          </SidebarMenuSubButton>
-                        </Link>
-                      </SidebarMenuSubItem>
-                      <SidebarMenuSubItem>
-                        <Link to="/partner/bookings/requests">
-                          <SidebarMenuSubButton
-                            isActive={
-                              location.pathname === "/partner/bookings/requests"
-                            }
-                            className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg"
-                          >
-                            <Ban className="h-4 w-4" />
-                            <span>{t("partner.bookings.requests")}</span>
                           </SidebarMenuSubButton>
                         </Link>
                       </SidebarMenuSubItem>
