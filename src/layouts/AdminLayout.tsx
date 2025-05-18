@@ -8,6 +8,7 @@ import {
   Building2,
   Users,
   Ticket,
+  Home,
 } from "lucide-react";
 
 import {
@@ -93,6 +94,23 @@ export default function AdminLayout() {
 
             <SidebarContent className="px-4 py-1 group-data-[collapsible=icon]:px-2">
               <SidebarMenu className="space-y-1">
+                {/* Dashboard */}
+                <SidebarMenuItem>
+                  <Link to="/admin/dashboard">
+                    <SidebarMenuButton
+                      isActive={location.pathname.startsWith(
+                        "/admin/dashboard"
+                      )}
+                      tooltip={t("admin.dashboard.title", "Dashboard")}
+                      className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg group-data-[collapsible=icon]:justify-center"
+                    >
+                      <Home className="h-4 w-4" />
+                      <span className="group-data-[collapsible=icon]:hidden">
+                        {t("admin.dashboard.title", "Dashboard")}
+                      </span>
+                    </SidebarMenuButton>
+                  </Link>
+                </SidebarMenuItem>
                 {/* Partner Account Management */}
                 <SidebarMenuItem>
                   <Link to="/admin/partners">

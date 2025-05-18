@@ -57,6 +57,7 @@ import HotelDetailAdminPage from "./pages/admin/HotelDetailPage";
 import VoucherManagementPage from "./pages/admin/VoucherManagementPage";
 import BookingsManagement from "./pages/admin/BookingsManagement";
 import BookingDetailPage from "./pages/admin/BookingDetailPage";
+import DashboardPage from "./pages/admin/DashboardPage";
 
 function App() {
   return (
@@ -132,6 +133,7 @@ function App() {
         {/* Protected Routes Admin - Yêu cầu đăng nhập với role admin */}
         <Route element={<PrivateRoute role="admin" />}>
           <Route path="/admin" element={<AdminLayout />}>
+            <Route path="dashboard" element={<DashboardPage />} />
             <Route path="partners" element={<PartnerApproval />} />
             <Route
               path="partners/:id"
