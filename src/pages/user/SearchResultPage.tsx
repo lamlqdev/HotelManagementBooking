@@ -8,8 +8,7 @@ import HeroBanner from "@/components/common/HeroBanner";
 import SearchBox from "@/components/common/SearchBox";
 import HotelList from "@/components/user/search-hotel/HotelList";
 import FilterSection from "@/components/user/search-hotel/FilterSection";
-import { roomApi } from "@/api/room/room.api";
-import { Hotel } from "@/types/hotel";
+import { hotelApi } from "@/api/hotel/hotel.api";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
@@ -43,12 +42,7 @@ const SearchResultPage = () => {
   const [sortBy, setSortBy] = useState("");
 
   // Sử dụng React Query để lấy danh sách khách sạn/phòng
-  const { data, isLoading, isError, error } = useQuery<{
-    success: boolean;
-    data: Hotel[];
-    pagination: { totalPages: number };
-    message?: string;
-  }>({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: [
       "hotels",
       locationName,
@@ -60,9 +54,9 @@ const SearchResultPage = () => {
     ],
     queryFn: async () => {
       try {
-        // Nếu có locationName -> gọi API searchRooms với thông tin mặc định
+        // Nếu có locationName -> gọi API searchHotelsWithAvailableRooms với thông tin mặc định
         if (locationName) {
-          const response = await roomApi.searchRooms({
+          const response = await hotelApi.searchHotelsWithAvailableRooms({
             locationName,
             checkIn: finalCheckIn,
             checkOut: finalCheckOut,
@@ -181,7 +175,9 @@ const SearchResultPage = () => {
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>{t("search.no_results")}</AlertTitle>
             <AlertDescription>
-              {data?.message || t("search.no_results_description")}
+              {"message" in (data || {})
+                ? (data as { message: string }).message
+                : t("search.no_results_description")}
             </AlertDescription>
           </Alert>
         </div>
@@ -294,7 +290,48 @@ const SearchResultPage = () => {
     );
   }
 
-  const rooms = data?.data || [];
+  const hotels = (data?.data || []).map(
+    (item: {
+      _id: string;
+      name: string;
+      address: string;
+      rating: number;
+      featuredImage: { url: string; publicId: string; filename: string };
+      images: Array<{ url: string; publicId: string; filename: string }>;
+      policies: {
+        checkInTime: string;
+        checkOutTime: string;
+        cancellationPolicy: "24h-full-refund" | "24h-half-refund" | "no-refund";
+        childrenPolicy: "yes" | "no";
+        petPolicy: "yes" | "no";
+        smokingPolicy: "yes" | "no";
+      };
+      lowestPrice: number;
+      lowestDiscountedPrice: number;
+      highestDiscountPercent: number;
+    }) => ({
+      _id: item._id,
+      name: item.name,
+      address: item.address,
+      locationId: { _id: "", name: locationName || "" }, // Không có locationId từ API search, gán tạm
+      locationDescription: "",
+      rating: item.rating,
+      description: "",
+      ownerId: "",
+      website: "",
+      featuredImage: item.featuredImage,
+      images: item.images,
+      amenities: [],
+      policies: item.policies,
+      favoriteCount: 0,
+      lowestPrice: item.lowestPrice,
+      lowestDiscountedPrice: item.lowestDiscountedPrice,
+      highestDiscountPercent: item.highestDiscountPercent,
+      status: "active" as const,
+      createdAt: "",
+      updatedAt: "",
+    })
+  );
   const totalPages = data?.pagination?.totalPages || 1;
 
   return (
@@ -335,7 +372,7 @@ const SearchResultPage = () => {
           {/* Hotel List Section */}
           <div className="col-span-9">
             <HotelList
-              hotels={rooms}
+              hotels={hotels}
               currentPage={currentPage}
               totalPages={totalPages}
               onPageChange={setCurrentPage}

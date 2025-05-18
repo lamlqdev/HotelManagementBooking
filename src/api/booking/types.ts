@@ -280,3 +280,10 @@ export interface GetMyHotelBookingsResponse {
   stats: BookingStats;
   message?: string;
 }
+
+export interface RetryPaymentResponse {
+  success: boolean;
+  paymentUrl: string;
+  transactionId: string;
+  retryCount: number;
+}

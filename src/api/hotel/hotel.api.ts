@@ -1,5 +1,11 @@
 import axiosInstance from "@/lib/axios";
-import { HotelResponse, HotelsResponse, HotelQueryParams } from "./types";
+import {
+  HotelResponse,
+  HotelsResponse,
+  HotelQueryParams,
+  SearchHotelsWithAvailableRoomsResponse,
+  GetAvailableRoomsByHotelResponse,
+} from "./types";
 
 const baseUrl = "/hotels";
 
@@ -210,6 +216,48 @@ export const hotelApi = {
       {
         params,
       }
+    );
+    return response.data;
+  },
+
+  // Tìm kiếm khách sạn có phòng trống theo địa điểm, ngày và số người
+  searchHotelsWithAvailableRooms: async (params: {
+    locationName: string;
+    checkIn: string;
+    checkOut: string;
+    capacity: number;
+    hotelName?: string;
+    minPrice?: number;
+    maxPrice?: number;
+    roomType?: string;
+    amenities?: string[];
+    sort?: string;
+    page?: number;
+    limit?: number;
+  }): Promise<SearchHotelsWithAvailableRoomsResponse> => {
+    const response = await axiosInstance.get(`/hotels/search`, { params });
+    return response.data;
+  },
+
+  // Lấy danh sách phòng còn trống trong một khách sạn
+  getAvailableRoomsByHotel: async (
+    hotelId: string,
+    params: {
+      checkIn: string;
+      checkOut: string;
+      capacity: number;
+      minPrice?: number;
+      maxPrice?: number;
+      roomType?: string;
+      amenities?: string[];
+      sort?: string;
+      page?: number;
+      limit?: number;
+    }
+  ): Promise<GetAvailableRoomsByHotelResponse> => {
+    const response = await axiosInstance.get(
+      `/hotels/${hotelId}/rooms/available`,
+      { params }
     );
     return response.data;
   },

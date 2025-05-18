@@ -1,53 +1,47 @@
 import axiosInstance from "@/lib/axios";
 import {
-  GetRevenueStatisticsResponse,
-  GetBookingStatisticsResponse,
-  GetReviewStatisticsResponse,
-  GetUserStatisticsResponse,
-  GetRoomStatisticsResponse,
-  StatisticsQueryParams,
+  RevenueSummaryResponse,
+  RevenueChartRequest,
+  RevenueChartResponse,
+  TopRoomsRequest,
+  TopRoomsResponse,
+  BookingStatisticsResponse,
 } from "./types";
 
 const API_URL = "/statistics";
 
 export const statisticsApi = {
-  // Thống kê doanh thu
-  getRevenueStatistics: async (
-    params?: StatisticsQueryParams
-  ): Promise<GetRevenueStatisticsResponse> => {
-    const response = await axiosInstance.get(`${API_URL}/revenue`, { params });
+  // Tổng quan doanh thu
+  getRevenueSummary: async (
+    period: "day" | "week" | "month" | "year" = "month"
+  ): Promise<RevenueSummaryResponse> => {
+    const response = await axiosInstance.get(`${API_URL}/summary`, {
+      params: { period },
+    });
     return response.data;
   },
 
-  // Thống kê đặt phòng
-  getBookingStatistics: async (
-    params?: StatisticsQueryParams
-  ): Promise<GetBookingStatisticsResponse> => {
-    const response = await axiosInstance.get(`${API_URL}/bookings`, { params });
+  // Biểu đồ doanh thu
+  getRevenueChart: async (
+    params: RevenueChartRequest
+  ): Promise<RevenueChartResponse> => {
+    const response = await axiosInstance.get(`${API_URL}/chart`, {
+      params,
+    });
     return response.data;
   },
 
-  // Thống kê đánh giá
-  getReviewStatistics: async (
-    params?: StatisticsQueryParams
-  ): Promise<GetReviewStatisticsResponse> => {
-    const response = await axiosInstance.get(`${API_URL}/reviews`, { params });
+  // Top phòng doanh thu cao nhất
+  getTopRooms: async (params?: TopRoomsRequest): Promise<TopRoomsResponse> => {
+    const response = await axiosInstance.get(`${API_URL}/top-rooms`, {
+      params,
+    });
     return response.data;
   },
 
-  // Thống kê người dùng
-  getUserStatistics: async (
-    params?: StatisticsQueryParams
-  ): Promise<GetUserStatisticsResponse> => {
-    const response = await axiosInstance.get(`${API_URL}/users`, { params });
-    return response.data;
-  },
-
-  // Thống kê phòng
-  getRoomStatistics: async (
-    params?: StatisticsQueryParams
-  ): Promise<GetRoomStatisticsResponse> => {
-    const response = await axiosInstance.get(`${API_URL}/rooms`, { params });
+  // Thống kê booking
+  getBookingStatistics: async (): Promise<BookingStatisticsResponse> => {
+    const response = await axiosInstance.get(`${API_URL}/booking`);
     return response.data;
   },
 };

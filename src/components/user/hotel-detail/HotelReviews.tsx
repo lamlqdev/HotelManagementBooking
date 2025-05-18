@@ -12,13 +12,6 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 
 import { Review } from "@/types/review";
 import Reviews from "@/assets/illustration/Reviews.svg";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
 import { useAppSelector } from "@/store/hooks";
 import {
   AlertDialog,
@@ -45,7 +38,7 @@ interface ReviewStats {
 interface HotelReviewsProps {
   reviewStats: ReviewStats;
   reviews: Review[];
-  rooms: { _id: string; roomName: string }[];
+  hotelId: string;
   onReviewCreated?: () => void;
 }
 
@@ -62,12 +55,13 @@ interface BackendError {
 const HotelReviews = ({
   reviewStats,
   reviews,
-  rooms,
+  // rooms,
+  hotelId,
   onReviewCreated,
 }: HotelReviewsProps) => {
   const { t } = useTranslation();
   const user = useAppSelector((state) => state.auth.user);
-  const [roomId, setRoomId] = useState(rooms[0]?._id || "");
+  // const [roomId, setRoomId] = useState(rooms[0]?._id || "");
   const [rating, setRating] = useState(0);
   const [title, setTitle] = useState("");
   const [comment, setComment] = useState("");
@@ -78,7 +72,7 @@ const HotelReviews = ({
 
   const createReviewMutation = useMutation({
     mutationFn: (data: {
-      roomId: string;
+      hotelId: string;
       rating: number;
       title: string;
       comment: string;
@@ -122,8 +116,8 @@ const HotelReviews = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!roomId || !rating || !title || !comment) {
-      toast.error("Vui lòng chọn phòng và điền đầy đủ thông tin đánh giá");
+    if (!rating || !title || !comment) {
+      toast.error("Vui lòng điền đầy đủ thông tin đánh giá");
       return;
     }
 
@@ -136,7 +130,6 @@ const HotelReviews = ({
         {
           onSuccess: () => {
             toast.success("Đã cập nhật đánh giá!");
-            setRoomId(rooms[0]?._id || "");
             setRating(0);
             setTitle("");
             setComment("");
@@ -157,11 +150,10 @@ const HotelReviews = ({
       );
     } else {
       createReviewMutation.mutate(
-        { roomId, rating, title, comment, isAnonymous },
+        { hotelId, rating, title, comment, isAnonymous },
         {
           onSuccess: () => {
             toast.success("Đánh giá của bạn đã được gửi!");
-            setRoomId(rooms[0]?._id || "");
             setRating(0);
             setTitle("");
             setComment("");
@@ -185,7 +177,6 @@ const HotelReviews = ({
 
   const handleCancel = () => {
     setShowForm(false);
-    setRoomId(rooms[0]?._id || "");
     setRating(0);
     setTitle("");
     setComment("");
@@ -213,21 +204,6 @@ const HotelReviews = ({
           onSubmit={handleSubmit}
           className="bg-card rounded-lg shadow-md p-6 mb-8 space-y-4"
         >
-          <div>
-            <label className="block font-medium mb-1">Chọn phòng</label>
-            <Select value={roomId} onValueChange={setRoomId}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Chọn phòng" />
-              </SelectTrigger>
-              <SelectContent>
-                {rooms.map((room) => (
-                  <SelectItem key={room._id} value={room._id}>
-                    {room.roomName}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
           <div>
             <label className="block font-medium mb-1">
               {t("hotel.reviews.rating")}

@@ -1,70 +1,61 @@
-// Thống kê doanh thu
-export interface RevenueStatistic {
-  _id: string;
+// Tổng quan doanh thu
+export interface RevenueSummaryResponse {
+  success: boolean;
+  data: {
+    totalRevenue: number;
+    totalBookings: number;
+    successfulBookings: number;
+    cancelledBookings: number;
+    pendingBookings: number;
+    previousPeriodRevenue: number;
+    revenueChange: number | string;
+  };
+}
+
+// Biểu đồ doanh thu
+export interface RevenueChartRequest {
+  from: string;
+  to: string;
+  groupBy?: "day" | "month";
+}
+
+export interface RevenueChartItem {
+  period: string;
+  revenue: number;
+  bookings: number;
+}
+
+export interface RevenueChartResponse {
+  success: boolean;
+  data: RevenueChartItem[];
+}
+
+// Top phòng doanh thu cao nhất
+export interface TopRoom {
+  _id: string; // id phòng
   totalRevenue: number;
   bookingCount: number;
+  hotelName?: string;
 }
 
-export interface GetRevenueStatisticsResponse {
+export interface TopRoomsRequest {
+  limit?: number;
+  from?: string;
+  to?: string;
+}
+
+export interface TopRoomsResponse {
   success: boolean;
-  totalRevenue: number;
-  data: RevenueStatistic[];
+  data: TopRoom[];
 }
 
-// Thống kê đặt phòng
-export interface BookingStatistic {
-  _id: string;
-  count: number;
-}
-
-export interface GetBookingStatisticsResponse {
+// Thống kê booking
+export interface BookingStatisticsResponse {
   success: boolean;
-  data: BookingStatistic[];
-}
-
-// Thống kê đánh giá
-export interface ReviewStatistic {
-  _id: number;
-  count: number;
-}
-
-export interface GetReviewStatisticsResponse {
-  success: boolean;
-  totalReviews: number;
-  averageRating: number;
-  data: ReviewStatistic[];
-}
-
-// Thống kê người dùng
-export interface UserStatistic {
-  _id: string;
-  count: number;
-}
-
-export interface GetUserStatisticsResponse {
-  success: boolean;
-  totalUsers: number;
-  data: UserStatistic[];
-}
-
-// Thống kê phòng
-export interface RoomStatistic {
-  roomType: string;
-  bedType: string;
-  bookingCount: number;
-  totalRevenue: number;
-}
-
-export interface GetRoomStatisticsResponse {
-  success: boolean;
-  data: RoomStatistic[];
-}
-
-// Query parameters
-export interface StatisticsQueryParams {
-  startDate?: string;
-  endDate?: string;
-  hotelId?: string;
-  groupBy?: "day" | "week" | "month" | "year";
-  status?: string;
+  data: {
+    totalBookings: number;
+    successfulBookings: number;
+    cancelledBookings: number;
+    pendingBookings: number;
+  };
 }

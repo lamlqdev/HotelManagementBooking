@@ -32,6 +32,12 @@ interface BookingDetailModalProps {
   onClose: () => void;
 }
 
+// Type cho lỗi có thể có response
+type ErrorWithResponse = {
+  response?: { data?: { message?: string } };
+  message?: string;
+};
+
 export const BookingDetailModal = ({
   booking,
   isOpen,
@@ -92,14 +98,34 @@ export const BookingDetailModal = ({
       }
     },
     onError: (error: unknown) => {
-      const err = error as {
-        response?: { data?: { message?: string } };
-        message?: string;
-      };
+      const err = error as ErrorWithResponse;
       toast.error(
         err?.response?.data?.message ||
           err?.message ||
           "Có lỗi xảy ra khi huỷ đặt phòng"
+      );
+    },
+  });
+
+  // Mutation thanh toán lại
+  const retryPaymentMutation = useMutation({
+    mutationFn: async () => {
+      return await bookingApi.retryPayment({
+        bookingId: booking._id,
+        paymentMethod: booking.paymentMethod as "zalopay" | "vnpay",
+      });
+    },
+    onSuccess: (res) => {
+      if (res.success && res.paymentUrl) {
+        window.location.href = res.paymentUrl;
+      } else {
+        toast.error("Không thể tạo lại thanh toán");
+      }
+    },
+    onError: (error: unknown) => {
+      const err = error as ErrorWithResponse;
+      toast.error(
+        err?.response?.data?.message || err?.message || "Lỗi khi thanh toán lại"
       );
     },
   });
@@ -302,15 +328,29 @@ export const BookingDetailModal = ({
             {t("booking.detailModal.close")}
           </Button>
           {booking.status === "pending" && (
-            <Button
-              variant="destructive"
-              onClick={() => cancelMutation.mutate()}
-              disabled={cancelMutation.isPending}
-            >
-              {cancelMutation.isPending
-                ? t("booking.detailModal.cancelling") || "Đang huỷ..."
-                : t("booking.detailModal.cancel")}
-            </Button>
+            <>
+              <Button
+                variant="destructive"
+                onClick={() => cancelMutation.mutate()}
+                disabled={cancelMutation.isPending}
+              >
+                {cancelMutation.isPending
+                  ? t("booking.detailModal.cancelling") || "Đang huỷ..."
+                  : t("booking.detailModal.cancel")}
+              </Button>
+              {(booking.paymentStatus === "pending" ||
+                booking.paymentStatus === "failed") && (
+                <Button
+                  variant="default"
+                  onClick={() => retryPaymentMutation.mutate()}
+                  disabled={retryPaymentMutation.isPending}
+                >
+                  {retryPaymentMutation.isPending
+                    ? "Đang tạo lại thanh toán..."
+                    : "Thanh toán lại"}
+                </Button>
+              )}
+            </>
           )}
           {booking.status === "completed" ? (
             <Button

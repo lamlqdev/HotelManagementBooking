@@ -13,6 +13,7 @@ import {
   GetAllBookingsResponse,
   BookingDetailsResponse,
   GetMyHotelBookingsResponse,
+  RetryPaymentResponse,
 } from "./types";
 
 const API_URL = "/bookings";
@@ -140,6 +141,15 @@ export const bookingApi = {
     const response = await axiosInstance.get(`${API_URL}/my-hotels`, {
       params,
     });
+    return response.data;
+  },
+
+  // Thanh toán lại cho booking chưa hoàn tất
+  retryPayment: async (data: {
+    bookingId: string;
+    paymentMethod: "zalopay" | "vnpay";
+  }): Promise<RetryPaymentResponse> => {
+    const response = await axiosInstance.post(`${API_URL}/retry-payment`, data);
     return response.data;
   },
 };

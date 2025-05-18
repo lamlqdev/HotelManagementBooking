@@ -13,7 +13,6 @@ import ChatSupport from "@/components/common/ChatSupport";
 
 import { hotelApi } from "@/api/hotel/hotel.api";
 import { amenitiesApi } from "@/api/amenities/amenities.api";
-import { roomApi } from "@/api/room/room.api";
 import { reviewApi } from "@/api/review/review.api";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
@@ -49,9 +48,14 @@ const HotelDetailPage = () => {
   });
 
   const { data: roomsResponse, isLoading: isLoadingRooms } = useQuery({
-    queryKey: ["rooms", id],
-    queryFn: () => roomApi.getRooms(id as string, { available: true }),
-    enabled: !!id,
+    queryKey: ["availableRooms", id, checkIn, checkOut, capacity],
+    queryFn: () =>
+      hotelApi.getAvailableRoomsByHotel(id as string, {
+        checkIn: checkIn || "",
+        checkOut: checkOut || "",
+        capacity: capacity ? parseInt(capacity) : 1,
+      }),
+    enabled: !!id && !!checkIn && !!checkOut && !!capacity,
   });
 
   const {
@@ -190,7 +194,7 @@ const HotelDetailPage = () => {
           <HotelReviews
             reviewStats={reviewStats}
             reviews={reviews}
-            rooms={rooms}
+            hotelId={hotel._id}
             onReviewCreated={refetchReviews}
           />
         </div>

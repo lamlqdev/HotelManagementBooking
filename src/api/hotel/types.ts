@@ -1,4 +1,5 @@
 import { Hotel } from "@/types/hotel";
+import { Room } from "@/types/room";
 
 export interface HotelResponse {
   success: boolean;
@@ -28,4 +29,53 @@ export interface HotelQueryParams {
   limit?: number;
   status?: "active" | "inactive" | "pending";
   rating?: number;
+}
+
+export interface SearchHotelsWithAvailableRoomsResponse {
+  success: boolean;
+  count: number;
+  total: number;
+  pagination: {
+    currentPage: number;
+    totalPages: number;
+  };
+  data: Array<{
+    _id: string;
+    name: string;
+    address: string;
+    rating: number;
+    images: Array<{
+      url: string;
+      publicId: string;
+      filename: string;
+    }>;
+    featuredImage: {
+      url: string;
+      publicId: string;
+      filename: string;
+    };
+    policies: {
+      checkInTime: string;
+      checkOutTime: string;
+      cancellationPolicy: "24h-full-refund" | "24h-half-refund" | "no-refund";
+      childrenPolicy: "yes" | "no";
+      petPolicy: "yes" | "no";
+      smokingPolicy: "yes" | "no";
+    };
+    lowestPrice: number;
+    lowestDiscountedPrice: number;
+    highestDiscountPercent: number;
+    availableRoomCount: number;
+  }>;
+}
+
+export interface GetAvailableRoomsByHotelResponse {
+  success: boolean;
+  count: number;
+  total: number;
+  pagination: {
+    currentPage: number;
+    totalPages: number;
+  };
+  data: Room[];
 }
