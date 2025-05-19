@@ -242,6 +242,7 @@
   },
   "search": {
     "destination": "Destination",
+    "no_results_description": "No results found. Please try again with different search criteria.",
     "check_in": "Check-in",
     "check_out": "Check-out",
     "guests": "Guests",
@@ -301,6 +302,20 @@
   "filter": {
     "price_range": "Price range",
     "star_rating": "Star rating",
+    "room_type": "Room type",
+    "room_type_placeholder": "Select room type",
+    "room_type_all": "All",
+    "room_type_single": "Single",
+    "room_type_double": "Double",
+    "room_type_queen": "Queen",
+    "room_type_king": "King",
+    "room_type_twin": "Twin",
+    "room_type_double_twin": "Double Twin",
+    "room_type_standard": "Standard",
+    "room_type_superior": "Superior",
+    "room_type_deluxe": "Deluxe",
+    "room_type_suite": "Suite",
+    "room_type_family": "Family",
     "amenities": "Amenities"
   },
   "amenities": {

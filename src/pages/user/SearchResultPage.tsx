@@ -27,6 +27,10 @@ const SearchResultPage = () => {
   const checkIn = searchParams.get("checkIn");
   const checkOut = searchParams.get("checkOut");
   const capacity = searchParams.get("capacity");
+  const minPrice = searchParams.get("minPrice");
+  const maxPrice = searchParams.get("maxPrice");
+  const roomType = searchParams.get("roomType"); // "Standard,Deluxe"
+  const amenities = searchParams.get("amenities"); // "id1,id2"
 
   // Nếu chỉ có locationName, tự động điền các thông tin còn lại
   const defaultCheckIn = new Date();
@@ -51,6 +55,10 @@ const SearchResultPage = () => {
       finalCapacity,
       currentPage,
       sortBy,
+      minPrice,
+      maxPrice,
+      roomType,
+      amenities,
     ],
     queryFn: async () => {
       try {
@@ -64,6 +72,10 @@ const SearchResultPage = () => {
             page: currentPage,
             limit: 10,
             sort: sortBy || undefined,
+            minPrice: minPrice ? Number(minPrice) : undefined,
+            maxPrice: maxPrice ? Number(maxPrice) : undefined,
+            roomType: roomType ? roomType.split(",")[0] : undefined,
+            amenities: amenities ? amenities.split(",") : undefined,
           });
           return response;
         }
@@ -116,12 +128,12 @@ const SearchResultPage = () => {
     setSearchParams(newParams);
   };
 
-  const handleStarChange = (stars: number[]) => {
+  const handleRoomTypeChange = (roomTypes: string[]) => {
     const newParams = new URLSearchParams(searchParams);
-    if (stars.length > 0) {
-      newParams.set("stars", stars.join(","));
+    if (roomTypes.length > 0) {
+      newParams.set("roomType", roomTypes.join(","));
     } else {
-      newParams.delete("stars");
+      newParams.delete("roomType");
     }
     setSearchParams(newParams);
   };
@@ -217,7 +229,7 @@ const SearchResultPage = () => {
             <div className="col-span-3">
               <FilterSection
                 onPriceChange={handlePriceChange}
-                onStarChange={handleStarChange}
+                onRoomTypeChange={handleRoomTypeChange}
                 onAmenitiesChange={handleAmenitiesChange}
               />
             </div>
@@ -364,7 +376,7 @@ const SearchResultPage = () => {
           <div className="col-span-3">
             <FilterSection
               onPriceChange={handlePriceChange}
-              onStarChange={handleStarChange}
+              onRoomTypeChange={handleRoomTypeChange}
               onAmenitiesChange={handleAmenitiesChange}
             />
           </div>

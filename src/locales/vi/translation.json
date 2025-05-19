@@ -242,6 +242,7 @@
   },
   "search": {
     "destination": "Địa điểm",
+    "no_results_description": "Không tìm thấy kết quả nào. Vui lòng thử lại với các tiêu chí tìm kiếm khác.",
     "check_in": "Nhận phòng",
     "check_out": "Trả phòng",
     "guests": "Khách",
@@ -301,6 +302,20 @@
   "filter": {
     "price_range": "Khoảng giá",
     "star_rating": "Hạng sao",
+    "room_type": "Loại phòng",
+    "room_type_placeholder": "Chọn loại phòng",
+    "room_type_all": "Tất cả",
+    "room_type_twin": "Phòng đôi",
+    "room_type_double_twin": "Phòng đôi kép",
+    "room_type_standard": "Phòng tiêu chuẩn",
+    "room_type_single": "Phòng đơn",
+    "room_type_double": "Phòng đôi",
+    "room_type_queen": "Phòng vua",
+    "room_type_king": "Phòng hoàng gia",
+    "room_type_superior": "Phòng superior",
+    "room_type_deluxe": "Phòng deluxe",
+    "room_type_suite": "Phòng suite",
+    "room_type_family": "Phòng gia đình",
     "amenities": "Tiện nghi"
   },
   "amenities": {

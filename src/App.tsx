@@ -72,7 +72,7 @@ function App() {
           <Route path="/booking-guide" element={<BookingGuidePage />} />
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/blog" element={<BlogPage />} />
-          <Route path="/blog/:slug" element={<BlogDetailPage />} />
+          <Route path="/blog/:id" element={<BlogDetailPage />} />
           <Route path="/partnership" element={<Partnership />} />
           <Route path="/register-partner" element={<RegisterPartner />} />
           <Route
