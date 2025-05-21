@@ -73,7 +73,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  to="/management"
+                  to="/partnership"
                   className="text-muted-foreground hover:text-foreground transition-colors"
                   onClick={scrollToTop}
                 >

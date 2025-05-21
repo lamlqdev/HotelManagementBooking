@@ -9,6 +9,7 @@ import {
   Users,
   Ticket,
   Home,
+  FileText,
 } from "lucide-react";
 
 import {
@@ -186,6 +187,22 @@ export default function AdminLayout() {
                       <Ticket className="h-4 w-4" />
                       <span className="group-data-[collapsible=icon]:hidden">
                         {t("admin.vouchers.title")}
+                      </span>
+                    </SidebarMenuButton>
+                  </Link>
+                </SidebarMenuItem>
+
+                {/* Post Management */}
+                <SidebarMenuItem>
+                  <Link to="/admin/posts">
+                    <SidebarMenuButton
+                      isActive={location.pathname.startsWith("/admin/posts")}
+                      tooltip={t("admin.posts.title", "Quản lý bài viết")}
+                      className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg group-data-[collapsible=icon]:justify-center"
+                    >
+                      <FileText className="h-4 w-4" />
+                      <span className="group-data-[collapsible=icon]:hidden">
+                        {t("admin.posts.title", "Quản lý bài viết")}
                       </span>
                     </SidebarMenuButton>
                   </Link>

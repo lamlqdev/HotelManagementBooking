@@ -58,6 +58,9 @@ import VoucherManagementPage from "./pages/admin/VoucherManagementPage";
 import BookingsManagement from "./pages/admin/BookingsManagement";
 import BookingDetailPage from "./pages/admin/BookingDetailPage";
 import DashboardPage from "./pages/admin/DashboardPage";
+import AdminPostManagementPage from "./pages/admin/PostManagementPage";
+import AdminPostDetailPage from "./pages/admin/PostDetailPage";
+import AdminPostCreatePage from "./pages/admin/PostCreatePage";
 
 function App() {
   return (
@@ -148,6 +151,9 @@ function App() {
             <Route path="bookings" element={<BookingsManagement />} />
             <Route path="bookings/:id" element={<BookingDetailPage />} />
             <Route path="notifications" element={<NotificationsPage />} />
+            <Route path="posts" element={<AdminPostManagementPage />} />
+            <Route path="posts/:id" element={<AdminPostDetailPage />} />
+            <Route path="posts/create" element={<AdminPostCreatePage />} />
           </Route>
         </Route>
       </Routes>

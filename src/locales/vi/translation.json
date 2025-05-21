@@ -958,7 +958,8 @@
       "location_desc": "Mô tả vị trí",
       "location_desc_placeholder": "Mô tả vị trí địa lý và các địa điểm lân cận...",
       "location": "Địa điểm",
-      "location_placeholder": "Khách sạn của bạn nằm ở đâu?"
+      "location_placeholder": "Khách sạn của bạn nằm ở đâu?",
+      "tourist_spot": "Điểm du lịch"
     },
     "contact_info": {
       "title": "Thông tin người đại diện",
@@ -1469,6 +1470,12 @@
         "pendingRequests": "Danh sách đơn đăng ký đang chờ",
         "pendingRequestsDescription": "Xem và duyệt các đơn đăng ký đối tác mới",
         "noPendingRequests": "Không có đơn đăng ký đang chờ",
+        "rejecting": "Đang từ chối...",
+        "approving": "Đang duyệt...",
+        "rejectSuccess": "Đơn đăng ký đối tác đã được từ chối thành công",
+        "approveSuccess": "Đơn đăng ký đối tác đã được duyệt thành công",
+        "rejectError": "Lỗi khi từ chối đơn đăng ký đối tác",
+        "approveError": "Lỗi khi duyệt đơn đăng ký đối tác",
         "table": {
           "hotelName": "Tên khách sạn",
           "ownerName": "Chủ sở hữu",
@@ -1702,6 +1709,37 @@
     },
     "bookings": {
       "title": "Quản lý đơn đặt phòng"
+    },
+    "posts": {
+      "title": "Quản lý bài viết",
+      "create": "Tạo bài viết",
+      "edit": "Chỉnh sửa bài viết",
+      "create_new": "Tạo bài viết mới",
+      "list_description": "Danh sách các bài viết do người dùng đăng tải trên hệ thống.",
+      "field": {
+        "title": "Tiêu đề",
+        "content": "Nội dung",
+        "images": "Hình ảnh"
+      },
+      "placeholder": {
+        "title": "Nhập tiêu đề bài viết",
+        "content": "Nhập nội dung bài viết"
+      },
+      "success": {
+        "create": "Đăng bài viết thành công!",
+        "update": "Cập nhật bài viết thành công!"
+      },
+      "error": {
+        "create": "Đăng bài viết thất bại!",
+        "update": "Cập nhật bài viết thất bại!",
+        "required": "Vui lòng nhập tiêu đề và nội dung!"
+      },
+      "no_posts": "Không có bài viết nào.",
+      "save": "Lưu thay đổi",
+      "submit": "Đăng bài",
+      "saving": "Đang lưu...",
+      "submitting": "Đang đăng...",
+      "cancel": "Huỷ"
     }
   },
   "greetings": {

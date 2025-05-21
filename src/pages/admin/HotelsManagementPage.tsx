@@ -36,15 +36,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import {
-  Building2,
-  Clock,
-  Filter,
-  MapPin,
-  Plus,
-  Search,
-  Star,
-} from "lucide-react";
+import { Building2, Clock, Filter, MapPin, Search, Star } from "lucide-react";
 
 export default function HotelsManagementPage() {
   const { t } = useTranslation();
@@ -174,10 +166,6 @@ export default function HotelsManagementPage() {
                   {t("admin.hotels.title")}
                 </h1>
               </div>
-              <Button>
-                <Plus className="h-4 w-4 mr-2" />
-                {t("admin.hotels.addNew")}
-              </Button>
             </div>
             <p className="text-muted-foreground mt-2">
               {t("admin.hotels.description")}

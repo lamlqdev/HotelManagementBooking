@@ -17,8 +17,10 @@ const API_URL = "/posts";
 
 export const postApi = {
   // Tạo bài viết mới
-  createPost: async (data: CreatePostRequest): Promise<CreatePostResponse> => {
-    const response = await axiosInstance.post(API_URL, data);
+  createPost: async (data: FormData): Promise<CreatePostResponse> => {
+    const response = await axiosInstance.post(API_URL, data, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
     return response.data;
   },
 
@@ -37,9 +39,11 @@ export const postApi = {
   // Cập nhật bài viết
   updatePost: async (
     postId: string,
-    data: UpdatePostRequest
+    data: FormData
   ): Promise<UpdatePostResponse> => {
-    const response = await axiosInstance.put(`${API_URL}/${postId}`, data);
+    const response = await axiosInstance.put(`${API_URL}/${postId}`, data, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
     return response.data;
   },
 

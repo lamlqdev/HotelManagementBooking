@@ -3,6 +3,7 @@ import { Building2, Phone, FileText, Image, ChevronLeft } from "lucide-react";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { toast } from "sonner";
+import { useQuery } from "@tanstack/react-query";
 
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -20,6 +21,7 @@ import RejectPartnerModal from "@/components/admin/partner-register-management/R
 import { partnerApi } from "@/api/partner/partner.api";
 import { Partner } from "@/api/partner/types";
 import { formatDate } from "@/utils/timeUtils";
+import { locationApi } from "@/api/location/location.api";
 
 const PartnerRegistrationDetails = () => {
   const { t } = useTranslation();
@@ -31,13 +33,20 @@ const PartnerRegistrationDetails = () => {
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [isApproving, setIsApproving] = useState(false);
   const [isRejecting, setIsRejecting] = useState(false);
-  const [rejectReasons, setRejectReasons] = useState({
+  const [rejectDetails, setRejectDetails] = useState("");
+  const [rejectReasons] = useState({
     incomplete: false,
     invalid: false,
     duplicate: false,
     other: false,
   });
-  const [rejectDetails, setRejectDetails] = useState("");
+
+  // Lấy thông tin location từ locationId (đặt trước mọi return/if)
+  const { data: locationData, isLoading: isLoadingLocation } = useQuery({
+    queryKey: ["location", partner?.hotel?.locationId],
+    queryFn: () => locationApi.getLocation(partner?.hotel?.locationId),
+    enabled: !!partner?.hotel?.locationId,
+  });
 
   if (!partner) {
     navigate("/admin/partners");
@@ -224,7 +233,11 @@ const PartnerRegistrationDetails = () => {
                 <h3 className="text-sm font-medium text-muted-foreground mb-1">
                   {t("register_partner.address.tourist_spot")}
                 </h3>
-                <p className="text-base">{partner.hotel.locationName}</p>
+                <p className="text-base">
+                  {isLoadingLocation
+                    ? t("common.loading")
+                    : locationData?.data?.name || partner.hotel.locationId}
+                </p>
               </div>
               <div>
                 <h3 className="text-sm font-medium text-muted-foreground mb-1">
@@ -369,7 +382,6 @@ const PartnerRegistrationDetails = () => {
         onOpenChange={setShowRejectModal}
         onReject={handleReject}
         rejectReasons={rejectReasons}
-        onRejectReasonsChange={setRejectReasons}
         rejectDetails={rejectDetails}
         onRejectDetailsChange={setRejectDetails}
         isLoading={isRejecting}

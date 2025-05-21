@@ -941,7 +941,8 @@
       "location_desc": "Location Description",
       "location_desc_placeholder": "Describe geographical location and nearby attractions...",
       "location": "Location",
-      "location_placeholder": "Where is your hotel located?"
+      "location_placeholder": "Where is your hotel located?",
+      "tourist_spot": "Tourist Spot"
     },
     "contact_info": {
       "title": "Contact Information",
@@ -1695,6 +1696,37 @@
     },
     "bookings": {
       "title": "Booking Management"
+    },
+    "posts": {
+      "title": "Post Management",
+      "create": "Create Post",
+      "edit": "Edit Post",
+      "create_new": "Create New Post",
+      "list_description": "List of posts uploaded by users on the system.",
+      "field": {
+        "title": "Title",
+        "content": "Content",
+        "images": "Images"
+      },
+      "placeholder": {
+        "title": "Enter post title",
+        "content": "Enter post content"
+      },
+      "success": {
+        "create": "Post created successfully!",
+        "update": "Post updated successfully!"
+      },
+      "error": {
+        "create": "Failed to create post!",
+        "update": "Failed to update post!",
+        "required": "Please enter title and content!"
+      },
+      "no_posts": "No posts found.",
+      "save": "Save changes",
+      "submit": "Submit post",
+      "saving": "Saving...",
+      "submitting": "Submitting...",
+      "cancel": "Cancel"
     }
   },
   "greetings": {
