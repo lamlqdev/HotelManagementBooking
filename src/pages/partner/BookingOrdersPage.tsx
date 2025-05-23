@@ -82,7 +82,7 @@ export default function BookingOrdersPage() {
         return { data: [], pagination: { totalPages: 1 } };
       const res = await bookingApi.getMyHotelBookings({
         page: currentPage,
-        limit: 10,
+        limit: 5,
         status: status === "all" ? undefined : status,
         hotelId: currentHotel?._id,
       });

@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { Users, Search, Plus, Filter, Mail, Phone, Shield } from "lucide-react";
+import { Users, Search, Filter, Mail, Phone, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -52,7 +52,7 @@ export default function UsersManagementPage() {
     queryFn: async () => {
       const response = await userApi.getUsers({
         page: currentPage,
-        limit: 10,
+        limit: 5,
         search,
         role: filters.role === "all" ? undefined : filters.role,
         isEmailVerified:
@@ -180,10 +180,6 @@ export default function UsersManagementPage() {
                 <Users className="h-6 w-6" />
                 <h1 className="text-2xl font-bold">{t("admin.users.title")}</h1>
               </div>
-              <Button>
-                <Plus className="h-4 w-4 mr-2" />
-                {t("admin.users.addNew")}
-              </Button>
             </div>
             <p className="text-muted-foreground mt-2">
               {t("admin.users.description")}

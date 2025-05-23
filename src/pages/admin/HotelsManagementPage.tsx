@@ -50,7 +50,7 @@ export default function HotelsManagementPage() {
     queryFn: async () => {
       const response = await hotelApi.getHotels({
         page: currentPage,
-        limit: 10,
+        limit: 5,
       });
       return response;
     },

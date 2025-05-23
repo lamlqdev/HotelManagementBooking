@@ -76,11 +76,10 @@ export default function BookingsManagement() {
     queryFn: async () => {
       const res = await bookingApi.getAllBookings({
         page: currentPage,
-        limit: 10,
+        limit: 5,
         status: status === "all" ? undefined : status,
         paymentStatus: paymentStatus === "all" ? undefined : paymentStatus,
         paymentMethod: paymentMethod === "all" ? undefined : paymentMethod,
-        // Có thể bổ sung search vào backend nếu hỗ trợ
       });
       return res;
     },
@@ -100,7 +99,6 @@ export default function BookingsManagement() {
     setCurrentPage(1);
   };
 
-  // Lọc client-side theo search (nếu backend chưa hỗ trợ)
   const filteredBookings = bookings.filter((b) => {
     const s = search.trim().toLowerCase();
     if (!s) return true;
@@ -123,10 +121,6 @@ export default function BookingsManagement() {
                   {t("admin.bookings.title")}
                 </h1>
               </div>
-              <Button variant="outline" onClick={handleResetFilters}>
-                <RefreshCw className="h-4 w-4 mr-2" />
-                Đặt lại bộ lọc
-              </Button>
             </div>
             <p className="text-muted-foreground mt-2">
               Danh sách toàn bộ đơn đặt phòng trong hệ thống
@@ -147,6 +141,10 @@ export default function BookingsManagement() {
                   }}
                 />
               </div>
+              <Button variant="outline" onClick={handleResetFilters}>
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Đặt lại bộ lọc
+              </Button>
             </div>
             <div className="flex items-center gap-4">
               <div className="flex flex-col gap-1">
