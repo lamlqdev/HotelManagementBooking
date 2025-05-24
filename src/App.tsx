@@ -27,6 +27,7 @@ import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
 import VerifyEmailPage from "./pages/auth/VerifyEmailPage";
 import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
+import OAuthCallback from "./pages/auth/OAuthCallback";
 
 // User Pages
 import SettingPage from "./pages/shared/SettingPage";
@@ -91,6 +92,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/verify-email/:token" element={<VerifyEmailPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/oauth" element={<OAuthCallback />} />
         </Route>
 
         {/* Protected Routes User - Yêu cầu đăng nhập với role user */}
