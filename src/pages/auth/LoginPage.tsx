@@ -1,11 +1,11 @@
+// src/pages/LoginPage.tsx
 import { useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useMutation } from "@tanstack/react-query";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
@@ -17,7 +17,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-
 import { authApi } from "@/api/auth/auth.api";
 import { loginSchema, LoginFormData, ApiError } from "@/api/auth/types";
 import { setCredentials, setUser, resetAuth } from "@/features/auth/authSlice";
@@ -66,23 +65,18 @@ const LoginPage = () => {
 
         try {
           const userResponse = await authApi.getMe();
-          if (userResponse.success) {
-            // Kiểm tra trạng thái của user
+          if (userResponse.success && userResponse.data) {
             if (userResponse.data.status !== "active") {
-              // Nếu user không active, xóa token và thông báo
               localStorage.removeItem("accessToken");
               localStorage.removeItem("refreshToken");
               dispatch(resetAuth());
-              toast.error(
-                "Tài khoản của bạn đã bị khóa hoặc chưa được kích hoạt"
-              );
+              toast.error(t("auth.login.error.accountInactive"));
               return;
             }
 
             dispatch(setUser(userResponse.data));
-            toast.success("Đăng nhập thành công");
+            toast.success(t("auth.login.success"));
 
-            // Chuyển hướng dựa trên role
             const role = userResponse.data.role;
             switch (role) {
               case "admin":
@@ -97,18 +91,20 @@ const LoginPage = () => {
               default:
                 navigate("/");
             }
+          } else {
+            toast.error(t("auth.login.error.fetchUser"));
           }
         } catch (error) {
-          console.error("Lỗi khi lấy thông tin user:", error);
-          toast.error("Không thể lấy thông tin người dùng");
+          console.error("Lỗi lấy thông tin người dùng:", error);
+          toast.error(t("auth.login.error.fetchUser"));
         }
       } else {
-        toast.error(response.message || "Đăng nhập không thành công");
+        toast.error(response.message || t("auth.login.error.generic"));
       }
     },
     onError: (error: ApiError) => {
       const errorMessage = error.response?.data?.message || error.message;
-      toast.error(errorMessage || "Có lỗi xảy ra khi đăng nhập");
+      toast.error(errorMessage || t("auth.login.error.generic"));
     },
   });
 
@@ -176,18 +172,14 @@ const LoginPage = () => {
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>
-                        {t("auth.login.form.password.label")}
-                      </FormLabel>
+                      <FormLabel>{t("auth.login.form.password.label")}</FormLabel>
                       <FormControl>
                         <div className="relative">
                           <Input
                             {...field}
                             type={showPassword ? "text" : "password"}
                             className="pr-10 [&::-ms-reveal]:hidden [&::-ms-clear]:hidden"
-                            placeholder={t(
-                              "auth.login.form.password.placeholder"
-                            )}
+                            placeholder={t("auth.login.form.password.placeholder")}
                             disabled={loginMutation.isPending}
                             autoComplete="current-password"
                           />
@@ -230,7 +222,7 @@ const LoginPage = () => {
                   disabled={loginMutation.isPending}
                 >
                   {loginMutation.isPending
-                    ? "Đang đăng nhập..."
+                    ? t("auth.login.form.submitting")
                     : t("auth.login.form.submit")}
                 </Button>
               </div>
@@ -253,6 +245,7 @@ const LoginPage = () => {
                     type="button"
                     className="w-full"
                     onClick={() => authApi.googleAuth()}
+                    disabled={loginMutation.isPending}
                   >
                     <img
                       src="/src/assets/images/google.svg"
@@ -266,6 +259,7 @@ const LoginPage = () => {
                     type="button"
                     className="w-full bg-[#4267B2] hover:bg-[#365899]"
                     onClick={() => authApi.facebookAuth()}
+                    disabled={loginMutation.isPending}
                   >
                     <img
                       src="/src/assets/images/facebook.svg"
