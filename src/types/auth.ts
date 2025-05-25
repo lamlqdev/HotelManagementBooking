@@ -2,8 +2,6 @@ export interface AvatarData {
   url: string;
   publicId: string;
   filename: string;
-  _id: string;
-  id: string;
 }
 
 export interface Document {
@@ -20,18 +18,21 @@ export interface User {
   _id: string;
   name: string;
   email: string;
-  phone: string;
-  avatar: AvatarData[];
-  role: string;
+  phone?: string;
+  avatar: AvatarData;
+  role: "user" | "partner" | "admin";
+  status: "pending" | "active" | "rejected";
   isEmailVerified: boolean;
+  provider: "local" | "google" | "facebook";
+  address?: string;
+  resetPasswordToken?: string;
+  resetPasswordExpire?: string;
+  refreshToken?: string;
+  verificationToken?: string;
+  verificationTokenExpire?: string;
+  favoriteHotels: string[];
   createdAt: string;
   updatedAt: string;
-  defaultAvatar: string;
-  partnerInfo?: {
-    documents: Document[];
-  };
-  status: string;
-  favoriteHotels: string[];
 }
 
 export interface AuthResponse {

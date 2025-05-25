@@ -279,12 +279,7 @@ const BlogDetail: React.FC = () => {
                   <div className="flex items-center space-x-4 mb-4">
                     <Avatar className="w-10 h-10">
                       <AvatarImage
-                        src={
-                          user?.avatar && user.avatar.length > 0
-                            ? user.avatar[0].url
-                            : user?.defaultAvatar ||
-                              "/images/default-avatar.png"
-                        }
+                        src={user?.avatar?.url || "/images/default-avatar.png"}
                         alt={user?.name || "User"}
                       />
                       <AvatarFallback>

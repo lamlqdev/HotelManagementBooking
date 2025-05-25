@@ -158,9 +158,8 @@ export default function PartnerProfilePage() {
                   <AvatarImage
                     src={
                       previewUrl ||
-                      (user?.avatar && user.avatar.length > 0
-                        ? user.avatar[0].url
-                        : user?.defaultAvatar || "/images/default-avatar.png")
+                      user?.avatar?.url ||
+                      "/images/default-avatar.png"
                     }
                     alt={user?.name}
                   />
