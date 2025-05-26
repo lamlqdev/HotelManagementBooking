@@ -61,6 +61,7 @@ import DashboardPage from "./pages/admin/DashboardPage";
 import AdminPostManagementPage from "./pages/admin/PostManagementPage";
 import AdminPostDetailPage from "./pages/admin/PostDetailPage";
 import AdminPostCreatePage from "./pages/admin/PostCreatePage";
+import AdminProfilePage from "./pages/user/ProfilePage";
 
 function App() {
   return (
@@ -138,6 +139,7 @@ function App() {
           <Route path="/admin" element={<AdminLayout />}>
             <Route path="dashboard" element={<DashboardPage />} />
             <Route path="partners" element={<PartnerApproval />} />
+            <Route path="profile" element={<AdminProfilePage />} />
             <Route
               path="partners/:id"
               element={<PartnerRegistrationDetails />}

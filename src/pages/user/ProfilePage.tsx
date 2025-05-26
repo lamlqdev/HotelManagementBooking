@@ -300,31 +300,6 @@ const Profile = () => {
             </form>
           </Form>
         </Card>
-
-        {/* Additional Information Cards */}
-        <Card className="p-6 md:col-span-3">
-          <h2 className="text-xl font-semibold mb-4">
-            {t("profile.travel_preferences")}
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="p-4 border rounded-lg">
-              <h3 className="font-medium">{t("profile.preferred_airline")}</h3>
-              <p className="text-muted-foreground">
-                Vietnam Airlines, Bamboo Airways
-              </p>
-            </div>
-            <div className="p-4 border rounded-lg">
-              <h3 className="font-medium">
-                {t("profile.preferred_hotel_type")}
-              </h3>
-              <p className="text-muted-foreground">4-5 Star Hotels</p>
-            </div>
-            <div className="p-4 border rounded-lg">
-              <h3 className="font-medium">{t("profile.meal_preferences")}</h3>
-              <p className="text-muted-foreground">{t("profile.vegetarian")}</p>
-            </div>
-          </div>
-        </Card>
       </div>
     </div>
   );

@@ -1,10 +1,8 @@
 import axiosInstance from "@/lib/axios";
 import {
-  CreatePostRequest,
   CreatePostResponse,
   GetPostsResponse,
   GetPostResponse,
-  UpdatePostRequest,
   UpdatePostResponse,
   DeletePostResponse,
   AddInteractionRequest,

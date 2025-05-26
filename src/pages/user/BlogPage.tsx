@@ -19,6 +19,12 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 
+function stripHtml(html: string) {
+  const div = document.createElement("div");
+  div.innerHTML = html;
+  return div.textContent || div.innerText || "";
+}
+
 const Blog: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -125,7 +131,7 @@ const Blog: React.FC = () => {
                       {post.title}
                     </h2>
                     <p className="text-muted-foreground mb-4 line-clamp-2">
-                      {post.content}
+                      {stripHtml(post.content).slice(0, 100)}
                     </p>
                     <div className="flex items-center text-sm text-muted-foreground space-x-4">
                       <div className="flex items-center">

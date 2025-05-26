@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { adminStatisticsApi } from "@/api/admin-statistics/admin-statistics.api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,7 +12,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -29,6 +28,7 @@ import {
   TrendingUp,
   BarChart2,
   PieChart,
+  CalendarDays,
 } from "lucide-react";
 import {
   LineChart as ReLineChart,
@@ -43,6 +43,13 @@ import {
   Cell,
   Legend,
 } from "recharts";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { vi } from "date-fns/locale";
 
 const BOOKING_COLORS = {
   completed: "#22c55e",
@@ -57,17 +64,42 @@ const HOTEL_COLORS = {
 };
 
 export default function DashboardPage() {
-  // Filter state
+  // State cho phần tổng quan (không cần filter)
+
+  // State cho filter biểu đồ tổng quan
   const today = new Date();
   const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
   const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-  const [from, setFrom] = useState<string>(firstDay.toISOString().slice(0, 10));
-  const [to, setTo] = useState<string>(lastDay.toISOString().slice(0, 10));
+  const [chartFrom, setChartFrom] = useState<string>(
+    firstDay.toISOString().slice(0, 10)
+  );
+  const [chartTo, setChartTo] = useState<string>(
+    lastDay.toISOString().slice(0, 10)
+  );
   const [groupBy, setGroupBy] = useState<"day" | "month">("day");
-  const [limit, setLimit] = useState<number>(5);
-  const [filterKey, setFilterKey] = useState(0);
+  const [chartFilterKey, setChartFilterKey] = useState(0);
 
-  // API calls
+  // State cho filter top khách sạn
+  const [topHotelFrom, setTopHotelFrom] = useState<string>(
+    firstDay.toISOString().slice(0, 10)
+  );
+  const [topHotelTo, setTopHotelTo] = useState<string>(
+    lastDay.toISOString().slice(0, 10)
+  );
+  const [topHotelLimit, setTopHotelLimit] = useState<number>(5);
+  const [topHotelFilterKey, setTopHotelFilterKey] = useState(0);
+
+  // State cho filter top người dùng
+  const [topUserFrom, setTopUserFrom] = useState<string>(
+    firstDay.toISOString().slice(0, 10)
+  );
+  const [topUserTo, setTopUserTo] = useState<string>(
+    lastDay.toISOString().slice(0, 10)
+  );
+  const [topUserLimit, setTopUserLimit] = useState<number>(5);
+  const [topUserFilterKey, setTopUserFilterKey] = useState(0);
+
+  // API calls cho phần tổng quan
   const { data: overview, isLoading: loadingOverview } = useQuery({
     queryKey: ["admin-statistics", "overview"],
     queryFn: () => adminStatisticsApi.getSystemOverview(),
@@ -80,30 +112,52 @@ export default function DashboardPage() {
     queryKey: ["admin-statistics", "hotel-status"],
     queryFn: () => adminStatisticsApi.getHotelStatus(),
   });
+
+  // API call cho biểu đồ tổng quan
   const { data: chartData, isLoading: loadingChart } = useQuery({
     queryKey: [
       "admin-statistics",
       "chart-data",
-      { from, to, groupBy, filterKey },
+      { chartFrom, chartTo, groupBy, chartFilterKey },
     ],
-    queryFn: () => adminStatisticsApi.getChartData({ from, to, groupBy }),
-    enabled: !!from && !!to,
+    queryFn: () =>
+      adminStatisticsApi.getChartData({
+        from: chartFrom,
+        to: chartTo,
+        groupBy,
+      }),
+    enabled: !!chartFrom && !!chartTo,
   });
+
+  // API call cho top khách sạn
   const { data: topHotels, isLoading: loadingTopHotels } = useQuery({
     queryKey: [
       "admin-statistics",
       "top-hotels",
-      { limit, from, to, filterKey },
+      { topHotelLimit, topHotelFrom, topHotelTo, topHotelFilterKey },
     ],
     queryFn: () =>
-      adminStatisticsApi.getTopHotelsByBookings({ limit, from, to }),
-    enabled: !!from && !!to,
+      adminStatisticsApi.getTopHotelsByBookings({
+        limit: topHotelLimit,
+        from: topHotelFrom,
+        to: topHotelTo,
+      }),
+    enabled: !!topHotelFrom && !!topHotelTo,
   });
+  // API call cho top người dùng
   const { data: topUsers, isLoading: loadingTopUsers } = useQuery({
-    queryKey: ["admin-statistics", "top-users", { limit, from, to, filterKey }],
+    queryKey: [
+      "admin-statistics",
+      "top-users",
+      { topUserLimit, topUserFrom, topUserTo, topUserFilterKey },
+    ],
     queryFn: () =>
-      adminStatisticsApi.getTopUsersByBookings({ limit, from, to }),
-    enabled: !!from && !!to,
+      adminStatisticsApi.getTopUsersByBookings({
+        limit: topUserLimit,
+        from: topUserFrom,
+        to: topUserTo,
+      }),
+    enabled: !!topUserFrom && !!topUserTo,
   });
 
   // Pie data
@@ -151,93 +205,42 @@ export default function DashboardPage() {
       ]
     : [];
 
-  // Handler filter
-  const handleApplyFilter = (e: React.FormEvent) => {
-    e.preventDefault();
-    setFilterKey((k) => k + 1);
-  };
+  // Tổng booking và tổng khách sạn cho PieChart
+  const totalBooking = bookingStatus?.data
+    ? bookingStatus.data.completed +
+      bookingStatus.data.confirmed +
+      bookingStatus.data.cancelled +
+      bookingStatus.data.pending
+    : 0;
+  const totalHotel = hotelStatus?.data
+    ? hotelStatus.data.active +
+      hotelStatus.data.pending +
+      hotelStatus.data.inactive
+    : 0;
+
+  // Handler filter cho biểu đồ tổng quan (tự động fetch khi thay đổi)
+  useEffect(() => {
+    setChartFilterKey((k) => k + 1);
+    // eslint-disable-next-line
+  }, [chartFrom, chartTo, groupBy]);
+
+  // Handler filter cho top khách sạn (tự động fetch khi thay đổi)
+  useEffect(() => {
+    setTopHotelFilterKey((k) => k + 1);
+    // eslint-disable-next-line
+  }, [topHotelFrom, topHotelTo, topHotelLimit]);
+
+  // Handler filter cho top người dùng (tự động fetch khi thay đổi)
+  useEffect(() => {
+    setTopUserFilterKey((k) => k + 1);
+    // eslint-disable-next-line
+  }, [topUserFrom, topUserTo, topUserLimit]);
 
   return (
     <div className="space-y-8 w-full max-w-7xl mx-auto">
       <h1 className="text-3xl font-bold text-center mb-2">
         Dashboard quản trị
       </h1>
-
-      {/* Bộ lọc */}
-      <Card className="max-w-4xl mx-auto">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-base">
-            <BarChart2 className="w-5 h-5 text-primary" /> Bộ lọc thống kê
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form
-            className="flex flex-col md:flex-row gap-4 items-end justify-center"
-            onSubmit={handleApplyFilter}
-          >
-            <div className="flex flex-col gap-1 w-full max-w-[160px]">
-              <Label htmlFor="from">Từ ngày</Label>
-              <input
-                type="date"
-                id="from"
-                value={from}
-                onChange={(e) => setFrom(e.target.value)}
-                className="border rounded px-2 py-1"
-                max={to}
-                required
-              />
-            </div>
-            <div className="flex flex-col gap-1 w-full max-w-[160px]">
-              <Label htmlFor="to">Đến ngày</Label>
-              <input
-                type="date"
-                id="to"
-                value={to}
-                onChange={(e) => setTo(e.target.value)}
-                className="border rounded px-2 py-1"
-                min={from}
-                required
-              />
-            </div>
-            <div className="flex flex-col gap-1 w-full max-w-[120px]">
-              <Label>Nhóm theo</Label>
-              <Select
-                value={groupBy}
-                onValueChange={(v) => setGroupBy(v as "day" | "month")}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Nhóm theo" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="day">Ngày</SelectItem>
-                  <SelectItem value="month">Tháng</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="flex flex-col gap-1 w-full max-w-[120px]">
-              <Label>Số lượng top</Label>
-              <Select
-                value={limit.toString()}
-                onValueChange={(v) => setLimit(Number(v))}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Top" />
-                </SelectTrigger>
-                <SelectContent>
-                  {[3, 5, 10].map((n) => (
-                    <SelectItem key={n} value={n.toString()}>
-                      Top {n}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <Button type="submit" className="h-10 px-6 mt-2 md:mt-0">
-              Áp dụng
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
 
       {/* Tổng quan */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
@@ -248,8 +251,8 @@ export default function DashboardPage() {
         ) : overview?.data ? (
           <>
             <Card className="flex flex-col items-center py-4 shadow-md border border-gray-100">
-              <Home className="h-7 w-7 text-blue-600 mb-2" />
-              <span className="text-3xl font-bold text-blue-600">
+              <Home className="h-7 w-7 text-primary mb-2" />
+              <span className="text-3xl font-bold text-primary">
                 {overview.data.totalPartners}
               </span>
               <span className="mt-1 text-base text-gray-600 dark:text-gray-300">
@@ -257,8 +260,8 @@ export default function DashboardPage() {
               </span>
             </Card>
             <Card className="flex flex-col items-center py-4 shadow-md border border-gray-100">
-              <Users className="h-7 w-7 text-green-600 mb-2" />
-              <span className="text-3xl font-bold text-green-600">
+              <Users className="h-7 w-7 text-primary mb-2" />
+              <span className="text-3xl font-bold text-primary">
                 {overview.data.totalUsers}
               </span>
               <span className="mt-1 text-base text-gray-600 dark:text-gray-300">
@@ -266,8 +269,8 @@ export default function DashboardPage() {
               </span>
             </Card>
             <Card className="flex flex-col items-center py-4 shadow-md border border-gray-100">
-              <Hotel className="h-7 w-7 text-yellow-600 mb-2" />
-              <span className="text-3xl font-bold text-yellow-600">
+              <Hotel className="h-7 w-7 text-primary mb-2" />
+              <span className="text-3xl font-bold text-primary">
                 {overview.data.totalHotels}
               </span>
               <span className="mt-1 text-base text-gray-600 dark:text-gray-300">
@@ -275,8 +278,8 @@ export default function DashboardPage() {
               </span>
             </Card>
             <Card className="flex flex-col items-center py-4 shadow-md border border-gray-100">
-              <Ticket className="h-7 w-7 text-purple-600 mb-2" />
-              <span className="text-3xl font-bold text-purple-600">
+              <Ticket className="h-7 w-7 text-primary mb-2" />
+              <span className="text-3xl font-bold text-primary">
                 {overview.data.totalBookings}
               </span>
               <span className="mt-1 text-base text-gray-600 dark:text-gray-300">
@@ -284,8 +287,8 @@ export default function DashboardPage() {
               </span>
             </Card>
             <Card className="flex flex-col items-center py-4 shadow-md border border-gray-100">
-              <TrendingUp className="h-7 w-7 text-pink-600 mb-2" />
-              <span className="text-3xl font-bold text-pink-600">
+              <TrendingUp className="h-7 w-7 text-primary mb-2" />
+              <span className="text-3xl font-bold text-primary">
                 {overview.data.totalRevenue.toLocaleString("vi-VN")}₫
               </span>
               <span className="mt-1 text-base text-gray-600 dark:text-gray-300">
@@ -296,8 +299,318 @@ export default function DashboardPage() {
         ) : null}
       </div>
 
-      {/* Biểu đồ tổng quan */}
+      {/* Hai PieChart trạng thái */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Trạng thái booking */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <PieChart className="w-5 h-5" /> Trạng thái booking
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {loadingBookingStatus ? (
+              <Skeleton className="h-64 w-full rounded-lg" />
+            ) : (
+              <div className="flex flex-col md:flex-row items-center justify-center gap-8">
+                <div className="w-full max-w-md h-80 flex flex-col items-center justify-center relative">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <RePieChart>
+                      <Pie
+                        data={bookingPieData}
+                        dataKey="value"
+                        nameKey="name"
+                        cx="50%"
+                        cy="50%"
+                        outerRadius={120}
+                        innerRadius={70}
+                        labelLine={false}
+                        stroke="#fff"
+                        strokeWidth={2}
+                      >
+                        {bookingPieData.map((entry, idx) => (
+                          <Cell
+                            key={`cell-booking-${idx}`}
+                            fill={entry.color}
+                          />
+                        ))}
+                      </Pie>
+                      <Legend
+                        verticalAlign="bottom"
+                        iconType="circle"
+                        wrapperStyle={{ fontSize: 15 }}
+                      />
+                    </RePieChart>
+                  </ResponsiveContainer>
+                  {/* Tổng booking ở giữa PieChart */}
+                  <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+                    <span className="text-xs text-muted-foreground font-medium leading-tight mb-1">
+                      Tổng booking
+                    </span>
+                    <span className="text-xl font-bold text-primary leading-tight">
+                      {totalBooking}
+                    </span>
+                  </div>
+                </div>
+                {/* Thống kê từng trạng thái booking */}
+                <div className="grid grid-cols-2 gap-4 w-full max-w-xs">
+                  <div className="flex items-center gap-3 bg-white dark:bg-muted rounded-xl shadow p-3">
+                    <span
+                      className="inline-block w-4 h-4 rounded-full"
+                      style={{ background: BOOKING_COLORS.completed }}
+                    />
+                    <div>
+                      <div className="text-sm text-muted-foreground">
+                        Hoàn thành
+                      </div>
+                      <div className="text-lg font-bold text-gray-900 dark:text-white">
+                        {bookingStatus?.data?.completed}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 bg-white dark:bg-muted rounded-xl shadow p-3">
+                    <span
+                      className="inline-block w-4 h-4 rounded-full"
+                      style={{ background: BOOKING_COLORS.confirmed }}
+                    />
+                    <div>
+                      <div className="text-sm text-muted-foreground">
+                        Đã xác nhận
+                      </div>
+                      <div className="text-lg font-bold text-gray-900 dark:text-white">
+                        {bookingStatus?.data?.confirmed}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 bg-white dark:bg-muted rounded-xl shadow p-3">
+                    <span
+                      className="inline-block w-4 h-4 rounded-full"
+                      style={{ background: BOOKING_COLORS.cancelled }}
+                    />
+                    <div>
+                      <div className="text-sm text-muted-foreground">
+                        Đã huỷ
+                      </div>
+                      <div className="text-lg font-bold text-gray-900 dark:text-white">
+                        {bookingStatus?.data?.cancelled}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 bg-white dark:bg-muted rounded-xl shadow p-3">
+                    <span
+                      className="inline-block w-4 h-4 rounded-full"
+                      style={{ background: BOOKING_COLORS.pending }}
+                    />
+                    <div>
+                      <div className="text-sm text-muted-foreground">
+                        Chờ xử lý
+                      </div>
+                      <div className="text-lg font-bold text-gray-900 dark:text-white">
+                        {bookingStatus?.data?.pending}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+        {/* Trạng thái khách sạn */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <PieChart className="w-5 h-5" /> Trạng thái khách sạn
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {loadingHotelStatus ? (
+              <Skeleton className="h-64 w-full rounded-lg" />
+            ) : (
+              <div className="flex flex-col md:flex-row items-center justify-center gap-8">
+                <div className="w-full max-w-md h-80 flex flex-col items-center justify-center relative">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <RePieChart>
+                      <Pie
+                        data={hotelPieData}
+                        dataKey="value"
+                        nameKey="name"
+                        cx="50%"
+                        cy="50%"
+                        outerRadius={120}
+                        innerRadius={70}
+                        labelLine={false}
+                        stroke="#fff"
+                        strokeWidth={2}
+                      >
+                        {hotelPieData.map((entry, idx) => (
+                          <Cell key={`cell-hotel-${idx}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Legend
+                        verticalAlign="bottom"
+                        iconType="circle"
+                        wrapperStyle={{ fontSize: 15 }}
+                      />
+                    </RePieChart>
+                  </ResponsiveContainer>
+                  {/* Tổng khách sạn ở giữa PieChart */}
+                  <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+                    <span className="text-xs text-muted-foreground font-medium leading-tight mb-1">
+                      Tổng khách sạn
+                    </span>
+                    <span className="text-xl font-bold text-primary leading-tight">
+                      {totalHotel}
+                    </span>
+                  </div>
+                </div>
+                {/* Thống kê từng trạng thái khách sạn */}
+                <div className="grid grid-cols-2 gap-4 w-full max-w-xs">
+                  <div className="flex items-center gap-3 bg-white dark:bg-muted rounded-xl shadow p-3">
+                    <span
+                      className="inline-block w-4 h-4 rounded-full"
+                      style={{ background: HOTEL_COLORS.active }}
+                    />
+                    <div>
+                      <div className="text-sm text-muted-foreground">
+                        Hoạt động
+                      </div>
+                      <div className="text-lg font-bold text-gray-900 dark:text-white">
+                        {hotelStatus?.data?.active}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 bg-white dark:bg-muted rounded-xl shadow p-3">
+                    <span
+                      className="inline-block w-4 h-4 rounded-full"
+                      style={{ background: HOTEL_COLORS.pending }}
+                    />
+                    <div>
+                      <div className="text-sm text-muted-foreground">
+                        Chờ duyệt
+                      </div>
+                      <div className="text-lg font-bold text-gray-900 dark:text-white">
+                        {hotelStatus?.data?.pending}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 bg-white dark:bg-muted rounded-xl shadow p-3">
+                    <span
+                      className="inline-block w-4 h-4 rounded-full"
+                      style={{ background: HOTEL_COLORS.inactive }}
+                    />
+                    <div>
+                      <div className="text-sm text-muted-foreground">
+                        Ngừng hoạt động
+                      </div>
+                      <div className="text-lg font-bold text-gray-900 dark:text-white">
+                        {hotelStatus?.data?.inactive}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Bộ lọc + Biểu đồ tổng quan */}
       <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-base">
+            <BarChart2 className="w-5 h-5 text-primary" /> Bộ lọc biểu đồ tổng
+            quan
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col md:flex-row gap-4 items-end justify-center py-2">
+            <div className="flex flex-col gap-1 w-full max-w-[180px]">
+              <Label htmlFor="chart-from" className="text-xs font-medium mb-1">
+                Từ ngày
+              </Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <button
+                    type="button"
+                    className="border rounded-lg px-3 py-2 pr-10 w-full flex items-center text-sm shadow-sm focus:outline-primary bg-white hover:bg-muted transition group"
+                  >
+                    <CalendarDays className="mr-2 h-4 w-4 text-gray-400" />
+                    {chartFrom ? (
+                      new Date(chartFrom).toLocaleDateString("vi-VN")
+                    ) : (
+                      <span className="text-muted-foreground group-hover:text-primary">
+                        Chọn ngày bắt đầu
+                      </span>
+                    )}
+                  </button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={chartFrom ? new Date(chartFrom) : undefined}
+                    onSelect={(date) => {
+                      if (date instanceof Date)
+                        setChartFrom(date.toISOString().slice(0, 10));
+                    }}
+                    initialFocus
+                    locale={vi}
+                    disabled={(date) => date > new Date(chartTo)}
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+            <div className="flex flex-col gap-1 w-full max-w-[180px]">
+              <Label htmlFor="chart-to" className="text-xs font-medium mb-1">
+                Đến ngày
+              </Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <button
+                    type="button"
+                    className="border rounded-lg px-3 py-2 pr-10 w-full flex items-center text-sm shadow-sm focus:outline-primary bg-white hover:bg-muted transition group"
+                  >
+                    <CalendarDays className="mr-2 h-4 w-4 text-gray-400" />
+                    {chartTo ? (
+                      new Date(chartTo).toLocaleDateString("vi-VN")
+                    ) : (
+                      <span className="text-muted-foreground group-hover:text-primary">
+                        Chọn ngày kết thúc
+                      </span>
+                    )}
+                  </button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={chartTo ? new Date(chartTo) : undefined}
+                    onSelect={(date) => {
+                      if (date instanceof Date)
+                        setChartTo(date.toISOString().slice(0, 10));
+                    }}
+                    initialFocus
+                    locale={vi}
+                    disabled={(date) => date < new Date(chartFrom)}
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+            <div className="flex flex-col gap-1 w-full max-w-[140px]">
+              <Label className="text-xs font-medium mb-1">Nhóm theo</Label>
+              <Select
+                value={groupBy}
+                onValueChange={(v) => setGroupBy(v as "day" | "month")}
+              >
+                <SelectTrigger className="rounded-lg px-3 py-2 text-sm shadow-sm">
+                  <SelectValue placeholder="Nhóm theo" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="day">Ngày</SelectItem>
+                  <SelectItem value="month">Tháng</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </CardContent>
         <CardHeader>
           <CardTitle>
             Biểu đồ tổng quan theo {groupBy === "day" ? "ngày" : "tháng"}
@@ -353,77 +666,110 @@ export default function DashboardPage() {
         </CardContent>
       </Card>
 
-      {/* Hai PieChart trạng thái */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <PieChart className="w-5 h-5" /> Trạng thái booking
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            {loadingBookingStatus ? (
-              <Skeleton className="h-48 w-full rounded-lg" />
-            ) : (
-              <ResponsiveContainer width="100%" height={200}>
-                <RePieChart>
-                  <Pie
-                    data={bookingPieData}
-                    dataKey="value"
-                    nameKey="name"
-                    cx="50%"
-                    cy="50%"
-                    outerRadius={60}
-                    label
-                  >
-                    {bookingPieData.map((entry, idx) => (
-                      <Cell key={`cell-booking-${idx}`} fill={entry.color} />
-                    ))}
-                  </Pie>
-                  <Legend />
-                </RePieChart>
-              </ResponsiveContainer>
-            )}
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <PieChart className="w-5 h-5" /> Trạng thái khách sạn
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            {loadingHotelStatus ? (
-              <Skeleton className="h-48 w-full rounded-lg" />
-            ) : (
-              <ResponsiveContainer width="100%" height={200}>
-                <RePieChart>
-                  <Pie
-                    data={hotelPieData}
-                    dataKey="value"
-                    nameKey="name"
-                    cx="50%"
-                    cy="50%"
-                    outerRadius={60}
-                    label
-                  >
-                    {hotelPieData.map((entry, idx) => (
-                      <Cell key={`cell-hotel-${idx}`} fill={entry.color} />
-                    ))}
-                  </Pie>
-                  <Legend />
-                </RePieChart>
-              </ResponsiveContainer>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-
       {/* Top khách sạn */}
       <Card>
         <CardHeader>
           <CardTitle>Top khách sạn có nhiều booking nhất</CardTitle>
         </CardHeader>
+        {/* Bộ lọc riêng cho top khách sạn */}
+        <CardContent>
+          <div className="flex flex-col md:flex-row gap-4 items-end justify-center mb-4 py-2">
+            <div className="flex flex-col gap-1 w-full max-w-[180px]">
+              <Label
+                htmlFor="top-hotel-from"
+                className="text-xs font-medium mb-1"
+              >
+                Từ ngày
+              </Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <button
+                    type="button"
+                    className="border rounded-lg px-3 py-2 pr-10 w-full flex items-center text-sm shadow-sm focus:outline-primary bg-white hover:bg-muted transition group"
+                  >
+                    <CalendarDays className="mr-2 h-4 w-4 text-gray-400" />
+                    {topHotelFrom ? (
+                      new Date(topHotelFrom).toLocaleDateString("vi-VN")
+                    ) : (
+                      <span className="text-muted-foreground group-hover:text-primary">
+                        Chọn ngày bắt đầu
+                      </span>
+                    )}
+                  </button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={topHotelFrom ? new Date(topHotelFrom) : undefined}
+                    onSelect={(date) => {
+                      if (date instanceof Date)
+                        setTopHotelFrom(date.toISOString().slice(0, 10));
+                    }}
+                    initialFocus
+                    locale={vi}
+                    disabled={(date) => date > new Date(topHotelTo)}
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+            <div className="flex flex-col gap-1 w-full max-w-[180px]">
+              <Label
+                htmlFor="top-hotel-to"
+                className="text-xs font-medium mb-1"
+              >
+                Đến ngày
+              </Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <button
+                    type="button"
+                    className="border rounded-lg px-3 py-2 pr-10 w-full flex items-center text-sm shadow-sm focus:outline-primary bg-white hover:bg-muted transition group"
+                  >
+                    <CalendarDays className="mr-2 h-4 w-4 text-gray-400" />
+                    {topHotelTo ? (
+                      new Date(topHotelTo).toLocaleDateString("vi-VN")
+                    ) : (
+                      <span className="text-muted-foreground group-hover:text-primary">
+                        Chọn ngày kết thúc
+                      </span>
+                    )}
+                  </button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={topHotelTo ? new Date(topHotelTo) : undefined}
+                    onSelect={(date) => {
+                      if (date instanceof Date)
+                        setTopHotelTo(date.toISOString().slice(0, 10));
+                    }}
+                    initialFocus
+                    locale={vi}
+                    disabled={(date) => date < new Date(topHotelFrom)}
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+            <div className="flex flex-col gap-1 w-full max-w-[140px]">
+              <Label className="text-xs font-medium mb-1">Số lượng top</Label>
+              <Select
+                value={topHotelLimit.toString()}
+                onValueChange={(v) => setTopHotelLimit(Number(v))}
+              >
+                <SelectTrigger className="rounded-lg px-3 py-2 text-sm shadow-sm">
+                  <SelectValue placeholder="Top" />
+                </SelectTrigger>
+                <SelectContent>
+                  {[3, 5, 10].map((n) => (
+                    <SelectItem key={n} value={n.toString()}>
+                      Top {n}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </CardContent>
         <CardContent>
           {loadingTopHotels ? (
             <Skeleton className="h-48 w-full rounded-lg" />
@@ -465,6 +811,102 @@ export default function DashboardPage() {
         <CardHeader>
           <CardTitle>Top người dùng có nhiều booking nhất</CardTitle>
         </CardHeader>
+        {/* Bộ lọc riêng cho top người dùng */}
+        <CardContent>
+          <div className="flex flex-col md:flex-row gap-4 items-end justify-center mb-4 py-2">
+            <div className="flex flex-col gap-1 w-full max-w-[180px]">
+              <Label
+                htmlFor="top-user-from"
+                className="text-xs font-medium mb-1"
+              >
+                Từ ngày
+              </Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <button
+                    type="button"
+                    className="border rounded-lg px-3 py-2 pr-10 w-full flex items-center text-sm shadow-sm focus:outline-primary bg-white hover:bg-muted transition group"
+                  >
+                    <CalendarDays className="mr-2 h-4 w-4 text-gray-400" />
+                    {topUserFrom ? (
+                      new Date(topUserFrom).toLocaleDateString("vi-VN")
+                    ) : (
+                      <span className="text-muted-foreground group-hover:text-primary">
+                        Chọn ngày bắt đầu
+                      </span>
+                    )}
+                  </button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={topUserFrom ? new Date(topUserFrom) : undefined}
+                    onSelect={(date) => {
+                      if (date instanceof Date)
+                        setTopUserFrom(date.toISOString().slice(0, 10));
+                    }}
+                    initialFocus
+                    locale={vi}
+                    disabled={(date) => date > new Date(topUserTo)}
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+            <div className="flex flex-col gap-1 w-full max-w-[180px]">
+              <Label htmlFor="top-user-to" className="text-xs font-medium mb-1">
+                Đến ngày
+              </Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <button
+                    type="button"
+                    className="border rounded-lg px-3 py-2 pr-10 w-full flex items-center text-sm shadow-sm focus:outline-primary bg-white hover:bg-muted transition group"
+                  >
+                    <CalendarDays className="mr-2 h-4 w-4 text-gray-400" />
+                    {topUserTo ? (
+                      new Date(topUserTo).toLocaleDateString("vi-VN")
+                    ) : (
+                      <span className="text-muted-foreground group-hover:text-primary">
+                        Chọn ngày kết thúc
+                      </span>
+                    )}
+                  </button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={topUserTo ? new Date(topUserTo) : undefined}
+                    onSelect={(date) => {
+                      if (date instanceof Date)
+                        setTopUserTo(date.toISOString().slice(0, 10));
+                    }}
+                    initialFocus
+                    locale={vi}
+                    disabled={(date) => date < new Date(topUserFrom)}
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+            <div className="flex flex-col gap-1 w-full max-w-[140px]">
+              <Label className="text-xs font-medium mb-1">Số lượng top</Label>
+              <Select
+                value={topUserLimit.toString()}
+                onValueChange={(v) => setTopUserLimit(Number(v))}
+              >
+                <SelectTrigger className="rounded-lg px-3 py-2 text-sm shadow-sm">
+                  <SelectValue placeholder="Top" />
+                </SelectTrigger>
+                <SelectContent>
+                  {[3, 5, 10].map((n) => (
+                    <SelectItem key={n} value={n.toString()}>
+                      Top {n}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </CardContent>
         <CardContent>
           {loadingTopUsers ? (
             <Skeleton className="h-48 w-full rounded-lg" />
