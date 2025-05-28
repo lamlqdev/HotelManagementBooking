@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { useState, useEffect } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,6 +29,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useAppDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -115,6 +116,19 @@ const LoginPage = () => {
   const onSubmit = (data: LoginFormData) => {
     loginMutation.mutate(data);
   };
+
+  // Hiển thị toast nếu có lỗi từ OAuth hoặc các redirect khác
+  useEffect(() => {
+    const error = searchParams.get("error");
+    const message = searchParams.get("message");
+    if (error) {
+      setTimeout(() => {
+        toast.error(decodeURIComponent(message || "Có lỗi xảy ra"), {
+          duration: 6000,
+        });
+      }, 200);
+    }
+  }, [searchParams, setSearchParams]);
 
   return (
     <div className="min-h-screen flex">

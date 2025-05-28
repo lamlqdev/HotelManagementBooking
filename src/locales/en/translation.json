@@ -76,6 +76,14 @@
     "login": {
       "title": "Login",
       "welcome": "Hello!",
+      "error": {
+        "generic": "An error occurred during login. Please try again.",
+        "noToken": "No authentication token received. Please try again.",
+        "accountInactive": "Your account is not active or has been deactivated.",
+        "fetchUser": "Could not fetch user information. Please try again."
+      },
+      "error_message": "An error occurred during login. Please try again.",
+      "success": "Login successful!",
       "welcomeMessage": "We hope you have the most comfortable experience with our services.",
       "form": {
         "email": {
@@ -100,7 +108,8 @@
         "facebook": "Continue with Facebook"
       },
       "noAccount": "Don't have an account?",
-      "register": "Register"
+      "register": "Register",
+      "processing": "Processing login..."
     },
     "register": {
       "title": "Register account",

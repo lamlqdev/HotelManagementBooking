@@ -76,6 +76,14 @@
     "login": {
       "title": "Đăng nhập",
       "welcome": "Xin chào!",
+      "error": {
+        "generic": "Đã xảy ra lỗi khi đăng nhập. Vui lòng thử lại.",
+        "noToken": "Không nhận được mã xác thực. Vui lòng thử lại.",
+        "accountInactive": "Tài khoản của bạn chưa được kích hoạt hoặc đã bị vô hiệu hóa.",
+        "fetchUser": "Không thể lấy thông tin người dùng. Vui lòng thử lại."
+      },
+      "error_message": "Đã xảy ra lỗi khi đăng nhập. Vui lòng thử lại.",
+      "success": "Đăng nhập thành công!",
       "welcomeMessage": "Chúc bạn có những giây phút trải nghiệm dịch vụ của chúng tôi thoải mái nhất.",
       "form": {
         "email": {
@@ -202,7 +210,15 @@
         "password_mismatch": "Mật khẩu không khớp",
         "unknown": "Đã có lỗi xảy ra, vui lòng thử lại"
       }
-    }
+    },
+    "error": {
+      "generic": "Đã xảy ra lỗi khi đăng nhập. Vui lòng thử lại.",
+      "noToken": "Không nhận được mã xác thực. Vui lòng thử lại.",
+      "accountInactive": "Tài khoản của bạn chưa được kích hoạt hoặc đã bị vô hiệu hóa.",
+      "fetchUser": "Không thể lấy thông tin người dùng. Vui lòng thử lại."
+    },
+    "success": "Đăng nhập thành công!",
+    "processing": "Đang xử lý đăng nhập..."
   },
   "banner": {
     "home": {
