@@ -107,7 +107,7 @@ export const roomApi = {
   // Tìm kiếm khách sạn theo tiêu chí
   searchRooms: async (params: RoomSearchParams): Promise<HotelResponse> => {
     const response = await axiosInstance.get<HotelResponse>(
-      `${baseUrl}/search`,
+      `/hotels/search`,
       {
         params: {
           ...params,
