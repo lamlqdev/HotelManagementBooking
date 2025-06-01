@@ -51,10 +51,12 @@ const Blog: React.FC = () => {
     };
   });
 
-  // Lọc theo search
-  const filteredPosts = blogPosts.filter((post) => {
-    return post.title.toLowerCase().includes(searchQuery.toLowerCase());
-  });
+  // Chỉ lấy bài viết đã duyệt và lọc theo search
+  const filteredPosts = blogPosts
+    .filter((post) => post.status === "approved")
+    .filter((post) =>
+      post.title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
   // Tính toán phân trang
   const totalPages = Math.ceil(filteredPosts.length / postsPerPage);

@@ -92,7 +92,7 @@ export default function RoomDetailPage() {
   });
 
   const handleDelete = () => {
-    if (confirmName !== room?.roomName) {
+    if (confirmName !== room?.name) {
       toast.error(t("room.dialog.delete.name_mismatch"));
       return;
     }
@@ -186,13 +186,13 @@ export default function RoomDetailPage() {
         <div className="relative h-[600px]">
           <img
             src={room.images[currentImageIndex]?.url || ""}
-            alt={`${room.roomName} - Hình ${currentImageIndex + 1}`}
+            alt={`${room.name} - Hình ${currentImageIndex + 1}`}
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-black/40">
             <div className="absolute bottom-0 left-0 right-0 p-6">
               <h2 className="text-4xl font-bold text-white mb-2">
-                {room.roomName}
+                {room.name}
               </h2>
               <p className="text-xl text-white/90">{room.roomType}</p>
             </div>

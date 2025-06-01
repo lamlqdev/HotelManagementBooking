@@ -61,7 +61,7 @@ export type RoomDiscountParams = {
 };
 
 export type UpdateRoomData = {
-  roomName?: string;
+  name?: string;
   floor?: number;
   roomType?: string;
   bedType?: string;
@@ -79,7 +79,7 @@ export type UpdateRoomFormData = FormData;
 
 export const createRoomSchema = z.object({
   hotelId: z.string().min(1, "Vui lòng chọn khách sạn"),
-  roomName: z.string().min(1, "Vui lòng nhập tên phòng"),
+  name: z.string().min(1, "Vui lòng nhập tên phòng"),
   description: z.string().min(1, "Vui lòng nhập mô tả phòng"),
   floor: z
     .number()

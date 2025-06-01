@@ -114,7 +114,7 @@ export default function RoomManagementPage() {
       // Lọc theo tên phòng
       if (
         searchTerm &&
-        !room.roomName.toLowerCase().includes(searchTerm.toLowerCase())
+        !room.name.toLowerCase().includes(searchTerm.toLowerCase())
       ) {
         return false;
       }
@@ -141,8 +141,8 @@ export default function RoomManagementPage() {
   const sortedRooms = [...filteredRooms].sort((a, b) => {
     if (sortField === "name") {
       return sortOrder === "asc"
-        ? a.roomName.localeCompare(b.roomName)
-        : b.roomName.localeCompare(a.roomName);
+        ? a.name.localeCompare(b.name)
+        : b.name.localeCompare(a.name);
     } else {
       return sortOrder === "asc" ? a.price - b.price : b.price - a.price;
     }
@@ -504,12 +504,12 @@ export default function RoomManagementPage() {
                     ? room.images[0].url
                     : "https://via.placeholder.com/300x200?text=No+Image"
                 }
-                alt={room.roomName}
+                alt={room.name}
                 className="w-full h-full object-cover"
               />
             </div>
             <CardContent className="p-4">
-              <h3 className="font-semibold text-lg mb-1">{room.roomName}</h3>
+              <h3 className="font-semibold text-lg mb-1">{room.name}</h3>
               <p className="text-sm text-muted-foreground mb-2">
                 {room.roomType}
               </p>

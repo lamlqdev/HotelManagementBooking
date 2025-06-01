@@ -1815,5 +1815,12 @@
       "send": "Gửi đánh giá",
       "cancel": "Huỷ"
     }
+  },
+  "notification": {
+    "title": "Thông báo",
+    "description": "Thông báo",
+    "success": "Thành công",
+    "error": "Lỗi",
+    "empty": "Không có thông báo"
   }
 }

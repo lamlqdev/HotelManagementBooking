@@ -88,7 +88,7 @@ export function EditRoomDialog({
       const formData = new FormData();
 
       // Thêm các trường thông tin cơ bản nếu có
-      if (data.roomName) formData.append("roomName", data.roomName);
+      if (data.name) formData.append("name", data.name);
       if (data.floor) formData.append("floor", data.floor.toString());
       if (data.roomType) formData.append("roomType", data.roomType);
       if (data.bedType) formData.append("bedType", data.bedType);
@@ -253,8 +253,7 @@ export function EditRoomDialog({
 
     const updateData: UpdateRoomData = {};
 
-    if (editedRoom.roomName !== room.roomName)
-      updateData.roomName = editedRoom.roomName;
+    if (editedRoom.name !== room.name) updateData.name = editedRoom.name;
     if (editedRoom.roomType !== room.roomType)
       updateData.roomType = editedRoom.roomType;
     if (editedRoom.bedType !== room.bedType)
@@ -341,11 +340,11 @@ export function EditRoomDialog({
               <div className="space-y-2">
                 <Label>{t("room.dialog.edit.name")}</Label>
                 <Input
-                  value={editedRoom.roomName || ""}
+                  value={editedRoom.name || ""}
                   onChange={(e) =>
                     setEditedRoom((prev) => ({
                       ...prev,
-                      roomName: e.target.value,
+                      name: e.target.value,
                     }))
                   }
                 />

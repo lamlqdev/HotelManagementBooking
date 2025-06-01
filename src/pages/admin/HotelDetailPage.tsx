@@ -1,39 +1,36 @@
+import { useRef } from "react";
+import { useNavigate, useParams } from "react-router";
 import { useTranslation } from "react-i18next";
-import { useParams, useNavigate } from "react-router";
-import { useQuery } from "@tanstack/react-query";
-import { hotelApi } from "@/api/hotel/hotel.api";
-import { userApi } from "@/api/user/user.api";
-import { reviewApi } from "@/api/review/review.api";
-import { amenitiesApi } from "@/api/amenities/amenities.api";
-import { bookingApi } from "@/api/booking/booking.api";
-import { Amenity } from "@/types/amenity";
-import { getAmenityIcon } from "@/utils/amenityIcons";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { format } from "date-fns";
 import {
   ArrowLeft,
   Ban,
   Calendar,
   Clock,
+  Dog,
+  ExternalLink,
   Globe,
   Heart,
   Hotel,
+  Mail,
   MapPin,
   Phone,
   Star,
-  Users,
-  ExternalLink,
-  Dog,
-  Mail,
   User,
+  Users,
 } from "lucide-react";
-import { format } from "date-fns";
-import { User as UserType } from "@/types/auth";
-import { Review } from "@/types/review";
-import { useRef } from "react";
+
+import { amenitiesApi } from "@/api/amenities/amenities.api";
+import { bookingApi } from "@/api/booking/booking.api";
+import { hotelApi } from "@/api/hotel/hotel.api";
+import { reviewApi } from "@/api/review/review.api";
+import { userApi } from "@/api/user/user.api";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -42,6 +39,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Amenity } from "@/types/amenity";
+import { User as UserType } from "@/types/auth";
+import { Review } from "@/types/review";
+import { getAmenityIcon } from "@/utils/amenityIcons";
 
 export default function HotelDetailPage() {
   const sectionIds = [
@@ -55,6 +56,17 @@ export default function HotelDetailPage() {
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+
+  const queryClient = useQueryClient();
+  const disableHotelMutation = useMutation({
+    mutationFn: async () => {
+      if (!id) throw new Error("Hotel ID is required");
+      return hotelApi.updateHotel(id, { status: "inactive" });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["hotel", id] });
+    },
+  });
 
   // Sử dụng React Query để lấy thông tin chi tiết khách sạn
   const {
@@ -184,14 +196,29 @@ export default function HotelDetailPage() {
   return (
     <div className="container mx-auto px-4 pb-12">
       <div className="max-w-6xl mx-auto">
-        <div className="mb-4">
-          <Button variant="outline" onClick={handleBack} className="mb-3">
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            {t("common.back")}
+        <div className="mb-4 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <Button variant="outline" onClick={handleBack} className="mb-0">
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              {t("common.back")}
+            </Button>
+            <h1 className="text-2xl font-bold">
+              {t("admin.hotels.details.title")}
+            </h1>
+          </div>
+          <Button
+            variant="destructive"
+            onClick={() => disableHotelMutation.mutate()}
+            disabled={
+              hotel.status === "inactive" || disableHotelMutation.isPending
+            }
+          >
+            {disableHotelMutation.isPending
+              ? "Đang xử lý..."
+              : hotel.status === "inactive"
+              ? "Đã vô hiệu hoá"
+              : "Vô hiệu hoá khách sạn"}
           </Button>
-          <h1 className="text-2xl font-bold">
-            {t("admin.hotels.details.title")}
-          </h1>
         </div>
         {/* Layout chia 2 cột: nội dung | thanh điều hướng dọc */}
         <div className="flex flex-col md:flex-row gap-8">
@@ -561,7 +588,7 @@ export default function HotelDetailPage() {
                       <CardContent>
                         <div className="flex items-center gap-6 mb-8">
                           <Avatar className="h-24 w-24 border-4 border-primary shadow-lg">
-                            <AvatarImage src={partner.avatar?.[0]?.url} />
+                            <AvatarImage src={partner.avatar?.url} />
                             <AvatarFallback>
                               {partner.name
                                 ?.split(" ")
@@ -611,30 +638,6 @@ export default function HotelDetailPage() {
                             </span>
                           </div>
                         </div>
-                        {partner.partnerInfo?.documents && (
-                          <div className="mt-6">
-                            <h3 className="text-lg font-semibold mb-2 flex items-center gap-2">
-                              <ExternalLink className="h-4 w-4 text-primary" />{" "}
-                              Tài liệu xác thực
-                            </h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                              {partner.partnerInfo.documents.map(
-                                (doc, index) => (
-                                  <a
-                                    key={index}
-                                    href={doc.url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="flex items-center gap-2 p-3 bg-primary/5 rounded-lg hover:bg-primary/10 transition-colors shadow-sm text-blue-600 font-medium"
-                                  >
-                                    <ExternalLink className="h-4 w-4" />
-                                    <span>{doc.filename}</span>
-                                  </a>
-                                )
-                              )}
-                            </div>
-                          </div>
-                        )}
                       </CardContent>
                     </Card>
                   </div>
@@ -717,7 +720,7 @@ export default function HotelDetailPage() {
                       >
                         <div className="flex items-start gap-4">
                           <Avatar className="h-12 w-12">
-                            <AvatarImage src={review.userId.avatar?.[0]?.url} />
+                            <AvatarImage src={review.userId.avatar?.url} />
                             <AvatarFallback>
                               {review.userId.name
                                 ?.split(" ")

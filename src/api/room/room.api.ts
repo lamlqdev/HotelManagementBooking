@@ -42,7 +42,7 @@ export const roomApi = {
 
     // Thêm các trường thông tin cơ bản
     formData.append("hotelId", hotelId);
-    formData.append("roomName", data.roomName);
+    formData.append("name", data.name);
     formData.append("description", data.description);
     formData.append("floor", data.floor.toString());
     formData.append("roomType", data.roomType);

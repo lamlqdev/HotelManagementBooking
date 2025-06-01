@@ -33,7 +33,9 @@ export default function TravelInspiration() {
   };
 
   // Lấy 2 bài viết đầu tiên
-  const posts: Post[] = data?.data?.slice(0, 2) || [];
+  const posts: Post[] = (
+    data?.data?.filter((post: Post) => post.status === "approved") || []
+  ).slice(0, 2);
 
   return (
     <section className="py-12 bg-background">

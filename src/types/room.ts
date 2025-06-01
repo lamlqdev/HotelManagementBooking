@@ -9,7 +9,7 @@ export type RoomImage = {
 export type Room = {
   _id: string;
   hotelId: string;
-  roomName: string;
+  name: string;
   description: string;
   floor: number;
   roomType: "Standard" | "Superior" | "Deluxe" | "Suite" | "Family";

@@ -33,12 +33,24 @@ import { Voucher } from "@/types/voucher";
 
 const formSchema = z.object({
   code: z.string().min(1, "Vui lòng nhập mã voucher"),
-  discount: z.coerce.number().min(1, "Vui lòng nhập giá trị giảm giá"),
+  discount: z.coerce
+    .number()
+    .min(0, "Giá trị giảm giá phải lớn hơn hoặc bằng 0"),
   expiryDate: z.string().min(1, "Vui lòng chọn ngày hết hạn"),
-  usageLimit: z.coerce.number().optional(),
-  minOrderValue: z.coerce.number().optional(),
+  usageLimit: z.coerce
+    .number()
+    .min(0, "Số lượt sử dụng phải lớn hơn hoặc bằng 0")
+    .optional(),
+  minOrderValue: z.coerce
+    .number()
+    .min(0, "Giá trị đơn tối thiểu phải lớn hơn hoặc bằng 0")
+    .optional(),
   discountType: z.enum(["percentage", "fixed"]).default("percentage"),
-  maxDiscount: z.coerce.number().nullable().optional(),
+  maxDiscount: z.coerce
+    .number()
+    .min(0, "Giá trị giảm tối đa phải lớn hơn hoặc bằng 0")
+    .nullable()
+    .optional(),
   startDate: z.string().optional(),
   status: z.enum(["active", "inactive", "expired"]).default("active"),
 });

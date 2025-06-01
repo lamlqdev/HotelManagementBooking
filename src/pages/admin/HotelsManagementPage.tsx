@@ -42,15 +42,18 @@ export default function HotelsManagementPage() {
   const { t } = useTranslation();
   const [currentPage, setCurrentPage] = useState(1);
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchInput, setSearchInput] = useState("");
   const navigate = useNavigate();
 
   // Sử dụng React Query để lấy danh sách khách sạn
   const { data, isLoading, error } = useQuery({
-    queryKey: ["hotels", currentPage],
+    queryKey: ["hotels", currentPage, searchTerm],
     queryFn: async () => {
       const response = await hotelApi.getHotels({
         page: currentPage,
         limit: 5,
+        name: searchTerm || undefined,
       });
       return response;
     },
@@ -89,6 +92,17 @@ export default function HotelsManagementPage() {
 
   const handleRowClick = (hotelId: string) => {
     navigate(`/admin/hotels/${hotelId}`);
+  };
+
+  const handleSearch = () => {
+    setCurrentPage(1);
+    setSearchTerm(searchInput.trim());
+  };
+
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
   };
 
   const renderPaginationItems = () => {
@@ -178,7 +192,18 @@ export default function HotelsManagementPage() {
               <Input
                 placeholder={t("admin.hotels.searchPlaceholder")}
                 className="pl-9"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                onKeyDown={handleInputKeyDown}
               />
+              <Button
+                size="sm"
+                className="absolute right-2 top-1/2 -translate-y-1/2"
+                onClick={handleSearch}
+                variant="outline"
+              >
+                <Search className="h-4 w-4" />
+              </Button>
             </div>
             <Select
               value={statusFilter}

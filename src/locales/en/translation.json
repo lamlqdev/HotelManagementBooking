@@ -1804,5 +1804,12 @@
       "send": "Submit review",
       "cancel": "Cancel"
     }
+  },
+  "notification": {
+    "title": "Notification",
+    "description": "Notification",
+    "success": "Success",
+    "error": "Error",
+    "empty": "No notifications"
   }
 }
