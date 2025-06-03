@@ -476,6 +476,7 @@
       "noBooking": "Bạn chưa có đặt phòng nào",
       "errorTitle": "Có lỗi xảy ra khi tải dữ liệu",
       "errorDesc": "Vui lòng thử lại sau",
+      "statusFilter": "Lọc theo trạng thái",
       "columns": {
         "id": "Mã đặt phòng",
         "room": "Phòng",
@@ -486,6 +487,7 @@
         "total": "Tổng tiền"
       },
       "status": {
+        "all": "Tất cả",
         "confirmed": "Đã xác nhận",
         "pending": "Đang chờ",
         "cancelled": "Đã hủy",

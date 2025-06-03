@@ -17,6 +17,13 @@ import { Badge } from "@/components/ui/badge";
 import { BookingDetailModal } from "@/components/user/booking/BookingDetailModal";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const MyBookingPage = () => {
   const [selectedBooking, setSelectedBooking] = useState<MyBookingItem | null>(
@@ -32,6 +39,16 @@ const MyBookingPage = () => {
     queryKey: ["myBookings"],
     queryFn: () => bookingApi.getMyBookings(),
   });
+
+  const STATUS_OPTIONS = [
+    { value: "all", label: t("booking.myBookingPage.status.all") },
+    { value: "pending", label: t("booking.myBookingPage.status.pending") },
+    { value: "confirmed", label: t("booking.myBookingPage.status.confirmed") },
+    { value: "completed", label: t("booking.myBookingPage.status.completed") },
+    { value: "cancelled", label: t("booking.myBookingPage.status.cancelled") },
+  ];
+
+  const [statusFilter, setStatusFilter] = useState("all");
 
   if (error) {
     return (
@@ -62,6 +79,26 @@ const MyBookingPage = () => {
             <p className="text-muted-foreground mt-2">
               {t("booking.myBookingPage.description")}
             </p>
+          </div>
+
+          <div className="mb-4 flex items-center gap-4">
+            <label className="text-sm text-muted-foreground">
+              {t("booking.myBookingPage.statusFilter")}
+            </label>
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue
+                  placeholder={t("booking.myBookingPage.status.all")}
+                />
+              </SelectTrigger>
+              <SelectContent>
+                {STATUS_OPTIONS.map((opt) => (
+                  <SelectItem key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           <Table>
@@ -127,102 +164,108 @@ const MyBookingPage = () => {
                   </TableCell>
                 </TableRow>
               ) : (
-                bookings.data.map((booking) => (
-                  <TableRow
-                    key={booking._id}
-                    className="hover:bg-transparent cursor-pointer"
-                    onClick={() => setSelectedBooking(booking)}
-                  >
-                    <TableCell className="py-4">
-                      <span className="font-medium">#{booking._id}</span>
-                    </TableCell>
-                    <TableCell className="py-4">
-                      <div className="flex items-center gap-1">
-                        <Hotel className="h-3 w-3 flex-shrink-0 text-muted-foreground" />
-                        <span className="truncate">
-                          {t("booking.myBookingPage.columns.room")}{" "}
-                          {booking.room.roomName}
-                        </span>
-                      </div>
-                    </TableCell>
-                    <TableCell className="py-4">
-                      <div className="flex items-center gap-1">
-                        <Calendar className="h-3 w-3 flex-shrink-0 text-muted-foreground" />
-                        <span>{format(booking.checkIn, "dd/MM/yyyy")}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell className="py-4">
-                      <div className="flex items-center gap-1">
-                        <Calendar className="h-3 w-3 flex-shrink-0 text-muted-foreground" />
-                        <span>{format(booking.checkOut, "dd/MM/yyyy")}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell className="py-4">
-                      <Badge
-                        variant={
-                          booking.status === "confirmed"
-                            ? "default"
-                            : booking.status === "pending"
-                            ? "secondary"
-                            : booking.status === "cancelled"
-                            ? "destructive"
-                            : "outline"
-                        }
-                        className={`whitespace-nowrap
-                          ${
+                bookings.data
+                  .filter((booking) =>
+                    statusFilter === "all"
+                      ? true
+                      : booking.status === statusFilter
+                  )
+                  .map((booking) => (
+                    <TableRow
+                      key={booking._id}
+                      className="hover:bg-transparent cursor-pointer"
+                      onClick={() => setSelectedBooking(booking)}
+                    >
+                      <TableCell className="py-4">
+                        <span className="font-medium">#{booking._id}</span>
+                      </TableCell>
+                      <TableCell className="py-4">
+                        <div className="flex items-center gap-1">
+                          <Hotel className="h-3 w-3 flex-shrink-0 text-muted-foreground" />
+                          <span className="truncate">
+                            {t("booking.myBookingPage.columns.room")}{" "}
+                            {booking.room.roomName}
+                          </span>
+                        </div>
+                      </TableCell>
+                      <TableCell className="py-4">
+                        <div className="flex items-center gap-1">
+                          <Calendar className="h-3 w-3 flex-shrink-0 text-muted-foreground" />
+                          <span>{format(booking.checkIn, "dd/MM/yyyy")}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell className="py-4">
+                        <div className="flex items-center gap-1">
+                          <Calendar className="h-3 w-3 flex-shrink-0 text-muted-foreground" />
+                          <span>{format(booking.checkOut, "dd/MM/yyyy")}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell className="py-4">
+                        <Badge
+                          variant={
                             booking.status === "confirmed"
-                              ? "bg-green-100 text-green-700 border-green-200"
-                              : ""
+                              ? "default"
+                              : booking.status === "pending"
+                              ? "secondary"
+                              : booking.status === "cancelled"
+                              ? "destructive"
+                              : "outline"
                           }
-                          ${
-                            booking.status === "pending"
-                              ? "bg-yellow-100 text-yellow-700 border-yellow-200"
-                              : ""
+                          className={`whitespace-nowrap
+                            ${
+                              booking.status === "confirmed"
+                                ? "bg-green-100 text-green-700 border-green-200"
+                                : ""
+                            }
+                            ${
+                              booking.status === "pending"
+                                ? "bg-yellow-100 text-yellow-700 border-yellow-200"
+                                : ""
+                            }
+                            ${
+                              booking.status === "cancelled"
+                                ? "bg-red-100 text-red-700 border-red-200"
+                                : ""
+                            }
+                            ${
+                              booking.status === "completed"
+                                ? "bg-blue-100 text-blue-700 border-blue-200"
+                                : ""
+                            }
+                          `}
+                        >
+                          {t(`booking.myBookingPage.status.${booking.status}`)}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="py-4">
+                        <Badge
+                          variant={
+                            booking.paymentStatus === "paid"
+                              ? "default"
+                              : booking.paymentStatus === "pending"
+                              ? "secondary"
+                              : "destructive"
                           }
-                          ${
-                            booking.status === "cancelled"
-                              ? "bg-red-100 text-red-700 border-red-200"
-                              : ""
-                          }
-                          ${
-                            booking.status === "completed"
-                              ? "bg-blue-100 text-blue-700 border-blue-200"
-                              : ""
-                          }
-                        `}
-                      >
-                        {t(`booking.myBookingPage.status.${booking.status}`)}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="py-4">
-                      <Badge
-                        variant={
-                          booking.paymentStatus === "paid"
-                            ? "default"
-                            : booking.paymentStatus === "pending"
-                            ? "secondary"
-                            : "destructive"
-                        }
-                        className="whitespace-nowrap"
-                      >
-                        {t(
-                          `booking.myBookingPage.paymentStatus.${booking.paymentStatus}`
-                        )}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="py-4 text-right">
-                      <div className="flex items-center justify-end gap-1">
-                        <CreditCard className="h-3 w-3 flex-shrink-0 text-muted-foreground" />
-                        <span>
-                          {new Intl.NumberFormat("vi-VN", {
-                            style: "currency",
-                            currency: "VND",
-                          }).format(booking.finalPrice)}
-                        </span>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))
+                          className="whitespace-nowrap"
+                        >
+                          {t(
+                            `booking.myBookingPage.paymentStatus.${booking.paymentStatus}`
+                          )}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="py-4 text-right">
+                        <div className="flex items-center justify-end gap-1">
+                          <CreditCard className="h-3 w-3 flex-shrink-0 text-muted-foreground" />
+                          <span>
+                            {new Intl.NumberFormat("vi-VN", {
+                              style: "currency",
+                              currency: "VND",
+                            }).format(booking.finalPrice)}
+                          </span>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))
               )}
             </TableBody>
           </Table>

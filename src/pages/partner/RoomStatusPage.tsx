@@ -149,7 +149,7 @@ export default function RoomStatusPage() {
       selectedFloor === "all" || room.floor === parseInt(selectedFloor);
     const matchesStatus =
       statusFilter === "all" || room.status === statusFilter;
-    const matchesName = room.roomName
+    const matchesName = room.name
       .toLowerCase()
       .includes(searchTerm.toLowerCase());
     return matchesFloor && matchesStatus && matchesName;
@@ -255,7 +255,7 @@ export default function RoomStatusPage() {
                     className="hover:bg-muted/5 transition-colors"
                   >
                     <TableCell className="font-medium text-foreground py-4">
-                      {room.roomName}
+                      {room.name}
                     </TableCell>
                     <TableCell className="text-muted-foreground py-4">
                       {room.roomType}
@@ -375,7 +375,7 @@ export default function RoomStatusPage() {
         <DialogContent className="max-w-[700px] bg-card p-8 rounded-lg">
           <DialogHeader className="mb-6">
             <DialogTitle className="flex items-center gap-3 text-2xl text-foreground">
-              {selectedRoomDetails?.roomName}
+              {selectedRoomDetails?.name}
               {selectedRoomDetails && (
                 <div className="flex items-center gap-3">
                   <div className={getStatusDot(selectedRoomDetails.status)} />
@@ -395,7 +395,7 @@ export default function RoomStatusPage() {
                   <div className="space-y-2">
                     <p className="text-sm text-muted-foreground">Tên phòng</p>
                     <p className="text-foreground text-lg">
-                      {selectedRoomDetails.roomName}
+                      {selectedRoomDetails.name}
                     </p>
                   </div>
                   <div className="space-y-2">
@@ -429,7 +429,7 @@ export default function RoomStatusPage() {
                   <div className="col-span-2 space-y-2">
                     <p className="text-sm text-muted-foreground">Tên phòng</p>
                     <p className="text-foreground text-lg">
-                      {selectedRoomDetails.roomName}
+                      {selectedRoomDetails.name}
                     </p>
                   </div>
                   <div className="col-span-2 space-y-2">

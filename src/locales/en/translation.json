@@ -469,6 +469,7 @@
       "noBooking": "You have no bookings yet",
       "errorTitle": "An error occurred while loading data",
       "errorDesc": "Please try again later",
+      "statusFilter": "Filter by status",
       "columns": {
         "id": "Booking ID",
         "room": "Room",
@@ -479,6 +480,7 @@
         "total": "Total"
       },
       "status": {
+        "all": "All",
         "confirmed": "Confirmed",
         "pending": "Pending",
         "cancelled": "Cancelled",

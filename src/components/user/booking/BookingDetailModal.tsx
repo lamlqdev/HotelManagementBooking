@@ -17,7 +17,7 @@ import {
   Users,
   Tag,
 } from "lucide-react";
-import { format, differenceInCalendarDays } from "date-fns";
+import { format, differenceInCalendarDays, addDays } from "date-fns";
 import type { MyBookingItem } from "@/api/booking/types";
 import { useTranslation } from "react-i18next";
 import { Badge } from "@/components/ui/badge";
@@ -131,6 +131,9 @@ export const BookingDetailModal = ({
   });
 
   const navigate = useNavigate();
+
+  const tomorrow = format(addDays(new Date(), 1), "yyyy-MM-dd");
+  const dayAfterTomorrow = format(addDays(new Date(), 2), "yyyy-MM-dd");
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -355,14 +358,22 @@ export const BookingDetailModal = ({
           {booking.status === "completed" ? (
             <Button
               variant="default"
-              onClick={() => navigate(`/hoteldetail/${booking.room.hotelId}`)}
+              onClick={() =>
+                navigate(
+                  `/hoteldetail/${booking.room.hotelId}?checkIn=${tomorrow}&checkOut=${dayAfterTomorrow}&capacity=1`
+                )
+              }
             >
               {t("booking.detailModal.reviewHotel") || "Đánh giá khách sạn"}
             </Button>
           ) : (
             <Button
               variant="default"
-              onClick={() => navigate(`/hoteldetail/${booking.room.hotelId}`)}
+              onClick={() =>
+                navigate(
+                  `/hoteldetail/${booking.room.hotelId}?checkIn=${tomorrow}&checkOut=${dayAfterTomorrow}&capacity=1`
+                )
+              }
             >
               {t("booking.detailModal.gotoHotel") || "Xem khách sạn"}
             </Button>
