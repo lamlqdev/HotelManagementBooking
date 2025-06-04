@@ -5,7 +5,6 @@ import { toast } from "sonner";
 
 import { amenitiesApi } from "@/api/amenities/amenities.api";
 import { hotelApi } from "@/api/hotel/hotel.api";
-import { locationApi } from "@/api/location/location.api";
 
 import { AmenitiesSection } from "@/components/partner/hotel-info/AmenitiesSection";
 import { BasicInfoSection } from "@/components/partner/hotel-info/BasicInfoSection";
@@ -63,13 +62,6 @@ const HotelInfoPage = () => {
   });
 
   const hotel = hotels?.data[0];
-
-  // Thêm query để lấy thông tin location
-  const { data: locationData, isLoading: isLoadingLocation } = useQuery({
-    queryKey: ["location", hotel?.locationId._id],
-    queryFn: () => locationApi.getLocation(hotel?.locationId._id || ""),
-    enabled: !!hotel?.locationId._id,
-  });
 
   // Lưu thông tin hotel vào Redux khi lấy được dữ liệu
   useEffect(() => {
@@ -245,7 +237,7 @@ const HotelInfoPage = () => {
     toggleHotelStatusMutation.mutate(newStatus);
   };
 
-  if (isLoadingHotels || isLoadingAmenities || isLoadingLocation) {
+  if (isLoadingHotels || isLoadingAmenities) {
     return (
       <div className="container mx-auto px-4 space-y-6">
         <div className="flex justify-between items-center">
@@ -341,7 +333,6 @@ const HotelInfoPage = () => {
           handleInputChange(field as keyof EditedHotelData, value)
         }
         editedData={editedData}
-        location={locationData?.data}
       />
 
       {/* Phần ảnh */}

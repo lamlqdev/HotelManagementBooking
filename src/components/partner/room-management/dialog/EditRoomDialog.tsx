@@ -1,24 +1,24 @@
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Loader2, Pencil, Plus, X } from "lucide-react";
+import { toast } from "sonner";
+
+import { amenitiesApi } from "@/api/amenities/amenities.api";
+import { roomApi } from "@/api/room/room.api";
+import { UpdateRoomData } from "@/api/room/types";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogFooter,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Plus, Pencil, Loader2, X } from "lucide-react";
-import { Room } from "@/types/room";
-import { useTranslation } from "react-i18next";
-import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { roomApi } from "@/api/room/room.api";
-import { UpdateRoomData } from "@/api/room/types";
-import { useState, useEffect } from "react";
 import {
   Select,
   SelectContent,
@@ -26,8 +26,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { amenitiesApi } from "@/api/amenities/amenities.api";
+import { Textarea } from "@/components/ui/textarea";
 import { Amenity } from "@/types/amenity";
+import { Room } from "@/types/room";
 import { getAmenityIcon } from "@/utils/amenityIcons";
 
 interface EditRoomDialogProps {
@@ -245,6 +246,70 @@ export function EditRoomDialog({
   };
 
   const handleSave = () => {
+    // Validate các trường bắt buộc
+    if (!editedRoom.name || editedRoom.name.trim() === "") {
+      toast.error(t("room.dialog.edit.required_name"));
+      return;
+    }
+    if (!editedRoom.roomType) {
+      toast.error(t("room.dialog.edit.required_room_type"));
+      return;
+    }
+    if (!editedRoom.bedType) {
+      toast.error(t("room.dialog.edit.required_bed_type"));
+      return;
+    }
+    if (!editedRoom.description || editedRoom.description.trim() === "") {
+      toast.error(t("room.dialog.edit.required_description"));
+      return;
+    }
+    if (
+      editedRoom.capacity === undefined ||
+      editedRoom.capacity === null ||
+      editedRoom.capacity === 0 ||
+      isNaN(Number(editedRoom.capacity))
+    ) {
+      toast.error(t("room.dialog.edit.required_capacity"));
+      return;
+    }
+    if (
+      editedRoom.squareMeters === undefined ||
+      editedRoom.squareMeters === null ||
+      editedRoom.squareMeters === 0 ||
+      isNaN(Number(editedRoom.squareMeters))
+    ) {
+      toast.error(t("room.dialog.edit.required_square_meters"));
+      return;
+    }
+    if (
+      editedRoom.floor === undefined ||
+      editedRoom.floor === null ||
+      isNaN(Number(editedRoom.floor))
+    ) {
+      toast.error(t("room.dialog.edit.required_floor"));
+      return;
+    }
+
+    // Validate các trường số
+    if (
+      Number(editedRoom.capacity) <= 0 ||
+      !Number.isInteger(Number(editedRoom.capacity))
+    ) {
+      toast.error(t("room.dialog.edit.invalid_capacity"));
+      return;
+    }
+    if (Number(editedRoom.squareMeters) <= 0) {
+      toast.error(t("room.dialog.edit.invalid_square_meters"));
+      return;
+    }
+    if (
+      Number(editedRoom.floor) < 0 ||
+      !Number.isInteger(Number(editedRoom.floor))
+    ) {
+      toast.error(t("room.dialog.edit.invalid_floor"));
+      return;
+    }
+
     // Kiểm tra số lượng hình ảnh tối thiểu
     if (editedRoom.images.length === 0) {
       toast.error(t("room.dialog.edit.min_images_error"));

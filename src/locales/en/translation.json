@@ -1175,6 +1175,7 @@
       "location": "Location",
       "locationDescription": "Location Description",
       "locationDescriptionPlaceholder": "Describe the location of the hotel",
+      "location_placeholder": "Select location",
       "removeImage": "Remove Image"
     },
     "contact": {
@@ -1310,7 +1311,17 @@
         "success": "Room updated successfully",
         "error": "An error occurred while updating the room",
         "saving": "Saving...",
-        "min_images_error": "Please upload at least 1 image"
+        "min_images_error": "Please upload at least 1 image",
+        "required_name": "Please enter the room name",
+        "required_room_type": "Please select the room type",
+        "required_bed_type": "Please select the bed type",
+        "required_description": "Please enter the room description",
+        "required_capacity": "Please enter the capacity (greater than 0)",
+        "required_square_meters": "Please enter the room size (greater than 0)",
+        "required_floor": "Please enter the floor (0 or greater)",
+        "invalid_capacity": "Capacity must be a positive integer greater than 0",
+        "invalid_square_meters": "Room size must be a positive number greater than 0",
+        "invalid_floor": "Floor must be an integer 0 or greater"
       },
       "delete": {
         "title": "Confirm Delete Room",
@@ -1350,7 +1361,8 @@
         "end_date": "End Date",
         "select_end_date": "Select end date",
         "success": "Promotion added successfully",
-        "error": "Failed to add promotion. Please try again later."
+        "error": "Failed to add promotion. Please try again later.",
+        "end_date_required": "End date is required"
       },
       "remove_discount": {
         "success": "Discount removed successfully",

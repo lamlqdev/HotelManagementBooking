@@ -109,14 +109,14 @@ const HotelRooms = ({
             <div className="w-[35%] min-w-[160px] h-40 md:h-48 flex-shrink-0">
               <img
                 src={room.images?.[0]?.url || "/placeholder-room.jpg"}
-                alt={room.roomName}
+                alt={room.name}
                 className="w-full h-full object-cover"
               />
             </div>
             {/* Thông tin phòng */}
             <div className="flex-1 flex flex-row items-center justify-between px-6 py-4 bg-white">
               <div>
-                <h4 className="text-lg font-semibold mb-2">{room.roomName}</h4>
+                <h4 className="text-lg font-semibold mb-2">{room.name}</h4>
                 <div className="flex items-center gap-4 mb-2 text-muted-foreground">
                   <div className="flex items-center gap-1 text-base">
                     <FaBed /> {room.bedType}

@@ -1,4 +1,16 @@
+import { useState } from "react";
+
+import { useTranslation } from "react-i18next";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { format, startOfDay } from "date-fns";
+import { vi, enUS } from "date-fns/locale";
+import { Plus, CalendarIcon } from "lucide-react";
+
+import { roomApi } from "@/api/room/room.api";
+
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Dialog,
   DialogContent,
@@ -9,20 +21,11 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Plus, CalendarIcon } from "lucide-react";
-import { useTranslation } from "react-i18next";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { roomApi } from "@/api/room/room.api";
-import { toast } from "sonner";
-import { useState } from "react";
-import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { format, startOfDay } from "date-fns";
-import { vi, enUS } from "date-fns/locale";
 
 interface AddPromotionDialogProps {
   roomId: string;

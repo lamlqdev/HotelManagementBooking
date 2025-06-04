@@ -69,7 +69,7 @@ export function AddRoomDialog({
     resolver: zodResolver(createRoomSchema),
     defaultValues: {
       hotelId: currentHotel?._id || "",
-      roomName: "",
+      name: "",
       description: "",
       floor: 1,
       roomType: "Standard",
@@ -202,7 +202,7 @@ export function AddRoomDialog({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
-                  name="roomName"
+                  name="name"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>{t("room.dialog.edit.name")}</FormLabel>

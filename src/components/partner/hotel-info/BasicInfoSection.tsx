@@ -13,7 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Hotel } from "@/types/hotel";
-import { Location } from "@/api/location/types";
+import { Location } from "@/types/location";
 import { locationApi } from "@/api/location/location.api";
 
 interface BasicInfoSectionProps {
@@ -27,7 +27,6 @@ interface BasicInfoSectionProps {
     website?: string;
     locationId?: string;
   };
-  location?: Location;
 }
 
 export const BasicInfoSection = ({
@@ -35,7 +34,6 @@ export const BasicInfoSection = ({
   isEditing,
   onInputChange,
   editedData,
-  location,
 }: BasicInfoSectionProps) => {
   const { t } = useTranslation();
   const [locations, setLocations] = useState<Location[]>([]);
@@ -58,6 +56,14 @@ export const BasicInfoSection = ({
 
     fetchLocations();
   }, []);
+
+  const selectedLocation = locations.find(
+    (loc) =>
+      loc._id ===
+      (typeof hotel.locationId === "string"
+        ? hotel.locationId
+        : hotel.locationId?._id)
+  );
 
   return (
     <Card>
@@ -108,7 +114,12 @@ export const BasicInfoSection = ({
           {isEditing ? (
             <Select
               onValueChange={(value) => onInputChange("locationId", value)}
-              defaultValue={editedData.locationId ?? hotel.locationId}
+              defaultValue={
+                editedData.locationId ??
+                (typeof hotel.locationId === "string"
+                  ? hotel.locationId
+                  : hotel.locationId?._id)
+              }
               disabled={isLoadingLocations}
             >
               <SelectTrigger className="flex-1">
@@ -128,7 +139,7 @@ export const BasicInfoSection = ({
             <Input
               id="location"
               name="location"
-              value={location?.name || ""}
+              value={selectedLocation?.name || ""}
               disabled={true}
               className="flex-1"
               placeholder={t("hotelInfo.general.location")}

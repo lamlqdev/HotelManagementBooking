@@ -3,24 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BookingGeneralInfo } from "./BookingGeneralInfo";
 import { BookingCustomerInfo } from "./BookingCustomerInfo";
 import { BookingActions } from "./BookingActions";
-
-interface Booking {
-  id: string;
-  customerName: string;
-  customerEmail: string;
-  customerPhone: string;
-  hotelName: string;
-  roomType: string;
-  checkIn: Date;
-  checkOut: Date;
-  guests: number;
-  rooms: number;
-  totalPrice: number;
-  status: "pending" | "approved" | "rejected" | "completed" | "cancelled";
-  paymentStatus: "paid" | "pending" | "failed";
-  specialRequests: string;
-  createdAt: Date;
-}
+import type { Booking } from "@/types/booking";
 
 interface BookingDetailsProps {
   booking: Booking;

@@ -48,7 +48,9 @@ export default function FavouriteHotels() {
   const handleHotelClick = async (hotel: Hotel) => {
     try {
       // Lấy thông tin địa điểm từ locationId
-      const locationResponse = await locationApi.getLocation(hotel.locationId);
+      const locationResponse = await locationApi.getLocation(
+        hotel.locationId._id
+      );
       const locationName = locationResponse.data.name;
 
       const params = new URLSearchParams();

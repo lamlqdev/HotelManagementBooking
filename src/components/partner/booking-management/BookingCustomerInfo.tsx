@@ -1,24 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Mail, Phone, User } from "lucide-react";
-
-// Định nghĩa kiểu dữ liệu cho đơn đặt phòng
-interface Booking {
-  id: string;
-  customerName: string;
-  customerEmail: string;
-  customerPhone: string;
-  hotelName: string;
-  roomType: string;
-  checkIn: Date;
-  checkOut: Date;
-  guests: number;
-  rooms: number;
-  totalPrice: number;
-  status: "pending" | "approved" | "rejected" | "completed" | "cancelled";
-  paymentStatus: "paid" | "pending" | "failed";
-  specialRequests: string;
-  createdAt: Date;
-}
+import type { Booking } from "@/types/booking";
 
 interface BookingCustomerInfoProps {
   booking: Booking;
@@ -37,7 +19,7 @@ export function BookingCustomerInfo({ booking }: BookingCustomerInfoProps) {
           <div className="text-sm text-muted-foreground">
             {t("partner.bookings.customerName")}
           </div>
-          <div className="font-medium">{booking.customerName}</div>
+          <div className="font-medium">{booking.contactInfo.name}</div>
         </div>
       </div>
       <div className="flex items-center gap-3 p-3 bg-background rounded-md shadow-sm">
@@ -48,7 +30,7 @@ export function BookingCustomerInfo({ booking }: BookingCustomerInfoProps) {
           <div className="text-sm text-muted-foreground">
             {t("partner.bookings.customerEmail")}
           </div>
-          <div className="font-medium">{booking.customerEmail}</div>
+          <div className="font-medium">{booking.contactInfo.email}</div>
         </div>
       </div>
       <div className="flex items-center gap-3 p-3 bg-background rounded-md shadow-sm">
@@ -59,7 +41,7 @@ export function BookingCustomerInfo({ booking }: BookingCustomerInfoProps) {
           <div className="text-sm text-muted-foreground">
             {t("partner.bookings.customerPhone")}
           </div>
-          <div className="font-medium">{booking.customerPhone}</div>
+          <div className="font-medium">{booking.contactInfo.phone}</div>
         </div>
       </div>
     </div>

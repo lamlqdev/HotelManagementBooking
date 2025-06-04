@@ -1,6 +1,7 @@
 import { format } from "date-fns";
 import { vi } from "date-fns/locale";
 import { useTranslation } from "react-i18next";
+import type { TFunction } from "i18next";
 import {
   CalendarIcon,
   Clock,
@@ -10,32 +11,14 @@ import {
   Users,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-
-// Định nghĩa kiểu dữ liệu cho đơn đặt phòng
-interface Booking {
-  id: string;
-  customerName: string;
-  customerEmail: string;
-  customerPhone: string;
-  hotelName: string;
-  roomType: string;
-  checkIn: Date;
-  checkOut: Date;
-  guests: number;
-  rooms: number;
-  totalPrice: number;
-  status: "pending" | "approved" | "rejected" | "completed" | "cancelled";
-  paymentStatus: "paid" | "pending" | "failed";
-  specialRequests: string;
-  createdAt: Date;
-}
+import type { Booking } from "@/types/booking";
 
 interface BookingGeneralInfoProps {
   booking: Booking;
 }
 
 // Hàm định dạng trạng thái đơn đặt phòng
-const getStatusBadge = (status: Booking["status"], t: any) => {
+const getStatusBadge = (status: Booking["status"], t: TFunction) => {
   switch (status) {
     case "pending":
       return (
@@ -43,16 +26,10 @@ const getStatusBadge = (status: Booking["status"], t: any) => {
           {t("partner.bookings.statusTypes.pending")}
         </Badge>
       );
-    case "approved":
+    case "confirmed":
       return (
         <Badge variant="outline" className="bg-green-100 text-green-800">
-          {t("partner.bookings.statusTypes.approved")}
-        </Badge>
-      );
-    case "rejected":
-      return (
-        <Badge variant="outline" className="bg-red-100 text-red-800">
-          {t("partner.bookings.statusTypes.rejected")}
+          {t("partner.bookings.statusTypes.confirmed")}
         </Badge>
       );
     case "completed":
@@ -77,7 +54,10 @@ const getStatusBadge = (status: Booking["status"], t: any) => {
 };
 
 // Hàm định dạng trạng thái thanh toán
-const getPaymentStatusBadge = (status: Booking["paymentStatus"], t: any) => {
+const getPaymentStatusBadge = (
+  status: Booking["paymentStatus"],
+  t: TFunction
+) => {
   switch (status) {
     case "paid":
       return (
@@ -95,6 +75,12 @@ const getPaymentStatusBadge = (status: Booking["paymentStatus"], t: any) => {
       return (
         <Badge variant="outline" className="bg-red-100 text-red-800">
           {t("partner.bookings.paymentTypes.failed")}
+        </Badge>
+      );
+    case "refunded":
+      return (
+        <Badge variant="outline" className="bg-blue-100 text-blue-800">
+          {t("partner.bookings.paymentTypes.refunded")}
         </Badge>
       );
     default:
@@ -124,14 +110,14 @@ export function BookingGeneralInfo({ booking }: BookingGeneralInfoProps) {
           <div className="flex items-center gap-2">
             <Hotel className="h-4 w-4 text-muted-foreground" />
             <span className="font-medium">{t("partner.bookings.hotel")}:</span>
-            <span>{booking.hotelName}</span>
+            <span>{booking.roomId}</span>
           </div>
           <div className="flex items-center gap-2">
             <FileText className="h-4 w-4 text-muted-foreground" />
             <span className="font-medium">
               {t("partner.bookings.roomType")}:
             </span>
-            <span>{booking.roomType}</span>
+            <span>{booking.roomId}</span>
           </div>
           <div className="flex items-center gap-2">
             <CalendarIcon className="h-4 w-4 text-muted-foreground" />
@@ -160,19 +146,19 @@ export function BookingGeneralInfo({ booking }: BookingGeneralInfoProps) {
           <div className="flex items-center gap-2">
             <Users className="h-4 w-4 text-muted-foreground" />
             <span className="font-medium">{t("partner.bookings.guests")}:</span>
-            <span>{booking.guests}</span>
+            <span>{booking.guestInfo?.name || "-"}</span>
           </div>
           <div className="flex items-center gap-2">
             <Hotel className="h-4 w-4 text-muted-foreground" />
             <span className="font-medium">{t("partner.bookings.rooms")}:</span>
-            <span>{booking.rooms}</span>
+            <span>{booking.roomId}</span>
           </div>
           <div className="flex items-center gap-2">
             <CreditCard className="h-4 w-4 text-muted-foreground" />
             <span className="font-medium">
               {t("partner.bookings.totalPrice")}:
             </span>
-            <span>{formatPrice(booking.totalPrice)}</span>
+            <span>{formatPrice(booking.finalPrice)}</span>
           </div>
           <div className="flex items-center gap-2">
             <Clock className="h-4 w-4 text-muted-foreground" />
@@ -193,7 +179,8 @@ export function BookingGeneralInfo({ booking }: BookingGeneralInfoProps) {
           {t("partner.bookings.specialRequests")}:
         </div>
         <p className="text-sm text-muted-foreground">
-          {booking.specialRequests || t("partner.bookings.noSpecialRequests")}
+          {booking.specialRequests?.additionalRequests ||
+            t("partner.bookings.noSpecialRequests")}
         </p>
       </div>
 

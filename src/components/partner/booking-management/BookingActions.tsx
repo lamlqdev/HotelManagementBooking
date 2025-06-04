@@ -2,10 +2,11 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
+import type { Booking } from "@/types/booking";
 
 interface BookingActionsProps {
   bookingId: string;
-  status: "pending" | "approved" | "rejected" | "completed" | "cancelled";
+  status: Booking["status"];
   onApprove: (bookingId: string, note: string) => void;
   onReject: (bookingId: string, note: string) => void;
   onCancel: (bookingId: string, note: string) => void;
@@ -63,7 +64,7 @@ export function BookingActions({
             </Button>
           </>
         )}
-        {status === "approved" && (
+        {status === "confirmed" && (
           <Button
             variant="destructive"
             className="flex-1"
