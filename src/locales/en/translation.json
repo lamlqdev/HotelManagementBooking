@@ -1825,5 +1825,23 @@
     "success": "Success",
     "error": "Error",
     "empty": "No notifications"
+  },
+  "chatbot": {
+    "error_message": "Failed to send message. Please try again later.",
+    "send_message": "Send Message",
+    "send_message_placeholder": "Enter your message",
+    "send_message_button": "Send",
+    "send_message_success": "Message sent successfully",
+    "send_message_error": "Failed to send message",
+    "send_message_loading": "Sending...",
+    "title": "Chatbot",
+    "welcome": "Welcome to the chatbot! How can I help you today?",
+    "input_placeholder": "Enter your message",
+    "input_button": "Send",
+    "input_success": "Message sent successfully",
+    "input_error": "Failed to send message",
+    "input_loading": "Sending...",
+    "send_button": "Send",
+    "open_chat": "Open Chat"
   }
 }

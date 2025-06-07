@@ -1836,5 +1836,23 @@
     "success": "Thành công",
     "error": "Lỗi",
     "empty": "Không có thông báo"
+  },
+  "chatbot": {
+    "error_message": "Gửi tin nhắn thất bại. Vui lòng thử lại sau.",
+    "send_message": "Gửi tin nhắn",
+    "send_message_placeholder": "Nhập tin nhắn của bạn",
+    "send_message_button": "Gửi",
+    "send_message_success": "Gửi tin nhắn thành công",
+    "send_message_error": "Gửi tin nhắn thất bại",
+    "send_message_loading": "Đang gửi...",
+    "title": "Trợ lý ảo",
+    "welcome": "Chào mừng đến với trợ lý ảo! Bạn có thể hỏi tôi bất cứ điều gì.",
+    "input_placeholder": "Nhập tin nhắn của bạn...",
+    "input_button": "Gửi",
+    "input_success": "Gửi tin nhắn thành công",
+    "input_error": "Gửi tin nhắn thất bại",
+    "input_loading": "Đang gửi...",
+    "send_button": "Gửi",
+    "open_chat": "Mở trợ lý ảo"
   }
 }

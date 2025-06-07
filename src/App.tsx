@@ -21,6 +21,7 @@ import BlogDetailPage from "./pages/user/BlogDetailPage";
 import Partnership from "./pages/user/Partnership";
 import RegisterPartner from "./pages/user/RegisterPartner";
 import RegisterSuccessfullyPage from "./pages/user/RegisterSuccessfullyPage";
+import NotFoundPage from "./pages/user/NotFoundPage";
 
 // Auth Pages
 import LoginPage from "./pages/auth/LoginPage";
@@ -81,10 +82,6 @@ function App() {
           <Route path="/partnership" element={<Partnership />} />
           <Route path="/register-partner" element={<RegisterPartner />} />
           <Route
-            path="/booking-information/:roomId"
-            element={<BookingInformationPage />}
-          />
-          <Route
             path="/partner/registration-success"
             element={<RegisterSuccessfullyPage />}
           />
@@ -105,6 +102,10 @@ function App() {
             <Route path="/settings" element={<SettingPage />} />
             <Route path="/profile" element={<UserProfilePage />} />
             <Route path="/bookings" element={<MyBookingPage />} />
+            <Route
+              path="/booking-information/:roomId"
+              element={<BookingInformationPage />}
+            />
           </Route>
         </Route>
 
@@ -160,6 +161,9 @@ function App() {
             <Route path="posts/create" element={<AdminPostCreatePage />} />
           </Route>
         </Route>
+
+        {/* 404 Route - Phải đặt ở cuối cùng */}
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
 
       <Toaster position="top-right" richColors />

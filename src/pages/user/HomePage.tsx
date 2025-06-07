@@ -7,6 +7,7 @@ import PopularDestinations from "@/components/user/home/PopularDestinations";
 import HotelDeals from "@/components/user/home/HotelDeals";
 import FavouriteHotels from "@/components/user/home/FavouriteHotels";
 import TravelInspiration from "@/components/user/home/TravelInspiration";
+import ChatBot from "@/components/common/ChatBot";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -54,6 +55,9 @@ const HomePage = () => {
         <FavouriteHotels />
         <TravelInspiration />
       </div>
+
+      {/* ChatBot */}
+      <ChatBot />
     </>
   );
 };
