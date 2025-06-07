@@ -244,7 +244,7 @@ export default function PartnerLayout() {
                   <div className="flex items-center gap-3 p-2 cursor-pointer hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg transition-colors group-data-[collapsible=icon]:justify-center">
                     <Avatar className="h-10 w-10 ring-2 ring-sidebar-ring/10 group-data-[collapsible=icon]:h-8 group-data-[collapsible=icon]:w-8">
                       <AvatarImage
-                        src={user?.avatar?.[0]?.url}
+                        src={user?.avatar?.url}
                         alt="Partner avatar"
                       />
                       <AvatarFallback>P</AvatarFallback>

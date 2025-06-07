@@ -343,25 +343,27 @@ const HotelReviews = ({
                 >
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex gap-4">
-                      <img
-                        src={`https://ui-avatars.com/api/?name=${
-                          review.isAnonymous ? "Anonymous" : review.userId.name
-                        }`}
-                        alt={
-                          review.isAnonymous
-                            ? "Người dùng ẩn danh"
-                            : review.userId.name
-                        }
-                        className="w-12 h-12 rounded-full object-cover"
-                      />
-                      <div>
-                        <h4 className="font-medium text-foreground">
-                          {review.isAnonymous
-                            ? "Người dùng ẩn danh"
-                            : review.userId.name}
-                        </h4>
-                        <div className="text-sm text-muted-foreground">
-                          Việt Nam
+                      <div className="flex items-center gap-3">
+                        <img
+                          src={
+                            review.isAnonymous
+                              ? "https://ui-avatars.com/api/?name=Anonymous"
+                              : review.userId.avatar?.url ||
+                                `https://ui-avatars.com/api/?name=${review.userId.name}`
+                          }
+                          alt={
+                            review.isAnonymous
+                              ? "Người dùng ẩn danh"
+                              : review.userId.name
+                          }
+                          className="w-12 h-12 rounded-full object-cover"
+                        />
+                        <div className="flex items-center">
+                          <h4 className="font-medium text-foreground">
+                            {review.isAnonymous
+                              ? "Người dùng ẩn danh"
+                              : review.userId.name}
+                          </h4>
                         </div>
                       </div>
                     </div>

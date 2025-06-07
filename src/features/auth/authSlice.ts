@@ -3,6 +3,7 @@ import { User } from "@/types/auth";
 import { AxiosError } from "axios";
 import { AuthState } from "./types";
 import { clearCurrentHotel } from "../hotel/hotelSlice";
+import { queryClient } from "@/lib/react-query";
 
 const initialState: AuthState = {
   user: null,
@@ -22,6 +23,9 @@ export const logout = createAsyncThunk(
       // Reset state
       dispatch(resetAuth());
       dispatch(clearCurrentHotel());
+
+      // Invalidate tất cả các queries
+      queryClient.clear();
 
       return { success: true };
     } catch (error) {

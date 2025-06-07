@@ -2,6 +2,7 @@ import { useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { format, addDays } from "date-fns";
 
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { Heart, Star } from "lucide-react";
@@ -20,6 +21,9 @@ export const HotelCard = ({ hotel }: HotelCardProps) => {
   const queryClient = useQueryClient();
   const { isAuthenticated } = useAppSelector((state) => state.auth);
   const navigate = useNavigate();
+
+  const tomorrow = format(addDays(new Date(), 1), "yyyy-MM-dd");
+  const dayAfterTomorrow = format(addDays(new Date(), 2), "yyyy-MM-dd");
 
   // Query kiểm tra trạng thái yêu thích
   const { data: favoriteStatus, isLoading: isCheckingFavorite } = useQuery({
@@ -64,7 +68,9 @@ export const HotelCard = ({ hotel }: HotelCardProps) => {
   };
 
   const handleClick = () => {
-    navigate(`/hoteldetail/${hotel._id}`);
+    navigate(
+      `/hoteldetail/${hotel._id}?checkIn=${tomorrow}&checkOut=${dayAfterTomorrow}&capacity=1`
+    );
   };
 
   return (

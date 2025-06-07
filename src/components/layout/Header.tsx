@@ -139,7 +139,7 @@ const Header = () => {
                                 : "bg-white border-transparent"
                             } focus:bg-transparent focus:text-inherit hover:bg-gray-100`}
                           onClick={() => {
-                            markAsRead(n.id);
+                            markAsRead(n._id);
                             setSelectedNotification(n);
                           }}
                         >
