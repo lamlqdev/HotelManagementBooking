@@ -8,6 +8,7 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { Heart, Star } from "lucide-react";
 
 import { favouriteApi } from "@/api/favourite/favourite.api";
+import { reviewApi } from "@/api/review/review.api";
 import { useAppSelector } from "@/store/hooks";
 import { Hotel } from "@/types/hotel";
 import { Button } from "@/components/ui/button";
@@ -31,6 +32,14 @@ export const HotelCard = ({ hotel }: HotelCardProps) => {
     queryFn: () => favouriteApi.checkFavorite(hotel._id),
     enabled: isAuthenticated,
   });
+
+  // Query lấy số lượng review
+  const { data: reviewsResponse } = useQuery({
+    queryKey: ["reviews", hotel._id],
+    queryFn: () => reviewApi.getHotelReviews(hotel._id),
+  });
+
+  const totalReviews = reviewsResponse?.data?.length || 0;
 
   // Mutation để thêm/xóa khách sạn khỏi danh sách yêu thích
   const { mutate: toggleFavorite, isPending: isToggling } = useMutation({
@@ -115,7 +124,7 @@ export const HotelCard = ({ hotel }: HotelCardProps) => {
               {hotel.rating.toFixed(1)}
             </span>
             <span className="text-sm text-muted-foreground">
-              ({hotel.favoriteCount} {t("common.reviews")})
+              ({totalReviews} {t("common.reviews")})
             </span>
           </div>
           <div className="flex items-center gap-1">

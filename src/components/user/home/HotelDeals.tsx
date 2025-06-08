@@ -189,7 +189,7 @@ export default function HotelDeals() {
                       <div className="flex items-center gap-1 mb-2">
                         <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                         <span className="text-sm font-medium">
-                          {hotel.rating}
+                          {hotel.rating.toFixed(1)}
                         </span>
                       </div>
                       <h3 className="font-semibold mb-1 line-clamp-1">
