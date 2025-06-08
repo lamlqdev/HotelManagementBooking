@@ -1,5 +1,3 @@
-import { format } from "date-fns";
-import { vi } from "date-fns/locale";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import { FaBed, FaUserFriends, FaRulerCombined } from "react-icons/fa";
@@ -37,10 +35,6 @@ const HotelRooms = ({
     }).format(price);
   };
 
-  const formatDate = (dateString: string) => {
-    return format(new Date(dateString), "dd/MM/yyyy", { locale: vi });
-  };
-
   const handleBookRoom = (roomId: string) => {
     const params = new URLSearchParams();
     if (hotelId) params.append("hotelId", hotelId);
@@ -68,37 +62,6 @@ const HotelRooms = ({
 
   return (
     <div className="space-y-6">
-      <h3 className="text-2xl font-semibold">{t("hotel.rooms.title")}</h3>
-      {checkIn && checkOut && capacity && (
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg shadow-sm border border-blue-100 transition-all duration-300 hover:shadow-md">
-          <div className="flex items-center space-x-4">
-            <div className="flex-1">
-              <p className="text-sm text-gray-600 font-medium">
-                {t("hotel.rooms.search_info", {
-                  checkIn: formatDate(checkIn),
-                  checkOut: formatDate(checkOut),
-                  capacity,
-                })}
-              </p>
-            </div>
-            <div className="flex-shrink-0">
-              <svg
-                className="w-5 h-5 text-primary"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                />
-              </svg>
-            </div>
-          </div>
-        </div>
-      )}
       <div className="space-y-4">
         {rooms.map((room) => (
           <Card

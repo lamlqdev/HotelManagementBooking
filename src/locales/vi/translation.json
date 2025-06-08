@@ -283,6 +283,13 @@
     "no_results": "Không tìm thấy kết quả nào",
     "price": {
       "per_night": "mỗi đêm"
+    },
+    "error": {
+      "select_dates": "Vui lòng chọn ngày check-in và check-out",
+      "check_in_past": "Ngày check-in không được trong quá khứ",
+      "check_out_before_check_in": "Ngày check-out phải sau ngày check-in",
+      "max_stay_days": "Thời gian lưu trú không được quá 30 ngày",
+      "invalid_capacity": "Số lượng người phải từ 1 đến 6"
     }
   },
   "destinations": {

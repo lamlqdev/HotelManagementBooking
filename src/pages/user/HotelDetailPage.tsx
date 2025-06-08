@@ -10,6 +10,8 @@ import HotelOverview from "@/components/user/hotel-detail/HotelOverview";
 import HotelRooms from "@/components/user/hotel-detail/HotelRooms";
 import HotelReviews from "@/components/user/hotel-detail/HotelReviews";
 import ChatSupport from "@/components/common/ChatSupport";
+import RoomSearchBox from "@/components/user/hotel-detail/RoomSearchBox";
+import HotelMap from "@/components/user/hotel-detail/HotelMap";
 
 import { hotelApi } from "@/api/hotel/hotel.api";
 import { amenitiesApi } from "@/api/amenities/amenities.api";
@@ -21,7 +23,7 @@ import { useAppSelector } from "@/store/hooks";
 const HotelDetailPage = () => {
   const [activeTab, setActiveTab] = useState("tổng quan");
   const { id } = useParams<{ id: string }>();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   // Lấy thông tin tìm kiếm từ URL
   const checkIn = searchParams.get("checkIn");
@@ -69,6 +71,18 @@ const HotelDetailPage = () => {
   });
 
   const { isAuthenticated } = useAppSelector((state) => state.auth);
+
+  const handleSearch = (searchParams: {
+    checkIn: string;
+    checkOut: string;
+    capacity: number;
+  }) => {
+    setSearchParams({
+      checkIn: searchParams.checkIn,
+      checkOut: searchParams.checkOut,
+      capacity: searchParams.capacity.toString(),
+    });
+  };
 
   // Xử lý trạng thái loading
   if (
@@ -178,9 +192,21 @@ const HotelDetailPage = () => {
             description={hotel.description}
             amenities={hotelAmenities}
           />
+          <div className="mt-8">
+            <h3 className="text-xl font-semibold mb-4">Vị trí</h3>
+            <HotelMap address={hotel.address} />
+          </div>
         </div>
 
         <div id="phòng">
+          <RoomSearchBox
+            defaultValues={{
+              checkIn: checkIn || undefined,
+              checkOut: checkOut || undefined,
+              capacity: capacity ? parseInt(capacity) : undefined,
+            }}
+            onSearch={handleSearch}
+          />
           <HotelRooms
             rooms={rooms}
             checkIn={checkIn || undefined}
