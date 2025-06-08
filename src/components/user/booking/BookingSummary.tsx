@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import { hotelApi } from "@/api/hotel/hotel.api";
 import { roomApi } from "@/api/room/room.api";
+import { reviewApi } from "@/api/review/review.api";
 
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -35,7 +36,13 @@ export const BookingSummary = ({
     enabled: !!roomId,
   });
 
-  if (isLoadingHotel || isLoadingRoom) {
+  const { data: reviewsResponse, isLoading: isLoadingReviews } = useQuery({
+    queryKey: ["reviews", searchParams.hotelId],
+    queryFn: () => reviewApi.getHotelReviews(searchParams.hotelId),
+    enabled: !!searchParams.hotelId,
+  });
+
+  if (isLoadingHotel || isLoadingRoom || isLoadingReviews) {
     return (
       <div className="bg-card rounded-lg shadow-md p-6 sticky top-24">
         <Skeleton className="h-8 w-48 mb-4" />
@@ -52,6 +59,7 @@ export const BookingSummary = ({
 
   const hotel = hotelResponse?.data;
   const room = roomResponse?.data;
+  const reviews = reviewsResponse?.data || [];
 
   if (!hotel || !room) {
     return (
@@ -124,7 +132,7 @@ export const BookingSummary = ({
         <HotelInfo
           name={hotel.name}
           rating={hotel.rating}
-          reviews={hotel.favoriteCount}
+          reviews={reviews.length}
           address={hotel.address}
           image={hotel.featuredImage?.url || "/placeholder-hotel.jpg"}
         />
@@ -162,7 +170,7 @@ export const BookingSummary = ({
 
         <div className="border-t border-border dark:border-primary/30 pt-4">
           <PricingSummary
-            roomType={room.roomName}
+            roomType={room.roomType}
             guests={searchParams.capacity}
             rooms={1}
             nightsStay={nights}

@@ -26,6 +26,7 @@ interface HotelListProps {
   onPageChange: (page: number) => void;
   onSortChange: (value: string) => void;
   onHotelClick: (hotelId: string) => void;
+  sortBy: string;
 }
 
 const HotelList = ({
@@ -35,6 +36,7 @@ const HotelList = ({
   onPageChange,
   onSortChange,
   onHotelClick,
+  sortBy,
 }: HotelListProps) => {
   const { t } = useTranslation();
 
@@ -56,15 +58,18 @@ const HotelList = ({
           <span className="text-sm text-muted-foreground">
             {t("search.sort_by")}:
           </span>
-          <Select onValueChange={onSortChange} defaultValue="">
+          <Select
+            onValueChange={onSortChange}
+            value={sortBy || "-lowestDiscountedPrice"}
+          >
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder={t("search.select_sort")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="price">
+              <SelectItem value="lowestDiscountedPrice">
                 {t("search.sort.price_asc")}
               </SelectItem>
-              <SelectItem value="-price">
+              <SelectItem value="-lowestDiscountedPrice">
                 {t("search.sort.price_desc")}
               </SelectItem>
               <SelectItem value="rating">
@@ -73,10 +78,10 @@ const HotelList = ({
               <SelectItem value="-rating">
                 {t("search.sort.rating_desc")}
               </SelectItem>
-              <SelectItem value="discountPercent">
+              <SelectItem value="highestDiscountPercent">
                 {t("search.sort.discount_asc")}
               </SelectItem>
-              <SelectItem value="-discountPercent">
+              <SelectItem value="-highestDiscountPercent">
                 {t("search.sort.discount_desc")}
               </SelectItem>
             </SelectContent>

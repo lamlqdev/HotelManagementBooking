@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { AxiosError } from "axios";
 
 import { BookingContactForm } from "@/components/user/booking/BookingContactForm";
 import { BookingSpecialRequests } from "@/components/user/booking/BookingSpecialRequests";
@@ -13,6 +14,10 @@ import { bookingApi } from "@/api/booking/booking.api";
 import type { ContactFormData, SpecialRequestsData } from "@/api/booking/types";
 import { contactFormSchema, specialRequestsSchema } from "@/api/booking/types";
 import { voucherApi } from "@/api/voucher/voucher.api";
+
+interface ErrorResponse {
+  message: string;
+}
 
 const BookingInformationPage = () => {
   const { t } = useTranslation();
@@ -74,8 +79,9 @@ const BookingInformationPage = () => {
         guestInfo:
           contactData.bookingFor === "other"
             ? {
-                name: contactData.guestName || "",
+                name: contactData.contactName || "",
                 phone: contactData.phone,
+                email: contactData.email,
               }
             : undefined,
         specialRequests: specialRequestsData
@@ -99,10 +105,12 @@ const BookingInformationPage = () => {
       console.log(response.paymentUrl);
       window.location.href = response.paymentUrl;
     },
-    onError: (error) => {
+    onError: (error: AxiosError<ErrorResponse>) => {
       toast.dismiss(loadingToastId);
       console.error("Error creating booking:", error);
-      toast.error(t("booking.error"));
+      // Hiển thị message lỗi từ server nếu có, nếu không thì hiển thị message mặc định
+      const errorMessage = error.response?.data?.message || t("booking.error");
+      toast.error(errorMessage);
     },
   });
 

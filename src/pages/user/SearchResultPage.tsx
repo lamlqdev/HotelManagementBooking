@@ -31,6 +31,7 @@ const SearchResultPage = () => {
   const maxPrice = searchParams.get("maxPrice");
   const roomType = searchParams.get("roomType"); // "Standard,Deluxe"
   const amenities = searchParams.get("amenities"); // "id1,id2"
+  const sortBy = searchParams.get("sortBy") || "-lowestDiscountedPrice"; // Lấy giá trị sortBy từ URL, mặc định là giá giảm dần
 
   // Nếu chỉ có locationName, tự động điền các thông tin còn lại
   const defaultCheckIn = new Date();
@@ -43,7 +44,6 @@ const SearchResultPage = () => {
 
   // State management
   const [currentPage, setCurrentPage] = useState(1);
-  const [sortBy, setSortBy] = useState("");
 
   // Sử dụng React Query để lấy danh sách khách sạn/phòng
   const { data, isLoading, isError, error } = useQuery({
@@ -64,6 +64,15 @@ const SearchResultPage = () => {
       try {
         // Nếu có locationName -> gọi API searchHotelsWithAvailableRooms với thông tin mặc định
         if (locationName) {
+          // Chuyển đổi giá trị sortBy từ frontend sang backend
+          let backendSort = sortBy;
+          if (sortBy === "lowestDiscountedPrice") backendSort = "price";
+          else if (sortBy === "-lowestDiscountedPrice") backendSort = "-price";
+          else if (sortBy === "highestDiscountPercent")
+            backendSort = "discountPercent";
+          else if (sortBy === "-highestDiscountPercent")
+            backendSort = "-discountPercent";
+
           const response = await hotelApi.searchHotelsWithAvailableRooms({
             locationName,
             checkIn: finalCheckIn,
@@ -71,7 +80,7 @@ const SearchResultPage = () => {
             capacity: parseInt(finalCapacity),
             page: currentPage,
             limit: 10,
-            sort: sortBy || undefined,
+            sort: backendSort || "price",
             minPrice: minPrice ? Number(minPrice) : undefined,
             maxPrice: maxPrice ? Number(maxPrice) : undefined,
             roomType: roomType ? roomType.split(",")[0] : undefined,
@@ -144,6 +153,16 @@ const SearchResultPage = () => {
       newParams.set("amenities", amenities.join(","));
     } else {
       newParams.delete("amenities");
+    }
+    setSearchParams(newParams);
+  };
+
+  const handleSortChange = (value: string) => {
+    const newParams = new URLSearchParams(searchParams);
+    if (value) {
+      newParams.set("sortBy", value);
+    } else {
+      newParams.delete("sortBy");
     }
     setSearchParams(newParams);
   };
@@ -388,8 +407,9 @@ const SearchResultPage = () => {
               currentPage={currentPage}
               totalPages={totalPages}
               onPageChange={setCurrentPage}
-              onSortChange={setSortBy}
+              onSortChange={handleSortChange}
               onHotelClick={handleHotelClick}
+              sortBy={sortBy}
             />
           </div>
         </div>

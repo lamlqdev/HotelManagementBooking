@@ -26,7 +26,7 @@ export const BookingContactForm = ({ form }: BookingContactFormProps) => {
     if (bookingFor === "self" && user) {
       setValue("contactName", user.name);
       setValue("email", user.email);
-      setValue("phone", user.phone || "");
+      setValue("phone", user.phone || "0328265680");
     }
   }, [bookingFor, user, setValue]);
 

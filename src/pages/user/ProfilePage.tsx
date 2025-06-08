@@ -200,9 +200,6 @@ const Profile = () => {
               )}
             </div>
             <h2 className="mt-4 text-xl font-semibold">{user?.name}</h2>
-            <p className="text-muted-foreground">
-              {t("profile.member_since")} 2024
-            </p>
           </div>
         </Card>
 
