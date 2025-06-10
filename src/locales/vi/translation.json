@@ -12,6 +12,8 @@
     "create": "Tạo",
     "reject": "Từ chối",
     "approve": "Phê duyệt",
+    "approving": "Đang phê duyệt...",
+    "rejecting": "Đang từ chối...",
     "creating": "Đang tạo...",
     "all": "Tất cả",
     "yes": "Có",
@@ -60,7 +62,7 @@
     "error_loading_data": "Không thể tải dữ liệu. Vui lòng thử lại sau.",
     "favorites": "Yêu thích",
     "people": "Người",
-    "clearFilter": "Xóa bộ lọc",
+    "clearFilters": "Xóa bộ lọc",
     "processing": "Đang xử lý...",
     "optional": "Tùy chọn"
   },
@@ -391,14 +393,8 @@
       "description": "Khi nhận phòng, khách sạn sẽ thông báo cho bạn về khả năng đáp ứng các yêu cầu này. Một số yêu cầu có thể phát sinh thêm phí, nhưng bạn luôn có thể hủy yêu cầu sau.",
       "checkInOut": {
         "title": "Thời gian nhận/trả phòng mong muốn",
-        "checkIn": {
-          "label": "Thời gian nhận phòng",
-          "placeholder": "Chọn thời gian nhận phòng"
-        },
-        "checkOut": {
-          "label": "Thời gian trả phòng",
-          "placeholder": "Chọn thời gian trả phòng"
-        }
+        "earlyCheckIn": "Nhận phòng sớm",
+        "lateCheckOut": "Trả phòng muộn"
       },
       "other": {
         "label": "Yêu cầu khác",
@@ -475,7 +471,16 @@
       "cancelling": "Đang hủy đặt phòng...",
       "cancelError": "Có lỗi xảy ra khi hủy đặt phòng. Vui lòng thử lại sau.",
       "reviewHotel": "Đánh giá khách sạn",
-      "gotoHotel": "Đến khách sạn"
+      "gotoHotel": "Đến khách sạn",
+      "earlyCheckIn": "Nhận phòng sớm",
+      "lateCheckOut": "Trả phòng muộn",
+      "yes": "Có",
+      "no": "Không",
+      "cancelFailed": "Huỷ đặt phòng thất bại",
+      "retryPaymentFailed": "Không thể tạo lại thanh toán",
+      "retryPaymentError": "Lỗi khi thanh toán lại",
+      "retryingPayment": "Đang tạo lại thanh toán...",
+      "retryPayment": "Thanh toán lại"
     },
     "myBookingPage": {
       "title": "Lịch sử đặt phòng của tôi",

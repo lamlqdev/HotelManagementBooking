@@ -1,10 +1,7 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
+import { useMutation } from "@tanstack/react-query";
+import { format, differenceInCalendarDays, addDays } from "date-fns";
 import {
   Hotel,
   User,
@@ -17,14 +14,18 @@ import {
   Users,
   Tag,
 } from "lucide-react";
-import { format, differenceInCalendarDays, addDays } from "date-fns";
-import type { MyBookingItem } from "@/api/booking/types";
-import { useTranslation } from "react-i18next";
-import { Badge } from "@/components/ui/badge";
-import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
+
+import type { MyBookingItem } from "@/api/booking/types";
 import { bookingApi } from "@/api/booking/booking.api";
-import { useNavigate } from "react-router";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface BookingDetailModalProps {
   booking: MyBookingItem;
@@ -89,12 +90,10 @@ export const BookingDetailModal = ({
     mutationFn: () => bookingApi.cancelBooking(booking._id),
     onSuccess: (response) => {
       if (response.success) {
-        toast.success(
-          t("booking.detailModal.cancelSuccess") || "Huỷ đặt phòng thành công"
-        );
+        toast.success(t("booking.detailModal.cancelSuccess"));
         onClose();
       } else {
-        toast.error(response.message || "Huỷ đặt phòng thất bại");
+        toast.error(t("booking.detailModal.cancelFailed"));
       }
     },
     onError: (error: unknown) => {
@@ -102,7 +101,7 @@ export const BookingDetailModal = ({
       toast.error(
         err?.response?.data?.message ||
           err?.message ||
-          "Có lỗi xảy ra khi huỷ đặt phòng"
+          t("booking.detailModal.cancelError")
       );
     },
   });
@@ -119,13 +118,15 @@ export const BookingDetailModal = ({
       if (res.success && res.paymentUrl) {
         window.location.href = res.paymentUrl;
       } else {
-        toast.error("Không thể tạo lại thanh toán");
+        toast.error(t("booking.detailModal.retryPaymentFailed"));
       }
     },
     onError: (error: unknown) => {
       const err = error as ErrorWithResponse;
       toast.error(
-        err?.response?.data?.message || err?.message || "Lỗi khi thanh toán lại"
+        err?.response?.data?.message ||
+          err?.message ||
+          t("booking.detailModal.retryPaymentError")
       );
     },
   });
@@ -262,6 +263,26 @@ export const BookingDetailModal = ({
                   </span>
                   <span>{nights}</span>
                 </div>
+                {booking.specialRequests?.earlyCheckIn && (
+                  <div className="flex items-center gap-2">
+                    <span className="text-muted-foreground">
+                      {t("booking.detailModal.earlyCheckIn")}:
+                    </span>
+                    <span className="text-green-600">
+                      {t("booking.detailModal.yes")}
+                    </span>
+                  </div>
+                )}
+                {booking.specialRequests?.lateCheckOut && (
+                  <div className="flex items-center gap-2">
+                    <span className="text-muted-foreground">
+                      {t("booking.detailModal.lateCheckOut")}:
+                    </span>
+                    <span className="text-green-600">
+                      {t("booking.detailModal.yes")}
+                    </span>
+                  </div>
+                )}
                 {booking.specialRequests?.additionalRequests && (
                   <div className="flex items-center gap-2">
                     <span className="text-muted-foreground">
@@ -338,7 +359,7 @@ export const BookingDetailModal = ({
                 disabled={cancelMutation.isPending}
               >
                 {cancelMutation.isPending
-                  ? t("booking.detailModal.cancelling") || "Đang huỷ..."
+                  ? t("booking.detailModal.cancelling")
                   : t("booking.detailModal.cancel")}
               </Button>
               {(booking.paymentStatus === "pending" ||
@@ -349,8 +370,8 @@ export const BookingDetailModal = ({
                   disabled={retryPaymentMutation.isPending}
                 >
                   {retryPaymentMutation.isPending
-                    ? "Đang tạo lại thanh toán..."
-                    : "Thanh toán lại"}
+                    ? t("booking.detailModal.retryingPayment")
+                    : t("booking.detailModal.retryPayment")}
                 </Button>
               )}
             </>

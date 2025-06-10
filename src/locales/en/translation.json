@@ -60,9 +60,11 @@
     "error_loading_data": "Could not load data. Please try again later.",
     "favorites": "Favorites",
     "people": "People",
-    "clearFilter": "Clear filter",
+    "clearFilters": "Clear filter",
     "processing": "Processing...",
-    "optional": "Optional"
+    "optional": "Optional",
+    "approving": "Approving...",
+    "rejecting": "Rejecting..."
   },
   "nav": {
     "home": "Home",
@@ -384,14 +386,8 @@
       "description": "Upon check-in, the hotel will inform you whether these requests can be accommodated. Some requests may require additional fees, but you can always cancel the request later.",
       "checkInOut": {
         "title": "Preferred check-in/check-out time",
-        "checkIn": {
-          "label": "Requested check-in time",
-          "placeholder": "Select check-in time"
-        },
-        "checkOut": {
-          "label": "Requested check-out time",
-          "placeholder": "Select check-out time"
-        }
+        "earlyCheckIn": "Early check-in",
+        "lateCheckOut": "Late check-out"
       },
       "other": {
         "label": "Other requests",
@@ -468,7 +464,16 @@
       "cancelling": "Cancelling...",
       "cancelError": "An error occurred while cancelling the booking. Please try again later.",
       "reviewHotel": "Review hotel",
-      "gotoHotel": "Go to hotel"
+      "gotoHotel": "Go to hotel",
+      "earlyCheckIn": "Early check-in",
+      "lateCheckOut": "Late check-out",
+      "yes": "Yes",
+      "no": "No",
+      "cancelFailed": "Cancel booking failed",
+      "retryPaymentFailed": "Cannot create payment again",
+      "retryPaymentError": "Error when creating payment again",
+      "retryingPayment": "Creating payment again...",
+      "retryPayment": "Create payment again"
     },
     "myBookingPage": {
       "title": "My booking history",
