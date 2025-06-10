@@ -63,6 +63,12 @@ export default function RevenuePage() {
   const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
   const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
 
+  // State cho period tổng quan
+  const [summaryPeriod, setSummaryPeriod] = useState<
+    "day" | "week" | "month" | "year"
+  >("month");
+  const [summaryFilterKey, setSummaryFilterKey] = useState(0);
+
   // State cho filter biểu đồ doanh thu
   const [chartFrom, setChartFrom] = useState<string>(
     firstDay.toISOString().slice(0, 10)
@@ -83,6 +89,11 @@ export default function RevenuePage() {
   const [limit, setLimit] = useState<number>(5);
   const [topFilterKey, setTopFilterKey] = useState(0);
 
+  // Tự động fetch khi thay đổi period tổng quan
+  useEffect(() => {
+    setSummaryFilterKey((k) => k + 1);
+  }, [summaryPeriod]);
+
   // Tự động fetch khi thay đổi filter biểu đồ
   useEffect(() => {
     setChartFilterKey((k) => k + 1);
@@ -97,8 +108,8 @@ export default function RevenuePage() {
 
   // Tổng quan doanh thu
   const { data: revenueSummary, isLoading: isLoadingSummary } = useQuery({
-    queryKey: ["statistics", "summary"],
-    queryFn: () => statisticsApi.getRevenueSummary("month"),
+    queryKey: ["statistics", "summary", summaryPeriod, summaryFilterKey],
+    queryFn: () => statisticsApi.getRevenueSummary(summaryPeriod),
   });
 
   // Biểu đồ doanh thu
@@ -183,45 +194,67 @@ export default function RevenuePage() {
           ))}
         </div>
       ) : revenueSummary?.data ? (
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="flex flex-col items-center py-4 shadow-md border border-gray-100">
-            <TrendingUp className="text-primary mb-2" />
-            <div className="text-lg font-bold text-primary">
-              {revenueSummary.data.totalRevenue.toLocaleString()} đ
-            </div>
-            <div className="text-xs text-muted-foreground">Tổng doanh thu</div>
-          </Card>
-          <Card className="flex flex-col items-center py-4 shadow-md border border-gray-100">
-            <Users className="text-primary mb-2" />
-            <div className="text-lg font-bold text-primary">
-              {revenueSummary.data.totalBookings}
-            </div>
-            <div className="text-xs text-muted-foreground">Tổng booking</div>
-          </Card>
-          <Card className="flex flex-col items-center py-4 shadow-md border border-gray-100">
-            <Hotel className="text-primary mb-2" />
-            <div className="text-lg font-bold text-primary">
-              {revenueSummary.data.successfulBookings}
-            </div>
-            <div className="text-xs text-muted-foreground">
-              Booking thành công
-            </div>
-          </Card>
-          <Card className="flex flex-col items-center py-4 shadow-md border border-gray-100">
-            <ArrowDownUp className="mb-2 text-primary" />
-            <span
-              className={`text-lg font-bold ${
-                Number(revenueSummary.data.revenueChange) >= 0
-                  ? "text-green-600"
-                  : "text-red-600"
-              }`}
+        <div className="space-y-4">
+          <div className="flex justify-end">
+            <Select
+              value={summaryPeriod}
+              onValueChange={(v) =>
+                setSummaryPeriod(v as "day" | "week" | "month" | "year")
+              }
             >
-              {revenueSummary.data.revenueChange}%
-            </span>
-            <div className="text-xs text-muted-foreground">
-              Tăng trưởng doanh thu
-            </div>
-          </Card>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Chọn khoảng thời gian" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="day">Hôm nay</SelectItem>
+                <SelectItem value="week">Tuần này</SelectItem>
+                <SelectItem value="month">Tháng này</SelectItem>
+                <SelectItem value="year">Năm nay</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <Card className="flex flex-col items-center py-4 shadow-md border border-gray-100">
+              <TrendingUp className="text-primary mb-2" />
+              <div className="text-lg font-bold text-primary">
+                {revenueSummary.data.totalRevenue.toLocaleString()} đ
+              </div>
+              <div className="text-xs text-muted-foreground">
+                Tổng doanh thu
+              </div>
+            </Card>
+            <Card className="flex flex-col items-center py-4 shadow-md border border-gray-100">
+              <Users className="text-primary mb-2" />
+              <div className="text-lg font-bold text-primary">
+                {revenueSummary.data.totalBookings}
+              </div>
+              <div className="text-xs text-muted-foreground">Tổng booking</div>
+            </Card>
+            <Card className="flex flex-col items-center py-4 shadow-md border border-gray-100">
+              <Hotel className="text-primary mb-2" />
+              <div className="text-lg font-bold text-primary">
+                {revenueSummary.data.successfulBookings}
+              </div>
+              <div className="text-xs text-muted-foreground">
+                Booking thành công
+              </div>
+            </Card>
+            <Card className="flex flex-col items-center py-4 shadow-md border border-gray-100">
+              <ArrowDownUp className="mb-2 text-primary" />
+              <span
+                className={`text-lg font-bold ${
+                  Number(revenueSummary.data.revenueChange) >= 0
+                    ? "text-green-600"
+                    : "text-red-600"
+                }`}
+              >
+                {revenueSummary.data.revenueChange}%
+              </span>
+              <div className="text-xs text-muted-foreground">
+                Tăng trưởng doanh thu
+              </div>
+            </Card>
+          </div>
         </div>
       ) : null}
 

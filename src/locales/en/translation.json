@@ -1509,6 +1509,11 @@
       "addNew": "Add Hotel",
       "searchPlaceholder": "Search hotels...",
       "noHotels": "No hotels found",
+      "filters": {
+        "reset": "Reset Filters",
+        "status": "Status",
+        "search": "Search"
+      },
       "table": {
         "name": "Hotel Name",
         "location": "Location",

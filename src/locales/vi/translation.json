@@ -1573,7 +1573,11 @@
       "addNew": "Thêm khách sạn",
       "searchPlaceholder": "Tìm kiếm khách sạn...",
       "noHotels": "Không có khách sạn nào",
-
+      "filters": {
+        "reset": "Đặt lại bộ lọc",
+        "status": "Trạng thái",
+        "search": "Tìm kiếm"
+      },
       "table": {
         "name": "Tên khách sạn",
         "location": "Địa điểm",

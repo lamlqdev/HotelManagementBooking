@@ -36,7 +36,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { Building2, Clock, Filter, MapPin, Search, Star } from "lucide-react";
+import { Building2, Clock, MapPin, Search, Star, Filter } from "lucide-react";
 
 export default function HotelsManagementPage() {
   const { t } = useTranslation();
@@ -103,6 +103,12 @@ export default function HotelsManagementPage() {
     if (e.key === "Enter") {
       handleSearch();
     }
+  };
+
+  const handleResetFilters = () => {
+    setCurrentPage(1);
+    setStatusFilter("all");
+    setSearchInput("");
   };
 
   const renderPaginationItems = () => {
@@ -186,51 +192,63 @@ export default function HotelsManagementPage() {
             </p>
           </div>
 
-          <div className="flex items-center gap-4 mb-6">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                placeholder={t("admin.hotels.searchPlaceholder")}
-                className="pl-9"
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-                onKeyDown={handleInputKeyDown}
-              />
-              <Button
-                size="sm"
-                className="absolute right-2 top-1/2 -translate-y-1/2"
-                onClick={handleSearch}
-                variant="outline"
-              >
-                <Search className="h-4 w-4" />
+          <div className="flex flex-col gap-4 mb-6">
+            <div className="flex items-center gap-4">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  placeholder={t("admin.hotels.searchPlaceholder")}
+                  className="pl-9"
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  onKeyDown={handleInputKeyDown}
+                />
+                <Button
+                  size="sm"
+                  className="absolute right-2 top-1/2 -translate-y-1/2"
+                  onClick={handleSearch}
+                  variant="outline"
+                >
+                  <Search className="h-4 w-4" />
+                </Button>
+              </div>
+              <Button variant="outline" onClick={handleResetFilters}>
+                <Filter className="h-4 w-4 mr-2" />
+                {t("admin.hotels.filters.reset")}
               </Button>
             </div>
-            <Select
-              value={statusFilter}
-              onValueChange={handleStatusFilterChange}
-            >
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder={t("admin.hotels.filterByStatus")} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">
-                  {t("admin.hotels.status.all")}
-                </SelectItem>
-                <SelectItem value="active">
-                  {t("admin.hotels.status.active")}
-                </SelectItem>
-                <SelectItem value="inactive">
-                  {t("admin.hotels.status.inactive")}
-                </SelectItem>
-                <SelectItem value="pending">
-                  {t("admin.hotels.status.pending")}
-                </SelectItem>
-              </SelectContent>
-            </Select>
-            <Button variant="outline">
-              <Filter className="h-4 w-4 mr-2" />
-              {t("common.filter")}
-            </Button>
+
+            <div className="flex items-center gap-4">
+              <div className="flex flex-col gap-1">
+                <label className="text-sm text-muted-foreground">
+                  {t("admin.hotels.filters.status")}
+                </label>
+                <Select
+                  value={statusFilter}
+                  onValueChange={handleStatusFilterChange}
+                >
+                  <SelectTrigger className="w-[200px]">
+                    <SelectValue
+                      placeholder={t("admin.hotels.filterByStatus")}
+                    />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">
+                      {t("admin.hotels.status.all")}
+                    </SelectItem>
+                    <SelectItem value="active">
+                      {t("admin.hotels.status.active")}
+                    </SelectItem>
+                    <SelectItem value="inactive">
+                      {t("admin.hotels.status.inactive")}
+                    </SelectItem>
+                    <SelectItem value="pending">
+                      {t("admin.hotels.status.pending")}
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
           </div>
 
           <Table>

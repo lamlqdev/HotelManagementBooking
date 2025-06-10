@@ -186,10 +186,6 @@ export default function BookingOrdersPage() {
                   {t("partner.bookings.ordersTitle")}
                 </h1>
               </div>
-              <Button variant="outline" onClick={handleResetFilters}>
-                <RefreshCw className="h-4 w-4 mr-2" />
-                {t("partner.bookings.resetFilters")}
-              </Button>
             </div>
             <p className="text-muted-foreground mt-2">
               {t("partner.bookings.ordersDesc")}
@@ -210,6 +206,10 @@ export default function BookingOrdersPage() {
                   }}
                 />
               </div>
+              <Button variant="outline" onClick={handleResetFilters}>
+                <RefreshCw className="h-4 w-4 mr-2" />
+                {t("partner.bookings.resetFilters")}
+              </Button>
             </div>
             <div className="flex items-center gap-4">
               <div className="flex flex-col gap-1">
@@ -217,7 +217,7 @@ export default function BookingOrdersPage() {
                   {t("partner.bookings.status")}
                 </label>
                 <Select value={status} onValueChange={setStatus}>
-                  <SelectTrigger className="w-[160px]">
+                  <SelectTrigger className="w-[200px]">
                     <SelectValue placeholder={t("partner.bookings.status")} />
                   </SelectTrigger>
                   <SelectContent>

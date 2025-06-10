@@ -79,25 +79,26 @@ export default function DashboardPage() {
   const [groupBy, setGroupBy] = useState<"day" | "month">("day");
   const [chartFilterKey, setChartFilterKey] = useState(0);
 
-  // State cho filter top khách sạn
-  const [topHotelFrom, setTopHotelFrom] = useState<string>(
+  // State cho filter top khách sạn và người dùng
+  const [rankingFrom, setRankingFrom] = useState<string>(
     firstDay.toISOString().slice(0, 10)
   );
-  const [topHotelTo, setTopHotelTo] = useState<string>(
+  const [rankingTo, setRankingTo] = useState<string>(
     lastDay.toISOString().slice(0, 10)
   );
-  const [topHotelLimit, setTopHotelLimit] = useState<number>(5);
-  const [topHotelFilterKey, setTopHotelFilterKey] = useState(0);
+  const [rankingLimit, setRankingLimit] = useState<number>(5);
+  const [rankingFilterKey, setRankingFilterKey] = useState(0);
 
-  // State cho filter top người dùng
-  const [topUserFrom, setTopUserFrom] = useState<string>(
-    firstDay.toISOString().slice(0, 10)
-  );
-  const [topUserTo, setTopUserTo] = useState<string>(
-    lastDay.toISOString().slice(0, 10)
-  );
-  const [topUserLimit, setTopUserLimit] = useState<number>(5);
-  const [topUserFilterKey, setTopUserFilterKey] = useState(0);
+  // Tự động fetch khi thay đổi filter tổng quan
+  useEffect(() => {
+    setChartFilterKey((k) => k + 1);
+    // eslint-disable-next-line
+  }, [chartFrom, chartTo, groupBy]);
+
+  // Tự động fetch khi thay đổi filter ranking
+  useEffect(() => {
+    setRankingFilterKey((k) => k + 1);
+  }, [rankingFrom, rankingTo, rankingLimit]);
 
   // API calls cho phần tổng quan
   const { data: overview, isLoading: loadingOverview } = useQuery({
@@ -134,30 +135,31 @@ export default function DashboardPage() {
     queryKey: [
       "admin-statistics",
       "top-hotels",
-      { topHotelLimit, topHotelFrom, topHotelTo, topHotelFilterKey },
+      { rankingLimit, rankingFrom, rankingTo, rankingFilterKey },
     ],
     queryFn: () =>
       adminStatisticsApi.getTopHotelsByBookings({
-        limit: topHotelLimit,
-        from: topHotelFrom,
-        to: topHotelTo,
+        limit: rankingLimit,
+        from: rankingFrom,
+        to: rankingTo,
       }),
-    enabled: !!topHotelFrom && !!topHotelTo,
+    enabled: !!rankingFrom && !!rankingTo,
   });
+
   // API call cho top người dùng
   const { data: topUsers, isLoading: loadingTopUsers } = useQuery({
     queryKey: [
       "admin-statistics",
       "top-users",
-      { topUserLimit, topUserFrom, topUserTo, topUserFilterKey },
+      { rankingLimit, rankingFrom, rankingTo, rankingFilterKey },
     ],
     queryFn: () =>
       adminStatisticsApi.getTopUsersByBookings({
-        limit: topUserLimit,
-        from: topUserFrom,
-        to: topUserTo,
+        limit: rankingLimit,
+        from: rankingFrom,
+        to: rankingTo,
       }),
-    enabled: !!topUserFrom && !!topUserTo,
+    enabled: !!rankingFrom && !!rankingTo,
   });
 
   // Pie data
@@ -218,85 +220,75 @@ export default function DashboardPage() {
       hotelStatus.data.inactive
     : 0;
 
-  // Handler filter cho biểu đồ tổng quan (tự động fetch khi thay đổi)
-  useEffect(() => {
-    setChartFilterKey((k) => k + 1);
-    // eslint-disable-next-line
-  }, [chartFrom, chartTo, groupBy]);
-
-  // Handler filter cho top khách sạn (tự động fetch khi thay đổi)
-  useEffect(() => {
-    setTopHotelFilterKey((k) => k + 1);
-    // eslint-disable-next-line
-  }, [topHotelFrom, topHotelTo, topHotelLimit]);
-
-  // Handler filter cho top người dùng (tự động fetch khi thay đổi)
-  useEffect(() => {
-    setTopUserFilterKey((k) => k + 1);
-    // eslint-disable-next-line
-  }, [topUserFrom, topUserTo, topUserLimit]);
-
   return (
     <div className="space-y-8 w-full max-w-7xl mx-auto">
-      <h1 className="text-3xl font-bold text-center mb-2">
+      <h1 className="text-3xl font-bold text-center mb-4">
         Dashboard quản trị
       </h1>
 
       {/* Tổng quan */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-        {loadingOverview ? (
-          Array.from({ length: 5 }).map((_, i) => (
-            <Skeleton key={i} className="h-28 w-full rounded-lg" />
-          ))
-        ) : overview?.data ? (
-          <>
-            <Card className="flex flex-col items-center py-4 shadow-md border border-gray-100">
-              <Home className="h-7 w-7 text-primary mb-2" />
-              <span className="text-3xl font-bold text-primary">
-                {overview.data.totalPartners}
-              </span>
-              <span className="mt-1 text-base text-gray-600 dark:text-gray-300">
-                Đối tác
-              </span>
-            </Card>
-            <Card className="flex flex-col items-center py-4 shadow-md border border-gray-100">
-              <Users className="h-7 w-7 text-primary mb-2" />
-              <span className="text-3xl font-bold text-primary">
-                {overview.data.totalUsers}
-              </span>
-              <span className="mt-1 text-base text-gray-600 dark:text-gray-300">
-                Người dùng
-              </span>
-            </Card>
-            <Card className="flex flex-col items-center py-4 shadow-md border border-gray-100">
-              <Hotel className="h-7 w-7 text-primary mb-2" />
-              <span className="text-3xl font-bold text-primary">
-                {overview.data.totalHotels}
-              </span>
-              <span className="mt-1 text-base text-gray-600 dark:text-gray-300">
-                Khách sạn
-              </span>
-            </Card>
-            <Card className="flex flex-col items-center py-4 shadow-md border border-gray-100">
-              <Ticket className="h-7 w-7 text-primary mb-2" />
-              <span className="text-3xl font-bold text-primary">
-                {overview.data.totalBookings}
-              </span>
-              <span className="mt-1 text-base text-gray-600 dark:text-gray-300">
-                Booking
-              </span>
-            </Card>
-            <Card className="flex flex-col items-center py-4 shadow-md border border-gray-100">
-              <TrendingUp className="h-7 w-7 text-primary mb-2" />
-              <span className="text-3xl font-bold text-primary">
-                {overview.data.totalRevenue.toLocaleString("vi-VN")}₫
-              </span>
-              <span className="mt-1 text-base text-gray-600 dark:text-gray-300">
-                Tổng doanh thu
-              </span>
-            </Card>
-          </>
-        ) : null}
+      <div className="space-y-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+          {loadingOverview ? (
+            Array.from({ length: 5 }).map((_, i) => (
+              <Skeleton key={i} className="h-28 w-full rounded-lg" />
+            ))
+          ) : overview?.data ? (
+            <>
+              <Card className="flex flex-col items-center py-4 shadow-md border border-gray-100">
+                <Home className="h-7 w-7 text-primary mb-2" />
+                <span className="text-3xl font-bold text-primary">
+                  {overview.data.totalPartners}
+                </span>
+                <span className="mt-1 text-base text-gray-600 dark:text-gray-300">
+                  Đối tác
+                </span>
+              </Card>
+              <Card className="flex flex-col items-center py-4 shadow-md border border-gray-100">
+                <Users className="h-7 w-7 text-primary mb-2" />
+                <span className="text-3xl font-bold text-primary">
+                  {overview.data.totalUsers}
+                </span>
+                <span className="mt-1 text-base text-gray-600 dark:text-gray-300">
+                  Người dùng
+                </span>
+              </Card>
+              <Card className="flex flex-col items-center py-4 shadow-md border border-gray-100">
+                <Hotel className="h-7 w-7 text-primary mb-2" />
+                <span className="text-3xl font-bold text-primary">
+                  {overview.data.totalHotels}
+                </span>
+                <span className="mt-1 text-base text-gray-600 dark:text-gray-300">
+                  Khách sạn
+                </span>
+              </Card>
+              <Card className="flex flex-col items-center py-4 shadow-md border border-gray-100">
+                <Ticket className="h-7 w-7 text-primary mb-2" />
+                <span className="text-3xl font-bold text-primary">
+                  {overview.data.totalBookings}
+                </span>
+                <span className="mt-1 text-base text-gray-600 dark:text-gray-300">
+                  Booking
+                </span>
+              </Card>
+              <Card className="flex flex-col items-center py-4 shadow-md border border-gray-100">
+                <TrendingUp className="h-7 w-7 text-primary mb-2" />
+                <div className="flex flex-col items-center">
+                  <span className="text-3xl font-bold text-primary">
+                    {(
+                      (overview.data.totalBookings / overview.data.totalUsers) *
+                      100
+                    ).toFixed(1)}
+                    %
+                  </span>
+                  <span className="mt-1 text-base text-gray-600 dark:text-gray-300">
+                    Tỷ lệ booking/người dùng
+                  </span>
+                </div>
+              </Card>
+            </>
+          ) : null}
+        </div>
       </div>
 
       {/* Hai PieChart trạng thái */}
@@ -666,17 +658,18 @@ export default function DashboardPage() {
         </CardContent>
       </Card>
 
-      {/* Top khách sạn */}
+      {/* Bộ lọc chung cho top khách sạn và người dùng */}
       <Card>
         <CardHeader>
-          <CardTitle>Top khách sạn có nhiều booking nhất</CardTitle>
+          <CardTitle className="flex items-center gap-2 text-base">
+            <BarChart2 className="w-5 h-5 text-primary" /> Bộ lọc xếp hạng
+          </CardTitle>
         </CardHeader>
-        {/* Bộ lọc riêng cho top khách sạn */}
         <CardContent>
-          <div className="flex flex-col md:flex-row gap-4 items-end justify-center mb-4 py-2">
+          <div className="flex flex-col md:flex-row gap-4 items-end justify-center py-2">
             <div className="flex flex-col gap-1 w-full max-w-[180px]">
               <Label
-                htmlFor="top-hotel-from"
+                htmlFor="ranking-from"
                 className="text-xs font-medium mb-1"
               >
                 Từ ngày
@@ -688,8 +681,8 @@ export default function DashboardPage() {
                     className="border rounded-lg px-3 py-2 pr-10 w-full flex items-center text-sm shadow-sm focus:outline-primary bg-white hover:bg-muted transition group"
                   >
                     <CalendarDays className="mr-2 h-4 w-4 text-gray-400" />
-                    {topHotelFrom ? (
-                      new Date(topHotelFrom).toLocaleDateString("vi-VN")
+                    {rankingFrom ? (
+                      new Date(rankingFrom).toLocaleDateString("vi-VN")
                     ) : (
                       <span className="text-muted-foreground group-hover:text-primary">
                         Chọn ngày bắt đầu
@@ -700,23 +693,20 @@ export default function DashboardPage() {
                 <PopoverContent className="w-auto p-0" align="start">
                   <Calendar
                     mode="single"
-                    selected={topHotelFrom ? new Date(topHotelFrom) : undefined}
+                    selected={rankingFrom ? new Date(rankingFrom) : undefined}
                     onSelect={(date) => {
                       if (date instanceof Date)
-                        setTopHotelFrom(date.toISOString().slice(0, 10));
+                        setRankingFrom(date.toISOString().slice(0, 10));
                     }}
                     initialFocus
                     locale={vi}
-                    disabled={(date) => date > new Date(topHotelTo)}
+                    disabled={(date) => date > new Date(rankingTo)}
                   />
                 </PopoverContent>
               </Popover>
             </div>
             <div className="flex flex-col gap-1 w-full max-w-[180px]">
-              <Label
-                htmlFor="top-hotel-to"
-                className="text-xs font-medium mb-1"
-              >
+              <Label htmlFor="ranking-to" className="text-xs font-medium mb-1">
                 Đến ngày
               </Label>
               <Popover>
@@ -726,8 +716,8 @@ export default function DashboardPage() {
                     className="border rounded-lg px-3 py-2 pr-10 w-full flex items-center text-sm shadow-sm focus:outline-primary bg-white hover:bg-muted transition group"
                   >
                     <CalendarDays className="mr-2 h-4 w-4 text-gray-400" />
-                    {topHotelTo ? (
-                      new Date(topHotelTo).toLocaleDateString("vi-VN")
+                    {rankingTo ? (
+                      new Date(rankingTo).toLocaleDateString("vi-VN")
                     ) : (
                       <span className="text-muted-foreground group-hover:text-primary">
                         Chọn ngày kết thúc
@@ -738,14 +728,14 @@ export default function DashboardPage() {
                 <PopoverContent className="w-auto p-0" align="start">
                   <Calendar
                     mode="single"
-                    selected={topHotelTo ? new Date(topHotelTo) : undefined}
+                    selected={rankingTo ? new Date(rankingTo) : undefined}
                     onSelect={(date) => {
                       if (date instanceof Date)
-                        setTopHotelTo(date.toISOString().slice(0, 10));
+                        setRankingTo(date.toISOString().slice(0, 10));
                     }}
                     initialFocus
                     locale={vi}
-                    disabled={(date) => date < new Date(topHotelFrom)}
+                    disabled={(date) => date < new Date(rankingFrom)}
                   />
                 </PopoverContent>
               </Popover>
@@ -753,8 +743,8 @@ export default function DashboardPage() {
             <div className="flex flex-col gap-1 w-full max-w-[140px]">
               <Label className="text-xs font-medium mb-1">Số lượng top</Label>
               <Select
-                value={topHotelLimit.toString()}
-                onValueChange={(v) => setTopHotelLimit(Number(v))}
+                value={rankingLimit.toString()}
+                onValueChange={(v) => setRankingLimit(Number(v))}
               >
                 <SelectTrigger className="rounded-lg px-3 py-2 text-sm shadow-sm">
                   <SelectValue placeholder="Top" />
@@ -770,6 +760,13 @@ export default function DashboardPage() {
             </div>
           </div>
         </CardContent>
+      </Card>
+
+      {/* Top khách sạn */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Top khách sạn có nhiều booking nhất</CardTitle>
+        </CardHeader>
         <CardContent>
           {loadingTopHotels ? (
             <Skeleton className="h-48 w-full rounded-lg" />
@@ -811,102 +808,6 @@ export default function DashboardPage() {
         <CardHeader>
           <CardTitle>Top người dùng có nhiều booking nhất</CardTitle>
         </CardHeader>
-        {/* Bộ lọc riêng cho top người dùng */}
-        <CardContent>
-          <div className="flex flex-col md:flex-row gap-4 items-end justify-center mb-4 py-2">
-            <div className="flex flex-col gap-1 w-full max-w-[180px]">
-              <Label
-                htmlFor="top-user-from"
-                className="text-xs font-medium mb-1"
-              >
-                Từ ngày
-              </Label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <button
-                    type="button"
-                    className="border rounded-lg px-3 py-2 pr-10 w-full flex items-center text-sm shadow-sm focus:outline-primary bg-white hover:bg-muted transition group"
-                  >
-                    <CalendarDays className="mr-2 h-4 w-4 text-gray-400" />
-                    {topUserFrom ? (
-                      new Date(topUserFrom).toLocaleDateString("vi-VN")
-                    ) : (
-                      <span className="text-muted-foreground group-hover:text-primary">
-                        Chọn ngày bắt đầu
-                      </span>
-                    )}
-                  </button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={topUserFrom ? new Date(topUserFrom) : undefined}
-                    onSelect={(date) => {
-                      if (date instanceof Date)
-                        setTopUserFrom(date.toISOString().slice(0, 10));
-                    }}
-                    initialFocus
-                    locale={vi}
-                    disabled={(date) => date > new Date(topUserTo)}
-                  />
-                </PopoverContent>
-              </Popover>
-            </div>
-            <div className="flex flex-col gap-1 w-full max-w-[180px]">
-              <Label htmlFor="top-user-to" className="text-xs font-medium mb-1">
-                Đến ngày
-              </Label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <button
-                    type="button"
-                    className="border rounded-lg px-3 py-2 pr-10 w-full flex items-center text-sm shadow-sm focus:outline-primary bg-white hover:bg-muted transition group"
-                  >
-                    <CalendarDays className="mr-2 h-4 w-4 text-gray-400" />
-                    {topUserTo ? (
-                      new Date(topUserTo).toLocaleDateString("vi-VN")
-                    ) : (
-                      <span className="text-muted-foreground group-hover:text-primary">
-                        Chọn ngày kết thúc
-                      </span>
-                    )}
-                  </button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={topUserTo ? new Date(topUserTo) : undefined}
-                    onSelect={(date) => {
-                      if (date instanceof Date)
-                        setTopUserTo(date.toISOString().slice(0, 10));
-                    }}
-                    initialFocus
-                    locale={vi}
-                    disabled={(date) => date < new Date(topUserFrom)}
-                  />
-                </PopoverContent>
-              </Popover>
-            </div>
-            <div className="flex flex-col gap-1 w-full max-w-[140px]">
-              <Label className="text-xs font-medium mb-1">Số lượng top</Label>
-              <Select
-                value={topUserLimit.toString()}
-                onValueChange={(v) => setTopUserLimit(Number(v))}
-              >
-                <SelectTrigger className="rounded-lg px-3 py-2 text-sm shadow-sm">
-                  <SelectValue placeholder="Top" />
-                </SelectTrigger>
-                <SelectContent>
-                  {[3, 5, 10].map((n) => (
-                    <SelectItem key={n} value={n.toString()}>
-                      Top {n}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        </CardContent>
         <CardContent>
           {loadingTopUsers ? (
             <Skeleton className="h-48 w-full rounded-lg" />
