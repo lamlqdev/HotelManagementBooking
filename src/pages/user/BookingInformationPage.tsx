@@ -14,6 +14,7 @@ import { bookingApi } from "@/api/booking/booking.api";
 import type { ContactFormData, SpecialRequestsData } from "@/api/booking/types";
 import { contactFormSchema, specialRequestsSchema } from "@/api/booking/types";
 import { voucherApi } from "@/api/voucher/voucher.api";
+import { useAppSelector } from "@/store/hooks";
 
 interface ErrorResponse {
   message: string;
@@ -26,6 +27,7 @@ const BookingInformationPage = () => {
   const [selectedVoucherId, setSelectedVoucherId] = useState<
     string | undefined
   >(undefined);
+  const user = useAppSelector((state) => state.auth.user);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -72,16 +74,16 @@ const BookingInformationPage = () => {
         paymentMethod: contactData.paymentMethod,
         bookingFor: contactData.bookingFor,
         contactInfo: {
-          name: contactData.contactName,
-          email: contactData.email,
-          phone: contactData.phone,
+          name: user?.name || "",
+          email: user?.email || "",
+          phone: user?.phone || "",
         },
         guestInfo:
           contactData.bookingFor === "other"
             ? {
                 name: contactData.contactName || "",
-                phone: contactData.phone,
-                email: contactData.email,
+                phone: contactData.phone || "",
+                email: contactData.email || "",
               }
             : undefined,
         specialRequests: specialRequestsData
