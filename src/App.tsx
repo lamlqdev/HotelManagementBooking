@@ -22,6 +22,7 @@ import Partnership from "./pages/user/Partnership";
 import RegisterPartner from "./pages/user/RegisterPartner";
 import RegisterSuccessfullyPage from "./pages/user/RegisterSuccessfullyPage";
 import NotFoundPage from "./pages/user/NotFoundPage";
+import PaymentResultPage from "./pages/user/PaymentResultPage";
 
 // Auth Pages
 import LoginPage from "./pages/auth/LoginPage";
@@ -86,6 +87,9 @@ function App() {
             element={<RegisterSuccessfullyPage />}
           />
         </Route>
+
+        {/* Payment Result Page - Không có header footer */}
+        <Route path="/payment-result" element={<PaymentResultPage />} />
 
         {/* Auth Routes - Chỉ truy cập khi chưa đăng nhập */}
         <Route element={<PublicRoute />}>
