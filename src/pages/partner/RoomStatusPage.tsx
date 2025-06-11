@@ -215,11 +215,10 @@ export default function RoomStatusPage() {
           <Table>
             <TableHeader>
               <TableRow className="hover:bg-transparent">
-                <TableHead className="w-[25%]">Phòng</TableHead>
-                <TableHead className="w-[20%]">Loại phòng</TableHead>
-                <TableHead className="w-[15%]">Tầng</TableHead>
-                <TableHead className="w-[20%]">Trạng thái</TableHead>
-                <TableHead className="w-[10%]">Cập nhật lúc</TableHead>
+                <TableHead className="w-[30%]">Phòng</TableHead>
+                <TableHead className="w-[25%]">Loại phòng</TableHead>
+                <TableHead className="w-[20%]">Tầng</TableHead>
+                <TableHead className="w-[15%]">Cập nhật lúc</TableHead>
                 <TableHead className="w-[10%] text-right">Thao tác</TableHead>
               </TableRow>
             </TableHeader>
@@ -236,9 +235,6 @@ export default function RoomStatusPage() {
                     </TableCell>
                     <TableCell>
                       <Skeleton className="h-6 w-16" />
-                    </TableCell>
-                    <TableCell>
-                      <Skeleton className="h-6 w-20" />
                     </TableCell>
                     <TableCell>
                       <Skeleton className="h-6 w-24" />
@@ -262,12 +258,6 @@ export default function RoomStatusPage() {
                     </TableCell>
                     <TableCell className="text-muted-foreground py-4">
                       Tầng {room.floor}
-                    </TableCell>
-                    <TableCell className="py-4">
-                      <div className="flex items-center gap-3">
-                        <div className={getStatusDot(room.status)} />
-                        {getStatusBadge(room.status)}
-                      </div>
                     </TableCell>
                     <TableCell className="text-muted-foreground py-4">
                       {formatDate(room.updatedAt)}

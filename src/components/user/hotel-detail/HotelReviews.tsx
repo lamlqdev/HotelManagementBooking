@@ -193,7 +193,7 @@ const HotelReviews = ({
         {t("hotel.reviews.title")}
       </h2>
       {/* Nút mở form đánh giá */}
-      {!showForm && (
+      {!showForm && user && (
         <Button onClick={() => setShowForm(true)} className="mb-6">
           {t("hotel.reviews.write_review") || "Viết đánh giá"}
         </Button>

@@ -116,15 +116,6 @@ const Footer = () => {
                   {t("footer.support.terms")}
                 </Link>
               </li>
-              <li>
-                <Link
-                  to="/feedback"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                  onClick={scrollToTop}
-                >
-                  {t("footer.support.feedback")}
-                </Link>
-              </li>
             </ul>
           </div>
         </div>

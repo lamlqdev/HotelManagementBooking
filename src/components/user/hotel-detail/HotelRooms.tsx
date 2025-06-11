@@ -8,6 +8,7 @@ import { Card } from "@/components/ui/card";
 
 import { Room } from "@/types/room";
 import { getAmenityIcon } from "@/utils/amenityIcons";
+import NoData from "@/assets/illustration/NoData.svg";
 
 interface HotelRoomsProps {
   rooms: Room[];
@@ -49,7 +50,7 @@ const HotelRooms = ({
     return (
       <div className="text-center py-12">
         <img
-          src="/no-data.svg"
+          src={NoData}
           alt="No rooms available"
           className="mx-auto h-48 w-48 mb-4"
         />

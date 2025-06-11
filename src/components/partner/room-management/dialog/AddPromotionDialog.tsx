@@ -46,6 +46,7 @@ export function AddPromotionDialog({ roomId }: AddPromotionDialogProps) {
     }) => roomApi.setRoomDiscount(roomId, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["room", roomId] });
+      queryClient.invalidateQueries({ queryKey: ["rooms"] });
       toast.success(t("room.dialog.add_promotion.success"));
       setIsOpen(false);
     },

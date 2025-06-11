@@ -42,6 +42,7 @@ export function UpdatePriceDialog({
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["room", roomId] });
+      queryClient.invalidateQueries({ queryKey: ["rooms"] });
       toast.success(t("room.dialog.update_price.success"));
       onOpenChange(false);
     },

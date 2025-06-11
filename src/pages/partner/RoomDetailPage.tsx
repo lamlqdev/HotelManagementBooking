@@ -82,6 +82,7 @@ export default function RoomDetailPage() {
     mutationFn: () => roomApi.removeRoomDiscount(id || ""),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["room", id] });
+      queryClient.invalidateQueries({ queryKey: ["rooms"] });
       toast.success(t("room.dialog.remove_discount.success"));
       setIsRemovingDiscount(false);
     },
@@ -437,12 +438,6 @@ export default function RoomDetailPage() {
                     <p className="text-sm font-medium text-destructive">
                       -{room.discountPercent}% {t("room.detail.discount")}
                     </p>
-                    {room.discountStartDate && room.discountEndDate && (
-                      <p className="text-xs text-muted-foreground mt-1">
-                        {t("room.detail.valid_until")}:{" "}
-                        {new Date(room.discountEndDate).toLocaleDateString()}
-                      </p>
-                    )}
                   </div>
                 )}
               </div>
