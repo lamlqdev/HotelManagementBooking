@@ -23,4 +23,9 @@ export default defineConfig({
       reporter: ["text", "json", "html"],
     },
   },
+  base: "/",
+  build: {
+    outDir: "dist",
+    assetsDir: "assets",
+  },
 });
