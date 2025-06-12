@@ -20,7 +20,7 @@ import { Textarea } from "@/components/ui/textarea";
 
 import { PartnerFormData } from "@/api/partner/types";
 import { locationApi } from "@/api/location/location.api";
-import { Location } from "@/api/location/types";
+import { Location } from "@/types/location";
 
 interface AddressSectionProps {
   form: UseFormReturn<PartnerFormData>;

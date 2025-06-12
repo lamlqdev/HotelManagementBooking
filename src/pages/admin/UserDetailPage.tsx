@@ -195,10 +195,10 @@ export default function UserDetailPage() {
   useEffect(() => {
     if (user?.data) {
       setEditForm({
-        name: user.data.name,
-        email: user.data.email,
-        phone: user.data.phone,
-        role: user.data.role,
+        name: user.data.name || "",
+        email: user.data.email || "",
+        phone: user.data.phone || "",
+        role: user.data.role || "user",
       });
     }
   }, [user?.data]);

@@ -681,7 +681,7 @@ function SidebarMenuSubButton({
   size?: "sm" | "md";
   isActive?: boolean;
 }) {
-  const Comp = asChild ? Slot : props.href ? "a" : "button";
+  const Comp = asChild ? Slot : "button";
 
   return (
     <Comp
