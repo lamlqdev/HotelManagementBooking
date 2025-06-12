@@ -44,6 +44,7 @@ export interface SearchHotelsWithAvailableRoomsResponse {
     name: string;
     address: string;
     rating: number;
+    reviewCount: number;
     images: Array<{
       url: string;
       publicId: string;
@@ -66,6 +67,8 @@ export interface SearchHotelsWithAvailableRoomsResponse {
     lowestDiscountedPrice: number;
     highestDiscountPercent: number;
     availableRoomCount: number;
+    availableRoomTypes?: string[];
+    availableAmenities?: string[];
   }>;
 }
 
@@ -78,4 +81,6 @@ export interface GetAvailableRoomsByHotelResponse {
     totalPages: number;
   };
   data: Room[];
+  availableRoomTypes?: string[];
+  availableAmenities?: string[];
 }

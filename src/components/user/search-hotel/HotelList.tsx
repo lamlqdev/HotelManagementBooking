@@ -23,6 +23,7 @@ interface HotelListProps {
   hotels: Hotel[];
   currentPage: number;
   totalPages: number;
+  total: number;
   onPageChange: (page: number) => void;
   onSortChange: (value: string) => void;
   onHotelClick: (hotelId: string) => void;
@@ -33,6 +34,7 @@ const HotelList = ({
   hotels,
   currentPage,
   totalPages,
+  total,
   onPageChange,
   onSortChange,
   onHotelClick,
@@ -52,7 +54,7 @@ const HotelList = ({
     <div>
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold">
-          {t("search.results", { count: hotels.length })}
+          {t("search.results", { count: total })}
         </h2>
         <div className="flex items-center space-x-2">
           <span className="text-sm text-muted-foreground">
@@ -89,7 +91,7 @@ const HotelList = ({
         </div>
       </div>
 
-      {hotels.length === 0 ? (
+      {total === 0 ? (
         <div className="text-center py-12">
           <p className="text-muted-foreground">{t("search.no_results")}</p>
         </div>
@@ -124,7 +126,7 @@ const HotelList = ({
                         </div>
                         <p className="text-sm text-muted-foreground">
                           {t("hotels.card.reviews_count", {
-                            count: hotel.favoriteCount || 0,
+                            count: hotel.reviewCount || 0,
                           })}
                         </p>
                       </div>
