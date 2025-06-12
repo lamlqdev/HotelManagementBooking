@@ -1,14 +1,38 @@
 import { useNavigate, useSearchParams } from "react-router";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, XCircle } from "lucide-react";
+import { useEffect } from "react";
+import { bookingApi } from "@/api/booking/booking.api";
+import { toast } from "sonner";
 
 const PaymentResultPage = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const status = searchParams.get("status");
-  const bookingId = searchParams.get("bookingId");
 
-  const isSuccess = status === "success";
+  // Lấy các tham số từ VNPay callback
+  const vnpResponseCode = searchParams.get("vnp_ResponseCode");
+  const vnpTransactionNo = searchParams.get("vnp_TransactionNo");
+  const vnpOrderInfo = searchParams.get("vnp_OrderInfo");
+
+  // Trích xuất bookingId từ vnpOrderInfo (format: "Thanh toan dat phong #bookingId")
+  const bookingId = vnpOrderInfo?.split("#")[1];
+
+  const isSuccess = vnpResponseCode === "00";
+
+  useEffect(() => {
+    const confirmPayment = async () => {
+      if (vnpTransactionNo && bookingId) {
+        try {
+          await bookingApi.confirmPayment(vnpTransactionNo, "vnpay");
+        } catch (error) {
+          console.error("Error confirming payment:", error);
+          toast.error("Có lỗi xảy ra khi xác nhận thanh toán");
+        }
+      }
+    };
+
+    confirmPayment();
+  }, [vnpTransactionNo, bookingId]);
 
   return (
     <div className="container max-w-2xl mx-auto py-16 px-4">

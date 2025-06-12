@@ -3,7 +3,7 @@ import { notificationApi } from "@/api/notification/notification.api";
 import io from "socket.io-client";
 import { Notification } from "@/types/notification";
 
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || "http://localhost:3000";
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
 export function useNotifications(userId?: string) {
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -21,16 +21,37 @@ export function useNotifications(userId?: string) {
   useEffect(() => {
     if (!userId) return;
     fetchNotifications();
-    socketRef.current = io(SOCKET_URL, {
-      transports: ["websocket"],
-      query: { userId },
-    });
-    socketRef.current.on("notification", (data: Notification) => {
-      setNotifications((prev) => [data, ...prev]);
-      setUnreadCount((prev) => prev + 1);
-    });
+
+    try {
+      socketRef.current = io(SOCKET_URL, {
+        transports: ["websocket"],
+        query: { userId },
+        reconnection: true,
+        reconnectionAttempts: 5,
+        reconnectionDelay: 1000,
+        timeout: 10000,
+      });
+
+      socketRef.current.on("connect", () => {
+        console.log("Socket connected successfully");
+      });
+
+      socketRef.current.on("connect_error", (error: Error) => {
+        console.error("Socket connection error:", error);
+      });
+
+      socketRef.current.on("notification", (data: Notification) => {
+        setNotifications((prev) => [data, ...prev]);
+        setUnreadCount((prev) => prev + 1);
+      });
+    } catch (error) {
+      console.error("Socket initialization error:", error);
+    }
+
     return () => {
-      socketRef.current?.disconnect();
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+      }
     };
   }, [userId, fetchNotifications]);
 

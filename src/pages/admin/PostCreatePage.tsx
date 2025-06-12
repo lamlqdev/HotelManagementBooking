@@ -98,6 +98,9 @@ export default function AdminPostCreatePage() {
     }
   };
 
+  const uploadUrl = `${import.meta.env.VITE_API_URL}/uploads/tinymce`;
+  console.log(uploadUrl);
+
   return (
     <div className="w-full min-h-screen bg-white flex flex-col p-0 m-0">
       <div className="w-full max-w-full px-0 py-0">
@@ -153,8 +156,7 @@ export default function AdminPostCreatePage() {
                     "undo redo | formatselect | bold italic backcolor | " +
                     "alignleft aligncenter alignright alignjustify | " +
                     "bullist numlist outdent indent | removeformat | help | image",
-                  images_upload_url:
-                    "http://localhost:3000/api/uploads/tinymce",
+                  images_upload_url: uploadUrl,
                   automatic_uploads: true,
                   images_upload_credentials: true,
                   width: "100%",

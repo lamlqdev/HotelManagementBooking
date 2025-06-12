@@ -44,13 +44,43 @@ import { User as UserType } from "@/types/auth";
 import { Review } from "@/types/review";
 import { getAmenityIcon } from "@/utils/amenityIcons";
 
+// Thêm hàm chuyển đổi trạng thái booking
+const getBookingStatusText = (status: string) => {
+  switch (status) {
+    case "pending":
+      return "Chờ xác nhận";
+    case "confirmed":
+      return "Đã xác nhận";
+    case "checked_in":
+      return "Đã nhận phòng";
+    case "checked_out":
+      return "Đã trả phòng";
+    case "completed":
+      return "Hoàn thành";
+    case "cancelled":
+      return "Đã hủy";
+    default:
+      return status;
+  }
+};
+
+// Thêm hàm chuyển đổi trạng thái thanh toán
+const getPaymentStatusText = (status: string) => {
+  switch (status) {
+    case "pending":
+      return "Chờ thanh toán";
+    case "paid":
+      return "Đã thanh toán";
+    case "refunded":
+      return "Đã hoàn tiền";
+    case "failed":
+      return "Thanh toán thất bại";
+    default:
+      return status;
+  }
+};
+
 export default function HotelDetailPage() {
-  const sectionIds = [
-    { id: "thong-tin", label: "Thông tin" },
-    { id: "booking", label: "Đơn đặt phòng" },
-    { id: "doi-tac", label: "Thông tin đối tác" },
-    { id: "danh-gia", label: "Đánh giá" },
-  ];
   const sectionRefs = useRef<{ [key: string]: HTMLElement | null }>({});
 
   const { t } = useTranslation();
@@ -180,21 +210,8 @@ export default function HotelDetailPage() {
     hotel.amenities.includes(amenity._id)
   );
 
-  // Hàm scrollToSection để bấm vào thanh điều hướng vẫn cuộn tới section
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      const offset = 100;
-      const bodyRect = document.body.getBoundingClientRect().top;
-      const elementRect = element.getBoundingClientRect().top;
-      const elementPosition = elementRect - bodyRect;
-      const offsetPosition = elementPosition - offset;
-      window.scrollTo({ top: offsetPosition, behavior: "smooth" });
-    }
-  };
-
   return (
-    <div className="container mx-auto px-4 pb-12">
+    <div className="container mx-auto px-4 pb-6">
       <div className="max-w-6xl mx-auto">
         <div className="mb-4 flex items-center justify-between gap-4">
           <div className="flex items-center gap-2">
@@ -220,10 +237,9 @@ export default function HotelDetailPage() {
               : "Vô hiệu hoá khách sạn"}
           </Button>
         </div>
-        {/* Layout chia 2 cột: nội dung | thanh điều hướng dọc */}
-        <div className="flex flex-col md:flex-row gap-8">
+        <div className="flex flex-col items-center gap-8 overflow-x-hidden">
           {/* Nội dung các section */}
-          <div className="flex-1">
+          <div className="w-full min-w-0 max-w-full md:max-w-5xl">
             {/* Section Thông tin khách sạn */}
             <div
               id="thong-tin"
@@ -464,8 +480,8 @@ export default function HotelDetailPage() {
                   <Calendar className="h-5 w-5 text-primary" /> Danh sách
                   booking
                 </h3>
-                <div className="overflow-x-auto">
-                  <Table>
+                <div className="overflow-x-auto w-full">
+                  <Table className="min-w-[900px] w-full max-w-full">
                     <TableHeader>
                       <TableRow>
                         <TableHead className="w-[15%]">Mã booking</TableHead>
@@ -473,8 +489,12 @@ export default function HotelDetailPage() {
                         <TableHead className="w-[20%]">Khách hàng</TableHead>
                         <TableHead className="w-[12%]">Nhận phòng</TableHead>
                         <TableHead className="w-[12%]">Trả phòng</TableHead>
-                        <TableHead className="w-[10%]">Trạng thái</TableHead>
-                        <TableHead className="w-[10%]">Thanh toán</TableHead>
+                        <TableHead className="w-[10%] min-w-[120px]">
+                          Trạng thái
+                        </TableHead>
+                        <TableHead className="w-[10%] min-w-[120px]">
+                          Thanh toán
+                        </TableHead>
                         <TableHead className="w-[10%] text-right">
                           Tổng tiền
                         </TableHead>
@@ -532,8 +552,9 @@ export default function HotelDetailPage() {
                                     ? "destructive"
                                     : "secondary"
                                 }
+                                className="whitespace-nowrap"
                               >
-                                {booking.status}
+                                {getBookingStatusText(booking.status)}
                               </Badge>
                             </TableCell>
                             <TableCell className="py-4">
@@ -543,8 +564,9 @@ export default function HotelDetailPage() {
                                     ? "default"
                                     : "secondary"
                                 }
+                                className="whitespace-nowrap"
                               >
-                                {booking.paymentStatus}
+                                {getPaymentStatusText(booking.paymentStatus)}
                               </Badge>
                             </TableCell>
                             <TableCell className="py-4 text-right font-semibold text-primary">
@@ -776,38 +798,6 @@ export default function HotelDetailPage() {
                   </div>
                 )}
               </div>
-            </div>
-          </div>
-          {/* Thanh điều hướng sticky dọc bên phải */}
-          <div className="hidden md:block min-w-[180px]">
-            <div className="sticky top-32 z-40 flex flex-col gap-2 bg-background border-l border-border px-4 py-6 rounded-xl shadow-sm">
-              {sectionIds.map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => scrollToSection(tab.id)}
-                  className={
-                    "text-left py-2 px-3 rounded-lg transition-colors text-muted-foreground hover:text-foreground hover:bg-primary/5"
-                  }
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </div>
-          </div>
-          {/* Thanh điều hướng ngang cho mobile */}
-          <div className="block md:hidden sticky top-0 bg-background z-40 border-b border-border py-4 -mx-4 px-4">
-            <div className="flex gap-4 overflow-x-auto">
-              {sectionIds.map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => scrollToSection(tab.id)}
-                  className={
-                    "pb-2 px-2 whitespace-nowrap text-muted-foreground hover:text-foreground transition-colors"
-                  }
-                >
-                  {tab.label}
-                </button>
-              ))}
             </div>
           </div>
         </div>

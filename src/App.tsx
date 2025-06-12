@@ -23,6 +23,7 @@ import RegisterPartner from "./pages/user/RegisterPartner";
 import RegisterSuccessfullyPage from "./pages/user/RegisterSuccessfullyPage";
 import NotFoundPage from "./pages/user/NotFoundPage";
 import PaymentResultPage from "./pages/user/PaymentResultPage";
+import VNPayReturnPage from "./pages/user/VNPayReturnPage";
 
 // Auth Pages
 import LoginPage from "./pages/auth/LoginPage";
@@ -88,8 +89,12 @@ function App() {
           />
         </Route>
 
-        {/* Payment Result Page - Không có header footer */}
+        {/* Payment Result Pages - Không có header footer */}
         <Route path="/payment-result" element={<PaymentResultPage />} />
+        <Route
+          path="/api/bookings/vnpay-return"
+          element={<VNPayReturnPage />}
+        />
 
         {/* Auth Routes - Chỉ truy cập khi chưa đăng nhập */}
         <Route element={<PublicRoute />}>

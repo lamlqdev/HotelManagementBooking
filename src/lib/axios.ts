@@ -2,7 +2,7 @@ import axios from "axios";
 import { authApi } from "@/api/auth/auth.api";
 
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000/api",
+  baseURL: import.meta.env.VITE_API_URL,
   withCredentials: true,
 });
 

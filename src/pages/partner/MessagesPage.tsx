@@ -5,7 +5,7 @@ import { useAppSelector } from "@/store/hooks";
 import io from "socket.io-client";
 import { User } from "@/types/auth";
 
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || "http://localhost:3000";
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
 const MessagesPage = () => {
   const { user } = useAppSelector((state) => state.auth);
@@ -37,32 +37,53 @@ const MessagesPage = () => {
   // Kết nối socket
   useEffect(() => {
     if (!user) return;
-    socketRef.current = io(SOCKET_URL, { transports: ["websocket"] });
-    socketRef.current.emit("join", user.id);
 
-    socketRef.current.on("newMessage", (msg: ChatMessage) => {
-      // Nếu đang chat với user này thì thêm vào messages
-      if (
-        msg.senderId === selectedUserId ||
-        msg.receiverId === selectedUserId
-      ) {
-        setMessages((prev) => [...prev, msg]);
-      }
-      // Cập nhật lại danh sách cuộc trò chuyện (có thể làm mới lại)
-      chatApi.getConversations().then((res) => setConversations(res.data));
-    });
+    try {
+      socketRef.current = io(SOCKET_URL, {
+        transports: ["websocket"],
+        reconnection: true,
+        reconnectionAttempts: 5,
+        reconnectionDelay: 1000,
+        timeout: 10000,
+      });
 
-    socketRef.current.on("messageSent", (msg: ChatMessage) => {
-      if (
-        msg.senderId === selectedUserId ||
-        msg.receiverId === selectedUserId
-      ) {
-        setMessages((prev) => [...prev, msg]);
-      }
-    });
+      socketRef.current.on("connect", () => {
+        console.log("Messages socket connected successfully");
+        socketRef.current?.emit("join", user.id);
+      });
+
+      socketRef.current.on("connect_error", (error: Error) => {
+        console.error("Messages socket connection error:", error);
+      });
+
+      socketRef.current.on("newMessage", (msg: ChatMessage) => {
+        // Nếu đang chat với user này thì thêm vào messages
+        if (
+          msg.senderId === selectedUserId ||
+          msg.receiverId === selectedUserId
+        ) {
+          setMessages((prev) => [...prev, msg]);
+        }
+        // Cập nhật lại danh sách cuộc trò chuyện (có thể làm mới lại)
+        chatApi.getConversations().then((res) => setConversations(res.data));
+      });
+
+      socketRef.current.on("messageSent", (msg: ChatMessage) => {
+        if (
+          msg.senderId === selectedUserId ||
+          msg.receiverId === selectedUserId
+        ) {
+          setMessages((prev) => [...prev, msg]);
+        }
+      });
+    } catch (error) {
+      console.error("Messages socket initialization error:", error);
+    }
 
     return () => {
-      socketRef.current?.disconnect();
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+      }
     };
   }, [user, selectedUserId]);
 

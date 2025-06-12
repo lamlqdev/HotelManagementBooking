@@ -12,7 +12,7 @@ interface ChatSupportProps {
   receiverId: string;
 }
 
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || "http://localhost:3000";
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
 const getSenderId = (msg: ChatMessage) =>
   typeof msg.senderId === "string"
@@ -31,17 +31,40 @@ const ChatSupport = ({ receiverId }: ChatSupportProps) => {
   // Kết nối socket khi mở chat
   useEffect(() => {
     if (!isOpen || !user) return;
-    socketRef.current = io(SOCKET_URL, { transports: ["websocket"] });
-    socketRef.current.emit("join", user.id);
-    socketRef.current.on("newMessage", (msg: ChatMessage) => {
-      setMessages((prev) => [...prev, msg]);
-    });
-    // Lắng nghe messageSent cho chính mình
-    socketRef.current.on("messageSent", (msg: ChatMessage) => {
-      setMessages((prev) => [...prev, msg]);
-    });
+
+    try {
+      socketRef.current = io(SOCKET_URL, {
+        transports: ["websocket"],
+        reconnection: true,
+        reconnectionAttempts: 5,
+        reconnectionDelay: 1000,
+        timeout: 10000,
+      });
+
+      socketRef.current.on("connect", () => {
+        console.log("Chat socket connected successfully");
+        socketRef.current?.emit("join", user.id);
+      });
+
+      socketRef.current.on("connect_error", (error: Error) => {
+        console.error("Chat socket connection error:", error);
+      });
+
+      socketRef.current.on("newMessage", (msg: ChatMessage) => {
+        setMessages((prev) => [...prev, msg]);
+      });
+
+      socketRef.current.on("messageSent", (msg: ChatMessage) => {
+        setMessages((prev) => [...prev, msg]);
+      });
+    } catch (error) {
+      console.error("Chat socket initialization error:", error);
+    }
+
     return () => {
-      socketRef.current?.disconnect();
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+      }
     };
   }, [isOpen, user]);
 
