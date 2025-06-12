@@ -1,0 +1,15 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Envelope -->
+  <rect x="40" y="60" width="120" height="80" rx="8" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
+  <path d="M40 80L100 120L160 80" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Checkmark -->
+  <circle cx="100" cy="100" r="40" fill="#4F46E5" fill-opacity="0.1"/>
+  <path d="M85 100L95 110L115 90" stroke="#4F46E5" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Decorative elements -->
+  <circle cx="30" cy="30" r="5" fill="#4F46E5" fill-opacity="0.2"/>
+  <circle cx="170" cy="30" r="5" fill="#4F46E5" fill-opacity="0.2"/>
+  <circle cx="30" cy="170" r="5" fill="#4F46E5" fill-opacity="0.2"/>
+  <circle cx="170" cy="170" r="5" fill="#4F46E5" fill-opacity="0.2"/>
+</svg> 

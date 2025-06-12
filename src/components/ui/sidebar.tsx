@@ -676,7 +676,7 @@ function SidebarMenuSubButton({
   isActive = false,
   className,
   ...props
-}: React.ComponentProps<"button" | "a"> & {
+}: React.ComponentProps<"button"> & {
   asChild?: boolean;
   size?: "sm" | "md";
   isActive?: boolean;
