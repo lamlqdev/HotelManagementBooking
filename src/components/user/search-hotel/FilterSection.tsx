@@ -5,10 +5,12 @@ import { Checkbox } from "../../ui/checkbox";
 import { amenitiesApi } from "@/api/amenities/amenities.api";
 import { Amenity } from "@/types/amenity";
 
-interface FilterSectionProps {
+export interface FilterSectionProps {
   onPriceChange: (range: [number, number]) => void;
   onAmenitiesChange: (amenities: string[]) => void;
   onRoomTypeChange: (roomTypes: string[]) => void;
+  initialSelectedAmenities: string[];
+  initialSelectedRoomTypes: string[];
 }
 
 const ROOM_TYPES = ["Standard", "Superior", "Deluxe", "Suite", "Family"];
@@ -17,11 +19,17 @@ const FilterSection = ({
   onPriceChange,
   onAmenitiesChange,
   onRoomTypeChange,
+  initialSelectedAmenities,
+  initialSelectedRoomTypes,
 }: FilterSectionProps) => {
   const { t } = useTranslation();
   const [amenities, setAmenities] = useState<Amenity[]>([]);
-  const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
-  const [selectedRoomType, setSelectedRoomType] = useState<string>("");
+  const [selectedAmenities, setSelectedAmenities] = useState<string[]>(
+    initialSelectedAmenities
+  );
+  const [selectedRoomTypes, setSelectedRoomTypes] = useState<string[]>(
+    initialSelectedRoomTypes
+  );
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 5000000]);
 
   useEffect(() => {
@@ -29,6 +37,14 @@ const FilterSection = ({
       setAmenities(res.data || []);
     });
   }, []);
+
+  useEffect(() => {
+    setSelectedAmenities(initialSelectedAmenities);
+  }, [initialSelectedAmenities]);
+
+  useEffect(() => {
+    setSelectedRoomTypes(initialSelectedRoomTypes);
+  }, [initialSelectedRoomTypes]);
 
   // Xử lý chọn tiện nghi
   const handleAmenityChange = (amenityId: string, checked: boolean) => {
@@ -43,9 +59,15 @@ const FilterSection = ({
   };
 
   // Xử lý chọn loại phòng
-  const handleRoomTypeChange = (roomType: string) => {
-    setSelectedRoomType(roomType);
-    onRoomTypeChange([roomType]);
+  const handleRoomTypeChange = (roomType: string, checked: boolean) => {
+    let updated: string[];
+    if (checked) {
+      updated = [...selectedRoomTypes, roomType];
+    } else {
+      updated = selectedRoomTypes.filter((type) => type !== roomType);
+    }
+    setSelectedRoomTypes(updated);
+    onRoomTypeChange(updated);
   };
 
   // Xử lý chọn giá
@@ -78,12 +100,12 @@ const FilterSection = ({
         <h3 className="font-semibold text-lg">{t("filter.room_type")}</h3>
         {ROOM_TYPES.map((type) => (
           <div key={type} className="flex items-center space-x-2">
-            <input
-              type="radio"
+            <Checkbox
               id={`roomtype-${type}`}
-              name="roomType"
-              checked={selectedRoomType === type}
-              onChange={() => handleRoomTypeChange(type)}
+              checked={selectedRoomTypes.includes(type)}
+              onCheckedChange={(checked) =>
+                handleRoomTypeChange(type, Boolean(checked))
+              }
             />
             <label htmlFor={`roomtype-${type}`}>
               {t(`filter.room_type_${type.toLowerCase()}`)}

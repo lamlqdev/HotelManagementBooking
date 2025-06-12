@@ -29,9 +29,9 @@ const SearchResultPage = () => {
   const capacity = searchParams.get("capacity");
   const minPrice = searchParams.get("minPrice");
   const maxPrice = searchParams.get("maxPrice");
-  const roomType = searchParams.get("roomType"); // "Standard,Deluxe"
-  const amenities = searchParams.get("amenities"); // "id1,id2"
-  const sortBy = searchParams.get("sortBy") || "-lowestDiscountedPrice"; // Lấy giá trị sortBy từ URL, mặc định là giá giảm dần
+  const roomType = searchParams.get("roomType")?.split(",") || [];
+  const amenities = searchParams.get("amenities")?.split(",") || [];
+  const sortBy = searchParams.get("sortBy") || "-lowestDiscountedPrice";
 
   // Nếu chỉ có locationName, tự động điền các thông tin còn lại
   const defaultCheckIn = new Date();
@@ -83,14 +83,20 @@ const SearchResultPage = () => {
             sort: backendSort || "price",
             minPrice: minPrice ? Number(minPrice) : undefined,
             maxPrice: maxPrice ? Number(maxPrice) : undefined,
-            roomType: roomType ? roomType.split(",")[0] : undefined,
-            amenities: amenities ? amenities.split(",") : undefined,
+            roomType: roomType.length > 0 ? roomType : undefined,
+            amenities: amenities.length > 0 ? amenities : undefined,
           });
           return response;
         }
 
         // Nếu không có đủ thông tin -> trả về danh sách rỗng
-        return { success: true, data: [], pagination: { totalPages: 0 } };
+        return {
+          success: true,
+          data: [],
+          pagination: { totalPages: 0, currentPage: 1 },
+          count: 0,
+          total: 0,
+        };
       } catch (error) {
         // Nếu là lỗi 404 (không tìm thấy kết quả), trả về danh sách rỗng với message từ server
         const axiosError = error as {
@@ -100,7 +106,9 @@ const SearchResultPage = () => {
           return {
             success: true,
             data: [],
-            pagination: { totalPages: 0 },
+            pagination: { totalPages: 0, currentPage: 1 },
+            count: 0,
+            total: 0,
             message:
               axiosError.response?.data?.message ||
               t("search.no_results_description"),
@@ -175,47 +183,6 @@ const SearchResultPage = () => {
     navigate(`/hoteldetail/${hotelId}?${params.toString()}`);
   };
 
-  // Xử lý trạng thái không có kết quả
-  if (!isLoading && !isError && data?.data.length === 0) {
-    return (
-      <div>
-        <div className="relative mb-24">
-          <HeroBanner
-            imageUrl="https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=2948&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            title={t("banner.home.title")}
-            description={t("banner.home.description")}
-          />
-
-          <div className="absolute left-0 right-0 bottom-0 transform translate-y-1/2 px-4">
-            <div className="container mx-auto max-w-6xl">
-              <SearchBox
-                onSearch={handleSearch}
-                defaultValues={{
-                  locationName: locationName || undefined,
-                  checkIn: finalCheckIn,
-                  checkOut: finalCheckOut,
-                  capacity: parseInt(finalCapacity),
-                }}
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="container mx-auto max-w-6xl px-4 py-8">
-          <Alert>
-            <AlertCircle className="h-4 w-4" />
-            <AlertTitle>{t("search.no_results")}</AlertTitle>
-            <AlertDescription>
-              {"message" in (data || {})
-                ? (data as { message: string }).message
-                : t("search.no_results_description")}
-            </AlertDescription>
-          </Alert>
-        </div>
-      </div>
-    );
-  }
-
   // Xử lý trạng thái loading
   if (isLoading) {
     return (
@@ -250,6 +217,8 @@ const SearchResultPage = () => {
                 onPriceChange={handlePriceChange}
                 onRoomTypeChange={handleRoomTypeChange}
                 onAmenitiesChange={handleAmenitiesChange}
+                initialSelectedAmenities={amenities}
+                initialSelectedRoomTypes={roomType}
               />
             </div>
 
@@ -327,6 +296,7 @@ const SearchResultPage = () => {
       name: string;
       address: string;
       rating: number;
+      reviewCount: number;
       featuredImage: { url: string; publicId: string; filename: string };
       images: Array<{ url: string; publicId: string; filename: string }>;
       policies: {
@@ -347,6 +317,7 @@ const SearchResultPage = () => {
       locationId: { _id: "", name: locationName || "" }, // Không có locationId từ API search, gán tạm
       locationDescription: "",
       rating: item.rating,
+      reviewCount: item.reviewCount,
       description: "",
       ownerId: "",
       website: "",
@@ -363,7 +334,9 @@ const SearchResultPage = () => {
       updatedAt: "",
     })
   );
+
   const totalPages = data?.pagination?.totalPages || 1;
+  const total = data?.total || 0;
 
   return (
     <div>
@@ -397,6 +370,8 @@ const SearchResultPage = () => {
               onPriceChange={handlePriceChange}
               onRoomTypeChange={handleRoomTypeChange}
               onAmenitiesChange={handleAmenitiesChange}
+              initialSelectedAmenities={amenities}
+              initialSelectedRoomTypes={roomType}
             />
           </div>
 
@@ -406,6 +381,7 @@ const SearchResultPage = () => {
               hotels={hotels}
               currentPage={currentPage}
               totalPages={totalPages}
+              total={total}
               onPageChange={setCurrentPage}
               onSortChange={handleSortChange}
               onHotelClick={handleHotelClick}

@@ -8,6 +8,7 @@ export interface Hotel {
   };
   locationDescription?: string;
   rating: number;
+  reviewCount: number;
   description: string;
   ownerId: string;
   website?: string;

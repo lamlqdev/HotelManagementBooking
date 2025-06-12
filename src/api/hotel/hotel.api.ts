@@ -229,13 +229,20 @@ export const hotelApi = {
     hotelName?: string;
     minPrice?: number;
     maxPrice?: number;
-    roomType?: string;
+    roomType?: string[];
     amenities?: string[];
     sort?: string;
     page?: number;
     limit?: number;
   }): Promise<SearchHotelsWithAvailableRoomsResponse> => {
-    const response = await axiosInstance.get(`/hotels/search`, { params });
+    const apiParams = {
+      ...params,
+      roomType: params.roomType?.join(","),
+      amenities: params.amenities?.join(","),
+    };
+    const response = await axiosInstance.get(`/hotels/search`, {
+      params: apiParams,
+    });
     return response.data;
   },
 
@@ -248,16 +255,21 @@ export const hotelApi = {
       capacity: number;
       minPrice?: number;
       maxPrice?: number;
-      roomType?: string;
+      roomType?: string[];
       amenities?: string[];
       sort?: string;
       page?: number;
       limit?: number;
     }
   ): Promise<GetAvailableRoomsByHotelResponse> => {
+    const apiParams = {
+      ...params,
+      roomType: params.roomType?.join(","),
+      amenities: params.amenities?.join(","),
+    };
     const response = await axiosInstance.get(
       `/hotels/${hotelId}/rooms/available`,
-      { params }
+      { params: apiParams }
     );
     return response.data;
   },
