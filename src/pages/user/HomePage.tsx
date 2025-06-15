@@ -40,7 +40,7 @@ const HomePage = () => {
         />
 
         {/* SearchBox Container */}
-        <div className="absolute left-0 right-0 bottom-0 transform translate-y-1/2 px-4">
+        <div className="absolute left-0 right-0 bottom-0 transform translate-y-1/2 px-4 z-20">
           <div className="container mx-auto max-w-6xl">
             <SearchBox onSearch={handleSearch} />
           </div>

@@ -1463,6 +1463,11 @@
         "percentage": "Phần trăm",
         "fixed": "Giá trị cố định"
       },
+      "tiers": {
+        "gold": "Vàng",
+        "silver": "Bạc",
+        "bronze": "Đồng"
+      },
       "edit": "Chỉnh sửa",
       "table": {
         "code": "Mã",

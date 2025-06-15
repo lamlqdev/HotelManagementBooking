@@ -10,6 +10,7 @@ export interface CreateVoucherRequest {
   minOrderValue?: number;
   discountType: "percentage" | "fixed";
   maxDiscount?: number | null;
+  applicableTiers?: string[];
 }
 
 export interface CreateVoucherResponse {

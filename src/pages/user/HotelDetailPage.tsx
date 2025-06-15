@@ -29,6 +29,7 @@ const HotelDetailPage = () => {
   const checkIn = searchParams.get("checkIn");
   const checkOut = searchParams.get("checkOut");
   const capacity = searchParams.get("capacity");
+  const amenities = searchParams.get("amenities")?.split(",") || [];
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -50,12 +51,13 @@ const HotelDetailPage = () => {
   });
 
   const { data: roomsResponse, isLoading: isLoadingRooms } = useQuery({
-    queryKey: ["availableRooms", id, checkIn, checkOut, capacity],
+    queryKey: ["availableRooms", id, checkIn, checkOut, capacity, amenities],
     queryFn: () =>
       hotelApi.getAvailableRoomsByHotel(id as string, {
         checkIn: checkIn || "",
         checkOut: checkOut || "",
         capacity: capacity ? parseInt(capacity) : 1,
+        amenities: amenities.length > 0 ? amenities : undefined,
       }),
     enabled: !!id && !!checkIn && !!checkOut && !!capacity,
   });
@@ -77,11 +79,15 @@ const HotelDetailPage = () => {
     checkOut: string;
     capacity: number;
   }) => {
-    setSearchParams({
-      checkIn: searchParams.checkIn,
-      checkOut: searchParams.checkOut,
-      capacity: searchParams.capacity.toString(),
-    });
+    const newParams = new URLSearchParams();
+    newParams.set("checkIn", searchParams.checkIn);
+    newParams.set("checkOut", searchParams.checkOut);
+    newParams.set("capacity", searchParams.capacity.toString());
+    // Preserve amenities when updating search params
+    if (amenities.length > 0) {
+      newParams.set("amenities", amenities.join(","));
+    }
+    setSearchParams(newParams);
   };
 
   // Xử lý trạng thái loading
@@ -145,12 +151,12 @@ const HotelDetailPage = () => {
   }
 
   const hotel = hotelResponse.data;
-  const amenities = amenitiesResponse?.data || [];
+  const amenitiesResponseData = amenitiesResponse?.data || [];
   const rooms = roomsResponse?.data || [];
   const reviews = reviewsResponse?.data || [];
 
   // Lọc các tiện ích của khách sạn
-  const hotelAmenities = amenities.filter((amenity) =>
+  const hotelAmenities = amenitiesResponseData.filter((amenity) =>
     hotel.amenities.includes(amenity._id)
   );
 
@@ -213,6 +219,7 @@ const HotelDetailPage = () => {
             checkOut={checkOut || undefined}
             capacity={capacity ? parseInt(capacity) : undefined}
             hotelId={hotel._id}
+            selectedAmenities={amenities}
           />
         </div>
 

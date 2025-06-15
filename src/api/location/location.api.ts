@@ -94,4 +94,12 @@ export const locationApi = {
     );
     return response.data;
   },
+
+  // API tìm kiếm địa điểm
+  searchLocations: async (query: string, limit: number) => {
+    const response = await axiosInstance.get<LocationResponse>(
+      `/locations/search?location=${query}&limit=${limit}`
+    );
+    return response.data;
+  },
 };
