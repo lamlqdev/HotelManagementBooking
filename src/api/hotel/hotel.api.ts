@@ -5,6 +5,7 @@ import {
   HotelQueryParams,
   SearchHotelsWithAvailableRoomsResponse,
   GetAvailableRoomsByHotelResponse,
+  SearchHotelsWithAvailableRoomsParams,
 } from "./types";
 
 const baseUrl = "/hotels";
@@ -221,20 +222,9 @@ export const hotelApi = {
   },
 
   // Tìm kiếm khách sạn có phòng trống theo địa điểm, ngày và số người
-  searchHotelsWithAvailableRooms: async (params: {
-    locationName: string;
-    checkIn: string;
-    checkOut: string;
-    capacity: number;
-    hotelName?: string;
-    minPrice?: number;
-    maxPrice?: number;
-    roomType?: string[];
-    amenities?: string[];
-    sort?: string;
-    page?: number;
-    limit?: number;
-  }): Promise<SearchHotelsWithAvailableRoomsResponse> => {
+  searchHotelsWithAvailableRooms: async (
+    params: SearchHotelsWithAvailableRoomsParams
+  ): Promise<SearchHotelsWithAvailableRoomsResponse> => {
     const apiParams = {
       ...params,
       roomType: params.roomType?.join(","),

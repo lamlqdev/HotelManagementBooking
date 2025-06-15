@@ -122,6 +122,32 @@ const Profile = () => {
     setIsEditing(false);
   };
 
+  const getTierColor = (tier: string) => {
+    switch (tier) {
+      case "Bronze":
+        return "bg-amber-600";
+      case "Silver":
+        return "bg-gray-400";
+      case "Gold":
+        return "bg-yellow-400";
+      default:
+        return "bg-amber-600";
+    }
+  };
+
+  const getTierIcon = (tier: string) => {
+    switch (tier) {
+      case "Bronze":
+        return "🥉";
+      case "Silver":
+        return "🥈";
+      case "Gold":
+        return "🥇";
+      default:
+        return "🥉";
+    }
+  };
+
   return (
     <div className="container mx-auto py-8 mt-24">
       <div className="flex justify-between items-center mb-6">
@@ -158,50 +184,78 @@ const Profile = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Left Column - Profile Info */}
-        <Card className="p-6">
-          <div className="flex flex-col items-center">
-            <div className="relative">
-              {uploadAvatarMutation.isPending ? (
-                <Skeleton className="w-32 h-32 rounded-full" />
-              ) : (
-                <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-primary">
-                  <img
-                    src={
-                      previewUrl ||
-                      user?.avatar?.url ||
-                      "/images/default-avatar.png"
-                    }
-                    alt={user?.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              )}
-              {isEditing && (
-                <div className="absolute bottom-0 right-0">
-                  <input
-                    id="avatar-upload"
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={handleAvatarUpload}
-                    disabled={uploadAvatarMutation.isPending}
-                  />
-                  <label
-                    htmlFor="avatar-upload"
-                    className={`cursor-pointer inline-flex items-center justify-center w-8 h-8 rounded-full bg-secondary hover:bg-secondary/80 transition-colors ${
-                      uploadAvatarMutation.isPending
-                        ? "opacity-50 cursor-not-allowed"
-                        : ""
-                    }`}
-                  >
-                    <Camera className="h-4 w-4" />
-                  </label>
-                </div>
-              )}
+        <div className="space-y-6">
+          <Card className="p-6">
+            <div className="flex flex-col items-center">
+              <div className="relative">
+                {uploadAvatarMutation.isPending ? (
+                  <Skeleton className="w-32 h-32 rounded-full" />
+                ) : (
+                  <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-primary">
+                    <img
+                      src={
+                        previewUrl ||
+                        user?.avatar?.url ||
+                        "/images/default-avatar.png"
+                      }
+                      alt={user?.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
+                {isEditing && (
+                  <div className="absolute bottom-0 right-0">
+                    <input
+                      id="avatar-upload"
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleAvatarUpload}
+                      disabled={uploadAvatarMutation.isPending}
+                    />
+                    <label
+                      htmlFor="avatar-upload"
+                      className={`cursor-pointer inline-flex items-center justify-center w-8 h-8 rounded-full bg-secondary hover:bg-secondary/80 transition-colors ${
+                        uploadAvatarMutation.isPending
+                          ? "opacity-50 cursor-not-allowed"
+                          : ""
+                      }`}
+                    >
+                      <Camera className="h-4 w-4" />
+                    </label>
+                  </div>
+                )}
+              </div>
+              <h2 className="mt-4 text-xl font-semibold">{user?.name}</h2>
             </div>
-            <h2 className="mt-4 text-xl font-semibold">{user?.name}</h2>
-          </div>
-        </Card>
+          </Card>
+
+          {/* Tier Card */}
+          <Card className="p-6">
+            <div className="flex flex-col items-center">
+              <div
+                className={`w-16 h-16 rounded-full ${getTierColor(
+                  user?.tier || "Bronze"
+                )} flex items-center justify-center text-2xl mb-4`}
+              >
+                {getTierIcon(user?.tier || "Bronze")}
+              </div>
+              <h3 className="text-lg font-semibold mb-2">
+                {t("profile.membership_tier")}
+              </h3>
+              <p className="text-2xl font-bold text-primary">
+                {user?.tier || "Bronze"}
+              </p>
+              <p className="text-sm text-muted-foreground mt-2 text-center">
+                {t(
+                  `profile.tier_description.${
+                    user?.tier?.toLowerCase() || "bronze"
+                  }`
+                )}
+              </p>
+            </div>
+          </Card>
+        </div>
 
         {/* Right Column - Personal Information */}
         <Card className="p-6 md:col-span-2">

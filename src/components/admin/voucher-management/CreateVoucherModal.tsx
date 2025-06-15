@@ -44,12 +44,13 @@ const formSchema = z.object({
     .number()
     .min(0, "Giá trị đơn tối thiểu phải lớn hơn hoặc bằng 0")
     .optional(),
-  discountType: z.enum(["percentage", "fixed"]).default("percentage"),
+  discountType: z.enum(["percentage", "fixed"]).default("fixed"),
   maxDiscount: z.coerce
     .number()
     .min(0, "Giá trị giảm tối đa phải lớn hơn hoặc bằng 0")
     .nullable()
     .optional(),
+  applicableTiers: z.array(z.string()).optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -58,6 +59,8 @@ interface CreateVoucherModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
+
+const MEMBERSHIP_TIERS = ["Gold", "Silver", "Bronze"];
 
 export default function CreateVoucherModal({
   isOpen,
@@ -74,8 +77,9 @@ export default function CreateVoucherModal({
       expiryDate: "",
       usageLimit: undefined,
       minOrderValue: undefined,
-      discountType: "percentage",
+      discountType: "fixed",
       maxDiscount: null,
+      applicableTiers: [],
     },
   });
 
@@ -106,7 +110,7 @@ export default function CreateVoucherModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
             <span>{t("admin.vouchers.create")}</span>
@@ -269,6 +273,90 @@ export default function CreateVoucherModal({
                 )}
               />
             )}
+
+            {/* Hạng thành viên áp dụng */}
+            <FormField
+              control={form.control}
+              name="applicableTiers"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-base font-semibold">
+                    {t("admin.vouchers.form.applicableTiers")}
+                  </FormLabel>
+                  <FormControl>
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-2">
+                        <Button
+                          type="button"
+                          variant={
+                            field.value?.length === MEMBERSHIP_TIERS.length
+                              ? "default"
+                              : "outline"
+                          }
+                          size="sm"
+                          onClick={() => {
+                            if (
+                              field.value?.length === MEMBERSHIP_TIERS.length
+                            ) {
+                              field.onChange([]);
+                            } else {
+                              field.onChange(MEMBERSHIP_TIERS);
+                            }
+                          }}
+                        >
+                          {field.value?.length === MEMBERSHIP_TIERS.length
+                            ? t("common.deselectAll")
+                            : t("common.selectAll")}
+                        </Button>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        {MEMBERSHIP_TIERS.map((tier) => (
+                          <div
+                            key={tier}
+                            className={`relative rounded-lg border p-4 cursor-pointer transition-all ${
+                              field.value?.includes(tier)
+                                ? "border-primary bg-primary/5"
+                                : "border-border hover:border-primary/50"
+                            }`}
+                            onClick={() => {
+                              const currentTiers = field.value || [];
+                              if (currentTiers.includes(tier)) {
+                                field.onChange(
+                                  currentTiers.filter((t) => t !== tier)
+                                );
+                              } else {
+                                field.onChange([...currentTiers, tier]);
+                              }
+                            }}
+                          >
+                            <div className="flex items-center justify-between">
+                              <div className="space-y-1">
+                                <p className="font-medium">
+                                  {t(
+                                    `admin.vouchers.tiers.${tier.toLowerCase()}`
+                                  )}
+                                </p>
+                                <p className="text-sm text-muted-foreground">
+                                  {t(
+                                    `admin.vouchers.tiers.${tier.toLowerCase()}Description`
+                                  )}
+                                </p>
+                              </div>
+                              <div className="h-4 w-4 rounded-full border flex items-center justify-center">
+                                {field.value?.includes(tier) && (
+                                  <div className="h-2 w-2 rounded-full bg-primary" />
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <div className="flex justify-end gap-2">
               <Button

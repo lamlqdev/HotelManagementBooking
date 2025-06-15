@@ -10,6 +10,7 @@ export interface Voucher {
   usageCount: number;
   minOrderValue: number;
   type: "room" | "service";
+  applicableTiers: ("Bronze" | "Silver" | "Gold")[];
   createdAt: Date;
   updatedAt: Date;
 }

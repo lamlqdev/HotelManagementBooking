@@ -31,6 +31,7 @@ export interface User {
   verificationToken?: string;
   verificationTokenExpire?: string;
   favoriteHotels: string[];
+  tier: "Bronze" | "Silver" | "Gold";
   createdAt: string;
   updatedAt: string;
 }
@@ -50,5 +51,13 @@ export interface UploadAvatarResponse {
   success: boolean;
   data: {
     avatar: AvatarData[];
+  };
+}
+
+export interface UserTierResponse {
+  success: boolean;
+  data: {
+    tier: "Bronze" | "Silver" | "Gold";
+    totalAmount: number;
   };
 }

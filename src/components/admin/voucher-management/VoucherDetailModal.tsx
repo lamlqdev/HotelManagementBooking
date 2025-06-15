@@ -35,13 +35,15 @@ export default function VoucherDetailModal({
         </DialogHeader>
         <div className="px-6 py-6 bg-background">
           <div className="grid grid-cols-2 gap-4 mb-4">
-            <div>
+            <div className="col-span-2">
               <div className="text-xs text-muted-foreground mb-1">
                 {t("admin.vouchers.form.code")}
               </div>
-              <div className="font-semibold text-lg flex items-center gap-2">
-                {voucher.code}
-                <Badge variant="outline" className="ml-2">
+              <div className="flex flex-col gap-2">
+                <div className="font-semibold text-lg flex items-center gap-2">
+                  {voucher.code}
+                </div>
+                <Badge variant="outline">
                   {t(`admin.vouchers.types.${voucher.discountType}`)}
                 </Badge>
               </div>
@@ -117,6 +119,18 @@ export default function VoucherDetailModal({
                 {voucher.minOrderValue?.toLocaleString() ?? (
                   <span className="text-muted-foreground">-</span>
                 )}
+              </div>
+            </div>
+            <div className="col-span-2">
+              <div className="text-xs text-muted-foreground mb-1">
+                {t("admin.vouchers.form.applicableTiers")}
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {voucher.applicableTiers.map((tier) => (
+                  <Badge key={tier} variant="secondary">
+                    {t(`admin.vouchers.tiers.${tier.toLowerCase()}`)}
+                  </Badge>
+                ))}
               </div>
             </div>
           </div>

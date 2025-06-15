@@ -2,7 +2,6 @@ import { useTranslation } from "react-i18next";
 import { useNavigate, useSearchParams } from "react-router";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { format } from "date-fns";
 
 import HeroBanner from "@/components/common/HeroBanner";
 import SearchBox from "@/components/common/SearchBox";
@@ -22,81 +21,76 @@ const SearchResultPage = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  // Lấy các tham số từ URL
-  const locationName = searchParams.get("locationName");
-  const checkIn = searchParams.get("checkIn");
-  const checkOut = searchParams.get("checkOut");
-  const capacity = searchParams.get("capacity");
+  // Get search params from URL
+  const locationName = searchParams.get("locationName") || "";
+  const checkIn = searchParams.get("checkIn") || "";
+  const checkOut = searchParams.get("checkOut") || "";
+  const capacity = Number(searchParams.get("capacity")) || 1;
+  const currentPage = Number(searchParams.get("page")) || 1;
+  const sortBy = searchParams.get("sort") || "price";
   const minPrice = searchParams.get("minPrice");
   const maxPrice = searchParams.get("maxPrice");
   const roomType = searchParams.get("roomType")?.split(",") || [];
   const amenities = searchParams.get("amenities")?.split(",") || [];
-  const sortBy = searchParams.get("sortBy") || "-lowestDiscountedPrice";
+  const minRating = searchParams.get("minRating");
+  const maxRating = searchParams.get("maxRating");
 
-  // Nếu chỉ có locationName, tự động điền các thông tin còn lại
-  const defaultCheckIn = new Date();
-  const defaultCheckOut = new Date();
-  defaultCheckOut.setDate(defaultCheckOut.getDate() + 1);
+  const finalCheckIn = checkIn;
+  const finalCheckOut = checkOut;
 
-  const finalCheckIn = checkIn || format(defaultCheckIn, "yyyy-MM-dd");
-  const finalCheckOut = checkOut || format(defaultCheckOut, "yyyy-MM-dd");
-  const finalCapacity = capacity || "1";
-
-  // State management
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPageState, setCurrentPageState] = useState(currentPage);
 
   // Sử dụng React Query để lấy danh sách khách sạn/phòng
-  const { data, isLoading, isError, error } = useQuery({
+  const {
+    data: hotelsData,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
     queryKey: [
       "hotels",
       locationName,
       finalCheckIn,
       finalCheckOut,
-      finalCapacity,
+      capacity,
       currentPage,
       sortBy,
       minPrice,
       maxPrice,
       roomType,
       amenities,
+      minRating,
+      maxRating,
     ],
     queryFn: async () => {
       try {
-        // Nếu có locationName -> gọi API searchHotelsWithAvailableRooms với thông tin mặc định
-        if (locationName) {
-          // Chuyển đổi giá trị sortBy từ frontend sang backend
-          let backendSort = sortBy;
-          if (sortBy === "lowestDiscountedPrice") backendSort = "price";
-          else if (sortBy === "-lowestDiscountedPrice") backendSort = "-price";
-          else if (sortBy === "highestDiscountPercent")
-            backendSort = "discountPercent";
-          else if (sortBy === "-highestDiscountPercent")
-            backendSort = "-discountPercent";
+        let backendSort = sortBy;
+        if (sortBy === "lowestDiscountedPrice") backendSort = "price";
+        else if (sortBy === "-lowestDiscountedPrice") backendSort = "-price";
+        else if (sortBy === "highestDiscountPercent")
+          backendSort = "highestDiscountPercent";
+        else if (sortBy === "-highestDiscountPercent")
+          backendSort = "-highestDiscountPercent";
+        else if (sortBy === "rating") backendSort = "rating";
+        else if (sortBy === "-rating") backendSort = "-rating";
 
-          const response = await hotelApi.searchHotelsWithAvailableRooms({
-            locationName,
-            checkIn: finalCheckIn,
-            checkOut: finalCheckOut,
-            capacity: parseInt(finalCapacity),
-            page: currentPage,
-            limit: 10,
-            sort: backendSort || "price",
-            minPrice: minPrice ? Number(minPrice) : undefined,
-            maxPrice: maxPrice ? Number(maxPrice) : undefined,
-            roomType: roomType.length > 0 ? roomType : undefined,
-            amenities: amenities.length > 0 ? amenities : undefined,
-          });
-          return response;
-        }
-
-        // Nếu không có đủ thông tin -> trả về danh sách rỗng
-        return {
-          success: true,
-          data: [],
-          pagination: { totalPages: 0, currentPage: 1 },
-          count: 0,
-          total: 0,
-        };
+        const response = await hotelApi.searchHotelsWithAvailableRooms({
+          locationName,
+          checkIn: finalCheckIn,
+          checkOut: finalCheckOut,
+          capacity,
+          hotelName: searchParams.get("hotelName") || undefined,
+          minPrice: minPrice ? Number(minPrice) : undefined,
+          maxPrice: maxPrice ? Number(maxPrice) : undefined,
+          roomType: roomType.length > 0 ? roomType : undefined,
+          amenities: amenities.length > 0 ? amenities : undefined,
+          minRating: minRating ? Number(minRating) : undefined,
+          maxRating: maxRating ? Number(maxRating) : undefined,
+          sort: backendSort || "price", // Use the converted backendSort
+          page: currentPage,
+          limit: 10,
+        });
+        return response;
       } catch (error) {
         // Nếu là lỗi 404 (không tìm thấy kết quả), trả về danh sách rỗng với message từ server
         const axiosError = error as {
@@ -118,7 +112,7 @@ const SearchResultPage = () => {
         throw error;
       }
     },
-    enabled: !!locationName,
+    enabled: !!locationName && !!checkIn && !!checkOut,
   });
 
   const handleSearch = (searchParams: {
@@ -145,6 +139,22 @@ const SearchResultPage = () => {
     setSearchParams(newParams);
   };
 
+  const handleRatingChange = (range: [number, number]) => {
+    const [min, max] = range;
+    const newParams = new URLSearchParams(searchParams);
+    if (min > 0) {
+      newParams.set("minRating", min.toString());
+    } else {
+      newParams.delete("minRating");
+    }
+    if (max < 5) {
+      newParams.set("maxRating", max.toString());
+    } else {
+      newParams.delete("maxRating");
+    }
+    setSearchParams(newParams);
+  };
+
   const handleRoomTypeChange = (roomTypes: string[]) => {
     const newParams = new URLSearchParams(searchParams);
     if (roomTypes.length > 0) {
@@ -168,9 +178,9 @@ const SearchResultPage = () => {
   const handleSortChange = (value: string) => {
     const newParams = new URLSearchParams(searchParams);
     if (value) {
-      newParams.set("sortBy", value);
+      newParams.set("sort", value);
     } else {
-      newParams.delete("sortBy");
+      newParams.delete("sort");
     }
     setSearchParams(newParams);
   };
@@ -179,8 +189,21 @@ const SearchResultPage = () => {
     const params = new URLSearchParams();
     params.append("checkIn", finalCheckIn);
     params.append("checkOut", finalCheckOut);
-    params.append("capacity", finalCapacity);
+    params.append("capacity", capacity.toString());
+    if (amenities.length > 0) {
+      params.append("amenities", amenities.join(","));
+    }
     navigate(`/hoteldetail/${hotelId}?${params.toString()}`);
+  };
+
+  const totalPages = hotelsData?.pagination?.totalPages || 1;
+  const total = hotelsData?.total || 0;
+
+  const handlePageChange = (newPage: number) => {
+    setCurrentPageState(newPage);
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set("page", newPage.toString());
+    setSearchParams(newParams);
   };
 
   // Xử lý trạng thái loading
@@ -194,7 +217,7 @@ const SearchResultPage = () => {
             description={t("banner.home.description")}
           />
 
-          <div className="absolute left-0 right-0 bottom-0 transform translate-y-1/2 px-4">
+          <div className="absolute left-0 right-0 bottom-0 transform translate-y-1/2 px-4 z-20">
             <div className="container mx-auto max-w-6xl">
               <SearchBox
                 onSearch={handleSearch}
@@ -202,7 +225,7 @@ const SearchResultPage = () => {
                   locationName: locationName || undefined,
                   checkIn: finalCheckIn,
                   checkOut: finalCheckOut,
-                  capacity: parseInt(finalCapacity),
+                  capacity: capacity,
                 }}
               />
             </div>
@@ -217,8 +240,13 @@ const SearchResultPage = () => {
                 onPriceChange={handlePriceChange}
                 onRoomTypeChange={handleRoomTypeChange}
                 onAmenitiesChange={handleAmenitiesChange}
+                onRatingChange={handleRatingChange}
                 initialSelectedAmenities={amenities}
                 initialSelectedRoomTypes={roomType}
+                initialRatingRange={[
+                  minRating ? Number(minRating) : 0,
+                  maxRating ? Number(maxRating) : 5,
+                ]}
               />
             </div>
 
@@ -260,7 +288,7 @@ const SearchResultPage = () => {
             description={t("banner.home.description")}
           />
 
-          <div className="absolute left-0 right-0 bottom-0 transform translate-y-1/2 px-4">
+          <div className="absolute left-0 right-0 bottom-0 transform translate-y-1/2 px-4 z-20">
             <div className="container mx-auto max-w-6xl">
               <SearchBox
                 onSearch={handleSearch}
@@ -268,7 +296,7 @@ const SearchResultPage = () => {
                   locationName: locationName || undefined,
                   checkIn: finalCheckIn,
                   checkOut: finalCheckOut,
-                  capacity: parseInt(finalCapacity),
+                  capacity: capacity,
                 }}
               />
             </div>
@@ -290,7 +318,7 @@ const SearchResultPage = () => {
     );
   }
 
-  const hotels = (data?.data || []).map(
+  const hotels = (hotelsData?.data || []).map(
     (item: {
       _id: string;
       name: string;
@@ -335,9 +363,6 @@ const SearchResultPage = () => {
     })
   );
 
-  const totalPages = data?.pagination?.totalPages || 1;
-  const total = data?.total || 0;
-
   return (
     <div>
       <div className="relative mb-24">
@@ -347,7 +372,7 @@ const SearchResultPage = () => {
           description={t("banner.home.description")}
         />
 
-        <div className="absolute left-0 right-0 bottom-0 transform translate-y-1/2 px-4">
+        <div className="absolute left-0 right-0 bottom-0 transform translate-y-1/2 px-4 z-20">
           <div className="container mx-auto max-w-6xl">
             <SearchBox
               onSearch={handleSearch}
@@ -355,7 +380,7 @@ const SearchResultPage = () => {
                 locationName: locationName || undefined,
                 checkIn: finalCheckIn,
                 checkOut: finalCheckOut,
-                capacity: parseInt(finalCapacity),
+                capacity: capacity,
               }}
             />
           </div>
@@ -370,8 +395,13 @@ const SearchResultPage = () => {
               onPriceChange={handlePriceChange}
               onRoomTypeChange={handleRoomTypeChange}
               onAmenitiesChange={handleAmenitiesChange}
+              onRatingChange={handleRatingChange}
               initialSelectedAmenities={amenities}
               initialSelectedRoomTypes={roomType}
+              initialRatingRange={[
+                minRating ? Number(minRating) : 0,
+                maxRating ? Number(maxRating) : 5,
+              ]}
             />
           </div>
 
@@ -379,10 +409,10 @@ const SearchResultPage = () => {
           <div className="col-span-9">
             <HotelList
               hotels={hotels}
-              currentPage={currentPage}
+              currentPage={currentPageState}
               totalPages={totalPages}
               total={total}
-              onPageChange={setCurrentPage}
+              onPageChange={handlePageChange}
               onSortChange={handleSortChange}
               onHotelClick={handleHotelClick}
               sortBy={sortBy}

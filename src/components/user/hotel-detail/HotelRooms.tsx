@@ -16,6 +16,7 @@ interface HotelRoomsProps {
   checkOut?: string;
   capacity?: number;
   hotelId?: string;
+  selectedAmenities?: string[];
 }
 
 const HotelRooms = ({
@@ -24,9 +25,20 @@ const HotelRooms = ({
   checkOut,
   capacity,
   hotelId,
+  selectedAmenities = [],
 }: HotelRoomsProps) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
+
+  // Filter rooms based on selected amenities if any
+  const filteredRooms =
+    selectedAmenities.length > 0
+      ? rooms.filter((room) =>
+          selectedAmenities.every((amenityId) =>
+            room.amenities.some((amenity) => amenity._id === amenityId)
+          )
+        )
+      : rooms;
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("vi-VN", {
@@ -43,10 +55,13 @@ const HotelRooms = ({
     if (checkOut) params.append("checkOut", checkOut);
     if (capacity) params.append("capacity", capacity.toString());
 
+    if (selectedAmenities.length > 0) {
+      params.append("amenities", selectedAmenities.join(","));
+    }
     navigate(`/booking-information/${roomId}?${params.toString()}`);
   };
 
-  if (rooms.length === 0) {
+  if (filteredRooms.length === 0) {
     return (
       <div className="text-center py-12">
         <img
@@ -55,7 +70,9 @@ const HotelRooms = ({
           className="mx-auto h-48 w-48 mb-4"
         />
         <p className="text-muted-foreground">
-          {t("hotel.rooms.no_rooms_available")}
+          {selectedAmenities.length > 0
+            ? t("hotel.rooms.no_rooms_with_amenities")
+            : t("hotel.rooms.no_rooms_available")}
         </p>
       </div>
     );
@@ -64,7 +81,7 @@ const HotelRooms = ({
   return (
     <div className="space-y-6">
       <div className="space-y-4">
-        {rooms.map((room) => (
+        {filteredRooms.map((room) => (
           <Card
             key={room._id}
             className="flex flex-row items-center rounded-xl shadow-sm overflow-hidden"

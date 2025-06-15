@@ -2,7 +2,7 @@ import { format, startOfDay } from "date-fns";
 import { enUS, vi } from "date-fns/locale";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import { locationApi } from "@/api/location/location.api";
 import { Location } from "@/types/location";
@@ -10,13 +10,8 @@ import { Location } from "@/types/location";
 import { Button } from "../ui/button";
 import { Calendar } from "../ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
+import { Input } from "../ui/input";
+import { ScrollArea } from "../ui/scroll-area";
 
 import { CalendarIcon, Search } from "lucide-react";
 
@@ -38,29 +33,34 @@ interface SearchBoxProps {
 
 const SearchBox = ({ className, onSearch, defaultValues }: SearchBoxProps) => {
   const { t, i18n } = useTranslation();
+  const [locationQuery, setLocationQuery] = useState(
+    defaultValues?.locationName || ""
+  );
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(
     null
   );
   const [checkIn, setCheckIn] = useState<Date>();
   const [checkOut, setCheckOut] = useState<Date>();
   const [capacity, setCapacity] = useState(defaultValues?.capacity || 2);
+  const [showLocationSuggestions, setShowLocationSuggestions] = useState(false);
+  const searchBoxRef = useRef<HTMLDivElement>(null);
 
-  const { data: locations = [], isLoading: isLoadingLocations } = useQuery({
-    queryKey: ["locations"],
+  const { data, isLoading: isLoadingSearchResults } = useQuery<Location[]>({
+    queryKey: ["searchLocations", locationQuery],
     queryFn: async () => {
-      const response = await locationApi.getLocations();
+      if (!locationQuery || locationQuery.length < 2) return [];
+      const response = await locationApi.searchLocations(locationQuery, 5);
       return response.success ? response.data : [];
     },
+    enabled: !!locationQuery && locationQuery.length >= 2,
+    staleTime: 5 * 60 * 1000,
   });
 
+  const searchResults: Location[] = data || [];
+
   useEffect(() => {
-    if (defaultValues?.locationName && locations.length > 0) {
-      const location = locations.find(
-        (loc) => loc.name === defaultValues.locationName
-      );
-      if (location) {
-        setSelectedLocation(location);
-      }
+    if (defaultValues?.locationName) {
+      setLocationQuery(defaultValues.locationName);
     }
     if (defaultValues?.checkIn) {
       setCheckIn(new Date(defaultValues.checkIn));
@@ -71,7 +71,23 @@ const SearchBox = ({ className, onSearch, defaultValues }: SearchBoxProps) => {
     if (defaultValues?.capacity) {
       setCapacity(defaultValues.capacity);
     }
-  }, [defaultValues, locations]);
+  }, [defaultValues]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        searchBoxRef.current &&
+        !searchBoxRef.current.contains(event.target as Node)
+      ) {
+        setShowLocationSuggestions(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [searchBoxRef]);
 
   const formatDate = (date: Date) => {
     const formatted = format(date, "PPP", {
@@ -98,32 +114,52 @@ const SearchBox = ({ className, onSearch, defaultValues }: SearchBoxProps) => {
   return (
     <div
       className={`bg-background/80 backdrop-blur-sm p-8 rounded-lg shadow-lg ${className}`}
+      ref={searchBoxRef}
     >
       <div className="flex flex-col md:flex-row gap-4 items-end">
-        {/* Location Dropdown */}
-        <div className="flex-1 w-full">
+        {/* Location Input */}
+        <div className="flex-1 w-full relative">
           <label className="text-sm font-medium mb-2 block">
             {t("search.destination")}
           </label>
-          <Select
-            value={selectedLocation?._id}
-            onValueChange={(value) => {
-              const location = locations.find((loc) => loc._id === value);
-              setSelectedLocation(location || null);
+
+          <Input
+            type="text"
+            placeholder={t("search.placeholder.destination")}
+            value={locationQuery}
+            onChange={(e) => {
+              setLocationQuery(e.target.value);
+              setSelectedLocation(null);
+              setShowLocationSuggestions(true);
             }}
-            disabled={isLoadingLocations}
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder={t("search.placeholder.destination")} />
-            </SelectTrigger>
-            <SelectContent>
-              {locations.map((location) => (
-                <SelectItem key={location._id} value={location._id}>
-                  {location.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            onFocus={() => setShowLocationSuggestions(true)}
+          />
+          {showLocationSuggestions && locationQuery.length >= 2 && (
+            <div className="absolute z-10 bg-white border rounded-md shadow-lg w-full mt-1 max-h-60 overflow-hidden">
+              {isLoadingSearchResults ? (
+                <div className="p-4 text-center text-gray-500">
+                  {t("common.loading")}
+                </div>
+              ) : searchResults.length > 0 ? (
+                <ScrollArea className="h-full max-h-60">
+                  {searchResults.map((location) => (
+                    <div
+                      key={location._id}
+                      className="flex items-center gap-2 p-2 hover:bg-gray-100 cursor-pointer"
+                      onClick={() => {
+                        setSelectedLocation(location);
+                        setLocationQuery(location.name);
+                        setShowLocationSuggestions(false);
+                      }}
+                    >
+                      <Search className="h-4 w-4 text-muted-foreground" />
+                      <span>{location.name}</span>
+                    </div>
+                  ))}
+                </ScrollArea>
+              ) : null}
+            </div>
+          )}
         </div>
 
         {/* Check-in */}
@@ -202,21 +238,12 @@ const SearchBox = ({ className, onSearch, defaultValues }: SearchBoxProps) => {
           <label className="text-sm font-medium mb-2 block">
             {t("search.guests")}
           </label>
-          <Select
-            value={capacity.toString()}
-            onValueChange={(value) => setCapacity(Number(value))}
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder={t("search.placeholder.guests")} />
-            </SelectTrigger>
-            <SelectContent>
-              {[1, 2, 3, 4, 5, 6].map((num) => (
-                <SelectItem key={num} value={num.toString()}>
-                  {num} {t("search.guests")}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <Input
+            type="number"
+            min="1"
+            value={capacity}
+            onChange={(e) => setCapacity(Number(e.target.value))}
+          />
         </div>
 
         {/* Search Button */}

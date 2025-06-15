@@ -26,7 +26,19 @@ export default function PopularDestinations() {
   });
 
   const handleDestinationClick = (locationName: string) => {
-    navigate(`/search?locationName=${encodeURIComponent(locationName)}`);
+    // Tạo ngày check-in mặc định là ngày hiện tại, check-out là ngày mai
+    const defaultCheckIn = new Date();
+    const defaultCheckOut = new Date();
+    defaultCheckOut.setDate(defaultCheckOut.getDate() + 1);
+
+    const searchParams = new URLSearchParams({
+      locationName: locationName,
+      checkIn: defaultCheckIn.toISOString().split("T")[0],
+      checkOut: defaultCheckOut.toISOString().split("T")[0],
+      capacity: "1",
+    });
+
+    navigate(`/search?${searchParams.toString()}`);
   };
 
   if (isLoading) {

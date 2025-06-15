@@ -5,6 +5,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useMutation } from "@tanstack/react-query";
+import googleLogo from "@/assets/images/google.svg";
+import facebookLogo from "@/assets/images/facebook.svg";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -269,7 +271,7 @@ const LoginPage = () => {
                     onClick={() => authApi.googleAuth()}
                   >
                     <img
-                      src="/src/assets/images/google.svg"
+                      src={googleLogo}
                       alt="Google logo"
                       className="h-5 w-5 mr-2"
                     />
@@ -282,7 +284,7 @@ const LoginPage = () => {
                     onClick={() => authApi.facebookAuth()}
                   >
                     <img
-                      src="/src/assets/images/facebook.svg"
+                      src={facebookLogo}
                       alt="Facebook logo"
                       className="h-5 w-5 mr-2"
                     />

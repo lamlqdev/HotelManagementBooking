@@ -8,6 +8,8 @@
     "logo_alt": "Logo BookIt",
     "view_all": "Xem tất cả",
     "reviews": "đánh giá",
+    "selectAll": "Chọn tất cả",
+    "deselectAll": "Bỏ chọn tất cả",
     "back": "Quay lại",
     "create": "Tạo",
     "reject": "Từ chối",
@@ -382,6 +384,11 @@
         "label": "Bạn đặt phòng cho ai?",
         "self": "Đặt cho bản thân",
         "other": "Đặt cho người khác"
+      },
+      "paymentMethod": {
+        "label": "Phương thức thanh toán",
+        "zaloPay": "ZaloPay",
+        "vnPay": "VNPay"
       },
       "guestName": "Tên khách *",
       "contactName": "Tên người liên hệ *",
@@ -810,7 +817,12 @@
   },
   "profile": {
     "title": "Hồ sơ của tôi",
-    "member_since": "Thành viên từ",
+    "membership_tier": "Hạng thành viên",
+    "tier_description": {
+      "bronze": "Hạng thành viên cơ bản",
+      "silver": "Hạng thành viên bạc với nhiều đặc quyền",
+      "gold": "Hạng thành viên vàng với đặc quyền cao cấp"
+    },
     "personal_info": "Thông tin cá nhân",
     "full_name": "Họ và tên",
     "email": "Địa chỉ email",
@@ -1463,6 +1475,14 @@
         "percentage": "Phần trăm",
         "fixed": "Giá trị cố định"
       },
+      "tiers": {
+        "gold": "Vàng",
+        "silver": "Bạc",
+        "bronze": "Đồng",
+        "goldDescription": "Áp dụng cho tier vàng",
+        "silverDescription": "Áp dụng cho tier bạc",
+        "bronzeDescription": "Áp dụng cho tier đồng"
+      },
       "edit": "Chỉnh sửa",
       "table": {
         "code": "Mã",
@@ -1477,6 +1497,8 @@
       "form": {
         "code": "Mã voucher",
         "codePlaceholder": "Nhập mã voucher",
+        "applicableTiers": "Áp dụng cho các tier nào",
+        "applicableTiersPlaceholder": "Chọn tier",
         "discount": "Giảm giá",
         "discountPlaceholder": "Nhập số tiền giảm giá",
         "value": "Giá trị",
@@ -1822,6 +1844,7 @@
     "rooms": {
       "title": "Phòng có sẵn",
       "no_rooms_available": "Không có phòng nào",
+      "no_rooms_with_amenities": "Không có phòng nào với các tiện ích đã chọn",
       "search_info": "Tìm kiếm phòng từ {{checkIn}} đến {{checkOut}} với {{capacity}} người",
       "per_night": "1 đêm",
       "book_now": "Đặt phòng"

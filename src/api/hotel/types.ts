@@ -1,6 +1,23 @@
 import { Hotel } from "@/types/hotel";
 import { Room } from "@/types/room";
 
+export interface SearchHotelsWithAvailableRoomsParams {
+  locationName: string;
+  checkIn: string;
+  checkOut: string;
+  capacity: number;
+  hotelName?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  roomType?: string[];
+  amenities?: string[];
+  minRating?: number;
+  maxRating?: number;
+  sort?: string;
+  page?: number;
+  limit?: number;
+}
+
 export interface HotelResponse {
   success: boolean;
   data: Hotel;

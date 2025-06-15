@@ -8,6 +8,8 @@
     "logo_alt": "BookIt Logo",
     "view_all": "View all",
     "reviews": "reviews",
+    "selectAll": "Select all",
+    "deselectAll": "Deselect all",
     "create": "Create",
     "reject": "Reject",
     "approve": "Approve",
@@ -375,6 +377,11 @@
         "label": "Who are you booking for?",
         "self": "Booking for myself",
         "other": "Booking for someone else"
+      },
+      "paymentMethod": {
+        "label": "Payment method",
+        "zaloPay": "ZaloPay",
+        "vnPay": "VNPay"
       },
       "guestName": "Guest name *",
       "contactName": "Contact name *",
@@ -803,7 +810,12 @@
   },
   "profile": {
     "title": "My Profile",
-    "member_since": "Member since",
+    "membership_tier": "Membership Tier",
+    "tier_description": {
+      "bronze": "Bronze tier with basic benefits",
+      "silver": "Silver tier with additional privileges",
+      "gold": "Gold tier with premium privileges"
+    },
     "personal_info": "Personal Information",
     "full_name": "Full Name",
     "email": "Email Address",
@@ -1471,9 +1483,19 @@
         "percentage": "Percentage",
         "fixed": "Fixed Amount"
       },
+      "tiers": {
+        "gold": "Gold",
+        "silver": "Silver",
+        "bronze": "Bronze",
+        "goldDescription": "Applicable for gold tier",
+        "silverDescription": "Applicable for silver tier",
+        "bronzeDescription": "Applicable for bronze tier"
+      },
       "form": {
         "code": "Voucher Code",
         "codePlaceholder": "Enter voucher code",
+        "applicableTiers": "Applicable Tiers",
+        "applicableTiersPlaceholder": "Select tiers",
         "discount": "Discount",
         "discountPlaceholder": "Enter discount percentage",
         "value": "Value",
@@ -1812,6 +1834,7 @@
     "rooms": {
       "title": "Available Rooms",
       "no_rooms_available": "No rooms available",
+      "no_rooms_with_amenities": "No rooms available with the selected amenities",
       "search_info": "Search rooms from {{checkIn}} to {{checkOut}} with {{capacity}} people",
       "per_night": "1 night",
       "book_now": "Book Now"
