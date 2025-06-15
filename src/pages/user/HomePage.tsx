@@ -7,7 +7,8 @@ import PopularDestinations from "@/components/user/home/PopularDestinations";
 import HotelDeals from "@/components/user/home/HotelDeals";
 import FavouriteHotels from "@/components/user/home/FavouriteHotels";
 import TravelInspiration from "@/components/user/home/TravelInspiration";
-import ChatBot from "@/components/common/ChatBot";
+// import ChatBot from "@/components/common/ChatBot";
+import GeminiChatBot from "@/components/common/GeminiChatBot";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -56,8 +57,9 @@ const HomePage = () => {
         <TravelInspiration />
       </div>
 
-      {/* ChatBot */}
-      <ChatBot />
+      {/* ChatBots */}
+      {/* <ChatBot /> */}
+      <GeminiChatBot />
     </>
   );
 };
