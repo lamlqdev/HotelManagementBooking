@@ -20,6 +20,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Logo } from "@/components/ui/logo";
+import googleLogo from "@/assets/images/google.svg";
+import facebookLogo from "@/assets/images/facebook.svg";
 
 import { authApi } from "@/api/auth/auth.api";
 import { registerSchema, RegisterFormData, ApiError } from "@/api/auth/types";
@@ -305,7 +307,7 @@ const RegisterPage = () => {
                       onClick={handleGoogleAuth}
                     >
                       <img
-                        src="/src/assets/images/google.svg"
+                        src={googleLogo}
                         alt="Google logo"
                         className="h-5 w-5 mr-2"
                       />
@@ -318,7 +320,7 @@ const RegisterPage = () => {
                       onClick={handleFacebookAuth}
                     >
                       <img
-                        src="/src/assets/images/facebook.svg"
+                        src={facebookLogo}
                         alt="Facebook logo"
                         className="h-5 w-5 mr-2"
                       />

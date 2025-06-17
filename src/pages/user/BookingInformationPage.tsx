@@ -28,7 +28,6 @@ const BookingInformationPage = () => {
     string | undefined
   >(undefined);
   const user = useAppSelector((state) => state.auth.user);
-
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -73,17 +72,24 @@ const BookingInformationPage = () => {
         voucherId: selectedVoucherId || undefined,
         paymentMethod: contactData.paymentMethod,
         bookingFor: contactData.bookingFor,
-        contactInfo: {
-          name: user?.name || "",
-          email: user?.email || "",
-          phone: user?.phone || "",
-        },
+        contactInfo:
+          contactData.bookingFor === "self"
+            ? {
+                name: contactData.contactName,
+                email: contactData.email,
+                phone: contactData.phone,
+              }
+            : {
+                name: user?.name || "",
+                phone: user?.phone || "",
+                email: user?.email || "",
+              },
         guestInfo:
           contactData.bookingFor === "other"
             ? {
-                name: contactData.contactName || "",
-                phone: contactData.phone || "",
-                email: contactData.email || "",
+                name: contactData.contactName,
+                phone: contactData.phone,
+                email: contactData.email,
               }
             : undefined,
         specialRequests: specialRequestsData

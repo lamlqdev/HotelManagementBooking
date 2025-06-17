@@ -195,8 +195,8 @@ export default function HotelDeals() {
                       <h3 className="font-semibold mb-1 line-clamp-1">
                         {hotel.name}
                       </h3>
-                      <p className="text-muted-foreground text-sm mb-3">
-                        {hotel.locationDescription || hotel.address}
+                      <p className="text-muted-foreground text-sm mb-3 line-clamp-2">
+                        {hotel.description}
                       </p>
                       <div className="space-y-1">
                         {hotel.lowestPrice > hotel.lowestDiscountedPrice && (

@@ -386,7 +386,8 @@
       "guestName": "Guest name *",
       "contactName": "Contact name *",
       "email": "Email *",
-      "phone": "Phone number *"
+      "phone": "Phone number *",
+      "updatePhone": "You need to update your phone number in your profile to book for someone else"
     },
     "specialRequests": {
       "title": "Special requests",

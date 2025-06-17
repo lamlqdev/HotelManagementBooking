@@ -393,7 +393,8 @@
       "guestName": "Tên khách *",
       "contactName": "Tên người liên hệ *",
       "email": "Email *",
-      "phone": "Số điện thoại *"
+      "phone": "Số điện thoại *",
+      "updatePhone": "Bạn cần cập nhật số điện thoại trong trang cá nhân để đặt phòng cho người khác"
     },
     "specialRequests": {
       "title": "Yêu cầu đặc biệt",

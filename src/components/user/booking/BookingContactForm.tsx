@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import type { UseFormReturn } from "react-hook-form";
 import type { ContactFormData } from "@/api/booking/types";
 import { useAppSelector } from "@/store/hooks";
+import { toast } from "sonner";
 
 interface BookingContactFormProps {
   form: UseFormReturn<ContactFormData>;
@@ -26,11 +27,16 @@ export const BookingContactForm = ({ form }: BookingContactFormProps) => {
     if (bookingFor === "self" && user) {
       setValue("contactName", user.name);
       setValue("email", user.email);
-      setValue("phone", user.phone || "0328265680");
+      setValue("phone", user.phone || "");
     }
   }, [bookingFor, user, setValue]);
 
   const handleBookingForChange = (value: "self" | "other") => {
+    if (value === "other" && (!user?.phone || user.phone.trim() === "")) {
+      toast.error(t("booking.contactInfo.updatePhone"));
+      return;
+    }
+
     setBookingFor(value);
     setValue("bookingFor", value);
 
