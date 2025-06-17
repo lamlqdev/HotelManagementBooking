@@ -174,18 +174,48 @@ const FilterSection = ({
       {/* Amenities */}
       <div className="space-y-4">
         <h3 className="font-semibold text-lg">{t("filter.amenities")}</h3>
-        {amenities.map((amenity) => (
-          <div key={amenity._id} className="flex items-center space-x-2">
-            <Checkbox
-              id={amenity._id}
-              checked={selectedAmenities.includes(amenity._id)}
-              onCheckedChange={(checked) =>
-                handleAmenityChange(amenity._id, Boolean(checked))
-              }
-            />
-            <label htmlFor={amenity._id}>{amenity.name}</label>
-          </div>
-        ))}
+
+        {/* Hotel Amenities */}
+        <div className="space-y-2">
+          <h4 className="font-medium text-base text-gray-700">
+            {t("filter.hotel_amenities")}
+          </h4>
+          {amenities
+            .filter((amenity) => amenity.type === "hotel")
+            .map((amenity) => (
+              <div key={amenity._id} className="flex items-center space-x-2">
+                <Checkbox
+                  id={amenity._id}
+                  checked={selectedAmenities.includes(amenity._id)}
+                  onCheckedChange={(checked) =>
+                    handleAmenityChange(amenity._id, Boolean(checked))
+                  }
+                />
+                <label htmlFor={amenity._id}>{amenity.name}</label>
+              </div>
+            ))}
+        </div>
+
+        {/* Room Amenities */}
+        <div className="space-y-2">
+          <h4 className="font-medium text-base text-gray-700">
+            {t("filter.room_amenities")}
+          </h4>
+          {amenities
+            .filter((amenity) => amenity.type === "room")
+            .map((amenity) => (
+              <div key={amenity._id} className="flex items-center space-x-2">
+                <Checkbox
+                  id={amenity._id}
+                  checked={selectedAmenities.includes(amenity._id)}
+                  onCheckedChange={(checked) =>
+                    handleAmenityChange(amenity._id, Boolean(checked))
+                  }
+                />
+                <label htmlFor={amenity._id}>{amenity.name}</label>
+              </div>
+            ))}
+        </div>
       </div>
     </div>
   );

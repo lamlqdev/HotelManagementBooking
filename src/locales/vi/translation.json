@@ -343,7 +343,9 @@
     "room_type_deluxe": "Phòng deluxe",
     "room_type_suite": "Phòng suite",
     "room_type_family": "Phòng gia đình",
-    "amenities": "Tiện nghi"
+    "amenities": "Tiện nghi",
+    "hotel_amenities": "Tiện nghi khách sạn",
+    "room_amenities": "Tiện nghi phòng"
   },
   "amenities": {
     "wifi": "WiFi",

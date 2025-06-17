@@ -336,7 +336,9 @@
     "room_type_deluxe": "Deluxe",
     "room_type_suite": "Suite",
     "room_type_family": "Family",
-    "amenities": "Amenities"
+    "amenities": "Amenities",
+    "hotel_amenities": "Hotel amenities",
+    "room_amenities": "Room amenities"
   },
   "amenities": {
     "wifi": "WiFi",
