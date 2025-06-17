@@ -228,7 +228,6 @@ export const hotelApi = {
     const apiParams = {
       ...params,
       roomType: params.roomType?.join(","),
-      amenities: params.amenities?.join(","),
     };
     const response = await axiosInstance.get(`/hotels/search`, {
       params: apiParams,

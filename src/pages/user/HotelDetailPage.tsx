@@ -31,7 +31,6 @@ const HotelDetailPage = () => {
   const capacity = searchParams.get("capacity");
   const amenities = searchParams.get("amenities")?.split(",") || [];
   const roomAmenities = searchParams.get("roomAmenities")?.split(",") || [];
-  const hotelAmenities = searchParams.get("hotelAmenities")?.split(",") || [];
 
   useEffect(() => {
     window.scrollTo(0, 0);
