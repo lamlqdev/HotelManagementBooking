@@ -31,7 +31,10 @@ const SearchResultPage = () => {
   const minPrice = searchParams.get("minPrice");
   const maxPrice = searchParams.get("maxPrice");
   const roomType = searchParams.get("roomType")?.split(",") || [];
-  const amenities = searchParams.get("amenities")?.split(",") || [];
+  const roomAmenities =
+    searchParams.get("roomAmenities")?.split(",").filter(Boolean) || [];
+  const hotelAmenities =
+    searchParams.get("hotelAmenities")?.split(",").filter(Boolean) || [];
   const minRating = searchParams.get("minRating");
   const maxRating = searchParams.get("maxRating");
 
@@ -58,7 +61,8 @@ const SearchResultPage = () => {
       minPrice,
       maxPrice,
       roomType,
-      amenities,
+      roomAmenities,
+      hotelAmenities,
       minRating,
       maxRating,
     ],
@@ -83,10 +87,13 @@ const SearchResultPage = () => {
           minPrice: minPrice ? Number(minPrice) : undefined,
           maxPrice: maxPrice ? Number(maxPrice) : undefined,
           roomType: roomType.length > 0 ? roomType : undefined,
-          amenities: amenities.length > 0 ? amenities : undefined,
+          roomAmenities:
+            roomAmenities.length > 0 ? roomAmenities.join(",") : undefined,
+          hotelAmenities:
+            hotelAmenities.length > 0 ? hotelAmenities.join(",") : undefined,
           minRating: minRating ? Number(minRating) : undefined,
           maxRating: maxRating ? Number(maxRating) : undefined,
-          sort: backendSort || "price", // Use the converted backendSort
+          sort: backendSort || "price",
           page: currentPage,
           limit: 10,
         });
@@ -165,12 +172,22 @@ const SearchResultPage = () => {
     setSearchParams(newParams);
   };
 
-  const handleAmenitiesChange = (amenities: string[]) => {
+  const handleRoomAmenitiesChange = (amenities: string[]) => {
     const newParams = new URLSearchParams(searchParams);
     if (amenities.length > 0) {
-      newParams.set("amenities", amenities.join(","));
+      newParams.set("roomAmenities", amenities.join(","));
     } else {
-      newParams.delete("amenities");
+      newParams.delete("roomAmenities");
+    }
+    setSearchParams(newParams);
+  };
+
+  const handleHotelAmenitiesChange = (amenities: string[]) => {
+    const newParams = new URLSearchParams(searchParams);
+    if (amenities.length > 0) {
+      newParams.set("hotelAmenities", amenities.join(","));
+    } else {
+      newParams.delete("hotelAmenities");
     }
     setSearchParams(newParams);
   };
@@ -190,8 +207,11 @@ const SearchResultPage = () => {
     params.append("checkIn", finalCheckIn);
     params.append("checkOut", finalCheckOut);
     params.append("capacity", capacity.toString());
-    if (amenities.length > 0) {
-      params.append("amenities", amenities.join(","));
+    if (roomAmenities.length > 0) {
+      params.append("roomAmenities", roomAmenities.join(","));
+    }
+    if (hotelAmenities.length > 0) {
+      params.append("hotelAmenities", hotelAmenities.join(","));
     }
     navigate(`/hoteldetail/${hotelId}?${params.toString()}`);
   };
@@ -239,9 +259,11 @@ const SearchResultPage = () => {
               <FilterSection
                 onPriceChange={handlePriceChange}
                 onRoomTypeChange={handleRoomTypeChange}
-                onAmenitiesChange={handleAmenitiesChange}
+                onRoomAmenitiesChange={handleRoomAmenitiesChange}
+                onHotelAmenitiesChange={handleHotelAmenitiesChange}
                 onRatingChange={handleRatingChange}
-                initialSelectedAmenities={amenities}
+                initialSelectedRoomAmenities={roomAmenities}
+                initialSelectedHotelAmenities={hotelAmenities}
                 initialSelectedRoomTypes={roomType}
                 initialRatingRange={[
                   minRating ? Number(minRating) : 0,
@@ -394,9 +416,11 @@ const SearchResultPage = () => {
             <FilterSection
               onPriceChange={handlePriceChange}
               onRoomTypeChange={handleRoomTypeChange}
-              onAmenitiesChange={handleAmenitiesChange}
+              onRoomAmenitiesChange={handleRoomAmenitiesChange}
+              onHotelAmenitiesChange={handleHotelAmenitiesChange}
               onRatingChange={handleRatingChange}
-              initialSelectedAmenities={amenities}
+              initialSelectedRoomAmenities={roomAmenities}
+              initialSelectedHotelAmenities={hotelAmenities}
               initialSelectedRoomTypes={roomType}
               initialRatingRange={[
                 minRating ? Number(minRating) : 0,

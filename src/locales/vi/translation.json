@@ -519,6 +519,7 @@
         "paid": "Đã thanh toán",
         "pending": "Chờ thanh toán",
         "failed": "Thanh toán thất bại",
+        "cancelled": "Đã hủy",
         "refunded": "Đã hoàn tiền"
       }
     }

@@ -30,6 +30,8 @@ const HotelDetailPage = () => {
   const checkOut = searchParams.get("checkOut");
   const capacity = searchParams.get("capacity");
   const amenities = searchParams.get("amenities")?.split(",") || [];
+  const roomAmenities = searchParams.get("roomAmenities")?.split(",") || [];
+  const hotelAmenities = searchParams.get("hotelAmenities")?.split(",") || [];
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -156,7 +158,7 @@ const HotelDetailPage = () => {
   const reviews = reviewsResponse?.data || [];
 
   // Lọc các tiện ích của khách sạn
-  const hotelAmenities = amenitiesResponseData.filter((amenity) =>
+  const hotelAmenitiesData = amenitiesResponseData.filter((amenity) =>
     hotel.amenities.includes(amenity._id)
   );
 
@@ -196,7 +198,7 @@ const HotelDetailPage = () => {
         <div id="tổng quan">
           <HotelOverview
             description={hotel.description}
-            amenities={hotelAmenities}
+            amenities={hotelAmenitiesData}
           />
           <div className="mt-8">
             <h3 className="text-xl font-semibold mb-4">Vị trí</h3>
@@ -219,7 +221,7 @@ const HotelDetailPage = () => {
             checkOut={checkOut || undefined}
             capacity={capacity ? parseInt(capacity) : undefined}
             hotelId={hotel._id}
-            selectedAmenities={amenities}
+            selectedAmenities={roomAmenities}
           />
         </div>
 

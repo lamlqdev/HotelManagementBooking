@@ -10,7 +10,8 @@ export interface SearchHotelsWithAvailableRoomsParams {
   minPrice?: number;
   maxPrice?: number;
   roomType?: string[];
-  amenities?: string[];
+  roomAmenities?: string;
+  hotelAmenities?: string;
   minRating?: number;
   maxRating?: number;
   sort?: string;

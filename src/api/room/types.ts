@@ -114,3 +114,22 @@ export const createRoomSchema = z.object({
 });
 
 export type CreateRoomFormData = z.infer<typeof createRoomSchema>;
+
+export type PartnerRoomQueryParams = {
+  name?: string;
+  floor?: number;
+  bedType?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  capacity?: number;
+  status?: string;
+  roomType?: string;
+  amenities?: string[];
+  hasDiscount?: boolean | string;
+  isBooked?: boolean | string;
+  checkIn?: string;
+  checkOut?: string;
+  sort?: string;
+  page?: number;
+  limit?: number;
+};

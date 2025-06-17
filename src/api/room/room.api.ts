@@ -8,6 +8,7 @@ import {
   CreateRoomFormData,
   UpdateRoomFormData,
   HotelResponse,
+  PartnerRoomQueryParams,
 } from "./types";
 
 const baseUrl = "/rooms";
@@ -136,6 +137,19 @@ export const roomApi = {
   removeRoomDiscount: async (id: string): Promise<RoomResponse> => {
     const response = await axiosInstance.delete<RoomResponse>(
       `${baseUrl}/${id}/discount`
+    );
+    return response.data;
+  },
+
+  // Lấy danh sách phòng của partner
+  getPartnerRooms: async (
+    params?: PartnerRoomQueryParams
+  ): Promise<RoomsResponse> => {
+    const response = await axiosInstance.get<RoomsResponse>(
+      `${baseUrl}/partner/rooms`,
+      {
+        params,
+      }
     );
     return response.data;
   },

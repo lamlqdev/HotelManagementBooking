@@ -134,7 +134,13 @@ const MessagesPage = () => {
                   </span>
                 )}
               </div>
-              <div className="text-xs text-muted-foreground truncate">
+              <div
+                className={`text-xs truncate ${
+                  selectedUserId === conv._id
+                    ? "text-white/80"
+                    : "text-muted-foreground"
+                }`}
+              >
                 {conv.lastMessage}
               </div>
             </li>

@@ -8,10 +8,12 @@ import { Amenity } from "@/types/amenity";
 
 export interface FilterSectionProps {
   onPriceChange: (range: [number, number]) => void;
-  onAmenitiesChange: (amenities: string[]) => void;
+  onRoomAmenitiesChange: (amenities: string[]) => void;
+  onHotelAmenitiesChange: (amenities: string[]) => void;
   onRoomTypeChange: (roomTypes: string[]) => void;
   onRatingChange: (range: [number, number]) => void;
-  initialSelectedAmenities: string[];
+  initialSelectedRoomAmenities: string[];
+  initialSelectedHotelAmenities: string[];
   initialSelectedRoomTypes: string[];
   initialRatingRange?: [number, number];
 }
@@ -20,18 +22,23 @@ const ROOM_TYPES = ["Standard", "Superior", "Deluxe", "Suite", "Family"];
 
 const FilterSection = ({
   onPriceChange,
-  onAmenitiesChange,
+  onRoomAmenitiesChange,
+  onHotelAmenitiesChange,
   onRoomTypeChange,
   onRatingChange,
-  initialSelectedAmenities,
+  initialSelectedRoomAmenities,
+  initialSelectedHotelAmenities,
   initialSelectedRoomTypes,
   initialRatingRange = [0, 5],
 }: FilterSectionProps) => {
   const { t } = useTranslation();
   const [amenities, setAmenities] = useState<Amenity[]>([]);
-  const [selectedAmenities, setSelectedAmenities] = useState<string[]>(
-    initialSelectedAmenities
+  const [selectedRoomAmenities, setSelectedRoomAmenities] = useState<string[]>(
+    initialSelectedRoomAmenities
   );
+  const [selectedHotelAmenities, setSelectedHotelAmenities] = useState<
+    string[]
+  >(initialSelectedHotelAmenities);
   const [selectedRoomTypes, setSelectedRoomTypes] = useState<string[]>(
     initialSelectedRoomTypes
   );
@@ -46,8 +53,12 @@ const FilterSection = ({
   }, []);
 
   useEffect(() => {
-    setSelectedAmenities(initialSelectedAmenities);
-  }, [initialSelectedAmenities]);
+    setSelectedRoomAmenities(initialSelectedRoomAmenities);
+  }, [initialSelectedRoomAmenities]);
+
+  useEffect(() => {
+    setSelectedHotelAmenities(initialSelectedHotelAmenities);
+  }, [initialSelectedHotelAmenities]);
 
   useEffect(() => {
     setSelectedRoomTypes(initialSelectedRoomTypes);
@@ -57,16 +68,28 @@ const FilterSection = ({
     setRatingRange(initialRatingRange);
   }, [initialRatingRange]);
 
-  // Xử lý chọn tiện nghi
-  const handleAmenityChange = (amenityId: string, checked: boolean) => {
+  // Xử lý chọn tiện nghi phòng
+  const handleRoomAmenityChange = (amenityId: string, checked: boolean) => {
     let updated: string[];
     if (checked) {
-      updated = [...selectedAmenities, amenityId];
+      updated = [...selectedRoomAmenities, amenityId];
     } else {
-      updated = selectedAmenities.filter((id) => id !== amenityId);
+      updated = selectedRoomAmenities.filter((id) => id !== amenityId);
     }
-    setSelectedAmenities(updated);
-    onAmenitiesChange(updated);
+    setSelectedRoomAmenities(updated);
+    onRoomAmenitiesChange(updated);
+  };
+
+  // Xử lý chọn tiện nghi khách sạn
+  const handleHotelAmenityChange = (amenityId: string, checked: boolean) => {
+    let updated: string[];
+    if (checked) {
+      updated = [...selectedHotelAmenities, amenityId];
+    } else {
+      updated = selectedHotelAmenities.filter((id) => id !== amenityId);
+    }
+    setSelectedHotelAmenities(updated);
+    onHotelAmenitiesChange(updated);
   };
 
   // Xử lý chọn loại phòng
@@ -186,9 +209,9 @@ const FilterSection = ({
               <div key={amenity._id} className="flex items-center space-x-2">
                 <Checkbox
                   id={amenity._id}
-                  checked={selectedAmenities.includes(amenity._id)}
+                  checked={selectedHotelAmenities.includes(amenity._id)}
                   onCheckedChange={(checked) =>
-                    handleAmenityChange(amenity._id, Boolean(checked))
+                    handleHotelAmenityChange(amenity._id, Boolean(checked))
                   }
                 />
                 <label htmlFor={amenity._id}>{amenity.name}</label>
@@ -207,9 +230,9 @@ const FilterSection = ({
               <div key={amenity._id} className="flex items-center space-x-2">
                 <Checkbox
                   id={amenity._id}
-                  checked={selectedAmenities.includes(amenity._id)}
+                  checked={selectedRoomAmenities.includes(amenity._id)}
                   onCheckedChange={(checked) =>
-                    handleAmenityChange(amenity._id, Boolean(checked))
+                    handleRoomAmenityChange(amenity._id, Boolean(checked))
                   }
                 />
                 <label htmlFor={amenity._id}>{amenity.name}</label>
