@@ -293,7 +293,7 @@
       "check_in_past": "Ngày check-in không được trong quá khứ",
       "check_out_before_check_in": "Ngày check-out phải sau ngày check-in",
       "max_stay_days": "Thời gian lưu trú không được quá 30 ngày",
-      "invalid_capacity": "Số lượng người phải từ 1 đến 6",
+      "invalid_capacity": "Số lượng người phải từ 1 trở lên",
       "missing_fields": "Vui lòng điền đầy đủ thông tin",
       "invalid_dates": "Ngày check-in phải trước ngày check-out"
     }

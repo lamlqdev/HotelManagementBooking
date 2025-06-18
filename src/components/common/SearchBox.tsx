@@ -62,6 +62,13 @@ const SearchBox = ({ className, onSearch, defaultValues }: SearchBoxProps) => {
   useEffect(() => {
     if (defaultValues?.locationName) {
       setLocationQuery(defaultValues.locationName);
+      locationApi
+        .searchLocations(defaultValues.locationName, 1)
+        .then((response) => {
+          if (response.success && response.data.length > 0) {
+            setSelectedLocation(response.data[0]);
+          }
+        });
     }
     if (defaultValues?.checkIn) {
       setCheckIn(new Date(defaultValues.checkIn));
@@ -99,12 +106,18 @@ const SearchBox = ({ className, onSearch, defaultValues }: SearchBoxProps) => {
 
   const handleSearch = () => {
     if (!selectedLocation || !checkIn || !checkOut) {
-      toast.error(t("search.error.missing_fields"));
+      toast.warning(t("search.error.missing_fields"));
       return;
     }
 
     if (checkIn >= checkOut) {
-      toast.error(t("search.error.invalid_dates"));
+      toast.warning(t("search.error.invalid_dates"));
+      return;
+    }
+
+    if (capacity < 1) {
+      toast.warning(t("search.error.invalid_capacity"));
+      setCapacity(1);
       return;
     }
 

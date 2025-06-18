@@ -286,7 +286,7 @@
       "check_in_past": "Check-in date cannot be in the past",
       "check_out_before_check_in": "Check-out date must be after check-in date",
       "max_stay_days": "Maximum stay period cannot exceed 30 days",
-      "invalid_capacity": "Number of guests must be between 1 and 6",
+      "invalid_capacity": "Number of guests must be at least 1",
       "missing_fields": "Please fill in all fields",
       "invalid_dates": "Check-in date must be before check-out date"
     }
