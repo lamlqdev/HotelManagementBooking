@@ -14,7 +14,6 @@ import {
   XCircle,
   AlertTriangle,
   UserCheck,
-  Trash2,
   Pencil,
 } from "lucide-react";
 import { userApi } from "@/api/user/user.api";
@@ -43,7 +42,6 @@ export default function UserDetailPage() {
   const queryClient = useQueryClient();
   const [deactivateReason, setDeactivateReason] = useState("");
   const [isDeactivateDialogOpen, setIsDeactivateDialogOpen] = useState(false);
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editForm, setEditForm] = useState({
     name: "",
@@ -94,23 +92,6 @@ export default function UserDetailPage() {
       error: Error & { response?: { data?: { message?: string } } }
     ) => {
       toast.error(t("admin.users.activate.error"), {
-        description: error.response?.data?.message || t("common.errorMessage"),
-      });
-    },
-  });
-
-  const deleteMutation = useMutation({
-    mutationFn: () => userApi.deleteUser(id!),
-    onSuccess: () => {
-      toast.success(t("admin.users.delete.success"), {
-        description: t("admin.users.delete.successMessage"),
-      });
-      navigate("/admin/users");
-    },
-    onError: (
-      error: Error & { response?: { data?: { message?: string } } }
-    ) => {
-      toast.error(t("admin.users.delete.error"), {
         description: error.response?.data?.message || t("common.errorMessage"),
       });
     },
@@ -482,43 +463,6 @@ export default function UserDetailPage() {
                   </DialogContent>
                 </Dialog>
 
-                <Dialog
-                  open={isDeleteDialogOpen}
-                  onOpenChange={setIsDeleteDialogOpen}
-                >
-                  <DialogTrigger asChild>
-                    <Button variant="destructive">
-                      <Trash2 className="h-4 w-4 mr-2" />
-                      {t("admin.users.details.delete")}
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>{t("admin.users.delete.title")}</DialogTitle>
-                      <DialogDescription>
-                        {t("admin.users.delete.description")}
-                      </DialogDescription>
-                    </DialogHeader>
-                    <DialogFooter>
-                      <Button
-                        variant="outline"
-                        onClick={() => setIsDeleteDialogOpen(false)}
-                      >
-                        {t("common.cancel")}
-                      </Button>
-                      <Button
-                        variant="destructive"
-                        onClick={() => deleteMutation.mutate()}
-                        disabled={deleteMutation.isPending}
-                      >
-                        {deleteMutation.isPending
-                          ? t("common.loading")
-                          : t("admin.users.delete.confirm")}
-                      </Button>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
-
                 {user.data.status === "active" ? (
                   <Dialog
                     open={isDeactivateDialogOpen}
@@ -527,7 +471,7 @@ export default function UserDetailPage() {
                     <DialogTrigger asChild>
                       <Button
                         variant="outline"
-                        className="text-amber-600 border-amber-600 hover:bg-amber-50"
+                        className="text-amber-600 border-amber-600 hover:bg-amber-600 hover:text-white transition-colors"
                       >
                         <AlertTriangle className="h-4 w-4 mr-2" />
                         {t("admin.users.details.deactivate")}
@@ -578,7 +522,7 @@ export default function UserDetailPage() {
                 ) : (
                   <Button
                     variant="outline"
-                    className="text-green-600 border-green-600 hover:bg-green-50"
+                    className="text-green-600 border-green-600 hover:bg-green-600 hover:text-white transition-colors"
                     onClick={() => activateMutation.mutate()}
                     disabled={activateMutation.isPending}
                   >
@@ -589,7 +533,6 @@ export default function UserDetailPage() {
                   </Button>
                 )}
 
-                {/* Gửi thông báo cho user */}
                 <Dialog
                   open={isNotifyDialogOpen}
                   onOpenChange={setIsNotifyDialogOpen}

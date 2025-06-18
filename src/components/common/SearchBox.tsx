@@ -3,6 +3,7 @@ import { enUS, vi } from "date-fns/locale";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { useState, useEffect, useRef } from "react";
+import { toast } from "sonner";
 
 import { locationApi } from "@/api/location/location.api";
 import { Location } from "@/types/location";
@@ -98,6 +99,12 @@ const SearchBox = ({ className, onSearch, defaultValues }: SearchBoxProps) => {
 
   const handleSearch = () => {
     if (!selectedLocation || !checkIn || !checkOut) {
+      toast.error(t("search.error.missing_fields"));
+      return;
+    }
+
+    if (checkIn >= checkOut) {
+      toast.error(t("search.error.invalid_dates"));
       return;
     }
 

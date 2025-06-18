@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router";
+import { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router";
 import { useQuery, useMutation } from "@tanstack/react-query";
 
 import { AxiosError } from "axios";
@@ -14,6 +14,8 @@ import LoadingSvg from "@/assets/illustration/Loading.svg";
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  const [isInitialized, setIsInitialized] = useState(false);
 
   const { isLoading: isLoadingUser } = useQuery({
     queryKey: ["user"],
@@ -27,19 +29,34 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       mutationFn: () => authApi.refreshToken(),
       onSuccess: async (refreshResponse) => {
         if (refreshResponse.success && refreshResponse.accessToken) {
-          const newUserResponse = await authApi.getMe();
-          if (newUserResponse.success) {
-            const storedRefreshToken = localStorage.getItem("refreshToken");
-            dispatch(
-              setCredentials({
-                accessToken: refreshResponse.accessToken,
-                refreshToken:
-                  refreshResponse.refreshToken ||
-                  (storedRefreshToken as string),
-              })
-            );
-            dispatch(setUser(newUserResponse.data));
+          try {
+            const newUserResponse = await authApi.getMe();
+            if (newUserResponse.success) {
+              const storedRefreshToken = localStorage.getItem("refreshToken");
+              dispatch(
+                setCredentials({
+                  accessToken: refreshResponse.accessToken,
+                  refreshToken:
+                    refreshResponse.refreshToken ||
+                    (storedRefreshToken as string),
+                })
+              );
+              dispatch(setUser(newUserResponse.data));
+              const savedPath = localStorage.getItem("savedPath");
+              if (savedPath) {
+                localStorage.removeItem("savedPath");
+                navigate(savedPath);
+              }
+            }
+          } catch (error) {
+            if (error instanceof AxiosError && error.response?.status === 401) {
+              handleAuthError();
+            } else {
+              handleAuthError();
+            }
           }
+        } else {
+          handleAuthError();
         }
       },
       onError: () => {
@@ -48,6 +65,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     });
 
   const handleAuthError = () => {
+    localStorage.setItem("savedPath", location.pathname);
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     dispatch(resetAuth());
@@ -83,12 +101,13 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           }
         }
       }
+      setIsInitialized(true);
     };
 
     initializeAuth();
   }, [dispatch, navigate, refreshTokenMutation]);
 
-  if (isLoadingUser || isLoadingRefresh) {
+  if (!isInitialized || isLoadingUser || isLoadingRefresh) {
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-background">
         <img src={LoadingSvg} alt="Loading" className="w-96 h-96" />
