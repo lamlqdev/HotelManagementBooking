@@ -64,13 +64,13 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       },
     });
 
-  const handleAuthError = () => {
+  const handleAuthError = async () => {
     localStorage.setItem("savedPath", location.pathname);
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     dispatch(resetAuth());
     toast.error("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại");
-    navigate("/login");
+    await navigate("/login");
   };
 
   useEffect(() => {
@@ -91,13 +91,13 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             );
             dispatch(setUser(userResponse.data));
           } else {
-            handleAuthError();
+            await handleAuthError();
           }
         } catch (error) {
           if (error instanceof AxiosError && error.response?.status === 401) {
-            refreshTokenMutation();
+            await refreshTokenMutation();
           } else {
-            handleAuthError();
+            await handleAuthError();
           }
         }
       }
