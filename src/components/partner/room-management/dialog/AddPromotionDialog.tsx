@@ -121,7 +121,6 @@ export function AddPromotionDialog({ roomId }: AddPromotionDialogProps) {
                   onSelect={(date) => date && setStartDate(date)}
                   initialFocus
                   locale={i18n.language === "vi" ? vi : enUS}
-                  disabled={(date) => startOfDay(date) < startOfDay(new Date())}
                 />
               </PopoverContent>
             </Popover>

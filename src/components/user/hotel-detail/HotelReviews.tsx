@@ -7,8 +7,15 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 import { Review } from "@/types/review";
 import Reviews from "@/assets/illustration/Reviews.svg";
@@ -24,7 +31,6 @@ import {
   AlertDialogAction,
   AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
-import { useMutation } from "@tanstack/react-query";
 
 interface ReviewStats {
   overall: number;
@@ -39,7 +45,6 @@ interface HotelReviewsProps {
   reviewStats: ReviewStats;
   reviews: Review[];
   hotelId: string;
-  onReviewCreated?: () => void;
 }
 
 // Định nghĩa type cho error trả về từ backend
@@ -52,23 +57,30 @@ interface BackendError {
   message?: string;
 }
 
-const HotelReviews = ({
-  reviewStats,
-  reviews,
-  // rooms,
+// Component Modal cho form đánh giá
+interface ReviewFormModalProps {
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
+  hotelId: string;
+  editReview?: Review | null;
+  onSuccess: () => void;
+}
+
+const ReviewFormModal = ({
+  isOpen,
+  onOpenChange,
   hotelId,
-  onReviewCreated,
-}: HotelReviewsProps) => {
+  editReview,
+  onSuccess,
+}: ReviewFormModalProps) => {
   const { t } = useTranslation();
-  const user = useAppSelector((state) => state.auth.user);
-  // const [roomId, setRoomId] = useState(rooms[0]?._id || "");
-  const [rating, setRating] = useState(0);
-  const [title, setTitle] = useState("");
-  const [comment, setComment] = useState("");
-  const [isAnonymous, setIsAnonymous] = useState(false);
-  const [showForm, setShowForm] = useState(false);
-  const [editReviewId, setEditReviewId] = useState<string | null>(null);
-  const [deleteReviewId, setDeleteReviewId] = useState<string | null>(null);
+  const queryClient = useQueryClient();
+  const [rating, setRating] = useState(editReview?.rating || 0);
+  const [title, setTitle] = useState(editReview?.title || "");
+  const [comment, setComment] = useState(editReview?.comment || "");
+  const [isAnonymous, setIsAnonymous] = useState(
+    editReview?.isAnonymous || false
+  );
 
   const createReviewMutation = useMutation({
     mutationFn: (data: {
@@ -92,28 +104,6 @@ const HotelReviews = ({
     }) => reviewApi.updateReview(params.id, params.data),
   });
 
-  const handleEdit = (review: Review) => {
-    setEditReviewId(review._id);
-    setRating(review.rating);
-    setTitle(review.title);
-    setComment(review.comment);
-    setIsAnonymous(review.isAnonymous);
-    setShowForm(true);
-  };
-
-  const handleDelete = async () => {
-    if (!deleteReviewId) return;
-    try {
-      await reviewApi.deleteReview(deleteReviewId);
-      toast.success("Đã xoá đánh giá!");
-      setDeleteReviewId(null);
-      if (onReviewCreated) onReviewCreated();
-    } catch (err) {
-      const error = err as { message?: string };
-      toast.error(error?.message || "Xoá đánh giá thất bại");
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!rating || !title || !comment) {
@@ -121,29 +111,31 @@ const HotelReviews = ({
       return;
     }
 
-    if (editReviewId) {
+    if (editReview) {
       updateReviewMutation.mutate(
         {
-          id: editReviewId,
+          id: editReview._id,
           data: { rating, title, comment, isAnonymous },
         },
         {
           onSuccess: () => {
             toast.success("Đã cập nhật đánh giá!");
-            setRating(0);
-            setTitle("");
-            setComment("");
-            setIsAnonymous(false);
-            setShowForm(false);
-            setEditReviewId(null);
-            if (onReviewCreated) onReviewCreated();
+            resetForm();
+            onOpenChange(false);
+
+            // Invalidate các queries liên quan
+            queryClient.invalidateQueries({ queryKey: ["reviews", hotelId] });
+            queryClient.invalidateQueries({ queryKey: ["hotel", hotelId] });
+            queryClient.invalidateQueries({ queryKey: ["availableRooms"] });
+
+            onSuccess();
           },
           onError: (err: unknown) => {
             const error = err as BackendError;
             const message =
               error?.response?.data?.message ||
               error?.message ||
-              "Gửi đánh giá thất bại";
+              "Cập nhật đánh giá thất bại";
             toast.error(message);
           },
         }
@@ -154,13 +146,15 @@ const HotelReviews = ({
         {
           onSuccess: () => {
             toast.success("Đánh giá của bạn đã được gửi!");
-            setRating(0);
-            setTitle("");
-            setComment("");
-            setIsAnonymous(false);
-            setShowForm(false);
-            setEditReviewId(null);
-            if (onReviewCreated) onReviewCreated();
+            resetForm();
+            onOpenChange(false);
+
+            // Invalidate các queries liên quan
+            queryClient.invalidateQueries({ queryKey: ["reviews", hotelId] });
+            queryClient.invalidateQueries({ queryKey: ["hotel", hotelId] });
+            queryClient.invalidateQueries({ queryKey: ["availableRooms"] });
+
+            onSuccess();
           },
           onError: (err: unknown) => {
             const error = err as BackendError;
@@ -175,38 +169,33 @@ const HotelReviews = ({
     }
   };
 
-  const handleCancel = () => {
-    setShowForm(false);
+  const resetForm = () => {
     setRating(0);
     setTitle("");
     setComment("");
     setIsAnonymous(false);
-    setEditReviewId(null);
+  };
+
+  const handleCancel = () => {
+    resetForm();
+    onOpenChange(false);
   };
 
   const loading =
     createReviewMutation.isPending || updateReviewMutation.isPending;
 
   return (
-    <section id="đánh giá">
-      <h2 className="text-2xl font-bold mb-6 text-foreground">
-        {t("hotel.reviews.title")}
-      </h2>
-      {/* Nút mở form đánh giá */}
-      {!showForm && user && (
-        <Button onClick={() => setShowForm(true)} className="mb-6">
-          {t("hotel.reviews.write_review") || "Viết đánh giá"}
-        </Button>
-      )}
-      {/* Form đánh giá */}
-      {(showForm || editReviewId) && (
-        <form
-          onSubmit={handleSubmit}
-          className="bg-card rounded-lg shadow-md p-6 mb-8 space-y-4"
-        >
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-[500px]">
+        <DialogHeader>
+          <DialogTitle>
+            {editReview ? "Chỉnh sửa đánh giá" : "Viết đánh giá"}
+          </DialogTitle>
+        </DialogHeader>
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block font-medium mb-1">
-              {t("hotel.reviews.rating")}
+            <label className="block font-medium mb-2">
+              {t("hotel.reviews.rating") || "Đánh giá"}
             </label>
             <div className="flex gap-1">
               {[1, 2, 3, 4, 5].map((star) => (
@@ -216,8 +205,8 @@ const HotelReviews = ({
                   onClick={() => setRating(star)}
                   className={
                     star <= rating
-                      ? "text-yellow-400 text-2xl"
-                      : "text-gray-300 text-2xl"
+                      ? "text-yellow-400 text-2xl hover:text-yellow-500 transition-colors"
+                      : "text-gray-300 text-2xl hover:text-gray-400 transition-colors"
                   }
                   aria-label={`Chọn ${star} sao`}
                 >
@@ -226,26 +215,32 @@ const HotelReviews = ({
               ))}
             </div>
           </div>
+
           <div>
-            <label className="block font-medium mb-1">
+            <label className="block font-medium mb-2">
               {t("hotel.reviews.title_label") || "Tiêu đề"}
             </label>
             <Input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Tiêu đề đánh giá"
+              required
             />
           </div>
+
           <div>
-            <label className="block font-medium mb-1">
+            <label className="block font-medium mb-2">
               {t("hotel.reviews.comment_label") || "Nội dung"}
             </label>
             <Textarea
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               placeholder="Nội dung đánh giá"
+              rows={4}
+              required
             />
           </div>
+
           <div className="flex items-center gap-2">
             <Checkbox
               id="anonymous"
@@ -256,18 +251,86 @@ const HotelReviews = ({
               {t("hotel.reviews.anonymous") || "Ẩn danh"}
             </label>
           </div>
-          <div className="flex gap-2">
-            <Button type="submit" disabled={loading}>
-              {loading
-                ? t("hotel.reviews.sending") || "Đang gửi..."
-                : t("hotel.reviews.send") || "Gửi đánh giá"}
-            </Button>
+
+          <div className="flex gap-2 justify-end pt-4">
             <Button type="button" variant="outline" onClick={handleCancel}>
               {t("hotel.reviews.cancel") || "Huỷ"}
             </Button>
+            <Button type="submit" disabled={loading}>
+              {loading
+                ? t("hotel.reviews.sending") || "Đang gửi..."
+                : editReview
+                ? "Cập nhật"
+                : t("hotel.reviews.send") || "Gửi đánh giá"}
+            </Button>
           </div>
         </form>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+const HotelReviews = ({ reviewStats, reviews, hotelId }: HotelReviewsProps) => {
+  const { t } = useTranslation();
+  const user = useAppSelector((state) => state.auth.user);
+  const queryClient = useQueryClient();
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [editReview, setEditReview] = useState<Review | null>(null);
+  const [deleteReviewId, setDeleteReviewId] = useState<string | null>(null);
+
+  const handleEdit = (review: Review) => {
+    setEditReview(review);
+    setIsReviewModalOpen(true);
+  };
+
+  const handleCreateReview = () => {
+    setEditReview(null);
+    setIsReviewModalOpen(true);
+  };
+
+  const handleDelete = async () => {
+    if (!deleteReviewId) return;
+    try {
+      await reviewApi.deleteReview(deleteReviewId);
+      toast.success("Đã xoá đánh giá!");
+      setDeleteReviewId(null);
+
+      // Invalidate các queries liên quan
+      queryClient.invalidateQueries({ queryKey: ["reviews", hotelId] });
+      queryClient.invalidateQueries({ queryKey: ["hotel", hotelId] });
+      queryClient.invalidateQueries({ queryKey: ["availableRooms"] });
+    } catch (err) {
+      const error = err as { message?: string };
+      toast.error(error?.message || "Xoá đánh giá thất bại");
+    }
+  };
+
+  const handleModalSuccess = () => {
+    // Modal sẽ tự động đóng và invalidate queries
+  };
+
+  return (
+    <section id="đánh giá">
+      <h2 className="text-2xl font-bold mb-6 text-foreground">
+        {t("hotel.reviews.title")}
+      </h2>
+
+      {/* Nút mở modal đánh giá */}
+      {user && (
+        <Button onClick={handleCreateReview} className="mb-6">
+          {t("hotel.reviews.write_review") || "Viết đánh giá"}
+        </Button>
       )}
+
+      {/* Modal form đánh giá */}
+      <ReviewFormModal
+        isOpen={isReviewModalOpen}
+        onOpenChange={setIsReviewModalOpen}
+        hotelId={hotelId}
+        editReview={editReview}
+        onSuccess={handleModalSuccess}
+      />
+
       {/* Phần hiển thị đánh giá hoặc illustration */}
       {!reviews || reviews.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-12 text-center">
@@ -376,7 +439,6 @@ const HotelReviews = ({
                               size="sm"
                               variant="outline"
                               onClick={() => handleEdit(review)}
-                              disabled={loading}
                             >
                               Sửa
                             </Button>
@@ -386,7 +448,6 @@ const HotelReviews = ({
                                   size="sm"
                                   variant="destructive"
                                   onClick={() => setDeleteReviewId(review._id)}
-                                  disabled={loading}
                                 >
                                   Xoá
                                 </Button>
@@ -407,10 +468,7 @@ const HotelReviews = ({
                                   >
                                     Huỷ
                                   </AlertDialogCancel>
-                                  <AlertDialogAction
-                                    onClick={handleDelete}
-                                    disabled={loading}
-                                  >
+                                  <AlertDialogAction onClick={handleDelete}>
                                     Xoá
                                   </AlertDialogAction>
                                 </AlertDialogFooter>

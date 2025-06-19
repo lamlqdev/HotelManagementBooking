@@ -92,35 +92,43 @@ export const BookingSummary = ({
 
   // Tính giá giảm và giá cuối cùng nếu có voucher
   const originalPrice = room.price * nights;
-  let discountAmount = 0;
+
+  // Tính giá sau khi áp dụng giảm giá phòng (nếu có)
+  const roomDiscountPrice =
+    room.discountPercent > 0
+      ? room.price * (1 - room.discountPercent / 100)
+      : room.price;
+  const discountedRoomPrice = roomDiscountPrice * nights;
+
+  let voucherDiscountAmount = 0;
   if (selectedVoucher) {
-    // Kiểm tra minOrderValue
+    // Kiểm tra minOrderValue - sử dụng giá sau khi đã giảm giá phòng
     if (
       !selectedVoucher.minOrderValue ||
-      originalPrice >= selectedVoucher.minOrderValue
+      discountedRoomPrice >= selectedVoucher.minOrderValue
     ) {
       if (selectedVoucher.discountType === "percentage") {
-        discountAmount = Math.round(
-          (originalPrice * selectedVoucher.discount) / 100
+        voucherDiscountAmount = Math.round(
+          (discountedRoomPrice * selectedVoucher.discount) / 100
         );
         if (
           selectedVoucher.maxDiscount &&
-          discountAmount > selectedVoucher.maxDiscount
+          voucherDiscountAmount > selectedVoucher.maxDiscount
         ) {
-          discountAmount = selectedVoucher.maxDiscount;
+          voucherDiscountAmount = selectedVoucher.maxDiscount;
         }
       } else {
-        discountAmount = selectedVoucher.discount;
+        voucherDiscountAmount = selectedVoucher.discount;
         if (
           selectedVoucher.maxDiscount &&
-          discountAmount > selectedVoucher.maxDiscount
+          voucherDiscountAmount > selectedVoucher.maxDiscount
         ) {
-          discountAmount = selectedVoucher.maxDiscount;
+          voucherDiscountAmount = selectedVoucher.maxDiscount;
         }
       }
     }
   }
-  const finalPrice = originalPrice - discountAmount;
+  const finalPrice = discountedRoomPrice - voucherDiscountAmount;
 
   return (
     <div className="bg-card rounded-lg shadow-md p-6 sticky top-32">
@@ -174,22 +182,57 @@ export const BookingSummary = ({
             guests={searchParams.capacity}
             rooms={1}
             nightsStay={nights}
-            pricePerNight={room.price}
-            totalPrice={originalPrice}
+            pricePerNight={roomDiscountPrice}
+            totalPrice={discountedRoomPrice}
           />
-          {/* Hiển thị giá giảm và giá cuối cùng nếu có voucher */}
-          {discountAmount > 0 && (
-            <div className="mt-4">
+
+          {/* Hiển thị thông tin giảm giá phòng nếu có */}
+          {room.discountPercent > 0 && (
+            <div className="mt-3 p-3 bg-green-50 rounded-lg">
               <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Giá gốc</span>
+                <span className="text-muted-foreground">Giá gốc phòng</span>
                 <span className="line-through text-muted-foreground">
                   {originalPrice.toLocaleString()}₫
                 </span>
               </div>
               <div className="flex justify-between text-sm mt-1">
-                <span className="text-green-600 font-medium">Giảm giá</span>
                 <span className="text-green-600 font-medium">
-                  - {discountAmount.toLocaleString()}₫
+                  Giảm giá phòng
+                </span>
+                <span className="text-green-600 font-medium">
+                  -{" "}
+                  {Math.round(
+                    originalPrice - discountedRoomPrice
+                  ).toLocaleString()}
+                  ₫
+                </span>
+              </div>
+              <div className="flex justify-between text-sm mt-1">
+                <span className="text-muted-foreground">Giá sau giảm</span>
+                <span className="font-medium">
+                  {discountedRoomPrice.toLocaleString()}₫
+                </span>
+              </div>
+            </div>
+          )}
+
+          {/* Hiển thị giá giảm và giá cuối cùng nếu có voucher */}
+          {voucherDiscountAmount > 0 && (
+            <div className="mt-4">
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">
+                  Giá sau giảm phòng
+                </span>
+                <span className="line-through text-muted-foreground">
+                  {discountedRoomPrice.toLocaleString()}₫
+                </span>
+              </div>
+              <div className="flex justify-between text-sm mt-1">
+                <span className="text-green-600 font-medium">
+                  Giảm giá voucher
+                </span>
+                <span className="text-green-600 font-medium">
+                  - {voucherDiscountAmount.toLocaleString()}₫
                 </span>
               </div>
               <div className="flex justify-between text-base mt-2 font-bold">
@@ -200,7 +243,7 @@ export const BookingSummary = ({
               </div>
             </div>
           )}
-          {discountAmount === 0 && selectedVoucher && (
+          {voucherDiscountAmount === 0 && selectedVoucher && (
             <div className="mt-4 text-sm text-yellow-600">
               Không đủ điều kiện áp dụng voucher này.
             </div>

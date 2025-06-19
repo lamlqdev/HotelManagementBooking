@@ -6,6 +6,7 @@ import {
   SearchHotelsWithAvailableRoomsResponse,
   GetAvailableRoomsByHotelResponse,
   SearchHotelsWithAvailableRoomsParams,
+  GetAvailableRoomsByHotelParams,
 } from "./types";
 
 const baseUrl = "/hotels";
@@ -238,18 +239,7 @@ export const hotelApi = {
   // Lấy danh sách phòng còn trống trong một khách sạn
   getAvailableRoomsByHotel: async (
     hotelId: string,
-    params: {
-      checkIn: string;
-      checkOut: string;
-      capacity: number;
-      minPrice?: number;
-      maxPrice?: number;
-      roomType?: string[];
-      amenities?: string[];
-      sort?: string;
-      page?: number;
-      limit?: number;
-    }
+    params: GetAvailableRoomsByHotelParams
   ): Promise<GetAvailableRoomsByHotelResponse> => {
     const apiParams = {
       ...params,

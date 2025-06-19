@@ -15,6 +15,7 @@ import {
   AlertTriangle,
   UserCheck,
   Pencil,
+  Award,
 } from "lucide-react";
 import { userApi } from "@/api/user/user.api";
 import { notificationApi } from "@/api/notification/notification.api";
@@ -265,6 +266,26 @@ export default function UserDetailPage() {
                       <Shield className="h-4 w-4 text-muted-foreground" />
                       <Badge variant="outline">
                         {t(`admin.users.roles.${user.data.role}`)}
+                      </Badge>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground">
+                      {t("admin.users.details.tier")}
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <Award className="h-4 w-4 text-muted-foreground" />
+                      <Badge
+                        variant="outline"
+                        className={
+                          user.data.tier === "Gold"
+                            ? "border-yellow-500 text-yellow-600 bg-yellow-50"
+                            : user.data.tier === "Silver"
+                            ? "border-gray-400 text-gray-600 bg-gray-50"
+                            : "border-amber-600 text-amber-700 bg-amber-50"
+                        }
+                      >
+                        {user.data.tier}
                       </Badge>
                     </div>
                   </div>

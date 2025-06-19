@@ -207,6 +207,23 @@ const SearchResultPage = () => {
     params.append("checkIn", finalCheckIn);
     params.append("checkOut", finalCheckOut);
     params.append("capacity", capacity.toString());
+
+    // Pass all filter parameters
+    if (minPrice) {
+      params.append("minPrice", minPrice);
+    }
+    if (maxPrice) {
+      params.append("maxPrice", maxPrice);
+    }
+    if (minRating) {
+      params.append("minRating", minRating);
+    }
+    if (maxRating) {
+      params.append("maxRating", maxRating);
+    }
+    if (roomType.length > 0) {
+      params.append("roomType", roomType.join(","));
+    }
     if (roomAmenities.length > 0) {
       params.append("roomAmenities", roomAmenities.join(","));
     }

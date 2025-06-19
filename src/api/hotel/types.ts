@@ -102,3 +102,18 @@ export interface GetAvailableRoomsByHotelResponse {
   availableRoomTypes?: string[];
   availableAmenities?: string[];
 }
+
+export interface GetAvailableRoomsByHotelParams {
+  checkIn: string;
+  checkOut: string;
+  capacity: number;
+  minPrice?: number;
+  maxPrice?: number;
+  minRating?: number;
+  maxRating?: number;
+  roomType?: string[];
+  amenities?: string[];
+  sort?: string;
+  page?: number;
+  limit?: number;
+}

@@ -29,8 +29,13 @@ const HotelDetailPage = () => {
   const checkIn = searchParams.get("checkIn");
   const checkOut = searchParams.get("checkOut");
   const capacity = searchParams.get("capacity");
-  const amenities = searchParams.get("amenities")?.split(",") || [];
+  const minPrice = searchParams.get("minPrice");
+  const maxPrice = searchParams.get("maxPrice");
+  const minRating = searchParams.get("minRating");
+  const maxRating = searchParams.get("maxRating");
+  const roomType = searchParams.get("roomType")?.split(",") || [];
   const roomAmenities = searchParams.get("roomAmenities")?.split(",") || [];
+  const hotelAmenities = searchParams.get("hotelAmenities")?.split(",") || [];
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -52,22 +57,38 @@ const HotelDetailPage = () => {
   });
 
   const { data: roomsResponse, isLoading: isLoadingRooms } = useQuery({
-    queryKey: ["availableRooms", id, checkIn, checkOut, capacity, amenities],
+    queryKey: [
+      "availableRooms",
+      id,
+      checkIn,
+      checkOut,
+      capacity,
+      minPrice,
+      maxPrice,
+      minRating,
+      maxRating,
+      roomType,
+      hotelAmenities,
+    ],
     queryFn: () =>
       hotelApi.getAvailableRoomsByHotel(id as string, {
         checkIn: checkIn || "",
         checkOut: checkOut || "",
         capacity: capacity ? parseInt(capacity) : 1,
-        amenities: amenities.length > 0 ? amenities : undefined,
+        minPrice: minPrice ? parseInt(minPrice) : undefined,
+        maxPrice: maxPrice ? parseInt(maxPrice) : undefined,
+        minRating: minRating ? parseInt(minRating) : undefined,
+        maxRating: maxRating ? parseInt(maxRating) : undefined,
+        roomType: roomType.length > 0 ? roomType : undefined,
+        amenities:
+          [...roomAmenities, ...hotelAmenities].filter(Boolean).length > 0
+            ? [...roomAmenities, ...hotelAmenities].filter(Boolean)
+            : undefined,
       }),
     enabled: !!id && !!checkIn && !!checkOut && !!capacity,
   });
 
-  const {
-    data: reviewsResponse,
-    isLoading: isLoadingReviews,
-    refetch: refetchReviews,
-  } = useQuery({
+  const { data: reviewsResponse, isLoading: isLoadingReviews } = useQuery({
     queryKey: ["reviews", id],
     queryFn: () => reviewApi.getHotelReviews(id as string),
     enabled: !!id,
@@ -84,9 +105,28 @@ const HotelDetailPage = () => {
     newParams.set("checkIn", searchParams.checkIn);
     newParams.set("checkOut", searchParams.checkOut);
     newParams.set("capacity", searchParams.capacity.toString());
-    // Preserve amenities when updating search params
-    if (amenities.length > 0) {
-      newParams.set("amenities", amenities.join(","));
+
+    // Preserve all filter parameters when updating search params
+    if (minPrice) {
+      newParams.set("minPrice", minPrice);
+    }
+    if (maxPrice) {
+      newParams.set("maxPrice", maxPrice);
+    }
+    if (minRating) {
+      newParams.set("minRating", minRating);
+    }
+    if (maxRating) {
+      newParams.set("maxRating", maxRating);
+    }
+    if (roomType.length > 0) {
+      newParams.set("roomType", roomType.join(","));
+    }
+    if (roomAmenities.length > 0) {
+      newParams.set("roomAmenities", roomAmenities.join(","));
+    }
+    if (hotelAmenities.length > 0) {
+      newParams.set("hotelAmenities", hotelAmenities.join(","));
     }
     setSearchParams(newParams);
   };
@@ -220,7 +260,9 @@ const HotelDetailPage = () => {
             checkOut={checkOut || undefined}
             capacity={capacity ? parseInt(capacity) : undefined}
             hotelId={hotel._id}
-            selectedAmenities={roomAmenities}
+            selectedAmenities={[...roomAmenities, ...hotelAmenities].filter(
+              Boolean
+            )}
           />
         </div>
 
@@ -229,7 +271,6 @@ const HotelDetailPage = () => {
             reviewStats={reviewStats}
             reviews={reviews}
             hotelId={hotel._id}
-            onReviewCreated={refetchReviews}
           />
         </div>
       </div>

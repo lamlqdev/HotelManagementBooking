@@ -34,7 +34,7 @@ const HotelRooms = ({
   const filteredRooms =
     selectedAmenities.length > 0
       ? rooms.filter((room) =>
-          selectedAmenities.every((amenityId) =>
+          selectedAmenities.some((amenityId) =>
             room.amenities.some((amenity) => amenity._id === amenityId)
           )
         )
@@ -124,9 +124,27 @@ const HotelRooms = ({
               </div>
               {/* Giá và nút đặt phòng */}
               <div className="flex flex-col items-end min-w-[140px] ml-6">
-                <p className="text-2xl font-bold text-primary mb-1">
-                  {formatPrice(room.price)}
-                </p>
+                <div className="text-right mb-2">
+                  {room.discountPercent > 0 ? (
+                    <>
+                      <p className="text-2xl font-bold text-primary mb-1">
+                        {formatPrice(
+                          room.price * (1 - room.discountPercent / 100)
+                        )}
+                      </p>
+                      <p className="text-sm text-muted-foreground line-through">
+                        {formatPrice(room.price)}
+                      </p>
+                      <Badge variant="destructive" className="text-xs">
+                        -{room.discountPercent}%
+                      </Badge>
+                    </>
+                  ) : (
+                    <p className="text-2xl font-bold text-primary mb-1">
+                      {formatPrice(room.price)}
+                    </p>
+                  )}
+                </div>
                 <p className="text-xs text-muted-foreground mb-2">
                   {t("hotel.rooms.per_night")}
                 </p>

@@ -1714,6 +1714,7 @@
         "phone": "Số điện thoại",
         "role": "Vai trò",
         "status": "Trạng thái",
+        "tier": "Hạng thành viên",
         "emailVerified": "Xác thực email",
         "createdAt": "Ngày tạo",
         "updatedAt": "Ngày cập nhật",

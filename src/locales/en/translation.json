@@ -1695,6 +1695,7 @@
         "phone": "Phone Number",
         "role": "Role",
         "status": "Status",
+        "tier": "Membership Tier",
         "emailVerified": "Email Verified",
         "createdAt": "Created At",
         "updatedAt": "Updated At",
