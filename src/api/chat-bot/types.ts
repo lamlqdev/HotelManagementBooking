@@ -30,6 +30,7 @@ export interface ChatBotResponse {
   sessionId: string;
   response: {
     responseText?: string;
+    
     intent?: string;
     parameters?: ChatBotParameters;
   };

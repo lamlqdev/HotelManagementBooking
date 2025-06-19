@@ -9,7 +9,7 @@ const ChatBot = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { t } = useTranslation();
   const [messages, setMessages] = useState<
-    Array<{ text: string; isBot: boolean }>
+    Array<{ text?: string; isBot: boolean; richContent?: Array<any> }>
   >([]);
   const [input, setInput] = useState("");
   const [sessionId] = useState(() => uuidv4());
@@ -40,7 +40,15 @@ const ChatBot = () => {
 
       if (response.success && response.response.responseText) {
         const botResponse = response.response.responseText;
-        setMessages((prev) => [...prev, { text: botResponse, isBot: true }]);
+        const richContent = response.response.richContent;
+        setMessages((prev) => [
+          ...prev,
+          {
+            text: botResponse,
+            isBot: true,
+            ...(richContent ? { richContent } : {}),
+          },
+        ]);
       }
     } catch (error) {
       console.error("ChatBot error:", error);
@@ -102,7 +110,30 @@ const ChatBot = () => {
                         : "bg-primary text-white"
                     }`}
                   >
-                    {msg.text}
+                    {/* Hiển thị text nếu có */}
+                    {msg.text && <div>{msg.text}</div>}
+                    {/* Hiển thị richContent nếu có */}
+                    {msg.richContent && msg.richContent.map((card, i) => (
+                      <div key={i} className="my-2 p-3 border rounded-lg bg-white shadow">
+                        <div className="font-bold">{card.title}</div>
+                        <div className="text-xs text-gray-500">{card.subtitle}</div>
+                        <ul className="mt-1 mb-2 text-sm">
+                          {card.text && card.text.map((line: string, idx: number) => (
+                            <li key={idx}>{line}</li>
+                          ))}
+                        </ul>
+                        {card.button && (
+                          <a
+                            href={card.button.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-block mt-2 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                          >
+                            {card.button.text}
+                          </a>
+                        )}
+                      </div>
+                    ))}
                   </div>
                 </div>
               ))}
