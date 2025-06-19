@@ -30,9 +30,9 @@ export interface ChatBotResponse {
   sessionId: string;
   response: {
     responseText?: string;
-    
     intent?: string;
     parameters?: ChatBotParameters;
+    richContent?: ChatBotRichContent[];
   };
 }
 
@@ -57,3 +57,13 @@ export interface ChatBotSessionResponse {
   message?: string;
   error?: string;
 }
+
+export type ChatBotRichContent = {
+  title: string;
+  subtitle?: string;
+  text?: string[];
+  button?: {
+    text: string;
+    link: string;
+  };
+};
