@@ -1,6 +1,6 @@
 import { FaStar, FaInfoCircle } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { reviewApi } from "@/api/review/review.api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -81,6 +81,22 @@ const ReviewFormModal = ({
   const [isAnonymous, setIsAnonymous] = useState(
     editReview?.isAnonymous || false
   );
+
+  // Cập nhật form values khi editReview thay đổi
+  useEffect(() => {
+    if (editReview) {
+      setRating(editReview.rating);
+      setTitle(editReview.title);
+      setComment(editReview.comment);
+      setIsAnonymous(editReview.isAnonymous);
+    } else {
+      // Reset form khi tạo review mới
+      setRating(0);
+      setTitle("");
+      setComment("");
+      setIsAnonymous(false);
+    }
+  }, [editReview]);
 
   const createReviewMutation = useMutation({
     mutationFn: (data: {
