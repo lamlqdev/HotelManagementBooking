@@ -24,36 +24,35 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     retry: false,
   });
 
-  const { mutate: refreshTokenMutation, isPending: isLoadingRefresh } =
-    useMutation({
-      mutationFn: () => authApi.refreshToken(),
-      onSuccess: async (refreshResponse) => {
-        if (refreshResponse.success && refreshResponse.accessToken) {
-          try {
-            const newUserResponse = await authApi.getMe();
-            if (newUserResponse.success) {
-              dispatch(setUser(newUserResponse.data));
-              const savedPath = localStorage.getItem("savedPath");
-              if (savedPath) {
-                localStorage.removeItem("savedPath");
-                navigate(savedPath);
-              }
-            }
-          } catch (error) {
-            if (error instanceof AxiosError && error.response?.status === 401) {
-              handleAuthError();
-            } else {
-              handleAuthError();
+  const { isPending: isLoadingRefresh } = useMutation({
+    mutationFn: () => authApi.refreshToken(),
+    onSuccess: async (refreshResponse) => {
+      if (refreshResponse.success && refreshResponse.accessToken) {
+        try {
+          const newUserResponse = await authApi.getMe();
+          if (newUserResponse.success) {
+            dispatch(setUser(newUserResponse.data));
+            const savedPath = localStorage.getItem("savedPath");
+            if (savedPath) {
+              localStorage.removeItem("savedPath");
+              navigate(savedPath);
             }
           }
-        } else {
-          handleAuthError();
+        } catch (error) {
+          if (error instanceof AxiosError && error.response?.status === 401) {
+            handleAuthError();
+          } else {
+            handleAuthError();
+          }
         }
-      },
-      onError: () => {
+      } else {
         handleAuthError();
-      },
-    });
+      }
+    },
+    onError: () => {
+      handleAuthError();
+    },
+  });
 
   const handleAuthError = async () => {
     localStorage.setItem("savedPath", location.pathname);
@@ -70,11 +69,11 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         if (userResponse.success) {
           dispatch(setUser(userResponse.data));
         } else {
-          await handleAuthError();
+          handleAuthError();
         }
       } catch (error) {
         if (error instanceof AxiosError && error.response?.status === 401) {
-          await refreshTokenMutation();
+          handleAuthError();
         } else {
           setIsInitialized(true);
         }
@@ -83,7 +82,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     initializeAuth();
-  }, [dispatch, navigate, refreshTokenMutation]);
+  }, []);
 
   if (!isInitialized || isLoadingUser || isLoadingRefresh) {
     return (
