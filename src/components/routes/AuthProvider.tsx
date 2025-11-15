@@ -6,7 +6,7 @@ import { AxiosError } from "axios";
 import { toast } from "sonner";
 
 import { useAppDispatch } from "@/store/hooks";
-import { setUser, setCredentials, resetAuth } from "@/features/auth/authSlice";
+import { setUser, resetAuth } from "@/features/auth/authSlice";
 
 import { authApi } from "@/api/auth/auth.api";
 import LoadingSvg from "@/assets/illustration/Loading.svg";
@@ -32,15 +32,6 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           try {
             const newUserResponse = await authApi.getMe();
             if (newUserResponse.success) {
-              const storedRefreshToken = localStorage.getItem("refreshToken");
-              dispatch(
-                setCredentials({
-                  accessToken: refreshResponse.accessToken,
-                  refreshToken:
-                    refreshResponse.refreshToken ||
-                    (storedRefreshToken as string),
-                })
-              );
               dispatch(setUser(newUserResponse.data));
               const savedPath = localStorage.getItem("savedPath");
               if (savedPath) {
@@ -66,8 +57,6 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const handleAuthError = async () => {
     localStorage.setItem("savedPath", location.pathname);
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
     dispatch(resetAuth());
     toast.error("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại");
     await navigate("/login");
@@ -75,30 +64,19 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const initializeAuth = async () => {
-      const accessToken = localStorage.getItem("accessToken");
-      const refreshToken = localStorage.getItem("refreshToken");
+      try {
+        const userResponse = await authApi.getMe();
 
-      if (accessToken && refreshToken) {
-        try {
-          const userResponse = await authApi.getMe();
-
-          if (userResponse.success) {
-            dispatch(
-              setCredentials({
-                accessToken,
-                refreshToken,
-              })
-            );
-            dispatch(setUser(userResponse.data));
-          } else {
-            await handleAuthError();
-          }
-        } catch (error) {
-          if (error instanceof AxiosError && error.response?.status === 401) {
-            await refreshTokenMutation();
-          } else {
-            await handleAuthError();
-          }
+        if (userResponse.success) {
+          dispatch(setUser(userResponse.data));
+        } else {
+          await handleAuthError();
+        }
+      } catch (error) {
+        if (error instanceof AxiosError && error.response?.status === 401) {
+          await refreshTokenMutation();
+        } else {
+          setIsInitialized(true);
         }
       }
       setIsInitialized(true);

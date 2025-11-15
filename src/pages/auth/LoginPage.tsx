@@ -22,7 +22,7 @@ import {
 
 import { authApi } from "@/api/auth/auth.api";
 import { loginSchema, LoginFormData, ApiError } from "@/api/auth/types";
-import { setCredentials, setUser, resetAuth } from "@/features/auth/authSlice";
+import { setUser, resetAuth } from "@/features/auth/authSlice";
 import { useAppDispatch } from "@/store/hooks";
 import { Logo } from "@/components/ui/logo";
 
@@ -54,27 +54,11 @@ const LoginPage = () => {
       return result;
     },
     onSuccess: async (response) => {
-      if (response.success && response.accessToken) {
-        localStorage.setItem("accessToken", response.accessToken);
-        if (response.refreshToken) {
-          localStorage.setItem("refreshToken", response.refreshToken);
-        }
-
-        dispatch(
-          setCredentials({
-            accessToken: response.accessToken,
-            refreshToken: response.refreshToken || "",
-          })
-        );
-
+      if (response.success) {
         try {
           const userResponse = await authApi.getMe();
           if (userResponse.success) {
-            // Kiểm tra trạng thái của user
             if (userResponse.data.status !== "active") {
-              // Nếu user không active, xóa token và thông báo
-              localStorage.removeItem("accessToken");
-              localStorage.removeItem("refreshToken");
               dispatch(resetAuth());
               toast.error(
                 "Tài khoản của bạn đã bị khóa hoặc chưa được kích hoạt"
@@ -85,7 +69,6 @@ const LoginPage = () => {
             dispatch(setUser(userResponse.data));
             toast.success("Đăng nhập thành công");
 
-            // Chuyển hướng dựa trên role
             const role = userResponse.data.role;
             switch (role) {
               case "admin":

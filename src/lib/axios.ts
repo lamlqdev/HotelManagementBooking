@@ -1,22 +1,19 @@
 import axios from "axios";
-import { authApi } from "@/api/auth/auth.api";
 
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   withCredentials: true,
 });
 
-// Biến để theo dõi số lần gọi refreshToken
 let isRefreshing = false;
-let refreshSubscribers: ((token: string) => void)[] = [];
+let refreshSubscribers: Array<{
+  resolve: () => void;
+  reject: (error: unknown) => void;
+}> = [];
 
 // Add request interceptor
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("accessToken");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
     return config;
   },
   (error) => {
@@ -30,18 +27,22 @@ axiosInstance.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    // Chỉ thực hiện refresh token khi có accessToken trong localStorage
-    if (
-      error.response?.status === 401 &&
-      !originalRequest._retry &&
-      localStorage.getItem("accessToken")
-    ) {
+    if (originalRequest.url?.includes("/refresh-token")) {
+      return Promise.reject(error);
+    }
+
+    // Chỉ thực hiện refresh token khi gặp lỗi 401
+    if (error.response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
         // Nếu đang refresh, thêm request vào hàng đợi
-        return new Promise((resolve) => {
-          refreshSubscribers.push((token: string) => {
-            originalRequest.headers.Authorization = `Bearer ${token}`;
-            resolve(axiosInstance(originalRequest));
+        return new Promise((resolve, reject) => {
+          refreshSubscribers.push({
+            resolve: () => {
+              resolve(axiosInstance(originalRequest));
+            },
+            reject: (err: unknown) => {
+              reject(err);
+            },
           });
         });
       }
@@ -50,30 +51,29 @@ axiosInstance.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        // Gọi API refresh token thông qua authApi
-        const response = await authApi.refreshToken();
+        const response = await axiosInstance.post("/auth/refresh-token");
 
-        if (response.accessToken) {
-          localStorage.setItem("accessToken", response.accessToken);
-          axiosInstance.defaults.headers.common[
-            "Authorization"
-          ] = `Bearer ${response.accessToken}`;
-
-          // Thực hiện lại các request đang đợi
-          refreshSubscribers.forEach((callback) => {
-            if (response.accessToken) {
-              callback(response.accessToken);
-            }
+        if (response.data?.accessToken) {
+          refreshSubscribers.forEach((subscriber) => {
+            subscriber.resolve();
           });
           refreshSubscribers = [];
 
           return axiosInstance(originalRequest);
+        } else {
+          throw new Error("Không nhận được access token mới");
         }
-      } catch (refreshError) {
-        // Nếu refresh token cũng hết hạn, logout user
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
-        window.location.href = "/login";
+      } catch (refreshError: unknown) {
+        // Nếu refresh token cũng hết hạn, reject tất cả request trong queue
+        refreshSubscribers.forEach((subscriber) => {
+          subscriber.reject(refreshError);
+        });
+        refreshSubscribers = [];
+
+        if (!window.location.pathname.includes("/login")) {
+          window.location.href = "/login";
+        }
+
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;

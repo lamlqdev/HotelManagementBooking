@@ -4,11 +4,10 @@ import { AxiosError } from "axios";
 import { AuthState } from "./types";
 import { clearCurrentHotel } from "../hotel/hotelSlice";
 import { queryClient } from "@/lib/react-query";
+import { authApi } from "@/api/auth/auth.api";
 
 const initialState: AuthState = {
   user: null,
-  accessToken: null,
-  refreshToken: null,
   isAuthenticated: false,
 };
 
@@ -16,15 +15,10 @@ export const logout = createAsyncThunk(
   "auth/logout",
   async (_, { dispatch }) => {
     try {
-      // Clear localStorage
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
+      await authApi.logout();
 
-      // Reset state
       dispatch(resetAuth());
       dispatch(clearCurrentHotel());
-
-      // Invalidate tất cả các queries
       queryClient.clear();
 
       return { success: true };
@@ -38,6 +32,9 @@ export const logout = createAsyncThunk(
       } else {
         console.error("Lỗi không xác định:", error);
       }
+      dispatch(resetAuth());
+      dispatch(clearCurrentHotel());
+      queryClient.clear();
       throw error;
     }
   }
@@ -49,23 +46,14 @@ const authSlice = createSlice({
   reducers: {
     resetAuth: (state) => {
       state.user = null;
-      state.accessToken = null;
-      state.refreshToken = null;
       state.isAuthenticated = false;
-    },
-    setCredentials: (
-      state,
-      action: PayloadAction<{ accessToken: string; refreshToken: string }>
-    ) => {
-      state.accessToken = action.payload.accessToken;
-      state.refreshToken = action.payload.refreshToken;
-      state.isAuthenticated = true;
     },
     setUser: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
+      state.isAuthenticated = true;
     },
   },
 });
 
-export const { setCredentials, setUser, resetAuth } = authSlice.actions;
+export const { setUser, resetAuth } = authSlice.actions;
 export default authSlice.reducer;

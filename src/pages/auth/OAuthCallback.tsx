@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from "react-router";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { useAppDispatch } from "@/store/hooks";
-import { setCredentials, setUser, resetAuth } from "@/features/auth/authSlice";
+import { setUser, resetAuth } from "@/features/auth/authSlice";
 import { authApi } from "@/api/auth/auth.api";
 
 const OAuthCallback = () => {
@@ -14,8 +14,6 @@ const OAuthCallback = () => {
 
   useEffect(() => {
     const handleOAuthCallback = async () => {
-      const token = searchParams.get("token");
-      const refreshToken = searchParams.get("refreshToken");
       const error = searchParams.get("error");
       const message = searchParams.get("message");
 
@@ -27,28 +25,10 @@ const OAuthCallback = () => {
         return;
       }
 
-      if (!token) {
-        toast.error(t("auth.login.error.noToken"));
-        navigate("/login");
-        return;
-      }
-
       try {
-        // Lưu access token vào localStorage
-        localStorage.setItem("accessToken", token);
-        localStorage.setItem("refreshToken", refreshToken || "");
-        dispatch(
-          setCredentials({
-            accessToken: token,
-            refreshToken: refreshToken || "",
-          })
-        );
-
-        // Lấy thông tin người dùng
         const userResponse = await authApi.getMe();
         if (userResponse.success && userResponse.data) {
           if (userResponse.data.status !== "active") {
-            localStorage.removeItem("accessToken");
             dispatch(resetAuth());
             toast.error(t("auth.login.error.accountInactive"));
             navigate("/login");
@@ -58,7 +38,6 @@ const OAuthCallback = () => {
           dispatch(setUser(userResponse.data));
           toast.success(t("auth.login.success"));
 
-          // Chuyển hướng dựa trên vai trò
           const role = userResponse.data.role;
           switch (role) {
             case "admin":
@@ -78,7 +57,6 @@ const OAuthCallback = () => {
         }
       } catch (error) {
         console.error("Lỗi callback OAuth:", error);
-        localStorage.removeItem("accessToken");
         dispatch(resetAuth());
         toast.error(t("auth.login.error.fetchUser"));
         navigate("/login");
