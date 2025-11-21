@@ -87,7 +87,19 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   if (!isInitialized || isLoadingUser || isLoadingRefresh) {
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-background">
-        <img src={LoadingSvg} alt="Loading" className="w-96 h-96" />
+        <div className="flex flex-col items-center gap-6">
+          <div className="relative">
+            <div className="absolute inset-0 animate-ping rounded-full bg-primary/20 blur-3xl" />
+            <img
+              src={LoadingSvg}
+              alt="Loading"
+              className="relative w-80 h-80 animate-bounce drop-shadow-lg"
+            />
+          </div>
+          <p className="text-lg font-semibold text-muted-foreground animate-pulse">
+            Đang tải dữ liệu...
+          </p>
+        </div>
       </div>
     );
   }
