@@ -39,11 +39,8 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             }
           }
         } catch (error) {
-          if (error instanceof AxiosError && error.response?.status === 401) {
-            handleAuthError();
-          } else {
-            handleAuthError();
-          }
+          console.error("Lỗi khi refresh token:", error);
+          handleAuthError();
         }
       } else {
         handleAuthError();
@@ -57,8 +54,8 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const handleAuthError = async () => {
     localStorage.setItem("savedPath", location.pathname);
     dispatch(resetAuth());
-    toast.error("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại");
-    await navigate("/login");
+    // toast.error("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại");
+    // await navigate("/login");
   };
 
   useEffect(() => {

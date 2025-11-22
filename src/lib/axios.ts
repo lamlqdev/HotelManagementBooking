@@ -70,9 +70,9 @@ axiosInstance.interceptors.response.use(
         });
         refreshSubscribers = [];
 
-        if (!window.location.pathname.includes("/login")) {
-          window.location.href = "/login";
-        }
+        // if (!window.location.pathname.includes("/login")) {
+        //   window.location.href = "/login";
+        // }
 
         return Promise.reject(refreshError);
       } finally {
