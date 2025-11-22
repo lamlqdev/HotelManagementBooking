@@ -3,7 +3,6 @@ import { useNavigate, useLocation } from "react-router";
 import { useQuery, useMutation } from "@tanstack/react-query";
 
 import { AxiosError } from "axios";
-import { toast } from "sonner";
 
 import { useAppDispatch } from "@/store/hooks";
 import { setUser, resetAuth } from "@/features/auth/authSlice";
