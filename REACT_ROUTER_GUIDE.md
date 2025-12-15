@@ -8,10 +8,7 @@
 - [4. Dynamic Routes & Parameters](#4-dynamic-routes--parameters)
 - [5. Navigation](#5-navigation)
 - [6. Route Protection](#6-route-protection)
-- [7. Advanced Patterns](#7-advanced-patterns)
-- [8. Common Hooks](#8-common-hooks)
-- [9. Routing Flow](#9-routing-flow)
-- [10. Best Practices](#10-best-practices)
+- [7. Routing Flow](#7-routing-flow)
 
 ---
 
@@ -534,145 +531,7 @@ The `Navigate` component immediately redirects when rendered. Useful in route gu
 
 ---
 
-## 7. Advanced Patterns
-
-### Complete Route Structure
-
-Here's how a real application organizes routes:
-
-**File: `App.tsx` (Simplified)**
-
-```tsx
-function App() {
-  return (
-    <Routes>
-      {/* Public Routes */}
-      <Route element={<Layout />}>
-        <Route index element={<HomePage />} />
-        <Route path="/search" element={<SearchResultPage />} />
-        <Route path="/hoteldetail/:id" element={<HotelDetailPage />} />
-      </Route>
-
-      {/* Auth Routes - Only when NOT logged in */}
-      <Route element={<PublicRoute />}>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-      </Route>
-
-      {/* User Routes - Requires user role */}
-      <Route element={<PrivateRoute role="user" />}>
-        <Route element={<Layout />}>
-          <Route path="/profile" element={<UserProfilePage />} />
-          <Route path="/bookings" element={<MyBookingPage />} />
-        </Route>
-      </Route>
-
-      {/* Partner Routes - Requires partner role */}
-      <Route element={<PrivateRoute role="partner" />}>
-        <Route path="/partner" element={<PartnerLayout />}>
-          <Route path="revenue" element={<RevenuePage />} />
-          <Route path="hotels/info" element={<HotelInfoPage />} />
-        </Route>
-      </Route>
-
-      {/* Admin Routes - Requires admin role */}
-      <Route element={<PrivateRoute role="admin" />}>
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route path="dashboard" element={<DashboardPage />} />
-          <Route path="partners" element={<PartnerApproval />} />
-        </Route>
-      </Route>
-
-      {/* 404 - Must be last */}
-      <Route path="*" element={<NotFoundPage />} />
-    </Routes>
-  );
-}
-```
-
-### Route Organization Tips
-
-1. **Group by functionality**: Public, Auth, User, Partner, Admin
-2. **Use comments**: Document route groups
-3. **Order matters**: More specific routes before general ones
-4. **404 last**: Catch-all route must be at the end
-
----
-
-## 8. Common Hooks
-
-### useNavigate
-
-Programmatic navigation.
-
-```tsx
-const navigate = useNavigate();
-
-// Navigate
-navigate("/about");
-
-// Navigate with replace
-navigate("/login", { replace: true });
-
-// Navigate with state
-navigate("/detail", { state: { data: 123 } });
-
-// Navigate back/forward
-navigate(-1); // back
-navigate(1); // forward
-```
-
-### useLocation
-
-Access current location.
-
-```tsx
-const location = useLocation();
-
-location.pathname; // "/hoteldetail/123"
-location.search; // "?checkIn=2024-01-01"
-location.state; // State passed via navigate()
-location.hash; // "#section"
-```
-
-### useParams
-
-Get route parameters.
-
-```tsx
-// Route: /hoteldetail/:id
-const { id } = useParams<{ id: string }>();
-
-// Route: /booking/:roomId/:hotelId
-const { roomId, hotelId } = useParams<{
-  roomId: string;
-  hotelId: string;
-}>();
-```
-
-### useSearchParams
-
-Work with query strings.
-
-```tsx
-const [searchParams, setSearchParams] = useSearchParams();
-
-// Get
-const page = searchParams.get("page");
-
-// Set
-setSearchParams({ page: "2", sort: "price" });
-
-// Update
-setSearchParams({
-  ...Object.fromEntries(searchParams),
-  page: "3",
-});
-```
-
----
-
-## 9. Routing Flow
+## 7. Routing Flow
 
 ### User Journey: Booking a Hotel
 
@@ -788,11 +647,79 @@ React Router enables powerful client-side routing in React applications. Key tak
 2. **Routes/Route** define your route structure
 3. **Outlet** renders nested child routes
 4. **Link** replaces `<a>` tags for internal navigation
-5. **useNavigate** enables programmatic navigation
-6. **useParams** accesses route parameters
-7. **useSearchParams** works with query strings
-8. **PrivateRoute/PublicRoute** protect routes
-9. **Navigate** component handles redirects
+5. **PrivateRoute/PublicRoute** protect routes
+6. **Navigate** component handles redirects
+
+### Common Hooks
+
+#### useNavigate
+
+Programmatic navigation.
+
+```tsx
+const navigate = useNavigate();
+
+// Navigate
+navigate("/about");
+
+// Navigate with replace
+navigate("/login", { replace: true });
+
+// Navigate with state
+navigate("/detail", { state: { data: 123 } });
+
+// Navigate back/forward
+navigate(-1); // back
+navigate(1); // forward
+```
+
+#### useLocation
+
+Access current location.
+
+```tsx
+const location = useLocation();
+
+location.pathname; // "/hoteldetail/123"
+location.search; // "?checkIn=2024-01-01"
+location.state; // State passed via navigate()
+location.hash; // "#section"
+```
+
+#### useParams
+
+Get route parameters.
+
+```tsx
+// Route: /hoteldetail/:id
+const { id } = useParams<{ id: string }>();
+
+// Route: /booking/:roomId/:hotelId
+const { roomId, hotelId } = useParams<{
+  roomId: string;
+  hotelId: string;
+}>();
+```
+
+#### useSearchParams
+
+Work with query strings.
+
+```tsx
+const [searchParams, setSearchParams] = useSearchParams();
+
+// Get
+const page = searchParams.get("page");
+
+// Set
+setSearchParams({ page: "2", sort: "price" });
+
+// Update
+setSearchParams({
+  ...Object.fromEntries(searchParams),
+  page: "3",
+});
+```
 
 This project demonstrates a production-ready routing setup with authentication, role-based access control, nested layouts, and dynamic routes.
 

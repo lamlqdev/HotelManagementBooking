@@ -40,14 +40,13 @@ A comprehensive hotel management system built with the MERN stack (MongoDB, Expr
 
 - **React 19** with TypeScript
 - **Vite** for fast development and building
-- **Redux Toolkit** for state management
-- **React Query** for server state management
+- **[Redux Toolkit](./REDUX_TOOLKIT_GUIDE.md)** for state management
+- **[React Query](./REACT_QUERY_GUIDE.md)** for server state management
 - **[React Router](./REACT_ROUTER_GUIDE.md)** for navigation
 - **Tailwind CSS** for styling
 - **Shadcn/ui** for UI components
-- **React Hook Form** for form handling
-- **Zod** for schema validation
-- **i18next** for internationalization
+- **[React Hook Form & Zod](./REACT_HOOK_FORM_ZOD_GUIDE.md)** for form handling and validation
+- **[i18next](./I18NEXT_GUIDE.md)** for internationalization
 
 ### Backend
 
@@ -152,7 +151,7 @@ The application supports multiple languages:
 - English (en)
 - Vietnamese (vi)
 
-Language files are located in `src/locales/` and can be easily extended.
+Language files are located in `src/locales/` and can be easily extended. See the [i18next Guide](./I18NEXT_GUIDE.md) for detailed information.
 
 ## 🔧 Configuration
 
