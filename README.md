@@ -42,7 +42,7 @@ A comprehensive hotel management system built with the MERN stack (MongoDB, Expr
 - **Vite** for fast development and building
 - **Redux Toolkit** for state management
 - **React Query** for server state management
-- **React Router** for navigation
+- **[React Router](./REACT_ROUTER_GUIDE.md)** for navigation
 - **Tailwind CSS** for styling
 - **Shadcn/ui** for UI components
 - **React Hook Form** for form handling
