@@ -11,7 +11,6 @@ import HotelRooms from "@/components/user/hotel-detail/HotelRooms";
 import HotelReviews from "@/components/user/hotel-detail/HotelReviews";
 import ChatSupport from "@/components/common/ChatSupport";
 import RoomSearchBox from "@/components/user/hotel-detail/RoomSearchBox";
-import HotelMap from "@/components/user/hotel-detail/HotelMap";
 
 import { hotelApi } from "@/api/hotel/hotel.api";
 import { amenitiesApi } from "@/api/amenities/amenities.api";
@@ -239,10 +238,6 @@ const HotelDetailPage = () => {
             description={hotel.description}
             amenities={hotelAmenitiesData}
           />
-          <div className="mt-8">
-            <h3 className="text-xl font-semibold mb-4">Vị trí</h3>
-            <HotelMap address={hotel.address} />
-          </div>
         </div>
 
         <div id="phòng">
