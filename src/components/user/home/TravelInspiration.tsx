@@ -23,7 +23,7 @@ export default function TravelInspiration() {
   const navigate = useNavigate();
 
   // Lấy danh sách bài viết bằng react-query
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["posts"],
     queryFn: postApi.getPosts,
   });
@@ -38,10 +38,10 @@ export default function TravelInspiration() {
   ).slice(0, 2);
 
   return (
-    <section className="py-12 bg-background">
+    <section className="md:py-12 py-6 bg-background md:px-0 px-4">
       <div className="container">
         <div className="flex items-center justify-between mb-8">
-          <h2 className="text-3xl font-bold">
+          <h2 className="text-xl md:text-3xl font-bold">
             {t("travel.inspiration.title")}
           </h2>
           <Button
@@ -64,41 +64,37 @@ export default function TravelInspiration() {
               className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-6">
-              <h3 className="text-2xl font-bold text-white mb-4">
+              <h3 className="text-xl md:text-2xl font-bold text-white mb-4">
                 {t(guideCard.title)}
               </h3>
             </div>
           </div>
           {/* Loading skeleton cho 2 bài viết */}
-          {isLoading ? (
-            [1, 2].map((i) => (
-              <Skeleton key={i} className="aspect-[4/3] w-full h-full" />
-            ))
-          ) : isError ? (
-            <div className="col-span-2 text-red-500">{t("common.error")}</div>
-          ) : (
-            posts.map((post, i) => (
-              <div
-                key={post.id || post._id || i}
-                className="relative rounded-lg overflow-hidden group cursor-pointer aspect-[4/3]"
-                onClick={() => navigate(`/blog/${post.id || post._id}`)}
-              >
-                <img
-                  src={post.images?.[0]?.url || "/images/default.jpg"}
-                  alt={post.title}
-                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-6">
-                  <h3 className="text-xl font-bold text-white mb-2">
-                    {post.title}
-                  </h3>
-                  <p className="text-white/80 text-sm">
-                    {formatDate(post.createdAt)}
-                  </p>
+          {isLoading
+            ? [1, 2].map((i) => (
+                <Skeleton key={i} className="aspect-[4/3] w-full h-full" />
+              ))
+            : posts.map((post, i) => (
+                <div
+                  key={post.id || post._id || i}
+                  className="relative rounded-lg overflow-hidden group cursor-pointer aspect-[4/3]"
+                  onClick={() => navigate(`/blog/${post.id || post._id}`)}
+                >
+                  <img
+                    src={post.images?.[0]?.url || "/images/default.jpg"}
+                    alt={post.title}
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-6">
+                    <h3 className="text-xl md:text-2xl font-bold text-white mb-2">
+                      {post.title}
+                    </h3>
+                    <p className="text-white/80 text-sm">
+                      {formatDate(post.createdAt)}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))
-          )}
+              ))}
         </div>
       </div>
     </section>

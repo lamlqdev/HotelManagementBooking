@@ -16,7 +16,7 @@ const Footer = () => {
           {/* Logo section */}
           <div>
             <Link to="/" className="flex items-center" onClick={scrollToTop}>
-              <Logo className="h-32" showDot={false} />
+              <Logo className="md:h-32" showDot={false} />
             </Link>
           </div>
 

@@ -43,7 +43,7 @@ export default function PopularDestinations() {
 
   if (isLoading) {
     return (
-      <section className="py-12">
+      <section className="py-12 md:px-0 px-4">
         <div className="container">
           <h2 className="text-3xl font-bold mb-8">
             {t("destinations.popular")}
@@ -66,7 +66,7 @@ export default function PopularDestinations() {
 
   if (isError) {
     return (
-      <section className="py-12">
+      <section className="py-12 px-4 md:px-0">
         <div className="container">
           <h2 className="text-3xl font-bold mb-8">
             {t("destinations.popular")}
@@ -89,7 +89,7 @@ export default function PopularDestinations() {
 
   if (popularDestinations.length === 0) {
     return (
-      <section className="py-6">
+      <section className="py-6 px-4 md:px-0">
         <div className="container">
           <h2 className="text-3xl font-bold mb-8">
             {t("destinations.popular")}
@@ -110,7 +110,7 @@ export default function PopularDestinations() {
   }
 
   return (
-    <section className="py-12">
+    <section className="py-12 px-4 md:px-0">
       <div className="container">
         <h2 className="text-3xl font-bold mb-8">{t("destinations.popular")}</h2>
         <div className="relative">
@@ -156,8 +156,8 @@ export default function PopularDestinations() {
             </CarouselContent>
             {popularDestinations.length > 4 && (
               <>
-                <CarouselPrevious className="hidden md:flex -left-4 bg-white hover:bg-white/90 text-foreground hover:text-foreground/90 border-none shadow-md" />
-                <CarouselNext className="hidden md:flex -right-4 bg-white hover:bg-white/90 text-foreground hover:text-foreground/90 border-none shadow-md" />
+                <CarouselPrevious className="flex -left-4 bg-white hover:bg-white/90 text-foreground hover:text-foreground/90 border-none shadow-md" />
+                <CarouselNext className="flex -right-4 bg-white hover:bg-white/90 text-foreground hover:text-foreground/90 border-none shadow-md" />
               </>
             )}
           </Carousel>

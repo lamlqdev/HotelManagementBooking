@@ -51,7 +51,7 @@ const Header = () => {
 
   return (
     <header>
-      <div className="container mx-auto bg-card rounded-lg p-2">
+      <div className="max-w-lg sm:max-w-4xl lg:max-w-6xl w-full mx-auto bg-card rounded-lg p-2">
         <div className="flex items-center justify-between h-16 px-6">
           <Link to="/" className="flex items-center">
             <Logo className="h-8" showDot={false} />

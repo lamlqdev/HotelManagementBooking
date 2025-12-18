@@ -77,7 +77,7 @@ export default function HotelDeals() {
   // Xử lý trạng thái loading
   if (isLoading) {
     return (
-      <section className="py-12 bg-background">
+      <section className="md:py-12 py-6 bg-background md:px-0 px-4">
         <div className="container">
           <div className="flex items-center justify-between mb-8">
             <Skeleton className="h-10 w-48" />
@@ -107,7 +107,7 @@ export default function HotelDeals() {
   // Xử lý trạng thái error
   if (isError) {
     return (
-      <section className="py-12 bg-background">
+      <section className="md:py-12 py-6 bg-background md:px-0 px-4">
         <div className="container">
           <div className="mb-8">
             <h2 className="text-3xl font-bold">{t("hotels.best_deals")}</h2>
@@ -127,7 +127,7 @@ export default function HotelDeals() {
   // Xử lý trạng thái không có dữ liệu
   if (!data?.data || data.data.length === 0) {
     return (
-      <section className="py-6">
+      <section className="md:py-12 py-6 md:px-0 px-4">
         <div className="container">
           <h2 className="text-3xl font-bold mb-8">{t("hotels.best_deals")}</h2>
           <div className="flex flex-col items-center justify-center py-12">
@@ -146,7 +146,7 @@ export default function HotelDeals() {
   }
 
   return (
-    <section className="py-12 bg-background">
+    <section className="md:py-12 py-6 bg-background md:px-0 px-4">
       <div className="container">
         <div className="mb-8">
           <h2 className="text-3xl font-bold">{t("hotels.best_deals")}</h2>
@@ -213,8 +213,8 @@ export default function HotelDeals() {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="hidden md:flex -left-4 bg-white hover:bg-white/90 text-foreground hover:text-foreground/90 border-none shadow-md" />
-            <CarouselNext className="hidden md:flex -right-4 bg-white hover:bg-white/90 text-foreground hover:text-foreground/90 border-none shadow-md" />
+            <CarouselPrevious className="flex -left-4 bg-white hover:bg-white/90 text-foreground hover:text-foreground/90 border-none shadow-md" />
+            <CarouselNext className="flex -right-4 bg-white hover:bg-white/90 text-foreground hover:text-foreground/90 border-none shadow-md" />
           </Carousel>
         </div>
       </div>

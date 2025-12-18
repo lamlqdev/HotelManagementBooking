@@ -41,7 +41,7 @@ const HomePage = () => {
         />
 
         {/* SearchBox Container */}
-        <div className="absolute left-0 right-0 bottom-0 transform translate-y-1/2 px-4 z-20">
+        <div className="absolute left-0 right-0 bottom-0 transform translate-y-1/2 px-3 sm:px-4 md:px-6 lg:px-8 z-20">
           <div className="container mx-auto max-w-6xl">
             <SearchBox onSearch={handleSearch} />
           </div>
@@ -49,7 +49,7 @@ const HomePage = () => {
       </div>
 
       {/* Main Content */}
-      <div className="container mx-auto mt-24">
+      <div className="container mx-auto md:mt-24 mt-56">
         {/* Các section khác của trang chủ */}
         <PopularDestinations />
         <HotelDeals />
