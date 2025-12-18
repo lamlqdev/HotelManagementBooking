@@ -82,10 +82,10 @@ const Blog: React.FC = () => {
       />
 
       {/* Search Section */}
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="w-full md:max-w-7xl mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
           {/* Search Bar */}
-          <div className="w-full md:w-96">
+          <div className="w-full">
             <div className="relative">
               <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
               <input

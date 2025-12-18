@@ -52,8 +52,8 @@ const HotelList = ({
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-4 sm:mb-6">
+        <h2 className="text-xl sm:text-2xl font-bold">
           {t("search.results", { count: total })}
         </h2>
         <div className="flex items-center space-x-2">
@@ -64,7 +64,7 @@ const HotelList = ({
             onValueChange={onSortChange}
             value={sortBy || "-lowestDiscountedPrice"}
           >
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-full sm:w-[180px]">
               <SelectValue placeholder={t("search.select_sort")} />
             </SelectTrigger>
             <SelectContent>
@@ -103,8 +103,8 @@ const HotelList = ({
                 key={hotel._id}
                 className="bg-card rounded-lg overflow-hidden border border-border p-4 hover:shadow-md transition-shadow"
               >
-                <div className="flex gap-4">
-                  <div className="w-48 h-32 relative rounded-md overflow-hidden">
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <div className="w-full sm:w-48 h-48 sm:h-32 relative rounded-md overflow-hidden flex-shrink-0">
                     <img
                       src={hotel.featuredImage?.url || "/placeholder-image.jpg"}
                       alt={hotel.name}
@@ -112,12 +112,12 @@ const HotelList = ({
                       loading="lazy"
                     />
                   </div>
-                  <div className="flex-1 flex justify-between">
-                    <div>
-                      <h3 className="text-xl font-semibold mb-1">
+                  <div className="flex-1 flex flex-col sm:flex-row sm:justify-between gap-4">
+                    <div className="flex-1">
+                      <h3 className="text-lg sm:text-xl font-semibold mb-1">
                         {hotel.name}
                       </h3>
-                      <p className="text-muted-foreground mb-2">
+                      <p className="text-sm sm:text-base text-muted-foreground mb-2">
                         {hotel.locationDescription || hotel.address}
                       </p>
                       <div className="flex items-center space-x-2 mt-2">
@@ -131,7 +131,7 @@ const HotelList = ({
                         </p>
                       </div>
                     </div>
-                    <div className="text-right">
+                    <div className="text-left sm:text-right">
                       {hotel.lowestPrice > hotel.lowestDiscountedPrice && (
                         <p className="text-sm text-muted-foreground">
                           {t("hotels.card.original_price")}:{" "}
@@ -140,7 +140,7 @@ const HotelList = ({
                           </span>
                         </p>
                       )}
-                      <p className="text-xl font-bold text-primary">
+                      <p className="text-lg sm:text-xl font-bold text-primary">
                         {formatPrice(hotel.lowestDiscountedPrice)}
                       </p>
                       <p className="text-sm text-muted-foreground">
@@ -153,6 +153,7 @@ const HotelList = ({
                   <Button
                     variant="default"
                     onClick={() => onHotelClick(hotel._id)}
+                    className="w-full sm:w-auto"
                   >
                     {t("common.view_details")}
                   </Button>

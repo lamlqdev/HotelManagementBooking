@@ -138,7 +138,9 @@ const FilterSection = ({
     <div className="w-full space-y-6">
       {/* Price Range */}
       <div className="space-y-4">
-        <h3 className="font-semibold text-lg">{t("filter.price_range")}</h3>
+        <h3 className="font-semibold text-base sm:text-lg">
+          {t("filter.price_range")}
+        </h3>
         <Slider
           defaultValue={priceRange}
           value={priceRange}
@@ -155,7 +157,7 @@ const FilterSection = ({
 
       {/* Rating Range */}
       <div className="space-y-4">
-        <h3 className="font-semibold text-lg">Đánh giá</h3>
+        <h3 className="font-semibold text-base sm:text-lg">Đánh giá</h3>
         <Slider
           defaultValue={ratingRange}
           value={ratingRange}
@@ -178,7 +180,9 @@ const FilterSection = ({
 
       {/* Room Type */}
       <div className="space-y-4">
-        <h3 className="font-semibold text-lg">{t("filter.room_type")}</h3>
+        <h3 className="font-semibold text-base sm:text-lg">
+          {t("filter.room_type")}
+        </h3>
         {ROOM_TYPES.map((type) => (
           <div key={type} className="flex items-center space-x-2">
             <Checkbox
@@ -196,7 +200,9 @@ const FilterSection = ({
       </div>
       {/* Amenities */}
       <div className="space-y-4">
-        <h3 className="font-semibold text-lg">{t("filter.amenities")}</h3>
+        <h3 className="font-semibold text-base sm:text-lg">
+          {t("filter.amenities")}
+        </h3>
 
         {/* Hotel Amenities */}
         <div className="space-y-2">

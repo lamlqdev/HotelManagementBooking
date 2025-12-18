@@ -247,14 +247,14 @@ const SearchResultPage = () => {
   if (isLoading) {
     return (
       <div>
-        <div className="relative mb-24">
+        <div className="relative mb-16 sm:mb-20 md:mb-24">
           <HeroBanner
             imageUrl="https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=2948&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             title={t("banner.home.title")}
             description={t("banner.home.description")}
           />
 
-          <div className="absolute left-0 right-0 bottom-0 transform translate-y-1/2 px-4 z-20">
+          <div className="absolute left-0 right-0 bottom-0 transform translate-y-1/2 px-3 sm:px-4 md:px-6 lg:px-8 z-20">
             <div className="container mx-auto max-w-6xl">
               <SearchBox
                 onSearch={handleSearch}
@@ -269,10 +269,10 @@ const SearchResultPage = () => {
           </div>
         </div>
 
-        <div className="container mx-auto max-w-6xl px-4 py-8">
-          <div className="grid grid-cols-12 gap-8">
+        <div className="container mx-auto max-w-6xl px-3 sm:px-4 md:px-6 py-4 sm:py-6 md:py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-6 lg:gap-8">
             {/* Filter Section */}
-            <div className="col-span-3">
+            <div className="lg:col-span-3">
               <FilterSection
                 onPriceChange={handlePriceChange}
                 onRoomTypeChange={handleRoomTypeChange}
@@ -290,7 +290,7 @@ const SearchResultPage = () => {
             </div>
 
             {/* Hotel List Section */}
-            <div className="col-span-9">
+            <div className="lg:col-span-9">
               <div className="space-y-4">
                 {[...Array(5)].map((_, index) => (
                   <div
@@ -320,14 +320,14 @@ const SearchResultPage = () => {
   if (isError) {
     return (
       <div>
-        <div className="relative mb-24">
+        <div className="relative mb-16 sm:mb-20 md:mb-24">
           <HeroBanner
             imageUrl="https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=2948&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             title={t("banner.home.title")}
             description={t("banner.home.description")}
           />
 
-          <div className="absolute left-0 right-0 bottom-0 transform translate-y-1/2 px-4 z-20">
+          <div className="absolute left-0 right-0 bottom-0 transform translate-y-1/2 px-3 sm:px-4 md:px-6 lg:px-8 z-20">
             <div className="container mx-auto max-w-6xl">
               <SearchBox
                 onSearch={handleSearch}
@@ -342,7 +342,7 @@ const SearchResultPage = () => {
           </div>
         </div>
 
-        <div className="container mx-auto max-w-6xl px-4 py-8">
+        <div className="container mx-auto max-w-6xl px-3 sm:px-4 md:px-6 py-4 sm:py-6 md:py-8">
           <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>{t("common.error")}</AlertTitle>
@@ -404,14 +404,14 @@ const SearchResultPage = () => {
 
   return (
     <div>
-      <div className="relative mb-24">
+      <div className="relative mb-16 sm:mb-20 md:mb-24">
         <HeroBanner
           imageUrl="https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=2948&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
           title={t("banner.home.title")}
           description={t("banner.home.description")}
         />
 
-        <div className="absolute left-0 right-0 bottom-0 transform translate-y-1/2 px-4 z-20">
+        <div className="absolute left-0 right-0 bottom-0 transform translate-y-1/2 px-3 sm:px-4 md:px-6 lg:px-8 z-20">
           <div className="container mx-auto max-w-6xl">
             <SearchBox
               onSearch={handleSearch}
@@ -426,10 +426,10 @@ const SearchResultPage = () => {
         </div>
       </div>
 
-      <div className="container mx-auto max-w-6xl px-4 py-8">
-        <div className="grid grid-cols-12 gap-8">
+      <div className="container mx-auto max-w-6xl px-3 sm:px-4 md:px-6 py-4 sm:py-6 md:py-8 md:mt-24 mt-64">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-6 lg:gap-8">
           {/* Filter Section */}
-          <div className="col-span-3">
+          <div className="lg:col-span-3">
             <FilterSection
               onPriceChange={handlePriceChange}
               onRoomTypeChange={handleRoomTypeChange}
@@ -447,7 +447,7 @@ const SearchResultPage = () => {
           </div>
 
           {/* Hotel List Section */}
-          <div className="col-span-9">
+          <div className="lg:col-span-9">
             <HotelList
               hotels={hotels}
               currentPage={currentPageState}

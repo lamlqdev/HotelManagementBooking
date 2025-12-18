@@ -33,7 +33,7 @@ const Partnership = () => {
 
       <div className="container mx-auto px-4 py-12">
         {/* Why Partner With Us Section */}
-        <section className="mb-12 relative">
+        <section className="mb-6 relative">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/10 rounded-3xl -z-10" />
           <div className="container mx-auto px-8 py-16">
             <h2 className="text-3xl font-bold text-center mb-8">
@@ -72,7 +72,7 @@ const Partnership = () => {
         </section>
 
         {/* Benefits Section */}
-        <section className="mb-12 relative">
+        <section className="mb-6 relative">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-background via-primary/5 to-background rounded-3xl -z-10" />
           <div className="container mx-auto px-4 py-16">
             <h2 className="text-3xl font-bold text-center mb-8">
@@ -122,7 +122,7 @@ const Partnership = () => {
         </section>
 
         {/* How to Apply Section */}
-        <section className="mb-12 relative">
+        <section className="mb-6 relative">
           <div className="absolute inset-0 bg-[linear-gradient(45deg,_var(--tw-gradient-stops))] from-primary/5 via-background to-primary/5 rounded-3xl -z-10" />
           <div className="container mx-auto px-4 py-16">
             <h2 className="text-3xl font-bold text-center mb-12">
@@ -194,7 +194,7 @@ const Partnership = () => {
         </section>
 
         {/* FAQ Section */}
-        <section className="mb-8 relative">
+        <section className="mb-6 relative">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/5 via-background to-background rounded-3xl -z-10" />
           <div className="container mx-auto px-4 py-16">
             <h2 className="text-3xl font-bold text-center mb-12">

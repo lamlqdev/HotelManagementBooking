@@ -8,35 +8,22 @@ import {
 } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 
+import HeroBanner from "@/components/common/HeroBanner";
+
 const ContactUs: React.FC = () => {
   const { t } = useTranslation();
 
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Banner */}
-      <div className="relative h-[400px]">
-        <div className="absolute inset-0">
-          <img
-            src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
-            alt={t("contact.hero.title")}
-            className="w-full h-full object-cover object-center"
-          />
-          <div className="absolute inset-0 bg-black/60" />
-        </div>
-        <div className="relative z-10 h-full flex items-center justify-center">
-          <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white">
-              {t("contact.hero.title")}
-            </h1>
-            <p className="text-xl text-gray-200">
-              {t("contact.hero.subtitle")}
-            </p>
-          </div>
-        </div>
-      </div>
+      <HeroBanner
+        imageUrl="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
+        title={t("contact.hero.title")}
+        description={t("contact.hero.subtitle")}
+      />
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 py-16">
+      <div className="w-full md:max-w-7xl mx-auto px-4 md:py-16 py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           {/* Contact Information */}
           <div className="space-y-4">
@@ -113,7 +100,7 @@ const ContactUs: React.FC = () => {
           </div>
 
           {/* Contact Form */}
-          <div className="bg-card rounded-lg shadow-lg p-8">
+          <div className="bg-card rounded-lg shadow-lg p-4 md:p-8">
             <div className="flex items-center space-x-4 mb-6">
               <img
                 src="https://img.freepik.com/premium-vector/young-smiling-man-avatar-man-with-brown-beard-mustache-hair-wearing-yellow-sweater-sweatshirt-3d-vector-people-character-illustration-cartoon-minimal-style_365941-860.jpg"
