@@ -39,10 +39,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { setUser } from "@/features/auth/authSlice";
+import { selectUser } from "@/features/auth/authSelector";
 
 const Profile = () => {
   const { t } = useTranslation();
-  const { user } = useAppSelector((state) => state.auth);
+  const user = useAppSelector(selectUser);
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);

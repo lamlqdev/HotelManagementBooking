@@ -2,6 +2,7 @@ import axios from "axios";
 
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
+  timeout: 10000,
   withCredentials: true,
 });
 
@@ -69,10 +70,6 @@ axiosInstance.interceptors.response.use(
           subscriber.reject(refreshError);
         });
         refreshSubscribers = [];
-
-        // if (!window.location.pathname.includes("/login")) {
-        //   window.location.href = "/login";
-        // }
 
         return Promise.reject(refreshError);
       } finally {
