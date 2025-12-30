@@ -33,6 +33,7 @@ import { DeleteRoomDialog } from "@/components/partner/room-management/dialog/De
 import { EditRoomDialog } from "@/components/partner/room-management/dialog/EditRoomDialog";
 import { UpdatePriceDialog } from "@/components/partner/room-management/dialog/UpdatePriceDialog";
 import { getAmenityIcon } from "@/utils/amenityIcons";
+import { selectCurrentHotel } from "@/features/hotel/hotelSelector";
 
 export default function RoomDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -45,7 +46,7 @@ export default function RoomDetailPage() {
   const [isRemovingDiscount, setIsRemovingDiscount] = useState(false);
   const [confirmName, setConfirmName] = useState("");
   const queryClient = useQueryClient();
-  const { currentHotel } = useAppSelector((state) => state.hotel);
+  const currentHotel = useAppSelector(selectCurrentHotel);
 
   const {
     data: roomResponse,

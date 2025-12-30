@@ -1,21 +1,23 @@
-import { AxiosError } from "axios";
-import { useTranslation } from "react-i18next";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useMutation } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { Camera, Save, User2, Mail, Phone } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
+import { AxiosError } from "axios";
+
+import { Camera, Mail, Phone, Save, User2 } from "lucide-react";
 
 import { userApi } from "@/api/user/user.api";
-import { useAppSelector, useAppDispatch } from "@/store/hooks";
+import { updateMeSchema, type UpdateMeFormData } from "@/api/user/types";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { selectUser } from "@/features/auth/authSelector";
 import { setUser } from "@/features/auth/authSlice";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { updateMeSchema, type UpdateMeFormData } from "@/api/user/types";
 import {
   Form,
   FormControl,
@@ -27,7 +29,7 @@ import {
 
 export default function PartnerProfilePage() {
   const { t } = useTranslation();
-  const { user } = useAppSelector((state) => state.auth);
+  const user = useAppSelector(selectUser);
   const dispatch = useAppDispatch();
   const [isEditing, setIsEditing] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);

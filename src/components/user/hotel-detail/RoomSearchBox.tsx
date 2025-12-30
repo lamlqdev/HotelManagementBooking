@@ -102,9 +102,9 @@ const RoomSearchBox = ({ defaultValues, onSearch }: RoomSearchBoxProps) => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 my-6">
       <h3 className="text-2xl font-semibold">{t("hotel.rooms.title")}</h3>
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg shadow-sm border border-blue-100 mb-4">
+      <div className="bg-background p-6 rounded-lg shadow-sm border border-blue-100 mb-4">
         <div className="flex flex-col md:flex-row gap-4 items-end">
           {/* Check-in */}
           <div className="flex-1 w-full">

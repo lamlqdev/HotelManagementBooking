@@ -1,5 +1,6 @@
 import { Navigate, Outlet, useLocation } from "react-router";
 import { useAppSelector } from "@/store/hooks";
+import { selectAuth } from "@/features/auth/authSelector";
 
 interface PrivateRouteProps {
   role: "user" | "admin" | "partner";
@@ -10,7 +11,7 @@ const PrivateRoute = ({
   role,
   allowMultipleRoles = false,
 }: PrivateRouteProps) => {
-  const { isAuthenticated, user } = useAppSelector((state) => state.auth);
+  const { isAuthenticated, user } = useAppSelector(selectAuth);
   const location = useLocation();
 
   // Nếu chưa đăng nhập, chuyển hướng đến trang login
@@ -30,7 +31,6 @@ const PrivateRoute = ({
 
   // Kiểm tra role có phù hợp không
   if (user.role !== role) {
-    // Chuyển hướng về trang chủ tương ứng với role của user
     switch (user.role) {
       case "admin":
         return <Navigate to="/admin/partners" replace />;

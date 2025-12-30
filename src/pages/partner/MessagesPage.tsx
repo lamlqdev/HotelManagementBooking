@@ -1,14 +1,16 @@
 import { useEffect, useRef, useState } from "react";
+import io from "socket.io-client";
+
 import { chatApi } from "@/api/chat/chat.api";
 import { ConversationItem, ChatMessage } from "@/api/chat/types";
+import { selectUser } from "@/features/auth/authSelector";
 import { useAppSelector } from "@/store/hooks";
-import io from "socket.io-client";
 import { User } from "@/types/auth";
 
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
 const MessagesPage = () => {
-  const { user } = useAppSelector((state) => state.auth);
+  const user = useAppSelector(selectUser);
   const [conversations, setConversations] = useState<ConversationItem[]>([]);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);

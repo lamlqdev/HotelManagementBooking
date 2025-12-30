@@ -80,13 +80,13 @@ const HotelRooms = ({
 
   return (
     <div className="space-y-4 sm:space-y-6">
-      <div className="space-y-3 sm:space-y-4">
+      <div className="space-y-3 sm:space-y-6">
         {filteredRooms.map((room) => (
           <Card
             key={room._id}
-            className="flex flex-col sm:flex-row items-stretch sm:items-center rounded-xl shadow-sm overflow-hidden"
+            className="flex flex-col sm:flex-row items-stretch sm:items-center bg-background rounded-xl border border-border shadow-sm overflow-hidden"
           >
-            {/* Hình ảnh */}
+            {/* Room Image */}
             <div className="w-full sm:w-[35%] sm:min-w-[160px] h-48 sm:h-40 md:h-48 flex-shrink-0">
               <img
                 src={room.images?.[0]?.url || "/placeholder-room.jpg"}
@@ -94,8 +94,9 @@ const HotelRooms = ({
                 className="w-full h-full object-cover"
               />
             </div>
-            {/* Thông tin phòng */}
-            <div className="flex-1 flex flex-col sm:flex-row sm:items-center sm:justify-between px-4 sm:px-6 py-4 bg-white gap-4">
+
+            {/* Room Information */}
+            <div className="flex-1 flex flex-col sm:flex-row sm:items-center sm:justify-between bg-background px-4 sm:px-6 py-4 gap-4">
               <div className="flex-1">
                 <h4 className="text-base sm:text-lg font-semibold mb-2">
                   {room.name}
@@ -124,7 +125,7 @@ const HotelRooms = ({
                   ))}
                 </div>
               </div>
-              {/* Giá và nút đặt phòng */}
+              {/* Price and Book Button */}
               <div className="flex flex-col items-start sm:items-end sm:min-w-[140px] sm:ml-6 border-t sm:border-t-0 pt-4 sm:pt-0">
                 <div className="text-left sm:text-right mb-2 w-full sm:w-auto">
                   {room.discountPercent > 0 ? (

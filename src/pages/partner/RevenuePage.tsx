@@ -97,13 +97,11 @@ export default function RevenuePage() {
   // Tự động fetch khi thay đổi filter biểu đồ
   useEffect(() => {
     setChartFilterKey((k) => k + 1);
-    // eslint-disable-next-line
   }, [chartFrom, chartTo, groupBy]);
 
   // Tự động fetch khi thay đổi filter top phòng
   useEffect(() => {
     setTopFilterKey((k) => k + 1);
-    // eslint-disable-next-line
   }, [topFrom, topTo, limit]);
 
   // Tổng quan doanh thu
